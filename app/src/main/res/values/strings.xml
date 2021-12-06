@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">E-Culture Tool</string>
-    <string name="login">Login</string>
-    <string name="sign_up">Sign up</string>
+    <string name="welcome_login_button">Login</string>
+    <string name="welcome_sign_up_button">Sign up</string>
 </resources>
