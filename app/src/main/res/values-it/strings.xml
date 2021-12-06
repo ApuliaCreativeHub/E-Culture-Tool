@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ECulture Tool</string>
 
-    <string name="nav_paths">Paths</string>
-    <string name="nav_places">Places</string>
+    <string name="nav_paths">Percorsi</string>
+    <string name="nav_places">Cerca</string>
     <string name="nav_user">User</string>
 </resources>
