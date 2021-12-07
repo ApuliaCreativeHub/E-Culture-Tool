@@ -22,8 +22,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        getSupportActionBar().hide();
+        setContentView(R.layout.home_main);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationBar);
         loadDefaultFragment();
