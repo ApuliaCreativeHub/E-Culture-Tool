@@ -2,11 +2,11 @@
     <item
         android:id="@+id/menuItemPaths"
         android:title="@string/nav_paths"
-        android:icon="@mipmap/ic_action_attach"/>
+        android:icon="@mipmap/ic_file_tree"/>
     <item
         android:id="@+id/menuItemPlaces"
         android:title="@string/nav_places"
-        android:icon="@mipmap/ic_action_search"/>
+        android:icon="@mipmap/ic_earth"/>
     <item
         android:id="@+id/menuItemUser"
         android:title="@string/nav_user"
