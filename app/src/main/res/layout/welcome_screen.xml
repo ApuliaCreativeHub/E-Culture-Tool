@@ -24,17 +24,18 @@
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/dark_brown"
         android:text="@string/welcome_login_button"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+        app:layout_constraintTop_toTopOf="@+id/loginButtonGuideline" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
+        android:id="@+id/loginButtonGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="410dp" />
+        app:layout_constraintGuide_begin="416dp" />
 
     <Button
         android:id="@+id/signUp"
@@ -43,6 +44,7 @@
         android:layout_marginTop="8dp"
         android:backgroundTint="@color/dark_brown"
         android:text="@string/welcome_sign_up_button"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
