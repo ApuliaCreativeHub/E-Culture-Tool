@@ -23,8 +23,7 @@
             <FrameLayout
                 android:id="@+id/container_frame_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 
@@ -38,7 +37,12 @@
                 android:id="@+id/bottomNavigationBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:menu="@menu/bottom_navigation_menu" />
+                android:layout_gravity="bottom"
+                app:labelVisibilityMode="selected"
+                app:itemIconSize="24dp"
+                android:fitsSystemWindows="true"
+                app:menu="@menu/bottom_navigation_menu"
+                />
 
 
         </LinearLayout>

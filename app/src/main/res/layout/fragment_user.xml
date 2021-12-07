@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.UserFragment"
     android:background="#A5DFFF">
+
 
     <TextView
         android:layout_width="match_parent"
@@ -15,4 +17,43 @@
         android:textColor="@color/black"
         android:textStyle="bold"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOptionsInformation"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+
+            android:backgroundTint="@color/white"
+            android:text="@string/options_user"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            app:icon="@mipmap/ic_action_user"
+            app:iconTint="@color/black"
+            app:iconSize="24dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOptionsLogout"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+
+            android:backgroundTint="@color/white"
+            android:text="@string/options_logout"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            app:icon="@mipmap/ic_arrow_right_bottom_bold"
+            app:iconTint="@color/black"
+            app:iconSize="24dp" />
+    </LinearLayout>
 </FrameLayout>
