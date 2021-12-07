@@ -6,6 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class WelcomeScreenActivity extends AppCompatActivity {
 
@@ -18,5 +22,23 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         if(actionBar != null){
             actionBar.hide();
         }
+        Button login = (Button) findViewById(R.id.login);
+        Button signUp = (Button) findViewById(R.id.signUp);
+        TextView logAsGuest = (TextView) findViewById(R.id.logAsGuest);
+     }
+
+     /**On click redirect user to Login form */
+     public void redirectLoginForm(View view){
+         //TODO: Intent for login activity
+    }
+
+    /**On click redirect user to Sign up form */
+    public void redirectSignUpForm(View view){
+        //TODO: Intent for signup activity
+    }
+
+    /**On click redirect user to HomePage in Places fragment*/
+    public void redirectHomePagePlaces(View view){
+        //TODO: Intent for HomePage activity
     }
 }
