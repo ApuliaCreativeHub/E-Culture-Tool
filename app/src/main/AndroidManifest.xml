@@ -26,6 +26,7 @@
             android:name=".activities.HomeActivity"
             android:exported="true">
         </activity>
+
      </application>
 
 </manifest>

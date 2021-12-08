@@ -6,10 +6,10 @@
     <item
         android:id="@+id/menuItemPlaces"
         android:title="@string/nav_places"
+        android:checked="true"
         android:icon="@mipmap/ic_earth"/>
     <item
         android:id="@+id/menuItemUser"
         android:title="@string/nav_user"
-        android:checked="true"
         android:icon="@mipmap/ic_action_user"/>
 </menu>

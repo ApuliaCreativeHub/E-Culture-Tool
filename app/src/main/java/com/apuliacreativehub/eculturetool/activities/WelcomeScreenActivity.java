@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Adapter;
@@ -41,6 +42,8 @@ public class WelcomeScreenActivity extends AppCompatActivity {
 
     /**On click redirect user to HomePage in Places fragment*/
     public void redirectHomePagePlaces(View view){
-        //TODO: Intent for HomePage activity
+        Intent intent = new Intent(WelcomeScreenActivity.this, HomeActivity.class);
+        WelcomeScreenActivity.this.startActivity(intent);
     }
+
 }

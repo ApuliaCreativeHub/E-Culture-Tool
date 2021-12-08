@@ -47,8 +47,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private boolean loadDefaultFragment() {
-        bottomNavigationView.setSelectedItemId(R.id.menuItemUser);
-        return loadFragment(new UserFragment());
+        bottomNavigationView.setSelectedItemId(R.id.menuItemPlaces);
+        return loadFragment(new PlacesFragment());
     }
 
     private Fragment mapperFragment(int id) {
