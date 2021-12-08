@@ -12,7 +12,7 @@
         android:theme="@style/Theme.ECultureTool">
 
         <activity
-            android:name=".WelcomeScreenActivity"
+            android:name=".activities.WelcomeScreenActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

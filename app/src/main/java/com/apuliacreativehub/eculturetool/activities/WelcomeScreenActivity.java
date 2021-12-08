@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool;
+package com.apuliacreativehub.eculturetool.activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +10,8 @@ import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.apuliacreativehub.eculturetool.R;
 
 public class WelcomeScreenActivity extends AppCompatActivity {
 
