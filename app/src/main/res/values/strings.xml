@@ -7,7 +7,7 @@
     <string name="nav_places">Places</string>
     <string name="nav_user">User</string>
 
-    <string name="search">Ricerca</string>
+    <string name="search">Search</string>
 
     <string name="options_user">Account details</string>
     <string name="options_logout">Logout</string>
