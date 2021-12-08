@@ -12,9 +12,6 @@
     <string name="options_user">Account details</string>
     <string name="options_logout">Logout</string>
 
-    <string name="app_name">E-Culture Tool</string>
-    <string name="welcome_login_button">Login</string>
-    <string name="welcome_sign_up_button">Sign up</string>
     <string name="login_form_title">Login</string>
     <string name="signup_form_title">Sign up</string>
     <string name="name_field_hint">Name</string>

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.viewmodels.SignUpFormViewModel;
 
 public class SignUpFormFragment extends Fragment {
     private EditText nameET;
