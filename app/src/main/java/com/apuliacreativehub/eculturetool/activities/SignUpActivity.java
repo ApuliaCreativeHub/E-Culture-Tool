@@ -20,9 +20,9 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_form);
 
-        sfViewModel =new ViewModelProvider(this).get(SignUpFormViewModel.class);
+        sfViewModel = new ViewModelProvider(this).get(SignUpFormViewModel.class);
 
-        signUpButton =findViewById(R.id.signUpButton);
+        signUpButton = findViewById(R.id.signUpButton);
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

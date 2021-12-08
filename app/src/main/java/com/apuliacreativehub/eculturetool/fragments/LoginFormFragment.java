@@ -3,7 +3,9 @@ package com.apuliacreativehub.eculturetool.fragments;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -19,7 +21,7 @@ public class LoginFormFragment extends Fragment {
     private EditText emailET;
     private EditText passwordET;
 
-    public LoginFormFragment(){
+    public LoginFormFragment() {
         super(R.layout.login_form_fields);
     }
 

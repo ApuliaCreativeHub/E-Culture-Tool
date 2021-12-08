@@ -3,12 +3,13 @@ package com.apuliacreativehub.eculturetool.viewmodels;
 import androidx.lifecycle.ViewModel;
 
 public class SignUpFormViewModel extends ViewModel {
-    private String name="";
-    private String surname="";
-    private String age="";
-    private String email="";
-    private String password="";
-    private String confirmPassword="";
+
+    private String name = "";
+    private String surname = "";
+    private String age = "";
+    private String email = "";
+    private String password = "";
+    private String confirmPassword = "";
 
     public String getName() {
         return name;

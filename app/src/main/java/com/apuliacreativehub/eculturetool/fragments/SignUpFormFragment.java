@@ -30,13 +30,13 @@ public class SignUpFormFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-        nameET=view.findViewById(R.id.editTextName);
-        surnameET=view.findViewById(R.id.editTextSurname);
-        ageET=view.findViewById(R.id.editTextAge);
-        emailET=view.findViewById(R.id.editTextEmailSignUp);
-        passwordET=view.findViewById(R.id.editTextPasswordSignUp);
-        confirmPasswordET=view.findViewById(R.id.editTextConfirmPassword);
-        viewModel=new ViewModelProvider(requireActivity()).get(SignUpFormViewModel.class);
+        nameET = view.findViewById(R.id.editTextName);
+        surnameET = view.findViewById(R.id.editTextSurname);
+        ageET = view.findViewById(R.id.editTextAge);
+        emailET = view.findViewById(R.id.editTextEmailSignUp);
+        passwordET = view.findViewById(R.id.editTextPasswordSignUp);
+        confirmPasswordET = view.findViewById(R.id.editTextConfirmPassword);
+        viewModel = new ViewModelProvider(requireActivity()).get(SignUpFormViewModel.class);
 
         nameET.addTextChangedListener(new TextWatcher() {
             @Override

@@ -30,20 +30,19 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         TextView logAsGuest = (TextView) findViewById(R.id.logAsGuest);
      }
 
-     /**On click redirect user to Login form */
+     // On click redirect user to login form
      public void redirectLoginForm(View view){
-         //TODO: Intent for login activity
+
     }
 
-    /**On click redirect user to Sign up form */
+    // On click redirect user to sign up form
     public void redirectSignUpForm(View view){
-        //TODO: Intent for signup activity
+
     }
 
-    /**On click redirect user to HomePage in Places fragment*/
+    // On click redirect user to homepage in places fragment
     public void redirectHomePagePlaces(View view){
-        Intent intent = new Intent(WelcomeScreenActivity.this, HomeActivity.class);
-        WelcomeScreenActivity.this.startActivity(intent);
+        WelcomeScreenActivity.this.startActivity(new Intent(WelcomeScreenActivity.this, HomeActivity.class));
     }
 
 }

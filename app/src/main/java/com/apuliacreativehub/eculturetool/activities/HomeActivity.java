@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.fragments.LoginFormFragment;
 import com.apuliacreativehub.eculturetool.fragments.PathsFragment;
 import com.apuliacreativehub.eculturetool.fragments.PlacesFragment;
 import com.apuliacreativehub.eculturetool.fragments.UserFragment;
@@ -58,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
                 fragment = new PlacesFragment();
                 break;
             case R.id.menuItemUser:
-                fragment = new UserFragment();
+                fragment = new LoginFormFragment();
                 break;
             case R.id.menuItemPaths:
                 fragment = new PathsFragment();

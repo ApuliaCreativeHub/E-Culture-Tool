@@ -46,6 +46,7 @@
             android:ems="10"
             android:hint="@string/age_field_hint"
             android:inputType="number"
+            android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextSurname" />
@@ -58,6 +59,7 @@
             android:ems="10"
             android:hint="@string/email_field_hint"
             android:inputType="textEmailAddress"
+            android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextAge" />
@@ -70,6 +72,7 @@
             android:ems="10"
             android:hint="@string/password_field_hint"
             android:inputType="textPassword"
+            android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextEmailSignUp" />
@@ -81,7 +84,8 @@
             android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="@string/confirm_password_field"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:minHeight="48dp" />
 
     </LinearLayout>
 

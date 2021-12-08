@@ -20,9 +20,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_form);
 
-        lfViewModel=new ViewModelProvider(this).get(LoginFormViewModel.class);
+        lfViewModel = new ViewModelProvider(this).get(LoginFormViewModel.class);
 
-        loginButton=(Button) findViewById(R.id.loginButton);
+        loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
