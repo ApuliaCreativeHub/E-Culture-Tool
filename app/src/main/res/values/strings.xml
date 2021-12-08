@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">ECulture Tool</string>
-
+    <string name="app_name">E-Culture Tool</string>
+    <string name="welcome_login_button">Login</string>
+    <string name="welcome_sign_up_button">Sign up</string>
+    <string name="welcome_log_as_guest_text_view">Continue as Guest…</string>
     <string name="nav_paths">Paths</string>
     <string name="nav_places">Places</string>
     <string name="nav_user">User</string>
