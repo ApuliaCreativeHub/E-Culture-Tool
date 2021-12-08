@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menuItemPaths"
+        android:title="@string/nav_paths"
+        android:icon="@mipmap/ic_file_tree"/>
+    <item
+        android:id="@+id/menuItemPlaces"
+        android:title="@string/nav_places"
+        android:icon="@mipmap/ic_earth"/>
+    <item
+        android:id="@+id/menuItemUser"
+        android:title="@string/nav_user"
+        android:checked="true"
+        android:icon="@mipmap/ic_action_user"/>
+</menu>
