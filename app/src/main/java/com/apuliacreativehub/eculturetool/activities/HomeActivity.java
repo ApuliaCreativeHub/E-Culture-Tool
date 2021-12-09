@@ -59,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
                 fragment = new PlacesFragment();
                 break;
             case R.id.menuItemUser:
-                fragment = new LoginFormFragment();
+                fragment = new UserFragment();
                 break;
             case R.id.menuItemPaths:
                 fragment = new PathsFragment();
