@@ -30,9 +30,11 @@ public class LoginFragment extends Fragment {
         EditText txtPassword = view.findViewById(R.id.txtPassword);
         viewModel = new ViewModelProvider(requireActivity()).get(LoginViewModel.class);
 
-        if(!viewModel.getEmail().equals("")){
-            txtPassword.setText(viewModel.getEmail());
-        }
+        if(!viewModel.getEmail().equals(""))
+            txtEmail.setText(viewModel.getEmail());
+
+        if(!viewModel.getPassword().equals(""))
+            txtPassword.setText(viewModel.getPassword());
 
         txtEmail.addTextChangedListener(new TextWatcher() {
             @Override
