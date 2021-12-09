@@ -2,7 +2,7 @@ package com.apuliacreativehub.eculturetool.viewmodels;
 
 import androidx.lifecycle.ViewModel;
 
-public class LoginFormViewModel extends ViewModel {
+public class LoginViewModel extends ViewModel {
 
     private String email = "";
 

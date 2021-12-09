@@ -3,9 +3,7 @@ package com.apuliacreativehub.eculturetool.fragments;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -14,29 +12,29 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.viewmodels.LoginFormViewModel;
+import com.apuliacreativehub.eculturetool.viewmodels.LoginViewModel;
 
-public class LoginFormFragment extends Fragment {
-    private LoginFormViewModel viewModel;
-    private EditText emailET;
-    private EditText passwordET;
+public class LoginFragment extends Fragment {
 
-    public LoginFormFragment() {
-        super(R.layout.login_form_fields);
+    private LoginViewModel viewModel;
+
+    public LoginFragment() {
+        super(R.layout.login);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        emailET=view.findViewById(R.id.editTextEmail);
-        passwordET=view.findViewById(R.id.editTextPassword);
-        viewModel=new ViewModelProvider(requireActivity()).get(LoginFormViewModel.class);
+
+        EditText txtEmail = view.findViewById(R.id.txtEmail);
+        EditText txtPassword = view.findViewById(R.id.txtPassword);
+        viewModel = new ViewModelProvider(requireActivity()).get(LoginViewModel.class);
 
         if(!viewModel.getEmail().equals("")){
-            emailET.setText(viewModel.getEmail());
+            txtPassword.setText(viewModel.getEmail());
         }
 
-        emailET.addTextChangedListener(new TextWatcher() {
+        txtEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -53,7 +51,7 @@ public class LoginFormFragment extends Fragment {
             }
         });
 
-        passwordET.addTextChangedListener(new TextWatcher() {
+        txtPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 

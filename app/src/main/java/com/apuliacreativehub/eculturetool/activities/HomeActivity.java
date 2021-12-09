@@ -9,10 +9,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.fragments.LoginFormFragment;
+import com.apuliacreativehub.eculturetool.fragments.LoginFragment;
 import com.apuliacreativehub.eculturetool.fragments.PathsFragment;
 import com.apuliacreativehub.eculturetool.fragments.PlacesFragment;
-import com.apuliacreativehub.eculturetool.fragments.UserFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -23,7 +22,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_main);
+        setContentView(R.layout.home);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationBar);
         loadDefaultFragment();
@@ -59,7 +58,7 @@ public class HomeActivity extends AppCompatActivity {
                 fragment = new PlacesFragment();
                 break;
             case R.id.menuItemUser:
-                fragment = new UserFragment();
+                fragment = new LoginFragment();
                 break;
             case R.id.menuItemPaths:
                 fragment = new PathsFragment();
