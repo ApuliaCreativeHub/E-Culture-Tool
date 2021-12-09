@@ -7,6 +7,8 @@
 
     <string name="search">Ricerca</string>
 
+    <string name="list_paths_last_used">Ultimo utilizzo:</string>
+
     <string name="options_user">Informazioni utente</string>
     <string name="options_logout">Esci</string>
 </resources>

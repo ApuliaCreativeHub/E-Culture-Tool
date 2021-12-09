@@ -9,6 +9,8 @@
 
     <string name="search">Search</string>
 
+    <string name="list_paths_last_used">Last used:</string>
+
     <string name="options_user">Account details</string>
     <string name="options_logout">Logout</string>
 </resources>
