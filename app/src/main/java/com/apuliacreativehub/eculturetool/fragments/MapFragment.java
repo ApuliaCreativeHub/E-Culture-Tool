@@ -16,18 +16,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.apuliacreativehub.eculturetool.R;
-
-import org.osmdroid.api.IMapController;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.views.CustomZoomButtonsController;
-import org.osmdroid.views.MapView;
+import com.mapbox.geojson.Point;
+import com.mapbox.maps.CameraOptions;
+import com.mapbox.maps.MapView;
+import com.mapbox.maps.Style;
 
 import java.util.ArrayList;
 
 public class MapFragment extends Fragment {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    private MapView map = null;
+    private MapView map;
 
     public MapFragment() {
         super(R.layout.osm_map);
@@ -38,50 +36,10 @@ public class MapFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.osm_map, null);
         map = v.findViewById(R.id.mapview);
+        map.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
+        // TODO: Center map accordingly to user's nation (based on GPS)
+        map.getMapboxMap().setCamera(new CameraOptions.Builder().center(Point.fromLngLat(16.871871, 41.117143)).zoom(3.0).build());
         return v;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        //handle permissions first, before map is created. not depicted here
-
-        //load/initialize the osmdroid configuration, this can be done
-        Context ctx = getContext();
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-        //setting this before the layout is inflated is a good idea
-        //it 'should' ensure that the map has a writable location for the map cache, even without permissions
-        //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
-        //see also StorageUtils
-        //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's
-        //tile servers will get you banned based on this string
-
-
-        map = (MapView) getView().findViewById(R.id.mapview);
-        map.setTileSource(TileSourceFactory.MAPNIK);
-
-        requestPermissionsIfNecessary(new String[]{
-                // if you need to show the current location, uncomment the line below
-                // Manifest.permission.ACCESS_FINE_LOCATION,
-                // WRITE_EXTERNAL_STORAGE is required in order to show the map
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-        });
-
-        map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT);
-        map.setMultiTouchControls(true);
-        IMapController mapController = map.getController();
-        mapController.setZoom(3.0);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        map.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        map.onResume();
     }
 
     @Override
