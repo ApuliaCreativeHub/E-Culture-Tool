@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lytLogin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imgMuseum"
+        android:layout_width="480dp"
+        android:layout_height="320dp"
+        android:contentDescription="@string/museum"
+        android:src="@drawable/museum"
+        tools:ignore="ImageContrastCheck" />
+
+    <TextView
+        android:id="@+id/txtLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0.03"
+        android:text="@string/login"
+        android:textColor="#403f3f"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/txtEmail"
+        android:layout_width="320dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:autofillHints="@string/email"
+        android:background="@drawable/circle"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:textColor="#ffc791"
+        android:textColorHint="#ffc791"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/txtPassword"
+        android:layout_width="320dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:autofillHints="@string/password"
+        android:background="@drawable/circle"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:textColor="#ffc791"
+        android:textColorHint="#ffc791"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/btnForgetPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="40dp"
+        android:text="@string/forget_password"
+        android:textColor="#403f3f"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="320dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button"
+        android:text="@string/login"
+        android:textColor="#FFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:ignore="DuplicateSpeakableTextCheck" />
+
+    <TextView
+        android:id="@+id/btnSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/sign_up"
+        android:textColor="#403f3f"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

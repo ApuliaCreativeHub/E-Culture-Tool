@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/imgMuseum"
-        android:layout_width="500dp"
-        android:layout_height="300dp"
+        android:layout_width="480dp"
+        android:layout_height="320dp"
         android:contentDescription="@string/museum"
         android:src="@drawable/museum"
         tools:ignore="ImageContrastCheck" />
@@ -19,7 +19,7 @@
         android:id="@+id/txtWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="30dp"
         android:text="@string/welcome"
         android:textColor="#403f3f"
         android:textSize="48sp"
@@ -36,7 +36,7 @@
 
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="360dp"
+        android:layout_width="320dp"
         android:layout_height="48dp"
         android:layout_marginTop="40dp"
         android:background="@drawable/button"
@@ -47,9 +47,9 @@
 
     <Button
         android:id="@+id/btnRegister"
-        android:layout_width="360dp"
+        android:layout_width="320dp"
         android:layout_height="48dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button"
         android:text="@string/register"
         android:textColor="#FFF"

@@ -15,7 +15,7 @@ public class PathsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.paths, container, false);
+        return inflater.inflate(R.layout.fragment_paths, container, false);
     }
 
 }
