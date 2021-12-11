@@ -7,6 +7,10 @@
 
     <string name="search">Search</string>
 
+    <string name="welcome">Welcome</string>
+    <string name="new_account">Create a new account</string>
+    <string name="register">Register</string>
+
     <string name="museum">Museum</string>
     <string name="email">Email</string>
     <string name="password">Password</string>

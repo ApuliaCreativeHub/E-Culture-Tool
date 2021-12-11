@@ -12,6 +12,7 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.fragments.LoginFragment;
 import com.apuliacreativehub.eculturetool.fragments.PathsFragment;
 import com.apuliacreativehub.eculturetool.fragments.PlacesFragment;
+import com.apuliacreativehub.eculturetool.fragments.WelcomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -58,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
                 fragment = new PlacesFragment();
                 break;
             case R.id.menuItemUser:
-                fragment = new LoginFragment();
+                fragment = new WelcomeFragment();
                 break;
             case R.id.menuItemPaths:
                 fragment = new PathsFragment();
