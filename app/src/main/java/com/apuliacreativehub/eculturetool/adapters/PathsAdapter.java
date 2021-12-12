@@ -18,11 +18,14 @@ import java.util.List;
 
 public class PathsAdapter extends BaseAdapter {
 
+    /**
     private List<PathViewModel> listPaths = new ArrayList<>(Arrays.asList(
             new PathViewModel("Museo d'arte Bari", "Percorso Mio", new Date()),
             new PathViewModel("Museo d'arte Torino", "Percorso Standard", new Date()),
             new PathViewModel("Museo Scultura Matera", "Percorso Avventuriero", new Date()),
             new PathViewModel("Museo d'arte Bari", "Percorso Standard", new Date())));
+     **/
+    private List<PathViewModel> listPaths = new ArrayList<>();
 
     private Context mContext;
     private int mResource;

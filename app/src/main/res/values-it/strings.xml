@@ -6,6 +6,7 @@
     <string name="nav_user">User</string>
 
     <string name="search">Ricerca</string>
+    <string name="filter">Filtri</string>
 
     <string name="list_paths_last_used">Ultimo utilizzo:</string>
 

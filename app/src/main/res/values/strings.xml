@@ -8,9 +8,16 @@
     <string name="nav_user">User</string>
 
     <string name="search">Search</string>
+    <string name="filter">Filter</string>>
+    <string name="filter_description">Select an filter</string>
 
+    <string name="list_paths_results">Results:</string>
+    <string name="list_paths_no_results">No results found</string>
+    <string name="list_paths_no_results_description">No paths has been found</string>
     <string name="list_paths_last_used">Last used:</string>
 
     <string name="options_user">Account details</string>
     <string name="options_logout">Logout</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
