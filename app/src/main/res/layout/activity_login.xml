@@ -1,95 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/lytLogin"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/imgMuseum"
-        android:layout_width="480dp"
-        android:layout_height="320dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:contentDescription="@string/museum"
+        android:scaleType="centerCrop"
         android:src="@drawable/museum"
+        app:layout_constraintBottom_toTopOf="@+id/lytLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ImageContrastCheck" />
 
-    <TextView
-        android:id="@+id/txtLogin"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/lytLogin"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:letterSpacing="0.03"
-        android:text="@string/login"
-        android:textColor="#403f3f"
-        android:textSize="40sp"
-        android:textStyle="bold" />
+        android:gravity="center_horizontal|top"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <EditText
-        android:id="@+id/txtEmail"
-        android:layout_width="320dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="32dp"
-        android:autofillHints="@string/email"
-        android:background="@drawable/circle"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:textColor="#ffc791"
-        android:textColorHint="#ffc791"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/txtLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:letterSpacing="0.03"
+            android:text="@string/login"
+            android:textColor="#403f3f"
+            android:textSize="40sp"
+            android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/txtPassword"
-        android:layout_width="320dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:autofillHints="@string/password"
-        android:background="@drawable/circle"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:textColor="#ffc791"
-        android:textColorHint="#ffc791"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        <EditText
+            android:id="@+id/txtEmail"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/email"
+            android:background="@drawable/circle"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:textColor="#ffc791"
+            android:textColorHint="#ffc791"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/btnForgetPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="40dp"
-        android:text="@string/forget_password"
-        android:textColor="#403f3f"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        <EditText
+            android:id="@+id/txtPassword"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/password"
+            android:background="@drawable/circle"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:textColor="#ffc791"
+            android:textColorHint="#ffc791"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="320dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/button"
-        android:text="@string/login"
-        android:textColor="#FFF"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        tools:ignore="DuplicateSpeakableTextCheck" />
+        <TextView
+            android:id="@+id/btnForgetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="40dp"
+            android:layout_weight="1"
+            android:text="@string/forget_password"
+            android:textColor="#403f3f"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/btnSignUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/sign_up"
-        android:textColor="#403f3f"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/button"
+            android:text="@string/login"
+            android:textColor="#FFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/btnSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:text="@string/sign_up"
+            android:textColor="#403f3f"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
