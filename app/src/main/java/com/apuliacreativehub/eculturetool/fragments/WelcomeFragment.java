@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.activities.LoginActivity;
+import com.apuliacreativehub.eculturetool.activities.RegisterActivity;
 
 public class WelcomeFragment extends Fragment {
 
@@ -29,6 +30,9 @@ public class WelcomeFragment extends Fragment {
 
         Button btnLogin = view.findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), LoginActivity.class)));
+
+        Button btnRegister = view.findViewById(R.id.btnRegister);
+        btnRegister.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), RegisterActivity.class)));
     }
 
 }

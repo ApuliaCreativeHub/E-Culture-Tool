@@ -10,24 +10,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ECultureTool">
-
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.LoginActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:configChanges="orientation|keyboardHidden" />
-
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".activities.HomeActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="true"
-            android:screenOrientation="fullSensor"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

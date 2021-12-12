@@ -69,11 +69,23 @@
             android:layout_width="320dp"
             android:layout_height="48dp"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:background="@drawable/button"
             android:text="@string/register"
             android:textColor="#FFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnWhySignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:text="@string/why_sign_up"
+            android:textColor="#403f3f"
             android:textSize="16sp"
             android:textStyle="bold" />
 

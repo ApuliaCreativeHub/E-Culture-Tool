@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel;
 public class LoginViewModel extends ViewModel {
 
     private String email = "";
-
     private String password = "";
 
     public String getEmail() {
@@ -17,7 +16,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void setEmail(String email) {
-        this.email=email;
+        this.email = email;
     }
 
     public void setPassword(String password) {

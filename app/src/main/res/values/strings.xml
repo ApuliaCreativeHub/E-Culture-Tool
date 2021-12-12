@@ -20,4 +20,10 @@
 
     <string name="options_user">Account details</string>
     <string name="options_logout">Logout</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_in">Already have an account? Sign In</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="curator">Are you a curator?</string>
+    <string name="why_sign_up">Why should I Sign Up?</string>
 </resources>

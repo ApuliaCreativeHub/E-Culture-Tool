@@ -5,18 +5,21 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.viewmodels.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private View view;
     private LoginViewModel loginViewModel;
     private EditText txtEmail;
     private EditText txtPassword;
@@ -30,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
-        View view = findViewById(R.id.lytLogin);
+        view = findViewById(R.id.lytLogin);
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         txtEmail = view.findViewById(R.id.txtEmail);
@@ -55,6 +58,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
+        TextView btnSignUp = view.findViewById(R.id.btnSignIn);
+        btnSignUp.setOnClickListener(view -> {
+            startActivity(new Intent(this, RegisterActivity.class));
+            finish();
+        });
 
         txtEmail.addTextChangedListener(new TextWatcher() {
             @Override
