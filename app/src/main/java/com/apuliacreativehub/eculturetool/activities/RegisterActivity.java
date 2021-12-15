@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -172,6 +173,80 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         sthCurator.setOnCheckedChangeListener((buttonView, isChecked) -> registerViewModel.setIsCurator(isChecked));
+
+        Button btnRegister = view.findViewById(R.id.btnRegister);
+        btnRegister.setOnClickListener(OnClickListener -> {
+            // Check Name
+            switch(registerViewModel.checkName(registerViewModel.getName())) {
+                case "empty":
+                    txtName.setError(getResources().getString(R.string.empty));
+                    break;
+                case "name_too_long_or_short":
+                    txtName.setError(getResources().getString(R.string.name_too_long_or_short));
+                    break;
+                case "invalid_name":
+                    txtName.setError(getResources().getString(R.string.invalid_name));
+                    break;
+                default:
+                    txtName.setError(null);
+                    break;
+            }
+
+            // Check Surname
+            switch(registerViewModel.checkSurname(registerViewModel.getSurname())) {
+                case "empty":
+                    txtSurname.setError(getResources().getString(R.string.empty));
+                    break;
+                case "surname_too_long_or_short":
+                    txtSurname.setError(getResources().getString(R.string.surname_too_long_or_short));
+                    break;
+                case "invalid_surname":
+                    txtSurname.setError(getResources().getString(R.string.invalid_surname));
+                    break;
+                default:
+                    txtSurname.setError(null);
+                    break;
+            }
+
+            // Check Email
+            switch(registerViewModel.checkEmail(registerViewModel.getEmail())) {
+                case "empty":
+                    txtEmail.setError(getResources().getString(R.string.empty));
+                    break;
+                case "invalid_email":
+                    txtEmail.setError(getResources().getString(R.string.invalid_email));
+                    break;
+                default:
+                    txtEmail.setError(null);
+                    break;
+            }
+
+            // Check Password
+            switch(registerViewModel.checkPassword(registerViewModel.getPassword())) {
+                case "empty":
+                    txtPassword.setError(getResources().getString(R.string.empty));
+                    break;
+                case "invalid_password":
+                    txtPassword.setError(getResources().getString(R.string.invalid_password));
+                    break;
+                default:
+                    txtPassword.setError(null);
+                    break;
+            }
+
+            // Check Confirm Password
+            switch(registerViewModel.checkConfirmPassword(registerViewModel.getPassword(), registerViewModel.getConfirmPassword())) {
+                case "empty":
+                    txtConfirmPassword.setError(getResources().getString(R.string.empty));
+                    break;
+                case "invalid_confirm_password":
+                    txtConfirmPassword.setError(getResources().getString(R.string.invalid_confirm_password));
+                    break;
+                default:
+                    txtConfirmPassword.setError(null);
+                    break;
+            }
+        });
     }
 
 }
