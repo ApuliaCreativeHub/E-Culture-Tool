@@ -9,4 +9,8 @@
 
     <string name="options_user">Informazioni utente</string>
     <string name="options_logout">Esci</string>
+
+    <string name="welcome_login_button">Login</string>
+    <string name="welcome_sign_up_button">Registrati</string>
+    <string name="welcome_log_as_guest_text_view">Continua come Guest…</string>
 </resources>
