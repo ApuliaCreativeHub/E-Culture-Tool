@@ -177,75 +177,34 @@ public class RegisterActivity extends AppCompatActivity {
         Button btnRegister = view.findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(OnClickListener -> {
             // Check Name
-            switch(registerViewModel.checkName(registerViewModel.getName())) {
-                case "empty":
-                    txtName.setError(getResources().getString(R.string.empty));
-                    break;
-                case "name_too_long_or_short":
-                    txtName.setError(getResources().getString(R.string.name_too_long_or_short));
-                    break;
-                case "invalid_name":
-                    txtName.setError(getResources().getString(R.string.invalid_name));
-                    break;
-                default:
-                    txtName.setError(null);
-                    break;
-            }
+            if(registerViewModel.checkName(registerViewModel.getName()))
+                txtName.setError(getResources().getString(R.string.invalid_name));
+            else
+                txtName.setError(null);
 
             // Check Surname
-            switch(registerViewModel.checkSurname(registerViewModel.getSurname())) {
-                case "empty":
-                    txtSurname.setError(getResources().getString(R.string.empty));
-                    break;
-                case "surname_too_long_or_short":
-                    txtSurname.setError(getResources().getString(R.string.surname_too_long_or_short));
-                    break;
-                case "invalid_surname":
-                    txtSurname.setError(getResources().getString(R.string.invalid_surname));
-                    break;
-                default:
-                    txtSurname.setError(null);
-                    break;
-            }
+            if(registerViewModel.checkSurname(registerViewModel.getSurname()))
+                txtSurname.setError(getResources().getString(R.string.invalid_surname));
+            else
+                txtSurname.setError(null);
 
             // Check Email
-            switch(registerViewModel.checkEmail(registerViewModel.getEmail())) {
-                case "empty":
-                    txtEmail.setError(getResources().getString(R.string.empty));
-                    break;
-                case "invalid_email":
-                    txtEmail.setError(getResources().getString(R.string.invalid_email));
-                    break;
-                default:
-                    txtEmail.setError(null);
-                    break;
-            }
+            if(registerViewModel.checkEmail(registerViewModel.getEmail()))
+                txtEmail.setError(getResources().getString(R.string.invalid_email));
+            else
+                txtEmail.setError(null);
 
             // Check Password
-            switch(registerViewModel.checkPassword(registerViewModel.getPassword())) {
-                case "empty":
-                    txtPassword.setError(getResources().getString(R.string.empty));
-                    break;
-                case "invalid_password":
-                    txtPassword.setError(getResources().getString(R.string.invalid_password));
-                    break;
-                default:
-                    txtPassword.setError(null);
-                    break;
-            }
+            if(registerViewModel.checkPassword(registerViewModel.getPassword()))
+                txtPassword.setError(getResources().getString(R.string.invalid_password));
+            else
+                txtPassword.setError(null);
 
             // Check Confirm Password
-            switch(registerViewModel.checkConfirmPassword(registerViewModel.getPassword(), registerViewModel.getConfirmPassword())) {
-                case "empty":
-                    txtConfirmPassword.setError(getResources().getString(R.string.empty));
-                    break;
-                case "invalid_confirm_password":
-                    txtConfirmPassword.setError(getResources().getString(R.string.invalid_confirm_password));
-                    break;
-                default:
-                    txtConfirmPassword.setError(null);
-                    break;
-            }
+            if(registerViewModel.checkConfirmPassword(registerViewModel.getPassword(), registerViewModel.getConfirmPassword()))
+                txtConfirmPassword.setError(getResources().getString(R.string.invalid_confirm_password));
+            else
+                txtConfirmPassword.setError(null);
         });
     }
 

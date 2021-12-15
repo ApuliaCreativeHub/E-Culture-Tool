@@ -8,23 +8,9 @@ import java.util.regex.Pattern;
 
 public class RegisterViewModel extends ViewModel {
 
-    private static final int MIN_CHARACTERS_NAME = 3;
-    private static final int MAX_CHARACTER_NAME = 50;
-    private static final Pattern NAME_PATTERN = Pattern.compile("[A-Z][a-z]*");
-
-    private static final int MIN_CHARACTERS_SURNAME = 3;
-    private static final int MAX_CHARACTER_SURNAME = 50;
-    private static final Pattern SURNAME_PATTERN = Pattern.compile("[A-Z][a-z]*([ '-][A-Z][a-z]*)*");
-
-    private static final Pattern PASSWORD_PATTERN =
-            Pattern.compile("^" +
-                    "(?=.*[0-9])" +      // at least 1 digit
-                    "(?=.*[a-z])" +      // at least 1 lower case letter
-                    "(?=.*[A-Z])" +      // at least 1 upper case letter
-                    "(?=.*[@#$%^&+=])" + // at least 1 special character
-                    "(?=\\S+$)" +        // no white spaces
-                    ".{6,}" +            // at least 8 characters
-                    "$");
+    private static final Pattern NAME_PATTERN = Pattern.compile("[A-Z][a-z]{2,14}");
+    private static final Pattern SURNAME_PATTERN = Pattern.compile("[A-Z][a-z]{2,14}([ ][A-Z][a-z]{2,14})?");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$");
 
     private String name = "";
     private String surname = "";
@@ -41,28 +27,20 @@ public class RegisterViewModel extends ViewModel {
         this.name = name;
     }
 
-    public String checkName(String name) {
-        String error = "";
+    public boolean checkName(String name) {
+        boolean error = false;
 
-        if(name.isEmpty())
-            error = "empty";
-        else if(name.length() < MIN_CHARACTERS_NAME || name.length() > MAX_CHARACTER_NAME)
-            error = "name_too_long_or_short";
-        else if(!NAME_PATTERN.matcher(name).matches())
-            error = "invalid_name";
+        if(!NAME_PATTERN.matcher(name).matches())
+            error = true;
 
         return error;
     }
 
-    public String checkSurname(String surname) {
-        String error = "";
+    public boolean checkSurname(String surname) {
+        boolean error = false;
 
-        if(surname.isEmpty())
-            error = "empty";
-        else if(surname.length() < MIN_CHARACTERS_SURNAME || surname.length() > MAX_CHARACTER_SURNAME)
-            error = "surname_too_long_or_short";
-        else if(!SURNAME_PATTERN.matcher(surname).matches())
-            error = "invalid_surname";
+        if(!SURNAME_PATTERN.matcher(surname).matches())
+            error = true;
 
         return error;
     }
@@ -83,13 +61,11 @@ public class RegisterViewModel extends ViewModel {
         this.email = email;
     }
 
-    public String checkEmail(String email) {
-        String error = "";
+    public boolean checkEmail(String email) {
+        boolean error = false;
 
-        if(email.isEmpty())
-            error = "empty";
-        else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
-            error = "invalid_email";
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+            error = true;
 
         return error;
     }
@@ -102,13 +78,11 @@ public class RegisterViewModel extends ViewModel {
         this.password = password;
     }
 
-    public String checkPassword(String password) {
-        String error = "";
+    public boolean checkPassword(String password) {
+        boolean error = false;
 
-        if(password.isEmpty())
-            error = "empty";
-        else if(!PASSWORD_PATTERN.matcher(password).matches())
-            error = "invalid_password";
+        if(!PASSWORD_PATTERN.matcher(password).matches())
+            error = true;
 
         return error;
     }
@@ -121,13 +95,11 @@ public class RegisterViewModel extends ViewModel {
         this.confirmPassword = confirmPassword;
     }
 
-    public String checkConfirmPassword(String password, String confirmPassword) {
-        String error = "";
+    public boolean checkConfirmPassword(String password, String confirmPassword) {
+        boolean error = false;
 
-        if(confirmPassword.isEmpty())
-            error = "empty";
-        else if(!password.equals(confirmPassword))
-            error = "invalid_confirm_password";
+        if(!password.equals(confirmPassword))
+            error = true;
 
         return error;
     }

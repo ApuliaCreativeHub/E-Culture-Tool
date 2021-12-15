@@ -27,12 +27,10 @@
     <string name="curator">Are you a curator?</string>
     <string name="why_sign_up">Why should I Sign Up?</string>
 
-    <string name="empty">Field can\'t be empty</string>
+    <string name="invalid_name">Please enter a name between 3 and 15 characters with the first letter capitalized and without spaces</string>
+    <string name="invalid_surname">Please enter a surname between 3 and 15 characters with the first letter capitalized and with at most one space</string>
     <string name="invalid_email">Please enter a valid email</string>
-    <string name="invalid_password">Enter at least 8 characters, without spaces, includes at least 1 digit, upper/lower case letter and special character</string>
-    <string name="invalid_confirm_password">Passwords don\'t match</string>
-    <string name="invalid_name">Please enter a valid name</string>
-    <string name="invalid_surname">Please enter a valid surname</string>
-    <string name="name_too_long_or_short">Name too long or short</string>
-    <string name="surname_too_long_or_short">Surname too long or short</string>
+    <string name="invalid_password">Please enter a password between 8 and 20 characters, without spaces, includes at least 1 digit, upper/lower case letter and special character</string>
+    <string name="invalid_confirm_password">Please be careful because the passwords don\'t match</string>
+
 </resources>
