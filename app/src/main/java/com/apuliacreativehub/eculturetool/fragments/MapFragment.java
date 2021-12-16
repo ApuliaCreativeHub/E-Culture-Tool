@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 public class MapFragment extends Fragment {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map;
+    View v;
 
     public MapFragment() {
         super(R.layout.osm_map);
@@ -34,26 +36,19 @@ public class MapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.osm_map, null);
+        v = inflater.inflate(R.layout.osm_map, null);
         map = v.findViewById(R.id.mapview);
         map.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
-        // TODO: Center map accordingly to user's nation (based on GPS)
-        map.getMapboxMap().setCamera(new CameraOptions.Builder().center(Point.fromLngLat(16.871871, 41.117143)).zoom(3.0).build());
-        return v;
-    }
+        requestPermissionsIfNecessary(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION});
+        registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if(isGranted) {
+                // TODO: Center map accordingly to user's nation (based on GPS)
+            }else{
+                map.getMapboxMap().setCamera(new CameraOptions.Builder().center(Point.fromLngLat(16.871871, 41.117143)).zoom(3.0).build());
+            }
+        });
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        ArrayList<String> permissionsToRequest = new ArrayList<>();
-        for (int i = 0; i < grantResults.length; i++) {
-            permissionsToRequest.add(permissions[i]);
-        }
-        if (permissionsToRequest.size() > 0) {
-            ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    permissionsToRequest.toArray(new String[0]),
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
-        }
+        return v;
     }
 
     private void requestPermissionsIfNecessary(String[] permissions) {
@@ -62,7 +57,11 @@ public class MapFragment extends Fragment {
             if (ContextCompat.checkSelfPermission(requireContext(), permission)
                     != PackageManager.PERMISSION_GRANTED) {
                 // Permission is not granted
-                permissionsToRequest.add(permission);
+                if(shouldShowRequestPermissionRationale(permission)){
+                    // TODO: Launch rationale Fragment
+                }else{
+                    permissionsToRequest.add(permission);
+                }
             }
         }
         if (permissionsToRequest.size() > 0) {
