@@ -27,22 +27,8 @@ public class RegisterViewModel extends ViewModel {
         this.name = name;
     }
 
-    public boolean checkName(String name) {
-        boolean error = false;
-
-        if(!NAME_PATTERN.matcher(name).matches())
-            error = true;
-
-        return error;
-    }
-
-    public boolean checkSurname(String surname) {
-        boolean error = false;
-
-        if(!SURNAME_PATTERN.matcher(surname).matches())
-            error = true;
-
-        return error;
+    public boolean isNameCorrect(String name) {
+        return NAME_PATTERN.matcher(name).matches();
     }
 
     public String getSurname() {
@@ -53,6 +39,10 @@ public class RegisterViewModel extends ViewModel {
         this.surname = surname;
     }
 
+    public boolean isSurnameCorrect(String surname) {
+        return SURNAME_PATTERN.matcher(surname).matches();
+    }
+
     public String getEmail() {
         return email;
     }
@@ -61,13 +51,8 @@ public class RegisterViewModel extends ViewModel {
         this.email = email;
     }
 
-    public boolean checkEmail(String email) {
-        boolean error = false;
-
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
-            error = true;
-
-        return error;
+    public boolean isEmailCorrect(String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     public String getPassword() {
@@ -78,13 +63,8 @@ public class RegisterViewModel extends ViewModel {
         this.password = password;
     }
 
-    public boolean checkPassword(String password) {
-        boolean error = false;
-
-        if(!PASSWORD_PATTERN.matcher(password).matches())
-            error = true;
-
-        return error;
+    public boolean isPasswordCorrect(String password) {
+        return PASSWORD_PATTERN.matcher(password).matches();
     }
 
     public String getConfirmPassword() {
@@ -95,13 +75,8 @@ public class RegisterViewModel extends ViewModel {
         this.confirmPassword = confirmPassword;
     }
 
-    public boolean checkConfirmPassword(String password, String confirmPassword) {
-        boolean error = false;
-
-        if(!password.equals(confirmPassword))
-            error = true;
-
-        return error;
+    public boolean isConfirmPasswordCorrect(String password, String confirmPassword) {
+        return password.equals(confirmPassword);
     }
 
     public boolean getIsCurator() {

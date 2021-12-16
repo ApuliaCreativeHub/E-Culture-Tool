@@ -176,35 +176,51 @@ public class RegisterActivity extends AppCompatActivity {
 
         Button btnRegister = view.findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(OnClickListener -> {
+            boolean errors = false;
+
             // Check Name
-            if(registerViewModel.checkName(registerViewModel.getName()))
+            if(!registerViewModel.isNameCorrect(registerViewModel.getName())) {
                 txtName.setError(getResources().getString(R.string.invalid_name));
-            else
+                errors = true;
+            } else {
                 txtName.setError(null);
+            }
 
             // Check Surname
-            if(registerViewModel.checkSurname(registerViewModel.getSurname()))
+            if(!registerViewModel.isSurnameCorrect(registerViewModel.getSurname())) {
                 txtSurname.setError(getResources().getString(R.string.invalid_surname));
-            else
+                errors = true;
+            } else {
                 txtSurname.setError(null);
+            }
 
             // Check Email
-            if(registerViewModel.checkEmail(registerViewModel.getEmail()))
+            if(!registerViewModel.isEmailCorrect(registerViewModel.getEmail())) {
                 txtEmail.setError(getResources().getString(R.string.invalid_email));
-            else
+                errors = true;
+            } else {
                 txtEmail.setError(null);
+            }
 
             // Check Password
-            if(registerViewModel.checkPassword(registerViewModel.getPassword()))
+            if(!registerViewModel.isPasswordCorrect(registerViewModel.getPassword())) {
                 txtPassword.setError(getResources().getString(R.string.invalid_password));
-            else
+                errors = true;
+            } else {
                 txtPassword.setError(null);
+            }
 
             // Check Confirm Password
-            if(registerViewModel.checkConfirmPassword(registerViewModel.getPassword(), registerViewModel.getConfirmPassword()))
+            if(!registerViewModel.isConfirmPasswordCorrect(registerViewModel.getPassword(), registerViewModel.getConfirmPassword())) {
                 txtConfirmPassword.setError(getResources().getString(R.string.invalid_confirm_password));
-            else
+                errors = true;
+            } else {
                 txtConfirmPassword.setError(null);
+            }
+
+            if(!errors) {
+                startActivity(new Intent(this, LoginActivity.class));
+            }
         });
     }
 
