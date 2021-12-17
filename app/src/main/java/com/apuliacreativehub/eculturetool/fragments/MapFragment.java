@@ -25,7 +25,6 @@ import com.mapbox.maps.Style;
 import java.util.ArrayList;
 
 public class MapFragment extends Fragment {
-    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map;
     View v;
 
@@ -34,7 +33,7 @@ public class MapFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.osm_map, null);
         map = v.findViewById(R.id.mapview);
@@ -51,7 +50,7 @@ public class MapFragment extends Fragment {
         return v;
     }
 
-    private void requestPermissionsIfNecessary(String[] permissions) {
+    private void requestPermissionsIfNecessary(@NonNull String[] permissions) {
         ArrayList<String> permissionsToRequest = new ArrayList<>();
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(requireContext(), permission)
@@ -65,6 +64,7 @@ public class MapFragment extends Fragment {
             }
         }
         if (permissionsToRequest.size() > 0) {
+            int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
             ActivityCompat.requestPermissions(
                     requireActivity(),
                     permissionsToRequest.toArray(new String[0]),
