@@ -82,7 +82,6 @@ public class MapFragment extends Fragment {
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
             if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-
                 showRationaleDialog(getString(R.string.rationale_location_permission_title), Manifest.permission.ACCESS_COARSE_LOCATION);
             } else {
                 requestPermissionLauncher.launch(
