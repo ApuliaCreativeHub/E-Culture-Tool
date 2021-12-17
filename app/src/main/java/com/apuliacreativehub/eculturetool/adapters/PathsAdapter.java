@@ -1,6 +1,7 @@
 package com.apuliacreativehub.eculturetool.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,22 +11,21 @@ import android.widget.TextView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.viewmodels.PathViewModel;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class PathsAdapter extends BaseAdapter {
 
-    /**
-    private List<PathViewModel> listPaths = new ArrayList<>(Arrays.asList(
-            new PathViewModel("Museo d'arte Bari", "Percorso Mio", new Date()),
-            new PathViewModel("Museo d'arte Torino", "Percorso Standard", new Date()),
-            new PathViewModel("Museo Scultura Matera", "Percorso Avventuriero", new Date()),
-            new PathViewModel("Museo d'arte Bari", "Percorso Standard", new Date())));
-     **/
-    private List<PathViewModel> listPaths = new ArrayList<>();
+    private List<PathViewModel> paths = getPathsList();
+    private List<PathViewModel> listPaths;
+    private Boolean filterPlaces;
+    private Boolean filterName;
+    private Boolean filterDate;
 
     private Context mContext;
     private int mResource;
@@ -34,6 +34,47 @@ public class PathsAdapter extends BaseAdapter {
     public PathsAdapter(Context context) {
         mContext = context;
         outputLastDate = context.getString(R.string.list_paths_last_used);
+        paths = getPathsList();
+        listPaths = paths;
+        filterPlaces = true;
+        filterName = true;
+        filterDate = true;
+    }
+
+    public void setFilterPlaces(Boolean filterPlaces) {
+        this.filterPlaces = filterPlaces;
+    }
+
+    public void setFilterName(Boolean filterName) {
+        this.filterName = filterName;
+    }
+
+    public void setFilterDate(Boolean filterDate) {
+        this.filterDate = filterDate;
+    }
+
+    public boolean getFilterPlaces() { return this.filterPlaces; }
+
+    public boolean getFilterName() { return this.filterName; }
+
+    public boolean getFilterDate() { return this.filterDate; }
+
+
+    public void applyFilter(String query) {
+        listPaths = new ArrayList<PathViewModel>();
+        Boolean canAdd;
+        for (PathViewModel path : paths) {
+            canAdd = false;
+            if((filterPlaces && findString(path.getPlace(), query)) ||
+                (filterDate && findString(path.getLastUsed().toString(), query)) ||
+                (filterName && findString(path.getName(), query))) canAdd = true;
+
+            if(canAdd) listPaths.add(path);
+        }
+    }
+
+    public void restoreAll() {
+        listPaths = new ArrayList<>(paths);
     }
 
     @Override
@@ -74,4 +115,18 @@ public class PathsAdapter extends BaseAdapter {
         return view;
     }
 
+    /**
+     * TODO: We have to implement the API to fetch data
+     */
+    private List<PathViewModel> getPathsList() {
+        return new ArrayList<>(Arrays.asList(
+                new PathViewModel("Museo d'arte Bari", "Percorso Mio", new Date()),
+                new PathViewModel("Museo d'arte Torino", "Percorso Standard", new Date()),
+                new PathViewModel("Museo Scultura Matera", "Percorso Avventuriero", new Date()),
+                new PathViewModel("Museo d'arte Bari", "Percorso Standard", new Date())));
+    }
+
+    private static Boolean findString(String source, String matcher) {
+        return source.toLowerCase(Locale.ROOT).contains(matcher.toLowerCase(Locale.ROOT));
+    }
 }

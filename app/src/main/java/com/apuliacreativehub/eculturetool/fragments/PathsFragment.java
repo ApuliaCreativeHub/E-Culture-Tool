@@ -1,9 +1,11 @@
 package com.apuliacreativehub.eculturetool.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.ListFragment;
@@ -15,7 +17,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.apuliacreativehub.eculturetool.R;
@@ -24,7 +30,7 @@ import com.apuliacreativehub.eculturetool.adapters.PathsAdapter;
 public class PathsFragment extends ListFragment {
 
     private FragmentActivity master;
-    private ListAdapter pathsAdapter;
+    private PathsAdapter pathsAdapter;
     private boolean isFilterChildOpened = false;
 
     public void setFilterChildOpened(boolean value) {
@@ -40,16 +46,16 @@ public class PathsFragment extends ListFragment {
         getParentFragmentManager().setFragmentResultListener("closingBackdrop", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                Log.i("LISTENER", "CALLED");
                 isFilterChildOpened = false;
+            }
+        });
 
-                int lastBack = master.getSupportFragmentManager().getBackStackEntryCount();
-
-                while(lastBack > 1) {
-                    master.getSupportFragmentManager().popBackStack();
-                    lastBack = master.getSupportFragmentManager().getBackStackEntryCount();
-                    Log.i("LISTENER", String.valueOf(lastBack));
-                }
+        getParentFragmentManager().setFragmentResultListener("applyFilter", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                pathsAdapter.setFilterDate(result.getBoolean("switchFilterDate"));
+                pathsAdapter.setFilterPlaces(result.getBoolean("switchFilterPlaces"));
+                pathsAdapter.setFilterName(result.getBoolean("switchFilterName"));
             }
         });
     }
@@ -58,6 +64,7 @@ public class PathsFragment extends ListFragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.top_menu_paths, menu);
+        defineSearchActionBar(menu);
     }
 
     @Override
@@ -74,7 +81,8 @@ public class PathsFragment extends ListFragment {
                                 R.anim.slide_out,
                                 R.anim.fade_out
                         )
-                        .replace(R.id.container_filter_paths, new PathsFilterFragment())
+                        .replace(R.id.container_filter_paths,
+                                new PathsFilterFragment(pathsAdapter.getFilterPlaces(), pathsAdapter.getFilterName(), pathsAdapter.getFilterDate()))
                         .commit();
             }
         }
@@ -92,17 +100,42 @@ public class PathsFragment extends ListFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView textCountResult = master.findViewById(R.id.textListPathsResult);
-        if(pathsAdapter.getCount() > 0) {
-            textCountResult.setText(textCountResult.getText() + " " + String.valueOf(pathsAdapter.getCount()));
-        } else {
-            textCountResult.setVisibility(View.INVISIBLE);
-        }
+        setCountResult();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.i("DETACHT", "OK");
+    private void defineSearchActionBar(@NonNull Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.searchPaths);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                pathsAdapter.applyFilter(query);
+                setListAdapter(pathsAdapter);
+                setCountResult();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.isEmpty()) {
+                    pathsAdapter.restoreAll();
+                    setListAdapter(pathsAdapter);
+                    setCountResult();
+                }
+                return true;
+            }
+        });
+    }
+
+    private void setCountResult() {
+        TextView textCountResult = master.findViewById(R.id.textListPathsResult);
+        if(pathsAdapter.getCount() > 0) {
+            textCountResult.setVisibility(View.VISIBLE);
+            textCountResult.setText(getString(R.string.list_paths_results) + " " + String.valueOf(pathsAdapter.getCount()));
+            ((ImageView) master.findViewById(R.id.frameNotFoundPaths)).setVisibility(View.INVISIBLE);
+        } else {
+            ((ImageView) master.findViewById(R.id.frameNotFoundPaths)).setVisibility(View.VISIBLE);
+            textCountResult.setVisibility(View.INVISIBLE);
+        }
     }
 }
