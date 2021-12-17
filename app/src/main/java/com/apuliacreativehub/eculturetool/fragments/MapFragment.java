@@ -3,41 +3,31 @@ package com.apuliacreativehub.eculturetool.fragments;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.os.ConfigurationCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.loader.content.AsyncTaskLoader;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.apuliacreativehub.eculturetool.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.mapbox.geojson.Point;
@@ -47,13 +37,8 @@ import com.mapbox.maps.Style;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.Executor;
 
 public class MapFragment extends Fragment {
     private MapView map;
@@ -71,7 +56,6 @@ public class MapFragment extends Fragment {
                     }
                 }
             });
-
         }else {
             centerMapAccordingToLocale();
         }
@@ -96,12 +80,9 @@ public class MapFragment extends Fragment {
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
             if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                /*LocationPermissionRationaleDialog rationaleDialog=new LocationPermissionRationaleDialog();
-                rationaleDialog.show(getParentFragmentManager(), "location_rationale");*/
-                showRationaleDialog("We need permission to access your location", Manifest.permission.ACCESS_COARSE_LOCATION);
+
+                showRationaleDialog(getString(R.string.rationale_location_permission_title), Manifest.permission.ACCESS_COARSE_LOCATION);
             } else {
-                // You can directly ask for the permission.
-                // The registered ActivityResultCallback gets the result of this request.
                 requestPermissionLauncher.launch(
                         Manifest.permission.ACCESS_COARSE_LOCATION);
             }
@@ -110,7 +91,7 @@ public class MapFragment extends Fragment {
 
     private void showRationaleDialog(String title, String permission) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(title).setMessage(R.string.rationale_location_permission)
+        builder.setTitle(title).setMessage(R.string.rationale_location_permission_message)
                 .setPositiveButton(R.string.rationale_ok_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         requestPermissionLauncher.launch(

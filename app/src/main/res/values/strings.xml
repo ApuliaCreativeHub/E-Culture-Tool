@@ -12,7 +12,8 @@
     <string name="options_user">Account details</string>
     <string name="options_logout">Logout</string>
 
-    <string name="rationale_location_permission">Now you will be asked to consent location permission to show you relevant culture places in your area</string>
+    <string name="rationale_location_permission_title">We need your permission to access location</string>
+    <string name="rationale_location_permission_message">You will now be asked to consent location permission to show you relevant culture places in your area</string>
     <string name="rationale_cancel_button">No, thanks</string>
     <string name="rationale_ok_button">Got it!</string>
 </resources>
