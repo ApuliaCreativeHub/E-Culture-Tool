@@ -2,7 +2,10 @@ package com.apuliacreativehub.eculturetool.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.os.ConfigurationCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.loader.content.AsyncTaskLoader;
 
@@ -47,6 +51,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 
@@ -55,7 +60,6 @@ public class MapFragment extends Fragment {
     View v;
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
         if (isGranted) {
-            // TODO: Center map accordingly to user's nation (based on GPS)
             FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
             @SuppressLint("MissingPermission") Task<Location> t = fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, null);
             t.addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
@@ -69,26 +73,7 @@ public class MapFragment extends Fragment {
             });
 
         }else {
-            String nominatimApi = "https://nominatim.openstreetmap.org/search?format=json&q=";
-            Locale currentLocale = ConfigurationCompat.getLocales(getResources().getConfiguration()).get(0);
-            RequestQueue queue = Volley.newRequestQueue(requireContext());
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, nominatimApi + currentLocale.getCountry(), new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONArray jsonArray = new JSONArray(response);
-                        double lat = jsonArray.getJSONObject(0).getDouble("lat");
-                        double lon = jsonArray.getJSONObject(0).getDouble("lon");
-                        Log.d("INFERRED LOCATION", "Lat: " + lat);
-                        Log.d("INFERRED LOCATION", "Lon: " + lon);
-                        map.getMapboxMap().setCamera(new CameraOptions.Builder().center(Point.fromLngLat(lon, lat)).zoom(3.0).build());
-                    } catch (JSONException e) {
-                        map.getMapboxMap().setCamera(new CameraOptions.Builder().zoom(3.0).build());
-                        e.printStackTrace();
-                    }
-                }
-            }, null);
-            queue.add(stringRequest);
+            centerMapAccordingToLocale();
         }
     });
 
@@ -102,31 +87,64 @@ public class MapFragment extends Fragment {
         v = inflater.inflate(R.layout.osm_map, null);
         map = v.findViewById(R.id.mapview);
         map.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
-        //requestPermissionsIfNecessary(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION});
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
+        requestLocationPermission();
         return v;
     }
 
-    private void requestPermissionsIfNecessary(@NonNull String[] permissions) {
-        ArrayList<String> permissionsToRequest = new ArrayList<>();
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(requireContext(), permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                // Permission is not granted
-                if(shouldShowRequestPermissionRationale(permission)){
-                    // TODO: Launch rationale Fragment
-                }else{
-                    permissionsToRequest.add(permission);
-                }
+    private void requestLocationPermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                /*LocationPermissionRationaleDialog rationaleDialog=new LocationPermissionRationaleDialog();
+                rationaleDialog.show(getParentFragmentManager(), "location_rationale");*/
+                showRationaleDialog("We need permission to access your location", Manifest.permission.ACCESS_COARSE_LOCATION);
+            } else {
+                // You can directly ask for the permission.
+                // The registered ActivityResultCallback gets the result of this request.
+                requestPermissionLauncher.launch(
+                        Manifest.permission.ACCESS_COARSE_LOCATION);
             }
         }
-        if (permissionsToRequest.size() > 0) {
-            int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-            ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    permissionsToRequest.toArray(new String[0]),
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
-        }
+    }
+
+    private void showRationaleDialog(String title, String permission) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(title).setMessage(R.string.rationale_location_permission)
+                .setPositiveButton(R.string.rationale_ok_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        requestPermissionLauncher.launch(
+                                permission);
+                    }
+                }).setNegativeButton(R.string.rationale_cancel_button, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                centerMapAccordingToLocale();
+            }
+        });
+        builder.create().show();
+    }
+
+    private void centerMapAccordingToLocale() {
+        String nominatimApi = "https://nominatim.openstreetmap.org/search?format=json&q=";
+        Locale currentLocale = ConfigurationCompat.getLocales(getResources().getConfiguration()).get(0);
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, nominatimApi + currentLocale.getCountry(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    double lat = jsonArray.getJSONObject(0).getDouble("lat");
+                    double lon = jsonArray.getJSONObject(0).getDouble("lon");
+                    Log.d("INFERRED LOCATION", "Lat: " + lat);
+                    Log.d("INFERRED LOCATION", "Lon: " + lon);
+                    map.getMapboxMap().setCamera(new CameraOptions.Builder().center(Point.fromLngLat(lon, lat)).zoom(3.0).build());
+                } catch (JSONException e) {
+                    map.getMapboxMap().setCamera(new CameraOptions.Builder().zoom(3.0).build());
+                    e.printStackTrace();
+                }
+            }
+        }, null);
+        queue.add(stringRequest);
     }
 
 }

@@ -13,4 +13,8 @@
     <string name="welcome_login_button">Login</string>
     <string name="welcome_sign_up_button">Registrati</string>
     <string name="welcome_log_as_guest_text_view">Continua come Guest…</string>
+
+    <string name="rationale_location_permission">Ora ti verranno richiesti i permessi di localizzaione per mostrarti luoghi di cultura rilevanti nella tua area</string>
+    <string name="rationale_cancel_button">No, grazie</string>
+    <string name="rationale_ok_button">Afferrato!</string>
 </resources>
