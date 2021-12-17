@@ -45,17 +45,7 @@ public class MapFragment extends Fragment {
     View v;
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
         if (isGranted) {
-            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
-            @SuppressLint("MissingPermission") Task<Location> t = fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, null);
-            t.addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null) {
-                        Log.d("LOCATION", String.valueOf(location));
-                        map.getMapboxMap().setCamera(new CameraOptions.Builder().center(Point.fromLngLat(location.getLongitude(), location.getLatitude())).zoom(3.0).build());
-                    }
-                }
-            });
+            centerMapAccordingToLocation();
         }else {
             centerMapAccordingToLocale();
         }
@@ -73,6 +63,18 @@ public class MapFragment extends Fragment {
         map.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
         requestLocationPermission();
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+            centerMapAccordingToLocation();
+        } else {
+            centerMapAccordingToLocale();
+        }
     }
 
     private void requestLocationPermission() {
@@ -103,6 +105,20 @@ public class MapFragment extends Fragment {
             }
         });
         builder.create().show();
+    }
+
+    private void centerMapAccordingToLocation() {
+        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
+        @SuppressLint("MissingPermission") Task<Location> t = fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, null);
+        t.addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    Log.d("LOCATION", String.valueOf(location));
+                    map.getMapboxMap().setCamera(new CameraOptions.Builder().center(Point.fromLngLat(location.getLongitude(), location.getLatitude())).zoom(3.0).build());
+                }
+            }
+        });
     }
 
     private void centerMapAccordingToLocale() {
