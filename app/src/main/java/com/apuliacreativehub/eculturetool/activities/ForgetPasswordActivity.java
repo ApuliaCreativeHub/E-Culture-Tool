@@ -3,8 +3,7 @@ package com.apuliacreativehub.eculturetool.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -18,36 +17,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.fragments.UserFragment;
-import com.apuliacreativehub.eculturetool.viewmodels.LoginViewModel;
+import com.apuliacreativehub.eculturetool.viewmodels.ForgetPasswordViewModel;
 
-public class LoginActivity extends AppCompatActivity {
+public class ForgetPasswordActivity extends AppCompatActivity {
 
     private View view;
-    private LoginViewModel loginViewModel;
+    private ForgetPasswordViewModel forgetPasswordViewModel;
     private EditText txtEmail;
-    private EditText txtPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_forget_password);
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
-        view = findViewById(R.id.lytLogin);
-        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        view = findViewById(R.id.lytForgetPassword);
+        forgetPasswordViewModel = new ViewModelProvider(this).get(ForgetPasswordViewModel.class);
 
         txtEmail = view.findViewById(R.id.txtEmail);
-        txtPassword = view.findViewById(R.id.txtPassword);
 
-        if(!loginViewModel.getEmail().equals(""))
-            txtEmail.setText(loginViewModel.getEmail());
-
-        if(!loginViewModel.getPassword().equals(""))
-            txtPassword.setText(loginViewModel.getPassword());
+        if(!forgetPasswordViewModel.getEmail().equals(""))
+            txtEmail.setText(forgetPasswordViewModel.getEmail());
     }
 
     @Override
@@ -76,31 +69,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                loginViewModel.setEmail(editable.toString());
+                forgetPasswordViewModel.setEmail(editable.toString());
             }
-        });
-
-        txtPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                loginViewModel.setPassword(editable.toString());
-            }
-        });
-
-        TextView btnForgetPassword = view.findViewById(R.id.btnForgetPassword);
-        btnForgetPassword.setOnClickListener(view -> {
-            startActivity(new Intent(this, ForgetPasswordActivity.class));
-            finish();
         });
 
         TextView btnSignUp = view.findViewById(R.id.btnSignUp);
@@ -109,10 +79,18 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         });
 
-        Button btnLogin = view.findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(view -> {
+        TextView btnSignIn = view.findViewById(R.id.btnSignIn);
+        btnSignIn.setOnClickListener(view -> {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        });
+
+        Button btnSend = view.findViewById(R.id.btnSend);
+        btnSend.setOnClickListener(view -> {
             // TODO: Aggiungere query di controllo sul db
-            startActivity(new Intent(this, HomeActivity.class));
+            // TODO: Generare la nuova password
+            // TODO: Inviare la nuova password tramite mail
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
         });
     }

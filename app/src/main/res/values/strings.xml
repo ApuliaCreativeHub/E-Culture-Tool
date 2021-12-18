@@ -32,5 +32,7 @@
     <string name="invalid_email">Please enter a valid email</string>
     <string name="invalid_password">Please enter a password between 8 and 20 characters, without spaces, includes at least 1 digit, upper/lower case letter and special character</string>
     <string name="invalid_confirm_password">Please be careful because the passwords don\'t match</string>
+    <string name="recover_password">Recover Password? Sign In</string>
+    <string name="send">Send</string>
 
 </resources>

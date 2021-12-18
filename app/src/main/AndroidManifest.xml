@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ECultureTool">
         <activity
+            android:name=".activities.ForgetPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.RegisterActivity"
             android:exported="false" />
         <activity

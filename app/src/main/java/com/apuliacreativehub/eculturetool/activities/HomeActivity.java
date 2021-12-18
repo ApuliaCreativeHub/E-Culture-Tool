@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.apuliacreativehub.eculturetool.fragments.UserFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import com.apuliacreativehub.eculturetool.R;
@@ -61,6 +62,7 @@ public class HomeActivity extends AppCompatActivity {
                 // se l'utente non è loggato dev'essere caricato il WelcomeFragment
                 // altrimenti dev'essere caricare l'UserFragment
                 fragment = new WelcomeFragment();
+                // fragment = new UserFragment();
                 break;
             case menuItemPaths:
                 fragment = new PathsFragment();

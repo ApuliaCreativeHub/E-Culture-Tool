@@ -81,12 +81,6 @@ public class RegisterActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        TextView btnSignIn = view.findViewById(R.id.btnSignIn);
-        btnSignIn.setOnClickListener(view -> {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        });
-
         txtName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -174,6 +168,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         sthCurator.setOnCheckedChangeListener((buttonView, isChecked) -> registerViewModel.setIsCurator(isChecked));
 
+        TextView btnSignIn = view.findViewById(R.id.btnSignIn);
+        btnSignIn.setOnClickListener(view -> {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        });
+
         Button btnRegister = view.findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(OnClickListener -> {
             boolean errors = false;
@@ -219,7 +219,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             if(!errors) {
+                // TODO: Aggiungere query di salvataggio sul db
                 startActivity(new Intent(this, LoginActivity.class));
+                finish();
             }
         });
     }
