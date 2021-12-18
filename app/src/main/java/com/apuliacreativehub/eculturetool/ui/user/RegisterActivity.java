@@ -1,9 +1,4 @@
-package com.apuliacreativehub.eculturetool.activities;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
+package com.apuliacreativehub.eculturetool.ui.user;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.viewmodels.RegisterViewModel;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class RegisterActivity extends AppCompatActivity {

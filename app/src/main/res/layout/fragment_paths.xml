@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.PathsFragment">
+    tools:context=".ui.paths.PathsFragment">
 
     <TextView
         android:id="@+id/textListPathsResult"
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textSize="12sp"
-        android:text="@string/list_paths_results"/>
+        android:text="@string/list_paths_results" />
 
     <FrameLayout
         android:layout_width="match_parent"

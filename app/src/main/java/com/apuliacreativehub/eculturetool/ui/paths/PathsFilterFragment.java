@@ -1,14 +1,6 @@
-package com.apuliacreativehub.eculturetool.fragments;
+package com.apuliacreativehub.eculturetool.ui.paths;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +8,20 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Switch;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
 import com.apuliacreativehub.eculturetool.R;
 
 public class PathsFilterFragment extends Fragment {
 
     private FragmentActivity master;
-    private Boolean activeFilterPlaces;
-    private Boolean activeFilterName;
-    private Boolean activeFilterDate;
-    ImageButton  closeFilter;
+    private final Boolean activeFilterPlaces;
+    private final Boolean activeFilterName;
+    private final Boolean activeFilterDate;
+    ImageButton closeFilter;
     Button applyFilter;
     Switch switchSearchName;
     Switch switchSearchDate;

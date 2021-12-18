@@ -1,18 +1,16 @@
-package com.apuliacreativehub.eculturetool.activities;
+package com.apuliacreativehub.eculturetool.ui;
+
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Bundle;
-
-import com.apuliacreativehub.eculturetool.fragments.UserFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.fragments.PathsFragment;
-import com.apuliacreativehub.eculturetool.fragments.PlacesFragment;
-import com.apuliacreativehub.eculturetool.fragments.WelcomeFragment;
+import com.apuliacreativehub.eculturetool.ui.paths.PathsFragment;
+import com.apuliacreativehub.eculturetool.ui.places.PlacesFragment;
+import com.apuliacreativehub.eculturetool.ui.user.WelcomeFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
 

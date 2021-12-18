@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.fragments;
+package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.Manifest;
 import android.annotation.SuppressLint;

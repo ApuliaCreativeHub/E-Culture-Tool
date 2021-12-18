@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.viewmodels;
+package com.apuliacreativehub.eculturetool.ui.user;
 
 import android.util.Patterns;
 

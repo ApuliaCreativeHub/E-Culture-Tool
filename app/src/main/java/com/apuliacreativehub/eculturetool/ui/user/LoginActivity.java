@@ -1,11 +1,4 @@
-package com.apuliacreativehub.eculturetool.activities;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
+package com.apuliacreativehub.eculturetool.ui.user;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,9 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.fragments.UserFragment;
-import com.apuliacreativehub.eculturetool.viewmodels.LoginViewModel;
+import com.apuliacreativehub.eculturetool.ui.HomeActivity;
 
 public class LoginActivity extends AppCompatActivity {
 

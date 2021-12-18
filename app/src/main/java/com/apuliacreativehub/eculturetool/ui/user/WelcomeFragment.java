@@ -1,18 +1,15 @@
-package com.apuliacreativehub.eculturetool.fragments;
+package com.apuliacreativehub.eculturetool.ui.user;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.fragment.app.Fragment;
+
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.activities.LoginActivity;
-import com.apuliacreativehub.eculturetool.activities.RegisterActivity;
 
 public class WelcomeFragment extends Fragment {
 

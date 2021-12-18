@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.viewmodels;
+package com.apuliacreativehub.eculturetool.ui.paths;
 
 import androidx.lifecycle.ViewModel;
 

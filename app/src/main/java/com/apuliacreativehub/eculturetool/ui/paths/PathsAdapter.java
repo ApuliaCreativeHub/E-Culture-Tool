@@ -1,7 +1,6 @@
-package com.apuliacreativehub.eculturetool.adapters;
+package com.apuliacreativehub.eculturetool.ui.paths;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.viewmodels.PathViewModel;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -27,9 +24,9 @@ public class PathsAdapter extends BaseAdapter {
     private Boolean filterName;
     private Boolean filterDate;
 
-    private Context mContext;
+    private final Context mContext;
     private int mResource;
-    private String outputLastDate;
+    private final String outputLastDate;
 
     public PathsAdapter(Context context) {
         mContext = context;
@@ -64,12 +61,11 @@ public class PathsAdapter extends BaseAdapter {
         listPaths = new ArrayList<PathViewModel>();
         Boolean canAdd;
         for (PathViewModel path : paths) {
-            canAdd = false;
-            if((filterPlaces && findString(path.getPlace(), query)) ||
-                (filterDate && findString(path.getLastUsed().toString(), query)) ||
-                (filterName && findString(path.getName(), query))) canAdd = true;
+            canAdd = (filterPlaces && findString(path.getPlace(), query)) ||
+                    (filterDate && findString(path.getLastUsed().toString(), query)) ||
+                    (filterName && findString(path.getName(), query));
 
-            if(canAdd) listPaths.add(path);
+            if (canAdd) listPaths.add(path);
         }
     }
 

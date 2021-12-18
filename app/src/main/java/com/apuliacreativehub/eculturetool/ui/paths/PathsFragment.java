@@ -1,15 +1,6 @@
-package com.apuliacreativehub.eculturetool.fragments;
+package com.apuliacreativehub.eculturetool.ui.paths;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentResultListener;
-import androidx.fragment.app.ListFragment;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,8 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentResultListener;
+import androidx.fragment.app.ListFragment;
+
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.adapters.PathsAdapter;
 
 public class PathsFragment extends ListFragment {
 
@@ -133,7 +131,7 @@ public class PathsFragment extends ListFragment {
         TextView textCountResult = master.findViewById(R.id.textListPathsResult);
         if(pathsAdapter.getCount() > 0) {
             textCountResult.setVisibility(View.VISIBLE);
-            textCountResult.setText(getString(R.string.list_paths_results) + " " + String.valueOf(pathsAdapter.getCount()));
+            textCountResult.setText(getString(R.string.list_paths_results) + " " + pathsAdapter.getCount());
             ((ImageView) master.findViewById(R.id.frameNotFoundPaths)).setVisibility(View.INVISIBLE);
         } else {
             ((ImageView) master.findViewById(R.id.frameNotFoundPaths)).setVisibility(View.VISIBLE);

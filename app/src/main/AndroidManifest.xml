@@ -13,18 +13,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ECultureTool">
         <activity
-            android:name=".activities.ForgetPasswordActivity"
+            android:name=".ui.user.ForgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.RegisterActivity"
+            android:name=".ui.user.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".ui.user.LoginActivity"
             android:configChanges="orientation|keyboardHidden"
             android:exported="false"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name=".activities.HomeActivity"
+            android:name=".ui.HomeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:exported="true"
             android:screenOrientation="fullSensor">
