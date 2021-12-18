@@ -12,4 +12,13 @@
 
     <string name="options_user">Informazioni utente</string>
     <string name="options_logout">Esci</string>
+
+    <string name="welcome_login_button">Login</string>
+    <string name="welcome_sign_up_button">Registrati</string>
+    <string name="welcome_log_as_guest_text_view">Continua come Guest…</string>
+
+    <string name="rationale_location_permission_title">Abbiamo bisogno del tuo permesso per accedere alla posizione</string>
+    <string name="rationale_location_permission_message">Ora ti verranno richiesti i permessi di localizzaione per mostrarti luoghi di cultura rilevanti nella tua area</string>
+    <string name="rationale_cancel_button">No, grazie</string>
+    <string name="rationale_ok_button">Afferrato!</string>
 </resources>
