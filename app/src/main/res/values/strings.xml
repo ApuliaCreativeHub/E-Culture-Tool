@@ -15,9 +15,13 @@
     <string name="list_paths_no_results">No results found</string>
     <string name="list_paths_no_results_description">No paths has been found</string>
     <string name="list_paths_last_used">Last used:</string>
+    <string name="list_paths_filter_names">Search by name:</string>
+    <string name="list_paths_filter_place">Search by place:</string>
+    <string name="list_paths_filter_date">Search by date used:</string>
+    <string name="apply_filter">APPLY FILTER</string>
 
     <string name="options_user">Account details</string>
     <string name="options_logout">Logout</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
