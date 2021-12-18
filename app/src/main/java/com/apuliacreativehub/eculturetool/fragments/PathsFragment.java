@@ -1,27 +1,22 @@
 package com.apuliacreativehub.eculturetool.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.ListFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.apuliacreativehub.eculturetool.R;
@@ -32,6 +27,7 @@ public class PathsFragment extends ListFragment {
     private FragmentActivity master;
     private PathsAdapter pathsAdapter;
     private boolean isFilterChildOpened = false;
+    private Fragment child;
 
     public void setFilterChildOpened(boolean value) {
         this.isFilterChildOpened = value;
@@ -46,6 +42,10 @@ public class PathsFragment extends ListFragment {
         getParentFragmentManager().setFragmentResultListener("closingBackdrop", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                getParentFragmentManager()
+                        .beginTransaction()
+                        .remove(child)
+                        .commit();
                 isFilterChildOpened = false;
             }
         });
@@ -73,16 +73,18 @@ public class PathsFragment extends ListFragment {
         if(item.getItemId() == filterId) {
             if(!isFilterChildOpened) {
                 setFilterChildOpened(true);
-                master.getSupportFragmentManager().beginTransaction()
-                        .addToBackStack(null)
+
+                child = new PathsFilterFragment(pathsAdapter.getFilterPlaces(), pathsAdapter.getFilterName(), pathsAdapter.getFilterDate());
+                master.getSupportFragmentManager()
+                        .beginTransaction()
                         .setCustomAnimations(
                                 R.anim.slide_in,
                                 R.anim.fade_out,
                                 R.anim.slide_out,
                                 R.anim.fade_out
                         )
-                        .replace(R.id.container_filter_paths,
-                                new PathsFilterFragment(pathsAdapter.getFilterPlaces(), pathsAdapter.getFilterName(), pathsAdapter.getFilterDate()))
+                        .add(R.id.container_filter_paths, child)
+                        .setReorderingAllowed(true)
                         .commit();
             }
         }

@@ -64,7 +64,6 @@ public class PathsFilterFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getParentFragmentManager().setFragmentResult("closingBackdrop", null);
-                master.getSupportFragmentManager().popBackStack();
             }
         });
 
