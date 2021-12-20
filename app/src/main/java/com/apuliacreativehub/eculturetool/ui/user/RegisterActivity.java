@@ -18,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.apuliacreativehub.eculturetool.R;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private View view;
@@ -218,7 +220,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             if(!errors) {
-                // TODO: Aggiungere query di salvataggio sul db
+                registerViewModel.registerUser();
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
             }

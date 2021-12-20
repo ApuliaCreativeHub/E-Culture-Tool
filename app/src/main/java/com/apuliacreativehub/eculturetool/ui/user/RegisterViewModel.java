@@ -4,7 +4,15 @@ import android.util.Patterns;
 
 import androidx.lifecycle.ViewModel;
 
+import com.apuliacreativehub.eculturetool.data.entity.User;
+import com.apuliacreativehub.eculturetool.data.repository.UserRepository;
+
 import java.util.regex.Pattern;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+import dagger.hilt.android.lifecycle.HiltViewModel;
 
 public class RegisterViewModel extends ViewModel {
 
@@ -18,6 +26,7 @@ public class RegisterViewModel extends ViewModel {
     private String password = "";
     private String confirmPassword = "";
     private boolean isCurator = Boolean.parseBoolean(null);
+    UserRepository repository;
 
     public String getName() {
         return name;
@@ -87,4 +96,8 @@ public class RegisterViewModel extends ViewModel {
         this.isCurator = isCurator;
     }
 
+    public void registerUser(){
+        User user = new User(name, surname, email, password, isCurator);
+        repository.registerUser(user);
+    }
 }
