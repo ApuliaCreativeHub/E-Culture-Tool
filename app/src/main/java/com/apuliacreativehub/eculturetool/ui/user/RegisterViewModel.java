@@ -9,11 +9,6 @@ import com.apuliacreativehub.eculturetool.data.repository.UserRepository;
 
 import java.util.regex.Pattern;
 
-import javax.inject.Inject;
-
-import dagger.hilt.android.AndroidEntryPoint;
-import dagger.hilt.android.lifecycle.HiltViewModel;
-
 public class RegisterViewModel extends ViewModel {
 
     private static final Pattern NAME_PATTERN = Pattern.compile("[A-Z][a-z]{2,14}");
@@ -26,7 +21,11 @@ public class RegisterViewModel extends ViewModel {
     private String password = "";
     private String confirmPassword = "";
     private boolean isCurator = Boolean.parseBoolean(null);
-    UserRepository repository;
+    private final UserRepository repository;
+
+    public RegisterViewModel(){
+        this.repository = new UserRepository();
+    }
 
     public String getName() {
         return name;

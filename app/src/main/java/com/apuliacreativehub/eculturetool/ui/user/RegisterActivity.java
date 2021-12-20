@@ -20,6 +20,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class RegisterActivity extends AppCompatActivity {
 
     private View view;

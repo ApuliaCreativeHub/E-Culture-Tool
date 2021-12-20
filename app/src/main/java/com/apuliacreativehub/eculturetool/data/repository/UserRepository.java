@@ -6,13 +6,9 @@ import com.apuliacreativehub.eculturetool.di.ECultureTool;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.AndroidEntryPoint;
-
-//TODO: resolve entryPoint's problem
-@AndroidEntryPoint
-public class UserRepository {
+public class UserRepository{
     @Inject
-    RemoteUserDAO remoteUserDAO;
+    RemoteUserDAO remoteUserDAO; //TODO: resolve nullPointerException
 
     public void registerUser(User user){
         remoteUserDAO.RegisterUser(user);
