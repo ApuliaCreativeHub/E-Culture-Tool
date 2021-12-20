@@ -2,15 +2,16 @@ package com.apuliacreativehub.eculturetool.data.repository;
 
 import com.apuliacreativehub.eculturetool.data.entity.User;
 import com.apuliacreativehub.eculturetool.data.network.RemoteUserDAO;
-import com.apuliacreativehub.eculturetool.di.ECultureTool;
+import com.apuliacreativehub.eculturetool.data.network.UserRemoteDatabase;
 
-import javax.inject.Inject;
+public class UserRepository {
+    RemoteUserDAO remoteUserDAO;
 
-public class UserRepository{
-    @Inject
-    RemoteUserDAO remoteUserDAO; //TODO: resolve nullPointerException
+    public UserRepository() {
+        remoteUserDAO = UserRemoteDatabase.provideRemoteUserDAO();
+    }
 
-    public void registerUser(User user){
+    public void registerUser(User user) {
         remoteUserDAO.RegisterUser(user);
     }
 }
