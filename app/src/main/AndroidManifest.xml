@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.apuliacreativehub.eculturetool">
+    package="com.apuliacreativehub.eculturetool" >
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,15 +12,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ECultureTool">
+        android:theme="@style/Theme.ECultureTool" >
         <activity
-            android:name=".ui.user.ForgetPasswordActivity"
+            android:name=".ui.user.FormActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.user.RegisterActivity"
+            android:name=".ui.user.ForgetPasswordFragment"
             android:exported="false" />
         <activity
-            android:name=".ui.user.LoginActivity"
+            android:name=".ui.user.RegisterFragment"
+            android:exported="false" />
+        <activity
+            android:name=".ui.user.LoginFragment"
             android:configChanges="orientation|keyboardHidden"
             android:exported="false"
             android:screenOrientation="fullSensor" />
@@ -27,7 +31,7 @@
             android:name=".ui.HomeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:exported="true"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="fullSensor" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

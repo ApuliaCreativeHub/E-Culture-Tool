@@ -1,53 +1,44 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
 
-public class ForgetPasswordActivity extends AppCompatActivity {
+public class ForgetPasswordFragment extends Fragment {
 
     private View view;
     private ForgetPasswordViewModel forgetPasswordViewModel;
     private EditText txtEmail;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forget_password);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_forget_password, container, false);
+        return view;
+    }
 
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        view = findViewById(R.id.lytForgetPassword);
         forgetPasswordViewModel = new ViewModelProvider(this).get(ForgetPasswordViewModel.class);
 
         txtEmail = view.findViewById(R.id.txtEmail);
 
         if(!forgetPasswordViewModel.getEmail().equals(""))
             txtEmail.setText(forgetPasswordViewModel.getEmail());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -72,24 +63,17 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         });
 
         TextView btnSignUp = view.findViewById(R.id.btnSignUp);
-        btnSignUp.setOnClickListener(view -> {
-            startActivity(new Intent(this, RegisterActivity.class));
-            finish();
-        });
+        btnSignUp.setOnClickListener(view -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new RegisterFragment()).commit());
 
         TextView btnSignIn = view.findViewById(R.id.btnSignIn);
-        btnSignIn.setOnClickListener(view -> {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        });
+        btnSignIn.setOnClickListener(view -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit());
 
         Button btnSend = view.findViewById(R.id.btnSend);
         btnSend.setOnClickListener(view -> {
             // TODO: Aggiungere query di controllo sul db
             // TODO: Generare la nuova password
             // TODO: Inviare la nuova password tramite mail
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit();
         });
     }
 

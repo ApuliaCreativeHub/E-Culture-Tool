@@ -9,10 +9,14 @@ import androidx.fragment.app.FragmentTransaction;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.paths.PathsFragment;
 import com.apuliacreativehub.eculturetool.ui.places.PlacesFragment;
+import com.apuliacreativehub.eculturetool.ui.user.UserFragment;
 import com.apuliacreativehub.eculturetool.ui.user.WelcomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
+
+    public static final String SHOW_FRAGMENT = "SHOW_FRAGMENT";
+    public static final String USER_FRAGMENT = "USER_FRAGMENT";
 
     private BottomNavigationView bottomNavigationView;
     public static final int menuItemPlaces = R.id.menuItemPlaces;
@@ -30,6 +34,13 @@ public class HomeActivity extends AppCompatActivity {
             Fragment activeFragment = mapperFragment(item.getItemId());
             return loadFragment(activeFragment);
         });
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            if(extras.getString(SHOW_FRAGMENT).equals(USER_FRAGMENT)) {
+                loadFragment(new UserFragment());
+            }
+        }
     }
 
     private boolean loadFragment(Fragment fragment) {

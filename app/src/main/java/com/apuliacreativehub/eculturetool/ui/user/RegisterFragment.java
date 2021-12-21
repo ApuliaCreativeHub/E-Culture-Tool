@@ -1,24 +1,24 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterFragment extends Fragment {
 
     private View view;
     private RegisterViewModel registerViewModel;
@@ -30,15 +30,15 @@ public class RegisterActivity extends AppCompatActivity {
     private SwitchMaterial sthCurator;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_register, container, false);
+        return view;
+    }
 
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        view = findViewById(R.id.lytRegister);
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
         txtName = view.findViewById(R.id.txtName);
@@ -65,15 +65,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(!registerViewModel.getIsCurator() == Boolean.parseBoolean(null))
             sthCurator.setChecked(registerViewModel.getIsCurator());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -168,10 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
         sthCurator.setOnCheckedChangeListener((buttonView, isChecked) -> registerViewModel.setIsCurator(isChecked));
 
         TextView btnSignIn = view.findViewById(R.id.btnSignIn);
-        btnSignIn.setOnClickListener(view -> {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        });
+        btnSignIn.setOnClickListener(view -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit());
 
         Button btnRegister = view.findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(OnClickListener -> {
@@ -219,8 +207,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             if(!errors) {
                 // TODO: Aggiungere query di salvataggio sul db
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit();
             }
         });
     }
