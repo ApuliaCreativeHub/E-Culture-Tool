@@ -1,59 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.user.UserFragment"
-    android:background="#A5DFFF">
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="User"
-        android:gravity="center"
-        android:textSize="40sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"/>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lytRegisterInformation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:id="@+id/lytUser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|top"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnOptionsInformation"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/txtDetails"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:letterSpacing="0.03"
+            android:text="@string/details"
+            android:textColor="#403f3f"
+            android:textSize="40sp"
+            android:textStyle="bold" />
 
-            android:backgroundTint="@color/white"
-            android:text="@string/options_user"
-            android:textAlignment="textStart"
-            android:textColor="@color/black"
-            app:icon="@mipmap/ic_action_user"
-            app:iconTint="@color/black"
-            app:iconSize="24dp" />
+        <EditText
+            android:id="@+id/txtName"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/name"
+            android:background="@drawable/circle"
+            android:hint="@string/name"
+            android:inputType="textPersonName"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:textColor="#ffc791"
+            android:textColorHint="#ffc791"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnOptionsLogout"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/txtSurname"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/surname"
+            android:background="@drawable/circle"
+            android:hint="@string/surname"
+            android:inputType="textPersonName"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:textColor="#ffc791"
+            android:textColorHint="#ffc791"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtEmail"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/email"
+            android:background="@drawable/circle"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:textColor="#ffc791"
+            android:textColorHint="#ffc791"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtOldPassword"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/password"
+            android:background="@drawable/circle"
+            android:hint="@string/old_password"
+            android:inputType="textPassword"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:textColor="#ffc791"
+            android:textColorHint="#ffc791"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtNewPassword"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/password"
+            android:background="@drawable/circle"
+            android:hint="@string/new_password"
+            android:inputType="textPassword"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:textColor="#ffc791"
+            android:textColorHint="#ffc791"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtConfirmPassword"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/confirm_password"
+            android:background="@drawable/circle"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:textColor="#ffc791"
+            android:textColorHint="#ffc791"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/sthCurator"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
+            android:layout_gravity="end"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="40dp"
+            android:layout_weight="1"
+            android:text="@string/curator"
+            android:textColor="#403f3f"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-            android:backgroundTint="@color/white"
-            android:text="@string/options_logout"
-            android:textAlignment="textStart"
-            android:textColor="@color/black"
-            app:icon="@mipmap/ic_arrow_right_bottom_bold"
-            app:iconTint="@color/black"
-            app:iconSize="24dp" />
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/button"
+            android:text="@string/save"
+            android:textColor="#FFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="DuplicateSpeakableTextCheck" />
+
+        <TextView
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:text="@string/logout"
+            android:textColor="#403f3f"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
-</FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

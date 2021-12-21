@@ -58,4 +58,9 @@
     <string name="information_paths">By registering we will save all your paths so that you can retrieve them from any device.</string>
     <string name="information_curator">In addition, if you are a curator of one or more places you can manage them by entering, in addition to all the information, even the paths visible to all users.</string>
     <string name="information">Information</string>
+    <string name="details">Details</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="save">Save</string>
+    <string name="logout">Do you want to exit your account? Logout</string>
 </resources>
