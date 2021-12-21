@@ -34,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText txtPassword;
     private EditText txtConfirmPassword;
     private SwitchMaterial sthCurator;
-    RepositoryCallback<Void> callback = new RepositoryCallback<Void>() {
+    private final RepositoryCallback<Void> callback = new RepositoryCallback<Void>() {
         @Override
         public void onComplete(Response<Void> response) {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());

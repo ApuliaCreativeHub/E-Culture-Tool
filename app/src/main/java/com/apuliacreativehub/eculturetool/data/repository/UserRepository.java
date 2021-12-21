@@ -14,7 +14,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class UserRepository {
-    RemoteUserDAO remoteUserDAO;
+    private final RemoteUserDAO remoteUserDAO;
     private final Executor executor;
     private final Handler resultHandler;
     private final RepositoryCallback callback;
