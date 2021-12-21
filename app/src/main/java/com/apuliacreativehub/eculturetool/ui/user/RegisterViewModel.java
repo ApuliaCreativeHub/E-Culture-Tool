@@ -6,6 +6,7 @@ import android.util.Patterns;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.apuliacreativehub.eculturetool.data.entity.User;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryCallback;
 import com.apuliacreativehub.eculturetool.data.repository.UserRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
 
@@ -25,10 +26,10 @@ public class RegisterViewModel extends AndroidViewModel {
     private boolean isCurator = Boolean.parseBoolean(null);
     private final UserRepository repository;
 
-    public RegisterViewModel(Application application) {
+    public RegisterViewModel(Application application, RepositoryCallback callback) {
         super(application);
         ECultureTool app = getApplication();
-        this.repository = new UserRepository(app.executorService, app.mainThreadHandler);
+        this.repository = new UserRepository(app.executorService, app.mainThreadHandler, callback);
     }
 
     public String getName() {

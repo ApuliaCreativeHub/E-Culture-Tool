@@ -17,30 +17,17 @@ public class UserRepository {
     RemoteUserDAO remoteUserDAO;
     private final Executor executor;
     private final Handler resultHandler;
+    private final RepositoryCallback callback;
 
-    public UserRepository(Executor executor, Handler resultHandler) {
+    public UserRepository(Executor executor, Handler resultHandler, RepositoryCallback callback) {
         remoteUserDAO = UserRemoteDatabase.provideRemoteUserDAO();
         this.executor = executor;
         this.resultHandler = resultHandler;
+        this.callback = callback;
     }
 
     public void registerUser(User user) {
         Call<Void> call = remoteUserDAO.RegisterUser(user);
-
-        // TODO: Pass callbacks implementation in constructor
-        RepositoryCallback<Void> callback = new RepositoryCallback<Void>() {
-            @Override
-            public void onComplete(Response<Void> response) {
-                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
-                Log.d("CALLBACK", String.valueOf(response.code()));
-            }
-
-            @Override
-            public void onException(IOException ioe) {
-                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
-                Log.d("CALLBACK", "An exception occurred: " + ioe.getMessage());
-            }
-        };
 
         executor.execute(new Runnable() {
             @Override

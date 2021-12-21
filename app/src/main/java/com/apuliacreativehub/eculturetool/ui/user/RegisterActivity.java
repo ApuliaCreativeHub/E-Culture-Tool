@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +17,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryCallback;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+
+import java.io.IOException;
+
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -28,6 +34,19 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText txtPassword;
     private EditText txtConfirmPassword;
     private SwitchMaterial sthCurator;
+    RepositoryCallback<Void> callback = new RepositoryCallback<Void>() {
+        @Override
+        public void onComplete(Response<Void> response) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(response.code()));
+        }
+
+        @Override
+        public void onException(IOException ioe) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + ioe.getMessage());
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +54,12 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
+        if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
         view = findViewById(R.id.lytRegister);
-        registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+        RegisterViewModelFactory registerViewModelFactory = new RegisterViewModelFactory(getApplication(), callback);
+        registerViewModel = new ViewModelProvider(this, registerViewModelFactory).get(RegisterViewModel.class);
 
         txtName = view.findViewById(R.id.txtName);
         txtSurname = view.findViewById(R.id.txtSurname);
@@ -48,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
         txtConfirmPassword = view.findViewById(R.id.txtConfirmPassword);
         sthCurator = view.findViewById(R.id.sthCurator);
 
-        if(!registerViewModel.getName().equals(""))
+        if (!registerViewModel.getName().equals(""))
             txtName.setText(registerViewModel.getName());
 
         if(!registerViewModel.getSurname().equals(""))
