@@ -219,6 +219,8 @@ public class RegisterActivity extends AppCompatActivity {
 
             if(!errors) {
                 registerViewModel.registerUser();
+                // TODO: Add an indeterminate progress bar during the HTTP request
+                // TODO: Move startActivity to the request success callback
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
             }
