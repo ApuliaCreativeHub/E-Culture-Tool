@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class UserRepository {
+public class UserRepository{
     private final RemoteUserDAO remoteUserDAO;
     private final Executor executor;
     private final Handler resultHandler;
@@ -35,29 +35,11 @@ public class UserRepository {
                 try {
                     Response<Void> response = call.execute();
                     Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                    notifyResult(response, callback);
+                    new UserRepositoryNotifier(resultHandler).notifyResult(response, callback);
                 } catch (IOException ioe) {
-                    notifyError(ioe, callback);
+                    new UserRepositoryNotifier(resultHandler).notifyError(ioe, callback);
                     Log.e("RETROFITERROR", ioe.getMessage());
                 }
-            }
-        });
-    }
-
-    private void notifyResult(final Response response, final RepositoryCallback callback) {
-        resultHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                callback.onComplete(response);
-            }
-        });
-    }
-
-    private void notifyError(final IOException ioe, RepositoryCallback callback) {
-        resultHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                callback.onException(ioe);
             }
         });
     }

@@ -26,7 +26,7 @@ public class RegisterViewModel extends AndroidViewModel {
     private boolean isCurator = Boolean.parseBoolean(null);
     private final UserRepository repository;
 
-    public RegisterViewModel(Application application, RepositoryCallback callback) {
+    public <T> RegisterViewModel(Application application, RepositoryCallback<T> callback) {
         super(application);
         ECultureTool app = getApplication();
         this.repository = new UserRepository(app.executorService, app.mainThreadHandler, callback);
