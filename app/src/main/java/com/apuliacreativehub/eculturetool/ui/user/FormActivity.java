@@ -14,6 +14,7 @@ public class FormActivity extends AppCompatActivity {
     public static final String SHOW_FRAGMENT = "SHOW_FRAGMENT";
     public static final String LOGIN_FRAGMENT = "LOGIN_FRAGMENT";
     public static final String REGISTER_FRAGMENT = "REGISTER_FRAGMENT";
+    public static final String REGISTER_INFORMATION_FRAGMENT = "REGISTER_INFORMATION_FRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,9 @@ public class FormActivity extends AppCompatActivity {
                     break;
                 case REGISTER_FRAGMENT:
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new RegisterFragment()).commit();
+                    break;
+                case REGISTER_INFORMATION_FRAGMENT:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new RegisterInformationFragment()).commit();
                     break;
             }
         }
