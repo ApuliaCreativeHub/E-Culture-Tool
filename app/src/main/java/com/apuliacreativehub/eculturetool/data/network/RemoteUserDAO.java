@@ -10,5 +10,5 @@ import retrofit2.http.POST;
 public interface RemoteUserDAO {
     @Headers("Content-Type: application/json")
     @POST("user/add")
-    Call<User> RegisterUser(@Body User user);
+    Call<Void> RegisterUser(@Body User user);
 }
