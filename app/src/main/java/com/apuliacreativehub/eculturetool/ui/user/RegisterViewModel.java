@@ -1,15 +1,17 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
+import android.app.Application;
 import android.util.Patterns;
 
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.AndroidViewModel;
 
 import com.apuliacreativehub.eculturetool.data.entity.User;
 import com.apuliacreativehub.eculturetool.data.repository.UserRepository;
+import com.apuliacreativehub.eculturetool.di.ECultureTool;
 
 import java.util.regex.Pattern;
 
-public class RegisterViewModel extends ViewModel {
+public class RegisterViewModel extends AndroidViewModel {
 
     private static final Pattern NAME_PATTERN = Pattern.compile("[A-Z][a-z]{2,14}");
     private static final Pattern SURNAME_PATTERN = Pattern.compile("[A-Z][a-z]{2,14}([ ][A-Z][a-z]{2,14})?");
@@ -23,8 +25,10 @@ public class RegisterViewModel extends ViewModel {
     private boolean isCurator = Boolean.parseBoolean(null);
     private final UserRepository repository;
 
-    public RegisterViewModel(){
-        this.repository = new UserRepository();
+    public RegisterViewModel(Application application) {
+        super(application);
+        ECultureTool app = getApplication();
+        this.repository = new UserRepository(app.executorService, app.mainThreadHandler);
     }
 
     public String getName() {
