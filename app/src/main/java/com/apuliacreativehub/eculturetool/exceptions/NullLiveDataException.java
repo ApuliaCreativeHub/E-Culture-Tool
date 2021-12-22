@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool;
+package com.apuliacreativehub.eculturetool.exceptions;
 
 public class NullLiveDataException extends Exception {
     private final static String ERROR_MESSAGE = "The LiveData object that you are requiring is null.";

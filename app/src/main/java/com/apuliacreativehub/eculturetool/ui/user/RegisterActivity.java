@@ -17,9 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.apuliacreativehub.eculturetool.NullLiveDataException;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
+import com.apuliacreativehub.eculturetool.exceptions.NullLiveDataException;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class RegisterActivity extends AppCompatActivity {

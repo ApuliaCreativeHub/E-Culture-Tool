@@ -6,11 +6,11 @@ import android.util.Patterns;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.apuliacreativehub.eculturetool.NullLiveDataException;
 import com.apuliacreativehub.eculturetool.data.entity.User;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.data.repository.UserRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
+import com.apuliacreativehub.eculturetool.exceptions.NullLiveDataException;
 
 import java.util.regex.Pattern;
 
