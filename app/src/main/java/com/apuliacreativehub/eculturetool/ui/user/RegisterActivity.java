@@ -21,6 +21,8 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import java.net.HttpURLConnection;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private View view;
@@ -31,8 +33,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText txtPassword;
     private EditText txtConfirmPassword;
     private SwitchMaterial sthCurator;
-    private static final String STATUS_OK = "200";
-    private static final String INTERNAL_SERVER_ERROR = "500";
 
     final Observer<RepositoryNotification<String>> registrationObserver = new Observer<RepositoryNotification<String>>() {
         @Override
@@ -40,9 +40,9 @@ public class RegisterActivity extends AppCompatActivity {
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
-                if(String.valueOf(notification.getData()).equals(STATUS_OK)){
+                if (String.valueOf(notification.getData()).equals(String.valueOf(HttpURLConnection.HTTP_OK))) {
                     goToLogin();
-                }else if(notification.getData() == INTERNAL_SERVER_ERROR){
+                } else if (notification.getData() == String.valueOf(HttpURLConnection.HTTP_INTERNAL_ERROR)) {
                     //TODO: show unexpected server error dialog and return to registration from
                 }
             } else {
@@ -72,8 +72,6 @@ public class RegisterActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
 
         view = findViewById(R.id.lytRegister);
-        /*RegisterViewModelFactory registerViewModelFactory = new RegisterViewModelFactory(getApplication(), callback);
-        registerViewModel = new ViewModelProvider(this, registerViewModelFactory).get(RegisterViewModel.class);*/
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
         txtName = view.findViewById(R.id.txtName);
