@@ -1,6 +1,6 @@
 package com.apuliacreativehub.eculturetool.data.repository;
 
-public class RepositoryNotification<T> {
+public class RepositoryNotification<T> implements RepositoryNotificationInterface<T> {
     private T data;
     private Exception exception;
 
