@@ -6,14 +6,16 @@ import java.io.IOException;
 
 import retrofit2.Response;
 
-public class UserRepositoryNotifier implements Notifier{
+public class RepositoryNotifier implements Notifier{
     private final Handler resultHandler;
+    private final RepositoryCallback callback;
 
-    public UserRepositoryNotifier(Handler resultHandler) {
+    public RepositoryNotifier(Handler resultHandler, RepositoryCallback callback) {
         this.resultHandler = resultHandler;
+        this.callback = callback;
     }
 
-    public <T> void notifyResult(final Response<T> response, final RepositoryCallback<T> callback) {
+    public <T> void notifyResult(final Response<T> response) {
         resultHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -22,7 +24,7 @@ public class UserRepositoryNotifier implements Notifier{
         });
     }
 
-    public <T> void notifyError(final IOException ioe, RepositoryCallback<T> callback) {
+    public <T> void notifyError(final IOException ioe) {
         resultHandler.post(new Runnable() {
             @Override
             public void run() {
