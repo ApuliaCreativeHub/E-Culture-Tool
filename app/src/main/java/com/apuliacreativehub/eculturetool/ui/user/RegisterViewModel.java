@@ -4,10 +4,11 @@ import android.app.Application;
 import android.util.Patterns;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 
+import com.apuliacreativehub.eculturetool.NullLiveDataException;
 import com.apuliacreativehub.eculturetool.data.entity.User;
-import com.apuliacreativehub.eculturetool.data.repository.RepositoryCallback;
-import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotifier;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.data.repository.UserRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
 
@@ -27,10 +28,12 @@ public class RegisterViewModel extends AndroidViewModel {
     private boolean isCurator = Boolean.parseBoolean(null);
     private final UserRepository repository;
 
-    public <T> RegisterViewModel(Application application, RepositoryCallback<T> callback) {
+    private MutableLiveData<RepositoryNotification<String>> registrationResult;
+
+    public <T> RegisterViewModel(Application application) {
         super(application);
         ECultureTool app = getApplication();
-        this.repository = new UserRepository(app.executorService, new RepositoryNotifier(app.mainThreadHandler, callback));
+        this.repository = new UserRepository(app.executorService);
     }
 
     public String getName() {
@@ -101,8 +104,16 @@ public class RegisterViewModel extends AndroidViewModel {
         this.isCurator = isCurator;
     }
 
-    public void registerUser(){
+    public void registerUser() {
         User user = new User(name, surname, email, password, isCurator);
-        repository.registerUser(user);
+        registrationResult = repository.registerUser(user);
+    }
+
+    public MutableLiveData<RepositoryNotification<String>> getRegistrationResult() throws NullLiveDataException {
+        if (registrationResult == null) {
+            throw new NullLiveDataException();
+        } else {
+            return registrationResult;
+        }
     }
 }

@@ -14,15 +14,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.apuliacreativehub.eculturetool.NullLiveDataException;
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.data.repository.RepositoryCallback;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.google.android.material.switchmaterial.SwitchMaterial;
-
-import java.io.IOException;
-
-import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -34,19 +32,28 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText txtPassword;
     private EditText txtConfirmPassword;
     private SwitchMaterial sthCurator;
-    private final RepositoryCallback<Void> callback = new RepositoryCallback<Void>() {
-        @Override
-        public void onComplete(Response<Void> response) {
-            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
-            Log.d("CALLBACK", String.valueOf(response.code()));
-        }
 
+    final Observer<RepositoryNotification<String>> registrationObserver = new Observer<RepositoryNotification<String>>() {
         @Override
-        public void onException(IOException ioe) {
-            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
-            Log.d("CALLBACK", "An exception occurred: " + ioe.getMessage());
+        public void onChanged(RepositoryNotification notification) {
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            }
         }
     };
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +65,9 @@ public class RegisterActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
 
         view = findViewById(R.id.lytRegister);
-        RegisterViewModelFactory registerViewModelFactory = new RegisterViewModelFactory(getApplication(), callback);
-        registerViewModel = new ViewModelProvider(this, registerViewModelFactory).get(RegisterViewModel.class);
+        /*RegisterViewModelFactory registerViewModelFactory = new RegisterViewModelFactory(getApplication(), callback);
+        registerViewModel = new ViewModelProvider(this, registerViewModelFactory).get(RegisterViewModel.class);*/
+        registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
         txtName = view.findViewById(R.id.txtName);
         txtSurname = view.findViewById(R.id.txtSurname);
@@ -85,15 +93,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(!registerViewModel.getIsCurator() == Boolean.parseBoolean(null))
             sthCurator.setChecked(registerViewModel.getIsCurator());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -239,6 +238,12 @@ public class RegisterActivity extends AppCompatActivity {
 
             if(!errors) {
                 registerViewModel.registerUser();
+                try {
+                    registerViewModel.getRegistrationResult().observe(this, registrationObserver);
+                } catch (NullLiveDataException nlde) {
+                    Log.e("LIVEDATA", nlde.getMessage());
+                }
+
                 // TODO: Add an indeterminate progress bar during the HTTP request
                 // TODO: Move startActivity to the request success callback
                 startActivity(new Intent(this, LoginActivity.class));
