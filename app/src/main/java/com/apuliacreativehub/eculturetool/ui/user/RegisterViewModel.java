@@ -1,12 +1,19 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
+import android.app.Application;
 import android.util.Patterns;
 
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+
+import com.apuliacreativehub.eculturetool.data.entity.User;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
+import com.apuliacreativehub.eculturetool.data.repository.UserRepository;
+import com.apuliacreativehub.eculturetool.di.ECultureTool;
 
 import java.util.regex.Pattern;
 
-public class RegisterViewModel extends ViewModel {
+public class RegisterViewModel extends AndroidViewModel {
 
     private static final Pattern NAME_PATTERN = Pattern.compile("[A-Z][a-z]{2,14}");
     private static final Pattern SURNAME_PATTERN = Pattern.compile("[A-Z][a-z]{2,14}([ ][A-Z][a-z]{2,14})?");
@@ -18,6 +25,13 @@ public class RegisterViewModel extends ViewModel {
     private String password = "";
     private String confirmPassword = "";
     private boolean isCurator = Boolean.parseBoolean(null);
+    private final UserRepository repository;
+
+    public RegisterViewModel(Application application) {
+        super(application);
+        ECultureTool app = getApplication();
+        this.repository = new UserRepository(app.executorService);
+    }
 
     public String getName() {
         return name;
@@ -87,4 +101,8 @@ public class RegisterViewModel extends ViewModel {
         this.isCurator = isCurator;
     }
 
+    public MutableLiveData<RepositoryNotification<String>> registerUser() {
+        User user = new User(name, surname, email, password, isCurator);
+        return repository.registerUser(user);
+    }
 }

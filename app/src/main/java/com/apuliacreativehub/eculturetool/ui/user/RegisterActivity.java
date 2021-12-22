@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -13,10 +14,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+
+import java.net.HttpURLConnection;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -29,13 +34,41 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText txtConfirmPassword;
     private SwitchMaterial sthCurator;
 
+    final Observer<RepositoryNotification<String>> registrationObserver = new Observer<RepositoryNotification<String>>() {
+        @Override
+        public void onChanged(RepositoryNotification notification) {
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (String.valueOf(notification.getData()).equals(String.valueOf(HttpURLConnection.HTTP_OK))) {
+                    goToLogin();
+                } else if (notification.getData() == String.valueOf(HttpURLConnection.HTTP_INTERNAL_ERROR)) {
+                    //TODO: show unexpected server error dialog and return to registration from
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                //TODO: show unexpected server error dialog and return to registration from
+            }
+        }
+    };
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
+        if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
         view = findViewById(R.id.lytRegister);
@@ -48,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
         txtConfirmPassword = view.findViewById(R.id.txtConfirmPassword);
         sthCurator = view.findViewById(R.id.sthCurator);
 
-        if(!registerViewModel.getName().equals(""))
+        if (!registerViewModel.getName().equals(""))
             txtName.setText(registerViewModel.getName());
 
         if(!registerViewModel.getSurname().equals(""))
@@ -65,15 +98,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(!registerViewModel.getIsCurator() == Boolean.parseBoolean(null))
             sthCurator.setChecked(registerViewModel.getIsCurator());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -218,11 +242,16 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             if(!errors) {
-                // TODO: Aggiungere query di salvataggio sul db
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
+                registerViewModel.registerUser().observe(this, registrationObserver);
+
+                // TODO: Add an indeterminate progress bar during the HTTP request
             }
         });
+    }
+
+    private void goToLogin(){
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
 }

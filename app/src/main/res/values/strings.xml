@@ -55,4 +55,9 @@
     <string name="send">Send</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="registration_failed_dialog">Something went wrong. Try again later.</string>
+    <string name="unexpected_exception_dialog">Something went wrong whit your application.</string>
+    <string name="ok">OK</string>
+
 </resources>
