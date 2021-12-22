@@ -31,6 +31,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText txtPassword;
     private EditText txtConfirmPassword;
     private SwitchMaterial sthCurator;
+    private static final String STATUS_OK = "200";
+    private static final String INTERNAL_SERVER_ERROR = "500";
 
     final Observer<RepositoryNotification<String>> registrationObserver = new Observer<RepositoryNotification<String>>() {
         @Override
@@ -38,9 +40,15 @@ public class RegisterActivity extends AppCompatActivity {
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if(String.valueOf(notification.getData()).equals(STATUS_OK)){
+                    goToLogin();
+                }else if(notification.getData() == INTERNAL_SERVER_ERROR){
+                    //TODO: show unexpected server error dialog and return to registration from
+                }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                //TODO: show unexpected server error dialog and return to registration from
             }
         }
     };
@@ -239,11 +247,13 @@ public class RegisterActivity extends AppCompatActivity {
                 registerViewModel.registerUser().observe(this, registrationObserver);
 
                 // TODO: Add an indeterminate progress bar during the HTTP request
-                // TODO: Move startActivity to the request success callback
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
             }
         });
+    }
+
+    private void goToLogin(){
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
 }
