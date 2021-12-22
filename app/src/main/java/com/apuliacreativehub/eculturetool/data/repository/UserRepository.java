@@ -16,29 +16,30 @@ import retrofit2.Response;
 public class UserRepository{
     private final RemoteUserDAO remoteUserDAO;
     private final Executor executor;
-    private final Handler resultHandler;
-    private final RepositoryCallback callback;
+    private Notifier notifier;
 
-    public UserRepository(Executor executor, Handler resultHandler, RepositoryCallback callback) {
+    public void setNotifier(RepositoryNotifier notifier) {
+        this.notifier = notifier;
+    }
+
+    public UserRepository(Executor executor, RepositoryNotifier notifier) {
         remoteUserDAO = UserRemoteDatabase.provideRemoteUserDAO();
         this.executor = executor;
-        this.resultHandler = resultHandler;
-        this.callback = callback;
+        this.notifier = notifier;
     }
 
     public void registerUser(User user) {
         Call<Void> call = remoteUserDAO.RegisterUser(user);
-
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 try {
                     Response<Void> response = call.execute();
                     Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                    new UserRepositoryNotifier(resultHandler).notifyResult(response, callback);
+                    notifier.notifyResult(response);
                 } catch (IOException ioe) {
-                    new UserRepositoryNotifier(resultHandler).notifyError(ioe, callback);
                     Log.e("RETROFITERROR", ioe.getMessage());
+                    notifier.notifyError(ioe);
                 }
             }
         });

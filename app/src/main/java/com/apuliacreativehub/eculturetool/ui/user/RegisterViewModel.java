@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.apuliacreativehub.eculturetool.data.entity.User;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryCallback;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotifier;
 import com.apuliacreativehub.eculturetool.data.repository.UserRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
 
@@ -29,7 +30,7 @@ public class RegisterViewModel extends AndroidViewModel {
     public <T> RegisterViewModel(Application application, RepositoryCallback<T> callback) {
         super(application);
         ECultureTool app = getApplication();
-        this.repository = new UserRepository(app.executorService, app.mainThreadHandler, callback);
+        this.repository = new UserRepository(app.executorService, new RepositoryNotifier(app.mainThreadHandler, callback));
     }
 
     public String getName() {
