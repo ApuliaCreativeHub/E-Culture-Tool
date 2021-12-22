@@ -6,24 +6,25 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.Observer;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.google.android.material.switchmaterial.SwitchMaterial;
-
 import java.net.HttpURLConnection;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterFragment extends Fragment {
 
     private View view;
     private RegisterViewModel registerViewModel;
@@ -41,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
                 if (String.valueOf(notification.getData()).equals(String.valueOf(HttpURLConnection.HTTP_OK))) {
-                    goToLogin();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit();
                 } else if (notification.getData() == String.valueOf(HttpURLConnection.HTTP_INTERNAL_ERROR)) {
                     //TODO: show unexpected server error dialog and return to registration from
                 }
@@ -54,24 +55,15 @@ public class RegisterActivity extends AppCompatActivity {
     };
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_register, container, false);
+        return view;
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
-
-        view = findViewById(R.id.lytRegister);
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
         txtName = view.findViewById(R.id.txtName);
@@ -192,10 +184,7 @@ public class RegisterActivity extends AppCompatActivity {
         sthCurator.setOnCheckedChangeListener((buttonView, isChecked) -> registerViewModel.setIsCurator(isChecked));
 
         TextView btnSignIn = view.findViewById(R.id.btnSignIn);
-        btnSignIn.setOnClickListener(view -> {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        });
+        btnSignIn.setOnClickListener(view -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit());
 
         Button btnRegister = view.findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(OnClickListener -> {
@@ -243,15 +232,9 @@ public class RegisterActivity extends AppCompatActivity {
 
             if(!errors) {
                 registerViewModel.registerUser().observe(this, registrationObserver);
-
                 // TODO: Add an indeterminate progress bar during the HTTP request
             }
         });
-    }
-
-    private void goToLogin(){
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
     }
 
 }

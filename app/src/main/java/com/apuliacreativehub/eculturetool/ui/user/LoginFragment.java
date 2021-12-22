@@ -4,21 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.HomeActivity;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginFragment extends Fragment {
 
     private View view;
     private LoginViewModel loginViewModel;
@@ -26,15 +27,15 @@ public class LoginActivity extends AppCompatActivity {
     private EditText txtPassword;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_login, container, false);
+        return view;
+    }
 
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        view = findViewById(R.id.lytLogin);
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         txtEmail = view.findViewById(R.id.txtEmail);
@@ -45,15 +46,6 @@ public class LoginActivity extends AppCompatActivity {
 
         if(!loginViewModel.getPassword().equals(""))
             txtPassword.setText(loginViewModel.getPassword());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -95,22 +87,15 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         TextView btnForgetPassword = view.findViewById(R.id.btnForgetPassword);
-        btnForgetPassword.setOnClickListener(view -> {
-            startActivity(new Intent(this, ForgetPasswordActivity.class));
-            finish();
-        });
+        btnForgetPassword.setOnClickListener(view -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new ForgetPasswordFragment()).commit());
 
         TextView btnSignUp = view.findViewById(R.id.btnSignUp);
-        btnSignUp.setOnClickListener(view -> {
-            startActivity(new Intent(this, RegisterActivity.class));
-            finish();
-        });
+        btnSignUp.setOnClickListener(view -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new RegisterFragment()).commit());
 
         Button btnLogin = view.findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(view -> {
             // TODO: Aggiungere query di controllo sul db
-            startActivity(new Intent(this, HomeActivity.class));
-            finish();
+            startActivity(new Intent(getActivity(), HomeActivity.class).putExtra(HomeActivity.SHOW_FRAGMENT, HomeActivity.USER_FRAGMENT));
         });
     }
 

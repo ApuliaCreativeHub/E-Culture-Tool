@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/imgMuseum"
@@ -37,54 +37,43 @@ xmlns:tools="http://schemas.android.com/tools">
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:text="@string/welcome"
+            android:text="@string/information"
             android:textColor="#403f3f"
             android:textSize="48sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/txtNewAccount"
+            android:id="@+id/txtInformationPaths"
+            android:layout_width="320dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            android:layout_weight="1"
+            android:text="@string/information_paths"
+            android:textColor="#ffc791"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/txtInformationCurator"
+            android:layout_width="320dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:text="@string/information_curator"
+            android:textColor="#ffc791"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/btnSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/new_account"
-            android:textColor="#403f3f"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="320dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="32dp"
-            android:layout_weight="1"
-            android:background="@drawable/button"
-            android:text="@string/login"
-            android:textColor="#FFF"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnRegister"
-            android:layout_width="320dp"
-            android:layout_height="48dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:background="@drawable/button"
-            android:text="@string/register"
-            android:textColor="#FFF"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/btnRegisterInformation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            android:text="@string/why_sign_up"
+            android:text="@string/sign_up"
             android:textColor="#403f3f"
             android:textSize="16sp"
             android:textStyle="bold" />

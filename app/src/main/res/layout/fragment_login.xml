@@ -14,14 +14,14 @@
         android:contentDescription="@string/museum"
         android:scaleType="centerCrop"
         android:src="@drawable/museum"
-        app:layout_constraintBottom_toTopOf="@+id/lytLogin"
+        app:layout_constraintBottom_toTopOf="@+id/lytUser"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ImageContrastCheck" />
 
     <LinearLayout
-        android:id="@+id/lytLogin"
+        android:id="@+id/lytUser"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal|top"
@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/txtLogin"
+            android:id="@+id/txtRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
