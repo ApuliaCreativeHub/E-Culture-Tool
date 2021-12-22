@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
-import com.apuliacreativehub.eculturetool.exceptions.NullLiveDataException;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -237,12 +236,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             if(!errors) {
-                registerViewModel.registerUser();
-                try {
-                    registerViewModel.getRegistrationResult().observe(this, registrationObserver);
-                } catch (NullLiveDataException nlde) {
-                    Log.e("LIVEDATA", nlde.getMessage());
-                }
+                registerViewModel.registerUser().observe(this, registrationObserver);
 
                 // TODO: Add an indeterminate progress bar during the HTTP request
                 // TODO: Move startActivity to the request success callback

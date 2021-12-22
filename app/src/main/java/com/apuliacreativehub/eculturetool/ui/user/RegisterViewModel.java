@@ -10,7 +10,6 @@ import com.apuliacreativehub.eculturetool.data.entity.User;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.data.repository.UserRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
-import com.apuliacreativehub.eculturetool.exceptions.NullLiveDataException;
 
 import java.util.regex.Pattern;
 
@@ -28,9 +27,7 @@ public class RegisterViewModel extends AndroidViewModel {
     private boolean isCurator = Boolean.parseBoolean(null);
     private final UserRepository repository;
 
-    private MutableLiveData<RepositoryNotification<String>> registrationResult;
-
-    public <T> RegisterViewModel(Application application) {
+    public RegisterViewModel(Application application) {
         super(application);
         ECultureTool app = getApplication();
         this.repository = new UserRepository(app.executorService);
@@ -104,16 +101,8 @@ public class RegisterViewModel extends AndroidViewModel {
         this.isCurator = isCurator;
     }
 
-    public void registerUser() {
+    public MutableLiveData<RepositoryNotification<String>> registerUser() {
         User user = new User(name, surname, email, password, isCurator);
-        registrationResult = repository.registerUser(user);
-    }
-
-    public MutableLiveData<RepositoryNotification<String>> getRegistrationResult() throws NullLiveDataException {
-        if (registrationResult == null) {
-            throw new NullLiveDataException();
-        } else {
-            return registrationResult;
-        }
+        return repository.registerUser(user);
     }
 }
