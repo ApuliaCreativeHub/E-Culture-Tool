@@ -35,13 +35,11 @@ public class UserRepository{
                     RepositoryNotification<String> repositoryNotification = new RepositoryNotification<>();
                     repositoryNotification.setData(String.valueOf(response.code()));
                     registrationResult.postValue(repositoryNotification);
-                    //notifier.notifyResult(response);
                 } catch (IOException ioe) {
                     RepositoryNotification<String> repositoryNotification = new RepositoryNotification<>();
                     repositoryNotification.setException(ioe);
                     registrationResult.postValue(repositoryNotification);
                     Log.e("RETROFITERROR", ioe.getMessage());
-                    //notifier.notifyError(ioe);
                 }
             }
         });
