@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,11 +49,15 @@ public class RegisterFragment extends Fragment {
                 } else if (String.valueOf(notification.getData()).equals(String.valueOf(HttpURLConnection.HTTP_INTERNAL_ERROR))) {
                     Log.d("Dialog", "show dialog here");
                     new RegistrationErrorDialog().show(getChildFragmentManager(), RegistrationErrorDialog.TAG);
+                    view.findViewById(R.id.registrationProgressionBar).setVisibility(View.INVISIBLE);
+                    view.findViewById(R.id.lytUser).setVisibility(View.VISIBLE);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
                 new UnexpectedExceptionDialog().show(getChildFragmentManager(), UnexpectedExceptionDialog.TAG);
+                view.findViewById(R.id.registrationProgressionBar).setVisibility(View.INVISIBLE);
+                view.findViewById(R.id.lytUser).setVisibility(View.VISIBLE);
             }
         }
     };
@@ -236,6 +241,8 @@ public class RegisterFragment extends Fragment {
             if(!errors) {
                 registerViewModel.registerUser().observe(this, registrationObserver);
                 // TODO: Add an indeterminate progress bar during the HTTP request
+                view.findViewById(R.id.lytUser).setVisibility(View.INVISIBLE);
+                view.findViewById(R.id.registrationProgressionBar).setVisibility(View.VISIBLE);
             }
         });
     }
