@@ -1,30 +1,28 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.dialogfragments.UnexpectedExceptionDialog;
 import com.apuliacreativehub.eculturetool.ui.dialogfragments.registration.RegistrationErrorDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+
 import java.net.HttpURLConnection;
 
 public class RegisterFragment extends Fragment {
@@ -240,7 +238,6 @@ public class RegisterFragment extends Fragment {
 
             if(!errors) {
                 registerViewModel.registerUser().observe(this, registrationObserver);
-                // TODO: Add an indeterminate progress bar during the HTTP request
                 view.findViewById(R.id.lytUser).setVisibility(View.INVISIBLE);
                 view.findViewById(R.id.registrationProgressionBar).setVisibility(View.VISIBLE);
             }
