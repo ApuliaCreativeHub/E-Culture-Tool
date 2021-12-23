@@ -21,6 +21,8 @@ import androidx.lifecycle.Observer;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
+import com.apuliacreativehub.eculturetool.ui.dialogfragments.UnexpectedExceptionDialog;
+import com.apuliacreativehub.eculturetool.ui.dialogfragments.registration.RegistrationErrorDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import java.net.HttpURLConnection;
 
@@ -43,13 +45,14 @@ public class RegisterFragment extends Fragment {
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
                 if (String.valueOf(notification.getData()).equals(String.valueOf(HttpURLConnection.HTTP_OK))) {
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit();
-                } else if (notification.getData() == String.valueOf(HttpURLConnection.HTTP_INTERNAL_ERROR)) {
-                    //TODO: show unexpected server error dialog and return to registration from
+                } else if (String.valueOf(notification.getData()).equals(String.valueOf(HttpURLConnection.HTTP_INTERNAL_ERROR))) {
+                    Log.d("Dialog", "show dialog here");
+                    new RegistrationErrorDialog().show(getChildFragmentManager(), RegistrationErrorDialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                //TODO: show unexpected server error dialog and return to registration from
+                new UnexpectedExceptionDialog().show(getChildFragmentManager(), UnexpectedExceptionDialog.TAG);
             }
         }
     };
