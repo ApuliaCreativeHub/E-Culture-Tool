@@ -5,6 +5,10 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +19,7 @@ import android.view.ViewGroup;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.core.os.ConfigurationCompat;
 import androidx.fragment.app.Fragment;
@@ -34,14 +39,22 @@ import com.mapbox.geojson.Point;
 import com.mapbox.maps.CameraOptions;
 import com.mapbox.maps.MapView;
 import com.mapbox.maps.Style;
+import com.mapbox.maps.plugin.annotation.AnnotationPlugin;
+import com.mapbox.maps.plugin.annotation.AnnotationPluginImplKt;
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager;
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManagerKt;
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.Locale;
+import java.util.Objects;
+
 
 public class MapFragment extends Fragment {
     private MapView map;
+    private Point[] points;
     View v;
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
         if (isGranted) {
@@ -56,13 +69,48 @@ public class MapFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.osm_map, null);
+
+        points = new Point[2];
+        points[0] = Point.fromLngLat(10.06D, 51.31D);
+        points[1] = Point.fromLngLat(11.06D, 78.31D);
+
         map = v.findViewById(R.id.mapview);
-        map.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
+        map.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS, style -> {
+            for (Point point : points)
+                addAnnotationToMap(point);
+        });
         requestLocationPermission();
         return v;
+    }
+
+
+    private void addAnnotationToMap(Point point) {
+        PointAnnotationOptions pointAnnotationOptions = new PointAnnotationOptions();
+        Bitmap bitmap = convertDrawableToBitmap(AppCompatResources.getDrawable(requireContext(), R.drawable.red_marker));
+        pointAnnotationOptions.withPoint(point).withIconImage(Objects.requireNonNull(bitmap));
+
+        AnnotationPlugin annotationApi = AnnotationPluginImplKt.getAnnotations(map);
+        PointAnnotationManager pointAnnotationManager = PointAnnotationManagerKt.createPointAnnotationManager(annotationApi, map);
+        pointAnnotationManager.create(pointAnnotationOptions);
+    }
+
+    private Bitmap convertDrawableToBitmap(Drawable sourceDrawable) {
+        Bitmap bitmap;
+
+        if (sourceDrawable instanceof BitmapDrawable) {
+            bitmap = ((BitmapDrawable)sourceDrawable).getBitmap();
+        } else {
+            Drawable drawable = sourceDrawable.getConstantState().newDrawable().mutate();
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+        }
+
+        return bitmap;
     }
 
     @Override
