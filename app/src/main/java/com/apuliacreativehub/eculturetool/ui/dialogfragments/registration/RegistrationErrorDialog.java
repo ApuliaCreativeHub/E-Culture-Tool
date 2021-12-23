@@ -15,6 +15,7 @@ public class RegistrationErrorDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         return new AlertDialog.Builder(requireContext())
+                // TODO: Set message as resource string
                 .setMessage(getString(R.string.registration_failed_dialog))
                 .setPositiveButton(getString(R.string.ok), (dialog, which) -> {} )
                 .create();
