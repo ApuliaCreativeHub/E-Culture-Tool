@@ -94,7 +94,7 @@ public class LoginFragment extends Fragment {
 
         Button btnLogin = view.findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(view -> {
-            // TODO: Aggiungere query di controllo sul db
+            // TODO: Add login query to remote database
             startActivity(new Intent(getActivity(), HomeActivity.class).putExtra(HomeActivity.SHOW_FRAGMENT, HomeActivity.USER_FRAGMENT));
         });
     }
