@@ -11,12 +11,17 @@ import androidx.fragment.app.DialogFragment;
 import com.apuliacreativehub.eculturetool.R;
 
 public class RegistrationErrorDialog extends DialogFragment {
+    private String message;
+
+    public RegistrationErrorDialog(String message){
+        this.message=message;
+    }
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         return new AlertDialog.Builder(requireContext())
                 // TODO: Set message as resource string
-                .setMessage(getString(R.string.registration_failed_dialog))
+                .setMessage(message)
                 .setPositiveButton(getString(R.string.ok), (dialog, which) -> {} )
                 .create();
     }
