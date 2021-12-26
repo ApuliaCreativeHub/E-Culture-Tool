@@ -18,17 +18,6 @@
             android:name=".ui.user.FormActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.user.ForgetPasswordFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ui.user.RegisterFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ui.user.LoginFragment"
-            android:configChanges="orientation|keyboardHidden"
-            android:exported="false"
-            android:screenOrientation="fullSensor" />
-        <activity
             android:name=".ui.HomeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:exported="true"
