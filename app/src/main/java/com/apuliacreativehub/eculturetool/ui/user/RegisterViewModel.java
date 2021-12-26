@@ -101,7 +101,7 @@ public class RegisterViewModel extends AndroidViewModel {
         this.isCurator = isCurator;
     }
 
-    public MutableLiveData<RepositoryNotification<String>> registerUser() {
+    public MutableLiveData<RepositoryNotification<Void>> registerUser() {
         User user = new User(name, surname, email, password, isCurator);
         return repository.registerUser(user);
     }

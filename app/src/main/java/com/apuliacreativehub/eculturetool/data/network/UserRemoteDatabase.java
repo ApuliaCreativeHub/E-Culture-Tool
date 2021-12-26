@@ -7,7 +7,8 @@ public class UserRemoteDatabase {
 
     public static RemoteUserDAO provideRemoteUserDAO(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://hiddenfile.ml/ecultureapi/")
+                //.baseUrl("https://hiddenfile.ml/ecultureapi/")
+                .baseUrl("http://10.0.2.2:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

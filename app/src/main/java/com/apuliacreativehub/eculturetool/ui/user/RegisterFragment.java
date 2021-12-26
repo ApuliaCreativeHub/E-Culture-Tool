@@ -23,8 +23,6 @@ import com.apuliacreativehub.eculturetool.ui.dialogfragments.UnexpectedException
 import com.apuliacreativehub.eculturetool.ui.dialogfragments.registration.RegistrationErrorDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import java.net.HttpURLConnection;
-
 public class RegisterFragment extends Fragment {
 
     private View view;
@@ -36,17 +34,17 @@ public class RegisterFragment extends Fragment {
     private EditText txtConfirmPassword;
     private SwitchMaterial sthCurator;
 
-    final Observer<RepositoryNotification<String>> registrationObserver = new Observer<RepositoryNotification<String>>() {
+    final Observer<RepositoryNotification<Void>> registrationObserver = new Observer<RepositoryNotification<Void>>() {
         @Override
         public void onChanged(RepositoryNotification notification) {
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
-                if (String.valueOf(notification.getData()).equals(String.valueOf(HttpURLConnection.HTTP_OK))) {
+                if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit();
-                } else if (String.valueOf(notification.getData()).equals(String.valueOf(HttpURLConnection.HTTP_INTERNAL_ERROR))) {
+                } else {
                     Log.d("Dialog", "show dialog here");
-                    new RegistrationErrorDialog().show(getChildFragmentManager(), RegistrationErrorDialog.TAG);
+                    new RegistrationErrorDialog(notification.getErrorMessage()).show(getChildFragmentManager(), RegistrationErrorDialog.TAG);
                     view.findViewById(R.id.registrationProgressionBar).setVisibility(View.INVISIBLE);
                     view.findViewById(R.id.lytUser).setVisibility(View.VISIBLE);
                 }

@@ -24,20 +24,26 @@ public class UserRepository{
         this.executor = executor;
     }
 
-    public MutableLiveData<RepositoryNotification<String>> registerUser(User user) {
+    public MutableLiveData<RepositoryNotification<Void>> registerUser(User user) {
         Call<Void> call = remoteUserDAO.RegisterUser(user);
-        MutableLiveData<RepositoryNotification<String>> registrationResult = new MutableLiveData<>();
+        MutableLiveData<RepositoryNotification<Void>> registrationResult = new MutableLiveData<>();
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 try {
                     Response<Void> response = call.execute();
                     Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                    RepositoryNotification<String> repositoryNotification = new RepositoryNotification<>();
-                    repositoryNotification.setData(String.valueOf(response.code()));
+                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    if(response.isSuccessful()){
+                        repositoryNotification.setData(response.body());
+                    }else{
+                        if(response.errorBody()!=null){
+                            repositoryNotification.setErrorMessage(response.errorBody().string());
+                        }
+                    }
                     registrationResult.postValue(repositoryNotification);
                 } catch (IOException ioe) {
-                    RepositoryNotification<String> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
                     repositoryNotification.setException(ioe);
                     registrationResult.postValue(repositoryNotification);
                     Log.e("RETROFITERROR", ioe.getMessage());
@@ -57,7 +63,13 @@ public class UserRepository{
                     Response<Token> response = call.execute();
                     Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
                     RepositoryNotification<Token> repositoryNotification = new RepositoryNotification<>();
-                    repositoryNotification.setData(response.body());
+                    if(response.isSuccessful()){
+                        repositoryNotification.setData(response.body());
+                    }else{
+                        if(response.errorBody()!=null){
+                            repositoryNotification.setErrorMessage(response.errorBody().string());
+                        }
+                    }
                     loginResult.postValue(repositoryNotification);
                 } catch (IOException ioe) {
                     RepositoryNotification<Token> repositoryNotification = new RepositoryNotification<>();
