@@ -1,9 +1,12 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +17,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.UuidManager;
+import com.apuliacreativehub.eculturetool.data.entity.Token;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.HomeActivity;
+import com.apuliacreativehub.eculturetool.ui.dialogfragments.UnexpectedExceptionDialog;
 
 public class LoginFragment extends Fragment {
 
@@ -41,12 +49,40 @@ public class LoginFragment extends Fragment {
         txtEmail = view.findViewById(R.id.txtEmail);
         txtPassword = view.findViewById(R.id.txtPassword);
 
-        if(!loginViewModel.getEmail().equals(""))
+        if (!loginViewModel.getEmail().equals(""))
             txtEmail.setText(loginViewModel.getEmail());
 
-        if(!loginViewModel.getPassword().equals(""))
+        if (!loginViewModel.getPassword().equals(""))
             txtPassword.setText(loginViewModel.getPassword());
     }
+
+    final Observer<RepositoryNotification<Token>> loginObserver = new Observer<RepositoryNotification<Token>>() {
+        @Override
+        public void onChanged(RepositoryNotification<Token> notification) {
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage().equals("")) {
+                    // Add token to shared preferences
+                    Context context = getActivity();
+                    SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("token", notification.getData().getToken());
+                    // Add logged flag to shared preferences
+                    editor.putBoolean("isLogged", true);
+                    editor.apply();
+                    startActivity(new Intent(getActivity(), HomeActivity.class).putExtra(HomeActivity.SHOW_FRAGMENT, HomeActivity.USER_FRAGMENT));
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    // TODO: Show dialog here
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new UnexpectedExceptionDialog().show(getChildFragmentManager(), UnexpectedExceptionDialog.TAG);
+            }
+        }
+    };
 
     @Override
     public void onStart() {
@@ -94,8 +130,8 @@ public class LoginFragment extends Fragment {
 
         Button btnLogin = view.findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(view -> {
-            // TODO: Add login query to remote database
-            startActivity(new Intent(getActivity(), HomeActivity.class).putExtra(HomeActivity.SHOW_FRAGMENT, HomeActivity.USER_FRAGMENT));
+            loginViewModel.setUuid(UuidManager.getUuid(getActivity(), getString(R.string.login_shared_preferences)));
+            loginViewModel.loginUser().observe(this, loginObserver);
         });
     }
 

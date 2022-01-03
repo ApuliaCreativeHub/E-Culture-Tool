@@ -14,6 +14,6 @@ public interface RemoteUserDAO {
     Call<Void> RegisterUser(@Body User user);
 
     @Headers("Content-Type: application/json")
-    @POST("user/add")
+    @POST("user/auth")
     Call<Token> LoginUser(@Body User user);
 }
