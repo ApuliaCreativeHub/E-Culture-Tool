@@ -65,16 +65,18 @@ public class LoginFragment extends Fragment {
                 if (notification.getErrorMessage() == null) {
                     // Add token to shared preferences
                     Context context = getActivity();
-                    SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("token", notification.getData().getToken().getToken());
-                    editor.putBoolean("isLogged", true);
-                    editor.putString("name", notification.getData().getUser().getName());
-                    editor.putString("surname", notification.getData().getUser().getSurname());
-                    editor.putString("email", notification.getData().getUser().getEmail());
-                    editor.putBoolean("isACurator", notification.getData().getUser().isACurator());
-                    editor.apply();
-                    startActivity(new Intent(getActivity(), HomeActivity.class).putExtra(HomeActivity.SHOW_FRAGMENT, HomeActivity.USER_FRAGMENT));
+                    if (context != null) {
+                        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("token", notification.getData().getToken().getToken());
+                        editor.putBoolean("isLogged", true);
+                        editor.putString("name", notification.getData().getUser().getName());
+                        editor.putString("surname", notification.getData().getUser().getSurname());
+                        editor.putString("email", notification.getData().getUser().getEmail());
+                        editor.putBoolean("isACurator", notification.getData().getUser().isACurator());
+                        editor.apply();
+                        startActivity(new Intent(getActivity(), HomeActivity.class).putExtra(HomeActivity.SHOW_FRAGMENT, HomeActivity.USER_FRAGMENT));
+                    }
                 } else {
                     Log.d("Dialog", "show dialog here");
                     // TODO: Show dialog here
