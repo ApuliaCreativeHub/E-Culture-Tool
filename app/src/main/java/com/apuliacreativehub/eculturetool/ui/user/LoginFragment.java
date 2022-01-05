@@ -68,7 +68,6 @@ public class LoginFragment extends Fragment {
                     SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("token", notification.getData().getToken().getToken());
-                    // Add logged flag to shared preferences
                     editor.putBoolean("isLogged", true);
                     editor.putString("name", notification.getData().getUser().getName());
                     editor.putString("surname", notification.getData().getUser().getSurname());
