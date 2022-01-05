@@ -70,6 +70,10 @@ public class LoginFragment extends Fragment {
                     editor.putString("token", notification.getData().getToken().getToken());
                     // Add logged flag to shared preferences
                     editor.putBoolean("isLogged", true);
+                    editor.putString("name", notification.getData().getUser().getName());
+                    editor.putString("surname", notification.getData().getUser().getSurname());
+                    editor.putString("email", notification.getData().getUser().getEmail());
+                    editor.putBoolean("isACurator", notification.getData().getUser().isACurator());
                     editor.apply();
                     startActivity(new Intent(getActivity(), HomeActivity.class).putExtra(HomeActivity.SHOW_FRAGMENT, HomeActivity.USER_FRAGMENT));
                 } else {
