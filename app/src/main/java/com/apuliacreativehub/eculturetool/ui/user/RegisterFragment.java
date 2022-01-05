@@ -1,5 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -32,10 +34,10 @@ public class RegisterFragment extends Fragment {
     private EditText txtPassword;
     private EditText txtConfirmPassword;
     private SwitchMaterial sthCurator;
-
     final Observer<RepositoryNotification<Void>> registrationObserver = new Observer<RepositoryNotification<Void>>() {
         @Override
         public void onChanged(RepositoryNotification notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
@@ -43,7 +45,7 @@ public class RegisterFragment extends Fragment {
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit();
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new ErrorDialog(getString(R.string.error_dialog_title), notification.getErrorMessage(), "REGISTRATION_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+                    new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "REGISTRATION_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
                     view.findViewById(R.id.registrationProgressionBar).setVisibility(View.INVISIBLE);
                     view.findViewById(R.id.lytUser).setVisibility(View.VISIBLE);
                 }
@@ -56,6 +58,7 @@ public class RegisterFragment extends Fragment {
             }
         }
     };
+    private Context mcontext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,6 +69,7 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mcontext = getContext();
 
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 

@@ -21,6 +21,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.UuidManager;
 import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
@@ -28,37 +29,14 @@ import com.apuliacreativehub.eculturetool.ui.HomeActivity;
 import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
 
 public class LoginFragment extends Fragment {
-
     private View view;
     private LoginViewModel loginViewModel;
     private EditText txtEmail;
     private EditText txtPassword;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_login, container, false);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-
-        txtEmail = view.findViewById(R.id.txtEmail);
-        txtPassword = view.findViewById(R.id.txtPassword);
-
-        if (!loginViewModel.getEmail().equals(""))
-            txtEmail.setText(loginViewModel.getEmail());
-
-        if (!loginViewModel.getPassword().equals(""))
-            txtPassword.setText(loginViewModel.getPassword());
-    }
-
     final Observer<RepositoryNotification<UserWithToken>> loginObserver = new Observer<RepositoryNotification<UserWithToken>>() {
         @Override
         public void onChanged(RepositoryNotification<UserWithToken> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
@@ -79,7 +57,7 @@ public class LoginFragment extends Fragment {
                     }
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new ErrorDialog(getString(R.string.error_dialog_title), notification.getErrorMessage(), "LOGIN_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+                    new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "LOGIN_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
@@ -88,6 +66,31 @@ public class LoginFragment extends Fragment {
             }
         }
     };
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_login, container, false);
+        return view;
+    }
+
+    private Context mcontext;
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mcontext = getContext();
+
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
+        txtEmail = view.findViewById(R.id.txtEmail);
+        txtPassword = view.findViewById(R.id.txtPassword);
+
+        if (!loginViewModel.getEmail().equals(""))
+            txtEmail.setText(loginViewModel.getEmail());
+
+        if (!loginViewModel.getPassword().equals(""))
+            txtPassword.setText(loginViewModel.getPassword());
+    }
 
     @Override
     public void onStart() {
