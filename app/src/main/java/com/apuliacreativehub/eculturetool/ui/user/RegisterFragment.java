@@ -43,14 +43,14 @@ public class RegisterFragment extends Fragment {
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit();
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new ErrorDialog(getString(R.string.error_dialog_title), notification.getErrorMessage()).show(getChildFragmentManager(), ErrorDialog.TAG);
+                    new ErrorDialog(getString(R.string.error_dialog_title), notification.getErrorMessage(), "REGISTRATION_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
                     view.findViewById(R.id.registrationProgressionBar).setVisibility(View.INVISIBLE);
                     view.findViewById(R.id.lytUser).setVisibility(View.VISIBLE);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog)).show(getChildFragmentManager(), ErrorDialog.TAG);
+                new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "REGISTRATION_EXCEPTION").show(getChildFragmentManager(), ErrorDialog.TAG);
                 view.findViewById(R.id.registrationProgressionBar).setVisibility(View.INVISIBLE);
                 view.findViewById(R.id.lytUser).setVisibility(View.VISIBLE);
             }

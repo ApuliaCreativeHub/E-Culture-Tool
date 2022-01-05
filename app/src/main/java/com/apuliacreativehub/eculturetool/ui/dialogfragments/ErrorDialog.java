@@ -15,11 +15,6 @@ public class ErrorDialog extends DialogFragment {
     private final String title;
     private final String message;
 
-    public ErrorDialog(String title, String message) {
-        this.title = title;
-        this.message = message;
-    }
-
     public ErrorDialog(String title, String message, String tag) {
         this.title = title;
         this.message = message;

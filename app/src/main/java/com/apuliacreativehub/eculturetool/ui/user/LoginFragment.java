@@ -79,12 +79,12 @@ public class LoginFragment extends Fragment {
                     }
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new ErrorDialog(getString(R.string.error_dialog_title), notification.getErrorMessage()).show(getChildFragmentManager(), ErrorDialog.TAG);
+                    new ErrorDialog(getString(R.string.error_dialog_title), notification.getErrorMessage(), "LOGIN_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog)).show(getChildFragmentManager(), ErrorDialog.TAG);
+                new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "LOGIN_EXCEPTION").show(getChildFragmentManager(), ErrorDialog.TAG);
             }
         }
     };
