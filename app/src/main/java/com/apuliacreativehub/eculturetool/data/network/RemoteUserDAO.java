@@ -1,7 +1,7 @@
 package com.apuliacreativehub.eculturetool.data.network;
 
-import com.apuliacreativehub.eculturetool.data.entity.Token;
 import com.apuliacreativehub.eculturetool.data.entity.User;
+import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -15,5 +15,5 @@ public interface RemoteUserDAO {
 
     @Headers("Content-Type: application/json")
     @POST("user/auth")
-    Call<Token> LoginUser(@Body User user);
+    Call<UserWithToken> LoginUser(@Body UserWithToken user);
 }

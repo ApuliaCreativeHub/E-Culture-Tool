@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.apuliacreativehub.eculturetool.data.entity.Token;
 import com.apuliacreativehub.eculturetool.data.entity.User;
+import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.data.repository.UserRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
@@ -47,9 +48,11 @@ public class LoginViewModel extends AndroidViewModel {
         this.uuid = uuid;
     }
 
-    public MutableLiveData<RepositoryNotification<Token>> loginUser() {
+    public MutableLiveData<RepositoryNotification<UserWithToken>> loginUser() {
         User user = new User(email, password);
-        return repository.loginUser(user);
+        Token token = new Token("", null, uuid);
+        UserWithToken uwt = new UserWithToken(user, token);   // contains user with his UUID
+        return repository.loginUser(uwt);
     }
 
 }

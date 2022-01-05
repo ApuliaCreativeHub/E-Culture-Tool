@@ -4,8 +4,8 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.apuliacreativehub.eculturetool.data.entity.Token;
 import com.apuliacreativehub.eculturetool.data.entity.User;
+import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.network.RemoteUserDAO;
 import com.apuliacreativehub.eculturetool.data.network.UserRemoteDatabase;
 
@@ -53,26 +53,26 @@ public class UserRepository{
         return registrationResult;
     }
 
-    public MutableLiveData<RepositoryNotification<Token>> loginUser(User user) {
-        Call<Token> call = remoteUserDAO.LoginUser(user);
-        MutableLiveData<RepositoryNotification<Token>> loginResult = new MutableLiveData<>();
+    public MutableLiveData<RepositoryNotification<UserWithToken>> loginUser(UserWithToken uwt) {
+        Call<UserWithToken> call = remoteUserDAO.LoginUser(uwt);
+        MutableLiveData<RepositoryNotification<UserWithToken>> loginResult = new MutableLiveData<>();
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Response<Token> response = call.execute();
+                    Response<UserWithToken> response = call.execute();
                     Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                    RepositoryNotification<Token> repositoryNotification = new RepositoryNotification<>();
-                    if(response.isSuccessful()){
+                    RepositoryNotification<UserWithToken> repositoryNotification = new RepositoryNotification<>();
+                    if (response.isSuccessful()) {
                         repositoryNotification.setData(response.body());
-                    }else{
+                    } else {
                         if(response.errorBody()!=null){
                             repositoryNotification.setErrorMessage(response.errorBody().string());
                         }
                     }
                     loginResult.postValue(repositoryNotification);
                 } catch (IOException ioe) {
-                    RepositoryNotification<Token> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<UserWithToken> repositoryNotification = new RepositoryNotification<>();
                     repositoryNotification.setException(ioe);
                     loginResult.postValue(repositoryNotification);
                     Log.e("RETROFITERROR", ioe.getMessage());

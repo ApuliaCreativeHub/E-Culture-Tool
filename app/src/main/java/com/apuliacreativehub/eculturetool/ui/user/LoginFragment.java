@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.UuidManager;
-import com.apuliacreativehub.eculturetool.data.entity.Token;
+import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.HomeActivity;
 import com.apuliacreativehub.eculturetool.ui.dialogfragments.UnexpectedExceptionDialog;
@@ -56,18 +56,18 @@ public class LoginFragment extends Fragment {
             txtPassword.setText(loginViewModel.getPassword());
     }
 
-    final Observer<RepositoryNotification<Token>> loginObserver = new Observer<RepositoryNotification<Token>>() {
+    final Observer<RepositoryNotification<UserWithToken>> loginObserver = new Observer<RepositoryNotification<UserWithToken>>() {
         @Override
-        public void onChanged(RepositoryNotification<Token> notification) {
+        public void onChanged(RepositoryNotification<UserWithToken> notification) {
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
-                if (notification.getErrorMessage().equals("")) {
+                if (notification.getErrorMessage() == null) {
                     // Add token to shared preferences
                     Context context = getActivity();
                     SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("token", notification.getData().getToken());
+                    editor.putString("token", notification.getData().getToken().getToken());
                     // Add logged flag to shared preferences
                     editor.putBoolean("isLogged", true);
                     editor.apply();
