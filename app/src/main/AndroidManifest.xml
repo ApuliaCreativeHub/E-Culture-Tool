@@ -17,12 +17,13 @@
         android:theme="@style/Theme.ECultureTool" >
         <activity
             android:name=".ui.user.FormActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="userPortrait" />
         <activity
             android:name=".ui.HomeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:exported="true"
-            android:screenOrientation="fullSensor" >
+            android:screenOrientation="userPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
