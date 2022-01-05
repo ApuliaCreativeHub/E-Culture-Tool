@@ -25,7 +25,7 @@ import com.apuliacreativehub.eculturetool.data.UuidManager;
 import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.HomeActivity;
-import com.apuliacreativehub.eculturetool.ui.dialogfragments.UnexpectedExceptionDialog;
+import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
 
 public class LoginFragment extends Fragment {
 
@@ -79,12 +79,12 @@ public class LoginFragment extends Fragment {
                     }
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    // TODO: Show dialog here
+                    new ErrorDialog(getString(R.string.error_dialog_title), notification.getErrorMessage()).show(getChildFragmentManager(), ErrorDialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new UnexpectedExceptionDialog().show(getChildFragmentManager(), UnexpectedExceptionDialog.TAG);
+                new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog)).show(getChildFragmentManager(), ErrorDialog.TAG);
             }
         }
     };
