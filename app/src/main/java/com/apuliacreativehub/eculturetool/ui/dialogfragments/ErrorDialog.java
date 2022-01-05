@@ -30,7 +30,7 @@ public class ErrorDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         return new AlertDialog.Builder(requireContext())
-                .setTitle(R.string.error_dialog_title)
+                .setTitle(title)
                 // TODO: Set message as resource string
                 .setMessage(message)
                 .setPositiveButton(getString(R.string.ok), (dialog, which) -> {
