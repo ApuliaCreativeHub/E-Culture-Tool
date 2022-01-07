@@ -4,27 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.data.UuidManager;
 import com.apuliacreativehub.eculturetool.ui.HomeActivity;
 
-public class ProfileFragment extends Fragment {
+public class ProfileDetailsFragment extends Fragment {
     private View view;
 
     @Override
@@ -42,7 +36,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_profile, container, false);
+        view = inflater.inflate(R.layout.fragment_profile_details, container, false);
         return view;
     }
 
@@ -56,10 +50,6 @@ public class ProfileFragment extends Fragment {
             ((TextView)view.findViewById(R.id.txtName)).setText(sharedPref.getString("name", null));
             ((TextView)view.findViewById(R.id.txtSurname)).setText(sharedPref.getString("surname", null));
             ((TextView)view.findViewById(R.id.txtEmail)).setText(sharedPref.getString("email", null));
-
-            ((TextView)view.findViewById(R.id.editName)).setText(sharedPref.getString("name", null));
-            ((TextView)view.findViewById(R.id.editSurname)).setText(sharedPref.getString("surname", null));
-            ((TextView)view.findViewById(R.id.editEmail)).setText(sharedPref.getString("email", null));
         }
     }
 
@@ -67,10 +57,6 @@ public class ProfileFragment extends Fragment {
         super.onStart();
 
         TextView btnEdit = view.findViewById(R.id.btnEdit);
-        btnEdit.setOnClickListener(OnClickListener -> {view.findViewById(R.id.lytEdit).setVisibility(View.VISIBLE);
-                                                       view.findViewById(R.id.lytUser).setVisibility(View.INVISIBLE);});
-
-        TextView btnSave = view.findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(OnClickListener -> {startActivity(new Intent(getActivity(), HomeActivity.class));}); //TODO: implementing user update
+        btnEdit.setOnClickListener(edit -> {requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_frame_layout, new EditProfileFragment()).commit();});
     }
 }
