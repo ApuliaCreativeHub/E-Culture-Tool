@@ -69,9 +69,9 @@ public class HomeActivity extends AppCompatActivity {
                 fragment = new PlacesFragment();
                 break;
             case MENU_ITEM_USER:
-                // Qua bisogna aggiungere l'if per la sessione:
-                // se l'utente non è loggato dev'essere caricato il WelcomeFragment
-                // altrimenti dev'essere caricare l'UserFragment
+                // Here goes the session check:
+                // if the user is not logged WelcomeFragment will be loaded
+                // else UserFragment
                 fragment = new WelcomeFragment();
                 // fragment = new UserFragment();
                 break;
