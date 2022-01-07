@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.paths.PathsFragment;
 import com.apuliacreativehub.eculturetool.ui.places.PlacesFragment;
-import com.apuliacreativehub.eculturetool.ui.user.ProfileFragment;
+import com.apuliacreativehub.eculturetool.ui.user.ProfileDetailsFragment;
 import com.apuliacreativehub.eculturetool.ui.user.WelcomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -40,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
         if(extras != null) {
             if(extras.getString(SHOW_FRAGMENT).equals(USER_FRAGMENT)) {
                 bottomNavigationView.setSelectedItemId(MENU_ITEM_USER);
-                loadFragment(new ProfileFragment());
+                loadFragment(new ProfileDetailsFragment());
             }
         }
     }
