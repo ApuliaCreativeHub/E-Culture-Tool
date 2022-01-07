@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
+import com.apuliacreativehub.eculturetool.data.TokenManager;
 import com.apuliacreativehub.eculturetool.data.UuidManager;
 import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
@@ -47,6 +48,7 @@ public class LoginFragment extends Fragment {
                         SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString("token", notification.getData().getToken().getToken());
+                        TokenManager.setToken(notification.getData().getToken().getToken());
                         editor.putBoolean("isLogged", true);
                         editor.putString("name", notification.getData().getUser().getName());
                         editor.putString("surname", notification.getData().getUser().getSurname());
