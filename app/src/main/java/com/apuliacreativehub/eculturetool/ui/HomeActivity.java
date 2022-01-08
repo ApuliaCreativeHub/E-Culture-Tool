@@ -1,6 +1,9 @@
 package com.apuliacreativehub.eculturetool.ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -35,14 +38,6 @@ public class HomeActivity extends AppCompatActivity {
             Fragment activeFragment = mapperFragment(item.getItemId());
             return loadFragment(activeFragment);
         });
-
-        Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            if(extras.getString(SHOW_FRAGMENT).equals(USER_FRAGMENT)) {
-                bottomNavigationView.setSelectedItemId(MENU_ITEM_USER);
-                loadFragment(new ProfileDetailsFragment());
-            }
-        }
     }
 
     private boolean loadFragment(Fragment fragment) {
@@ -69,11 +64,12 @@ public class HomeActivity extends AppCompatActivity {
                 fragment = new PlacesFragment();
                 break;
             case MENU_ITEM_USER:
-                // Here goes the session check:
-                // if the user is not logged WelcomeFragment will be loaded
-                // else UserFragment
-                fragment = new WelcomeFragment();
-                // fragment = new UserFragment();
+                SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+                if(!sharedPref.getString("token", "").equals("")){
+                    fragment = new ProfileDetailsFragment();
+                }else{
+                    fragment = new WelcomeFragment();
+                }
                 break;
             case MENU_ITEM_PATHS:
                 fragment = new PathsFragment();

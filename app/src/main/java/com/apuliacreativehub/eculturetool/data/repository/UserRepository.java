@@ -81,4 +81,19 @@ public class UserRepository{
         });
         return loginResult;
     }
+
+    public void logoutUser() {
+        Call<Void> call = remoteUserDAO.LogoutUser();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response<Void> response = call.execute();
+                    Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                } catch (IOException ioe) {
+                    Log.e("RETROFITERROR", ioe.getMessage());
+                }
+            }
+        });
+    }
 }
