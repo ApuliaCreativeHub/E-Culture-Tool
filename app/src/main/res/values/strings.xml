@@ -69,6 +69,7 @@
     <string name="new_password">New Password</string>
     <string name="save">Save</string>
     <string name="edit">Edit</string>
+    <string name="manage_places">Manage Places</string>
     <string name="logout">Logout</string>
     <string name="name_subject_label">Name:</string>
     <string name="surname_subject_label">Surname:</string>

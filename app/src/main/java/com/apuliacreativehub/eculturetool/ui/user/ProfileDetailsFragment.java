@@ -63,13 +63,30 @@ public class ProfileDetailsFragment extends Fragment {
         super.onStart();
 
         Button btnEdit = view.findViewById(R.id.btnEdit);
-        btnEdit.setOnClickListener(edit -> {requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_frame_layout, new EditProfileFragment()).commit();});
+        btnEdit.setOnClickListener(edit -> {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_frame_layout, new EditProfileFragment()).commit();
+        });
+
+        boolean isACurator = false;
+        Context context = getActivity();
+        if (context != null) {
+            SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+            isACurator = sharedPref.getBoolean("isACurator", false);
+        }
+        if (isACurator) {
+            Button btnManagePlaces = view.findViewById(R.id.btnManagePlaces);
+            btnManagePlaces.setVisibility(View.VISIBLE);
+
+            btnManagePlaces.setOnClickListener(managePlaces -> {
+                // TODO: Start places management fragment
+                Log.d("TODO", "Stub! Start places management fragment");
+            });
+        }
 
         Button btnLogout = view.findViewById(R.id.btnLogout);
 
         btnLogout.setOnClickListener(logout -> {
-            Context context = getActivity();
-            if(context != null) {
+            if (context != null) {
                 SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.clear();
