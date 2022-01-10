@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="e40">The resource you’re trying to access is not available for some reason</string>
+    <string name="e41">A user with the given email already exists</string>
+    <string name="e42">A user with the given email does not exist</string>
+    <string name="e43">Email or password are incorrect</string>
+
+    <string name="e50">An error occurred while processing your request</string>
+    <string name="e51">Sent data was malformed</string>
+    <string name="e52">An error occurred while updating your information</string>
+</resources>

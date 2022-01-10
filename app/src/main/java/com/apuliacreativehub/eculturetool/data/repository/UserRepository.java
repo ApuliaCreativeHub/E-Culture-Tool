@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.apuliacreativehub.eculturetool.data.entity.User;
+import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.network.RemoteUserDAO;
 import com.apuliacreativehub.eculturetool.data.network.UserRemoteDatabase;
 
@@ -23,20 +24,26 @@ public class UserRepository{
         this.executor = executor;
     }
 
-    public MutableLiveData<RepositoryNotification<String>> registerUser(User user) {
+    public MutableLiveData<RepositoryNotification<Void>> registerUser(User user) {
         Call<Void> call = remoteUserDAO.RegisterUser(user);
-        MutableLiveData<RepositoryNotification<String>> registrationResult = new MutableLiveData<>();
+        MutableLiveData<RepositoryNotification<Void>> registrationResult = new MutableLiveData<>();
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 try {
                     Response<Void> response = call.execute();
                     Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                    RepositoryNotification<String> repositoryNotification = new RepositoryNotification<>();
-                    repositoryNotification.setData(String.valueOf(response.code()));
+                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    if(response.isSuccessful()){
+                        repositoryNotification.setData(response.body());
+                    }else{
+                        if(response.errorBody()!=null){
+                            repositoryNotification.setErrorMessage(response.errorBody().string());
+                        }
+                    }
                     registrationResult.postValue(repositoryNotification);
                 } catch (IOException ioe) {
-                    RepositoryNotification<String> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
                     repositoryNotification.setException(ioe);
                     registrationResult.postValue(repositoryNotification);
                     Log.e("RETROFITERROR", ioe.getMessage());
@@ -44,5 +51,78 @@ public class UserRepository{
             }
         });
         return registrationResult;
+    }
+
+    public MutableLiveData<RepositoryNotification<User>> editUser(User user) {
+        Call<User> call = remoteUserDAO.UpdateUser(user);
+        MutableLiveData<RepositoryNotification<User>> updatingResult = new MutableLiveData<>();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response<User> response = call.execute();
+                    Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                    RepositoryNotification<User> repositoryNotification = new RepositoryNotification<>();
+                    if(response.isSuccessful()){
+                        repositoryNotification.setData(response.body());
+                    }else{
+                        if(response.errorBody()!=null){
+                            repositoryNotification.setErrorMessage(response.errorBody().string());
+                        }
+                    }
+                    updatingResult.postValue(repositoryNotification);
+                } catch (IOException ioe) {
+                    RepositoryNotification<User> repositoryNotification = new RepositoryNotification<>();
+                    repositoryNotification.setException(ioe);
+                    updatingResult.postValue(repositoryNotification);
+                    Log.e("RETROFITERROR", ioe.getMessage());
+                }
+            }
+        });
+        return updatingResult;
+    }
+
+    public MutableLiveData<RepositoryNotification<UserWithToken>> loginUser(UserWithToken uwt) {
+        Call<UserWithToken> call = remoteUserDAO.LoginUser(uwt);
+        MutableLiveData<RepositoryNotification<UserWithToken>> loginResult = new MutableLiveData<>();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response<UserWithToken> response = call.execute();
+                    Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                    RepositoryNotification<UserWithToken> repositoryNotification = new RepositoryNotification<>();
+                    if (response.isSuccessful()) {
+                        repositoryNotification.setData(response.body());
+                    } else {
+                        if(response.errorBody()!=null){
+                            repositoryNotification.setErrorMessage(response.errorBody().string());
+                        }
+                    }
+                    loginResult.postValue(repositoryNotification);
+                } catch (IOException ioe) {
+                    RepositoryNotification<UserWithToken> repositoryNotification = new RepositoryNotification<>();
+                    repositoryNotification.setException(ioe);
+                    loginResult.postValue(repositoryNotification);
+                    Log.e("RETROFITERROR", ioe.getMessage());
+                }
+            }
+        });
+        return loginResult;
+    }
+
+    public void logoutUser() {
+        Call<Void> call = remoteUserDAO.LogoutUser();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response<Void> response = call.execute();
+                    Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                } catch (IOException ioe) {
+                    Log.e("RETROFITERROR", ioe.getMessage());
+                }
+            }
+        });
     }
 }

@@ -1,5 +1,7 @@
 package com.apuliacreativehub.eculturetool.ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,9 +9,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.TokenManager;
 import com.apuliacreativehub.eculturetool.ui.paths.PathsFragment;
 import com.apuliacreativehub.eculturetool.ui.places.PlacesFragment;
-import com.apuliacreativehub.eculturetool.ui.user.UserFragment;
+import com.apuliacreativehub.eculturetool.ui.user.ProfileDetailsFragment;
 import com.apuliacreativehub.eculturetool.ui.user.WelcomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -28,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+        TokenManager.setTokenFromSharedPreferences(this);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationBar);
         loadDefaultFragment();
@@ -35,14 +39,6 @@ public class HomeActivity extends AppCompatActivity {
             Fragment activeFragment = mapperFragment(item.getItemId());
             return loadFragment(activeFragment);
         });
-
-        Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            if(extras.getString(SHOW_FRAGMENT).equals(USER_FRAGMENT)) {
-                bottomNavigationView.setSelectedItemId(MENU_ITEM_USER);
-                loadFragment(new UserFragment());
-            }
-        }
     }
 
     private boolean loadFragment(Fragment fragment) {
@@ -69,11 +65,12 @@ public class HomeActivity extends AppCompatActivity {
                 fragment = new PlacesFragment();
                 break;
             case MENU_ITEM_USER:
-                // Qua bisogna aggiungere l'if per la sessione:
-                // se l'utente non è loggato dev'essere caricato il WelcomeFragment
-                // altrimenti dev'essere caricare l'UserFragment
-                fragment = new WelcomeFragment();
-                // fragment = new UserFragment();
+                SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+                if(!sharedPref.getString("token", "").equals("")){
+                    fragment = new ProfileDetailsFragment();
+                }else{
+                    fragment = new WelcomeFragment();
+                }
                 break;
             case MENU_ITEM_PATHS:
                 fragment = new PathsFragment();

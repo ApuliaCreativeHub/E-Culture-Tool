@@ -5,16 +5,17 @@ import android.app.Application;
 import androidx.lifecycle.MutableLiveData;
 
 import com.apuliacreativehub.eculturetool.data.entity.User;
+import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 
-public class RegisterViewModel extends AbstractUserViewModel {
+public class EditProfileViewModel extends AbstractUserViewModel{
 
-    public RegisterViewModel(Application application) {
+    public EditProfileViewModel(Application application) {
         super(application);
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> registerUser() {
+    public MutableLiveData<RepositoryNotification<User>> editDetails() {
         User user = new User(name, surname, email, password, isCurator);
-        return repository.registerUser(user);
+        return repository.editUser(user);
     }
 }

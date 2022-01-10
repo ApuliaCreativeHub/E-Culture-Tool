@@ -1,5 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,12 +19,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
-import com.apuliacreativehub.eculturetool.ui.dialogfragments.UnexpectedExceptionDialog;
-import com.apuliacreativehub.eculturetool.ui.dialogfragments.registration.RegistrationErrorDialog;
+import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
-
-import java.net.HttpURLConnection;
 
 public class RegisterFragment extends Fragment {
 
@@ -35,30 +34,31 @@ public class RegisterFragment extends Fragment {
     private EditText txtPassword;
     private EditText txtConfirmPassword;
     private SwitchMaterial sthCurator;
-
-    final Observer<RepositoryNotification<String>> registrationObserver = new Observer<RepositoryNotification<String>>() {
+    final Observer<RepositoryNotification<Void>> registrationObserver = new Observer<RepositoryNotification<Void>>() {
         @Override
         public void onChanged(RepositoryNotification notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
-                if (String.valueOf(notification.getData()).equals(String.valueOf(HttpURLConnection.HTTP_OK))) {
+                if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit();
-                } else if (String.valueOf(notification.getData()).equals(String.valueOf(HttpURLConnection.HTTP_INTERNAL_ERROR))) {
+                } else {
                     Log.d("Dialog", "show dialog here");
-                    new RegistrationErrorDialog().show(getChildFragmentManager(), RegistrationErrorDialog.TAG);
+                    new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "REGISTRATION_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
                     view.findViewById(R.id.registrationProgressionBar).setVisibility(View.INVISIBLE);
                     view.findViewById(R.id.lytUser).setVisibility(View.VISIBLE);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new UnexpectedExceptionDialog().show(getChildFragmentManager(), UnexpectedExceptionDialog.TAG);
+                new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "REGISTRATION_EXCEPTION").show(getChildFragmentManager(), ErrorDialog.TAG);
                 view.findViewById(R.id.registrationProgressionBar).setVisibility(View.INVISIBLE);
                 view.findViewById(R.id.lytUser).setVisibility(View.VISIBLE);
             }
         }
     };
+    private Context mcontext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,6 +69,7 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mcontext = getContext();
 
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 

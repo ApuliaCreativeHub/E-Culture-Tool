@@ -56,8 +56,9 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="registration_failed_dialog">Something went wrong. Try again later.</string>
-    <string name="unexpected_exception_dialog">Something went wrong whit your application.</string>
+    <string name="error_dialog_title">An error occurred</string>
+
+    <string name="unexpected_exception_dialog">Something went wrong with your application.</string>
     <string name="ok">OK</string>
 
     <string name="information_paths">By registering we will save all your paths so that you can retrieve them from any device.</string>
@@ -67,5 +68,12 @@
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
     <string name="save">Save</string>
-    <string name="logout">Do you want to exit your account? Logout</string>
+    <string name="edit">Edit</string>
+    <string name="manage_places">Manage Places</string>
+    <string name="logout">Logout</string>
+    <string name="name_subject_label">Name:</string>
+    <string name="surname_subject_label">Surname:</string>
+    <string name="email_subject_label">Email:</string>
+    <string name="new_password_subject_label">New Password</string>
+    <string name="confirm_password_subject_label">Confirm Password</string>
 </resources>
