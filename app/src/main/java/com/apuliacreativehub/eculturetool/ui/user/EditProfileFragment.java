@@ -22,9 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
-import com.apuliacreativehub.eculturetool.data.TokenManager;
 import com.apuliacreativehub.eculturetool.data.entity.User;
-import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
 
@@ -45,7 +43,6 @@ public class EditProfileFragment extends Fragment {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
                 if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
-                    //TODO: check why is not working...
                     SharedPreferences sharedPref = mcontext.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.remove("name");
@@ -57,7 +54,7 @@ public class EditProfileFragment extends Fragment {
                     editor.putString("email", notification.getData().getEmail());
                     editor.putBoolean("isACurator", notification.getData().isACurator());
                     editor.apply();
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new ProfileDetailsFragment()).commit();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_frame_layout, new ProfileDetailsFragment()).commit();
                 } else {
                     Log.d("Dialog", "show dialog here");
                     new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
@@ -268,12 +265,9 @@ public class EditProfileFragment extends Fragment {
 
             if(!errors) {
                 editProfileViewModel.editDetails().observe(this, updatingObserver);
-                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_frame_layout, new ProfileDetailsFragment()).commit();
                 //view.findViewById(R.id.lytUser).setVisibility(View.INVISIBLE);
                 //view.findViewById(R.id.registrationProgressionBar).setVisibility(View.VISIBLE);
             }
-
-
         });
     }
 }
