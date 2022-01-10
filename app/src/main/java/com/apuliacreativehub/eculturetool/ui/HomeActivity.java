@@ -3,13 +3,13 @@ package com.apuliacreativehub.eculturetool.ui;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.TokenManager;
 import com.apuliacreativehub.eculturetool.ui.paths.PathsFragment;
 import com.apuliacreativehub.eculturetool.ui.places.PlacesFragment;
 import com.apuliacreativehub.eculturetool.ui.user.ProfileDetailsFragment;
@@ -31,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+        TokenManager.setTokenFromSharedPreferences(this);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationBar);
         loadDefaultFragment();
