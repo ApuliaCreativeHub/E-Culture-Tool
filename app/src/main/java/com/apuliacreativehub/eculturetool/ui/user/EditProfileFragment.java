@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,9 +17,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
+import com.apuliacreativehub.eculturetool.data.TokenManager;
+import com.apuliacreativehub.eculturetool.data.entity.User;
+import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
+import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
 
 public class EditProfileFragment extends Fragment {
     private View view;
@@ -29,6 +37,38 @@ public class EditProfileFragment extends Fragment {
     private EditText Password;
     private EditText ConfirmPassword;
     private Context mcontext;
+    final Observer<RepositoryNotification<User>> updatingObserver = new Observer<RepositoryNotification<User>>() {
+        @Override
+        public void onChanged(RepositoryNotification<User> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
+                    //TODO: check why is not working...
+                    SharedPreferences sharedPref = mcontext.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.remove("name");
+                    editor.remove("surname");
+                    editor.remove("email");
+                    editor.remove("isACurator");
+                    editor.putString("name", notification.getData().getName());
+                    editor.putString("surname", notification.getData().getSurname());
+                    editor.putString("email", notification.getData().getEmail());
+                    editor.putBoolean("isACurator", notification.getData().isACurator());
+                    editor.apply();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new ProfileDetailsFragment()).commit();
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+            }
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -227,7 +267,7 @@ public class EditProfileFragment extends Fragment {
             }
 
             if(!errors) {
-                //TODO: implementing user update
+                editProfileViewModel.editDetails().observe(this, updatingObserver);
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_frame_layout, new ProfileDetailsFragment()).commit();
                 //view.findViewById(R.id.lytUser).setVisibility(View.INVISIBLE);
                 //view.findViewById(R.id.registrationProgressionBar).setVisibility(View.VISIBLE);

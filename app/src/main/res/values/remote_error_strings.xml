@@ -7,4 +7,5 @@
 
     <string name="e50">An error occurred while processing your request</string>
     <string name="e51">Sent data was malformed</string>
+    <string name="e52">An error occurred while updating your information</string>
 </resources>
