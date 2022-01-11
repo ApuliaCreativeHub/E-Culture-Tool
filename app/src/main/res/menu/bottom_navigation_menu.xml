@@ -1,15 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menuItemPaths"
+        android:id="@+id/pathsFragment"
         android:title="@string/nav_paths"
         android:icon="@mipmap/ic_file_tree"/>
     <item
-        android:id="@+id/menuItemPlaces"
+        android:id="@+id/placesFragment"
         android:title="@string/nav_places"
         android:checked="true"
         android:icon="@mipmap/ic_earth"/>
     <item
-        android:id="@+id/menuItemUser"
+        android:id="@+id/welcomeFragment"
         android:title="@string/nav_user"
         android:icon="@mipmap/ic_action_user"/>
 </menu>

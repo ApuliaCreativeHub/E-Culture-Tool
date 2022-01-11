@@ -4,80 +4,52 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.data.TokenManager;
-import com.apuliacreativehub.eculturetool.ui.paths.PathsFragment;
-import com.apuliacreativehub.eculturetool.ui.places.PlacesFragment;
-import com.apuliacreativehub.eculturetool.ui.user.ProfileDetailsFragment;
-import com.apuliacreativehub.eculturetool.ui.user.WelcomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
+    public static final int SHOW_PATHS = 0;
+    public static final int SHOW_PLACES = 1;
+    public static final int SHOW_PROFILE = 2;
 
-    public static final String SHOW_FRAGMENT = "SHOW_FRAGMENT";
-    public static final String USER_FRAGMENT = "USER_FRAGMENT";
-
-    public static final int MENU_ITEM_PLACES = R.id.menuItemPlaces;
-    public static final int MENU_ITEM_USER = R.id.menuItemUser;
-    public static final int MENU_ITEM_PATHS = R.id.menuItemPaths;
-
-    private BottomNavigationView bottomNavigationView;
+    private NavController navController;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
-        TokenManager.setTokenFromSharedPreferences(this);
-
-        bottomNavigationView = findViewById(R.id.bottomNavigationBar);
-        loadDefaultFragment();
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            Fragment activeFragment = mapperFragment(item.getItemId());
-            return loadFragment(activeFragment);
-        });
     }
 
-    private boolean loadFragment(Fragment fragment) {
-        if(fragment != null) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.container_frame_layout, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-            return true;
-        }
-        return false;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationBar);
+        navController = Navigation.findNavController(this, R.id.navHostContainer);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 
-    private void loadDefaultFragment() {
-        bottomNavigationView.setSelectedItemId(R.id.menuItemPlaces);
-        loadFragment(new PlacesFragment());
-    }
-
-    private Fragment mapperFragment(int id) {
-        Fragment fragment = null;
-
-        switch(id) {
-            case MENU_ITEM_PLACES:
-                fragment = new PlacesFragment();
+    private void navigateToScreen(int screen) {
+        switch (screen) {
+            case SHOW_PATHS:
+                navController.navigate(R.id.pathsFragment);
                 break;
-            case MENU_ITEM_USER:
+            case SHOW_PLACES:
+                navController.navigate(R.id.placesFragment);
+                break;
+            case SHOW_PROFILE:
                 SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
-                if(!sharedPref.getString("token", "").equals("")){
-                    fragment = new ProfileDetailsFragment();
-                }else{
-                    fragment = new WelcomeFragment();
+                if (!sharedPref.getString("token", "").equals("")) {
+                    navController.navigate(R.id.lytProfileDetails);
+                } else {
+                    navController.navigate(R.id.welcomeFragment);
                 }
                 break;
-            case MENU_ITEM_PATHS:
-                fragment = new PathsFragment();
-                break;
         }
-
-        return fragment;
     }
-
 }
