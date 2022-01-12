@@ -1,7 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,9 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.ui.HomeActivity;
 
 public class ProfileDetailsFragment extends Fragment {
     private View view;
@@ -92,7 +91,7 @@ public class ProfileDetailsFragment extends Fragment {
                 editor.clear();
                 editor.apply();
                 logoutViewModel.logoutUser();
-                startActivity(new Intent(getActivity(), HomeActivity.class));
+                Navigation.findNavController(requireActivity(), R.id.navHostContainer).popBackStack(R.id.placesFragment, false);
             }
         });
     }
