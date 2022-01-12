@@ -9,7 +9,7 @@
         android:checked="true"
         android:icon="@mipmap/ic_earth"/>
     <item
-        android:id="@+id/welcomeFragment"
+        android:id="@+id/userFragment"
         android:title="@string/nav_user"
         android:icon="@mipmap/ic_action_user"/>
 </menu>
