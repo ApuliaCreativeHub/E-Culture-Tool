@@ -1,5 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -53,7 +54,7 @@ public class LoginFragment extends Fragment {
                         editor.putString("email", notification.getData().getUser().getEmail());
                         editor.putBoolean("isACurator", notification.getData().getUser().isACurator());
                         editor.apply();
-                        //startActivity(new Intent(getActivity(), HomeActivity.class).putExtra("screen", HomeActivity.SHOW_PROFILE));
+                        getActivity().setResult(Activity.RESULT_OK);
                         getActivity().finish();
                     }
                 } else {
