@@ -9,10 +9,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.apuliacreativehub.eculturetool.R;
@@ -22,9 +23,20 @@ public class WelcomeFragment extends Fragment {
 
     private View view;
     private final ActivityResultLauncher<Intent> loginDoneCallback = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        NavController navController = Navigation.findNavController(activity, R.id.navHostContainer);
-        navController.popBackStack(R.id.userFragment, false);
+        Navigation.findNavController(activity, R.id.navHostContainer).popBackStack(R.id.userFragment, false);
     });
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        OnBackPressedCallback backPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Navigation.findNavController(activity, R.id.navHostContainer).popBackStack(R.id.placesFragment, false);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, backPressedCallback);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
