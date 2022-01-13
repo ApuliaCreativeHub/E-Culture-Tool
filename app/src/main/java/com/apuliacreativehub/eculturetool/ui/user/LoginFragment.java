@@ -1,7 +1,7 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -26,7 +26,6 @@ import com.apuliacreativehub.eculturetool.data.TokenManager;
 import com.apuliacreativehub.eculturetool.data.UuidManager;
 import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
-import com.apuliacreativehub.eculturetool.ui.HomeActivity;
 import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
 
 public class LoginFragment extends Fragment {
@@ -55,7 +54,8 @@ public class LoginFragment extends Fragment {
                         editor.putString("email", notification.getData().getUser().getEmail());
                         editor.putBoolean("isACurator", notification.getData().getUser().isACurator());
                         editor.apply();
-                        startActivity(new Intent(getActivity(), HomeActivity.class).putExtra(HomeActivity.SHOW_FRAGMENT, HomeActivity.USER_FRAGMENT));
+                        getActivity().setResult(Activity.RESULT_OK);
+                        getActivity().finish();
                     }
                 } else {
                     Log.d("Dialog", "show dialog here");

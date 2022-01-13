@@ -1,7 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,13 +12,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.ui.HomeActivity;
 
 public class ProfileDetailsFragment extends Fragment {
     private View view;
@@ -29,6 +29,13 @@ public class ProfileDetailsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        OnBackPressedCallback backPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Navigation.findNavController(requireActivity(), R.id.navHostContainer).popBackStack(R.id.placesFragment, false);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, backPressedCallback);
     }
 
     @Override
@@ -64,7 +71,7 @@ public class ProfileDetailsFragment extends Fragment {
 
         Button btnEdit = view.findViewById(R.id.btnEdit);
         btnEdit.setOnClickListener(edit -> {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_frame_layout, new EditProfileFragment()).commit();
+            //requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_frame_layout, new EditProfileFragment()).commit();
         });
 
         boolean isACurator = false;
@@ -92,7 +99,7 @@ public class ProfileDetailsFragment extends Fragment {
                 editor.clear();
                 editor.apply();
                 logoutViewModel.logoutUser();
-                startActivity(new Intent(getActivity(), HomeActivity.class));
+                Navigation.findNavController(requireActivity(), R.id.navHostContainer).popBackStack(R.id.placesFragment, false);
             }
         });
     }
