@@ -37,10 +37,10 @@ public class PathsFragment extends ListFragment {
         setHasOptionsMenu(true);
         master = getActivity();
 
-        getParentFragmentManager().setFragmentResultListener("closingBackdrop", this, new FragmentResultListener() {
+        getChildFragmentManager().setFragmentResultListener("closingBackdrop", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                getParentFragmentManager()
+                getChildFragmentManager()
                         .beginTransaction()
                         .remove(child)
                         .commit();
@@ -48,7 +48,7 @@ public class PathsFragment extends ListFragment {
             }
         });
 
-        getParentFragmentManager().setFragmentResultListener("applyFilter", this, new FragmentResultListener() {
+        getChildFragmentManager().setFragmentResultListener("applyFilter", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 pathsAdapter.setFilterDate(result.getBoolean("switchFilterDate"));
@@ -73,7 +73,7 @@ public class PathsFragment extends ListFragment {
                 setFilterChildOpened(true);
 
                 child = new PathsFilterFragment(pathsAdapter.getFilterPlaces(), pathsAdapter.getFilterName(), pathsAdapter.getFilterDate());
-                master.getSupportFragmentManager()
+                this.getChildFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(
                                 R.anim.slide_in,
