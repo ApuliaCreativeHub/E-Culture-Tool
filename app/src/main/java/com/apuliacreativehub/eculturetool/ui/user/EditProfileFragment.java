@@ -54,7 +54,7 @@ public class EditProfileFragment extends Fragment {
                     editor.putString("email", notification.getData().getEmail());
                     editor.putBoolean("isACurator", notification.getData().isACurator());
                     editor.apply();
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_frame_layout, new ProfileDetailsFragment()).commit();
+                    //requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_frame_layout, new ProfileDetailsFragment()).commit();
                 } else {
                     Log.d("Dialog", "show dialog here");
                     new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);

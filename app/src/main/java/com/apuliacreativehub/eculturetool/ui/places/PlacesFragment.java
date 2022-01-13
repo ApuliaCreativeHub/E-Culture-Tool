@@ -44,8 +44,11 @@ public class PlacesFragment extends Fragment {
         super.onStart();
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragmentContainerView2, MapFragment.class, null);
-        fragmentTransaction.commit();
+        MapFragment mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.mapContainer);
+        if (mapFragment == null) {
+            fragmentTransaction.add(R.id.mapContainer, MapFragment.class, null);
+            fragmentTransaction.commit();
+        }
     }
 
 
