@@ -26,6 +26,7 @@ public class PathsFragment extends ListFragment {
     private PathsAdapter pathsAdapter;
     private boolean isFilterChildOpened = false;
     private Fragment child;
+    private View view;
 
     public void setFilterChildOpened(boolean value) {
         this.isFilterChildOpened = value;
@@ -94,7 +95,7 @@ public class PathsFragment extends ListFragment {
                              Bundle savedInstanceState) {
         pathsAdapter = new PathsAdapter(getContext());
         setListAdapter(pathsAdapter);
-        return inflater.inflate(R.layout.fragment_paths, container, false);
+        return view = inflater.inflate(R.layout.fragment_paths, container, false);
     }
 
     @Override

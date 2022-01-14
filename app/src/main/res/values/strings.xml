@@ -9,7 +9,7 @@
 
     <string name="search">Search</string>
     <string name="filter">Filter</string>>
-    <string name="filter_description">Select an filter</string>
+    <string name="filter_description">Select a filter</string>
 
     <string name="list_paths_results">Results:</string>
     <string name="list_paths_no_results">No results found</string>
