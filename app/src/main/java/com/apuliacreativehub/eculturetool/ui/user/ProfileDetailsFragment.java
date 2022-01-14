@@ -71,7 +71,7 @@ public class ProfileDetailsFragment extends Fragment {
 
         Button btnEdit = view.findViewById(R.id.btnEdit);
         btnEdit.setOnClickListener(edit -> {
-            //requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_frame_layout, new EditProfileFragment()).commit();
+            Navigation.findNavController(requireActivity(), R.id.navHostContainer).navigate(R.id.action_profileDetailsFragment_to_editProfileFragment);
         });
 
         boolean isACurator = false;

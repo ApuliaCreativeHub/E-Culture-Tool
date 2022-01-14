@@ -23,7 +23,11 @@
         android:id="@+id/profileDetailsFragment"
         android:name="com.apuliacreativehub.eculturetool.ui.user.ProfileDetailsFragment"
         android:label="fragment_profile_details"
-        tools:layout="@layout/fragment_profile_details" />
+        tools:layout="@layout/fragment_profile_details">
+        <action
+            android:id="@+id/action_profileDetailsFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userFragment"
         android:name="com.apuliacreativehub.eculturetool.ui.user.UserFragment"
@@ -34,6 +38,14 @@
             app:destination="@id/welcomeFragment" />
         <action
             android:id="@+id/action_userFragment_to_profileDetailsFragment"
+            app:destination="@id/profileDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.apuliacreativehub.eculturetool.ui.user.EditProfileFragment"
+        android:label="EditProfileFragment">
+        <action
+            android:id="@+id/action_editProfileFragment_to_profileDetailsFragment"
             app:destination="@id/profileDetailsFragment" />
     </fragment>
 
