@@ -43,6 +43,7 @@ public class PathsFragment extends ListFragment {
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 getChildFragmentManager()
                         .beginTransaction()
+                        .setReorderingAllowed(true)
                         .remove(child)
                         .commit();
                 isFilterChildOpened = false;

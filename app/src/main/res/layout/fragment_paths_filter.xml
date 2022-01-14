@@ -39,10 +39,12 @@
             <ImageButton
                 android:id="@+id/btnCloseFilterBackdrop"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="160dp"
                 android:background="@color/dirty_white"
-                android:src="@mipmap/ic_chevron_down" />
+                android:contentDescription="@string/close_dropbox"
+                android:src="@mipmap/ic_chevron_down"
+                app:tint="@color/dark_brown" />
         </LinearLayout>
 
         <LinearLayout
@@ -61,11 +63,13 @@
                 android:text="@string/list_paths_filter_names"
                 android:textColor="@color/black" />
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchFilterSearchName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                app:thumbTint="@color/dark_brown"
+                app:trackTint="@color/light_brown" />
 
         </LinearLayout>
 
@@ -85,11 +89,13 @@
                 android:text="@string/list_paths_filter_date"
                 android:textColor="@color/black" />
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchFilterSearchDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                app:thumbTint="@color/dark_brown"
+                app:trackTint="@color/light_brown" />
 
         </LinearLayout>
 
@@ -110,11 +116,13 @@
                 android:text="@string/list_paths_filter_place"
                 android:textColor="@color/black" />
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchFilterSearchPlaces"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                app:thumbTint="@color/dark_brown"
+                app:trackTint="@color/light_brown" />
 
         </LinearLayout>
 
@@ -126,7 +134,7 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnApplyFilter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
