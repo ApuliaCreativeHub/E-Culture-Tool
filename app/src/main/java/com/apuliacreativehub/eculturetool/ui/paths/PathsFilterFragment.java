@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class PathsFilterFragment extends Fragment {
 
@@ -22,10 +24,10 @@ public class PathsFilterFragment extends Fragment {
     private final Boolean activeFilterName;
     private final Boolean activeFilterDate;
     ImageButton closeFilter;
-    Button applyFilter;
-    Switch switchSearchName;
-    Switch switchSearchDate;
-    Switch switchSearchPlaces;
+    MaterialButton applyFilter;
+    SwitchMaterial switchSearchName;
+    SwitchMaterial switchSearchDate;
+    SwitchMaterial switchSearchPlaces;
 
     public PathsFilterFragment(Boolean activeFilterPlaces, Boolean activeFilterName, Boolean activeFilterDate) {
         this.activeFilterName = activeFilterName;
@@ -42,6 +44,7 @@ public class PathsFilterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_paths_filter, container, false);
     }
 

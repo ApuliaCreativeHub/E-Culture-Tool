@@ -9,7 +9,7 @@
 
     <string name="search">Search</string>
     <string name="filter">Filter</string>>
-    <string name="filter_description">Select an filter</string>
+    <string name="filter_description">Select a filter</string>
 
     <string name="list_paths_results">Results:</string>
     <string name="list_paths_no_results">No results found</string>
@@ -76,4 +76,5 @@
     <string name="email_subject_label">Email:</string>
     <string name="new_password_subject_label">New Password</string>
     <string name="confirm_password_subject_label">Confirm Password</string>
+    <string name="close_dropbox">close dropbox</string>
 </resources>
