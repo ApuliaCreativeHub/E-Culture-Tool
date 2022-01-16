@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -97,8 +98,8 @@ public class EditProfileFragment extends Fragment {
         Name = view.findViewById(R.id.editName);
         Surname = view.findViewById(R.id.editSurname);
         Email = view.findViewById(R.id.editEmail);
-        Password = view.findViewById(R.id.editNewPassword);
-        ConfirmPassword = view.findViewById(R.id.editConfirmPassword);
+        /*Password = view.findViewById(R.id.editNewPassword);
+        ConfirmPassword = view.findViewById(R.id.editConfirmPassword);*/
 
         if (mcontext != null) {
             SharedPreferences sharedPref = mcontext.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
@@ -124,11 +125,11 @@ public class EditProfileFragment extends Fragment {
                 Email.setText(editProfileViewModel.getEmail());
             }
 
-            if(!editProfileViewModel.getPassword().equals(""))
+            /*if(!editProfileViewModel.getPassword().equals(""))
                 Password.setText(editProfileViewModel.getPassword());
 
             if(!editProfileViewModel.getConfirmPassword().equals(""))
-                ConfirmPassword.setText(editProfileViewModel.getConfirmPassword());
+                ConfirmPassword.setText(editProfileViewModel.getConfirmPassword());*/
         }
     }
 
@@ -186,7 +187,7 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        Password.addTextChangedListener(new TextWatcher() {
+        /*Password.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -218,9 +219,9 @@ public class EditProfileFragment extends Fragment {
             public void afterTextChanged(Editable editable) {
                 editProfileViewModel.setConfirmPassword(editable.toString());
             }
-        });
+        });*/
 
-        TextView btnSave = view.findViewById(R.id.btnSave);
+        Button btnSave = view.findViewById(R.id.btnSave);
         btnSave.setOnClickListener(save -> {
             boolean errors = false;
 
@@ -249,7 +250,7 @@ public class EditProfileFragment extends Fragment {
             }
 
             // Check Password
-            if(!editProfileViewModel.isPasswordCorrect(editProfileViewModel.getPassword())) {
+            /*if(!editProfileViewModel.isPasswordCorrect(editProfileViewModel.getPassword())) {
                 Password.setError(getResources().getString(R.string.invalid_password));
                 errors = true;
             } else {
@@ -262,13 +263,35 @@ public class EditProfileFragment extends Fragment {
                 errors = true;
             } else {
                 ConfirmPassword.setError(null);
-            }
+            }*/
 
             if(!errors) {
                 editProfileViewModel.editDetails().observe(this, updatingObserver);
                 //view.findViewById(R.id.lytUser).setVisibility(View.INVISIBLE);
                 //view.findViewById(R.id.registrationProgressionBar).setVisibility(View.VISIBLE);
             }
+        });
+
+        Button btnChangePassword = view.findViewById(R.id.btnChangePassword);
+        btnChangePassword.setOnClickListener(changePassword -> {
+            Fragment changePassswordFragment = getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView);
+            if (changePassswordFragment != null){
+                getChildFragmentManager().beginTransaction()
+                        .remove(changePassswordFragment)
+                        .setReorderingAllowed(true)
+                        .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
+                        .commit();
+                btnChangePassword.setText(R.string.change_password);
+            }else{
+                getChildFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
+                        .add(R.id.changePasswordContainerView, new ChangePasswordFragment())
+                        .setReorderingAllowed(true)
+                        .commit();
+                btnChangePassword.setText(R.string.do_not_change_anymore);
+
+            }
+
         });
     }
 }

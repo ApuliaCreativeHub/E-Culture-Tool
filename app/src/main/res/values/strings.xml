@@ -77,4 +77,6 @@
     <string name="new_password_subject_label">New Password</string>
     <string name="confirm_password_subject_label">Confirm Password</string>
     <string name="close_dropbox">close dropbox</string>
+    <string name="change_password">Change password</string>
+    <string name="do_not_change_anymore">Do not change anymore</string>
 </resources>
