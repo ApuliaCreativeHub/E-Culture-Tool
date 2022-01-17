@@ -23,7 +23,6 @@
                         android:id="@+id/textListPathName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"/>
             </LinearLayout>
@@ -37,7 +36,6 @@
                         android:id="@+id/textListPathPlace"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
                         android:text="Android"
                         android:textSize="12sp"/>
                     <TextView
@@ -46,7 +44,6 @@
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
                         android:textStyle="italic"
-                        android:textColor="@color/black"
                         android:textAlignment="textEnd"
                         android:layout_marginEnd="24dp"/>
             </LinearLayout>
