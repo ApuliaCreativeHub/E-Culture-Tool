@@ -31,8 +31,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //navigateToScreen(getIntent().getExtras().getInt("screen", SHOW_PLACES));
-
         setContentView(R.layout.home);
     }
 
@@ -47,24 +45,5 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar=findViewById(R.id.homeToolbar);
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-    }
-
-    private void navigateToScreen(int screen) {
-        switch (screen) {
-            case SHOW_PATHS:
-                navController.navigate(R.id.pathsFragment);
-                break;
-            case SHOW_PLACES:
-                navController.navigate(R.id.placesFragment);
-                break;
-            case SHOW_PROFILE:
-                SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
-                if (!sharedPref.getString("token", "").equals("")) {
-                    navController.navigate(R.id.lytProfileDetails);
-                } else {
-                    navController.navigate(R.id.welcomeFragment);
-                }
-                break;
-        }
     }
 }
