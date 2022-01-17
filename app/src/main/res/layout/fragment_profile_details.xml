@@ -7,16 +7,31 @@
     android:layout_height="match_parent"
     tools:context=".ui.user.ProfileDetailsFragment">
 
+    <ImageView
+        android:id="@+id/imgMuseum"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="false"
+        android:contentDescription="@string/museum"
+        android:scaleType="centerCrop"
+        android:src="@drawable/museum"
+        app:layout_constraintBottom_toTopOf="@+id/lytUser"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ImageContrastCheck" />
+
     <LinearLayout
         android:id="@+id/lytUser"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="56dp"
         android:gravity="center_horizontal|top"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/txtDetails"
@@ -44,11 +59,11 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:labelFor="@id/txtName"
-                    android:textStyle="bold"
-                    android:text="@string/name_subject_label" />
+                    android:text="@string/name_subject_label"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtName"
@@ -69,12 +84,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:labelFor="@id/txtEmail"
-                    android:textStyle="bold"
-                    android:text="@string/email_subject_label" />
+                    android:text="@string/email_subject_label"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtEmail"
@@ -95,12 +110,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:labelFor="@id/txtSurname"
-                    android:textStyle="bold"
-                    android:text="@string/surname_subject_label" />
+                    android:text="@string/surname_subject_label"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtSurname"
