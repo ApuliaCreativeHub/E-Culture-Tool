@@ -47,15 +47,8 @@
             android:layout_marginTop="32dp"
             android:layout_weight="1"
             android:autofillHints="@string/name"
-            android:background="@drawable/circle"
             android:hint="@string/name"
-            android:inputType="textPersonName"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:textColor="#ffc791"
-            android:textColorHint="#ffc791"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/txtSurname"
@@ -64,15 +57,8 @@
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:autofillHints="@string/surname"
-            android:background="@drawable/circle"
             android:hint="@string/surname"
-            android:inputType="textPersonName"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:textColor="#ffc791"
-            android:textColorHint="#ffc791"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/txtEmail"
@@ -81,15 +67,8 @@
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:autofillHints="@string/email"
-            android:background="@drawable/circle"
             android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:textColor="#ffc791"
-            android:textColorHint="#ffc791"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/txtPassword"
@@ -98,15 +77,8 @@
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:autofillHints="@string/password"
-            android:background="@drawable/circle"
             android:hint="@string/password"
-            android:inputType="textPassword"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:textColor="#ffc791"
-            android:textColorHint="#ffc791"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:inputType="textPassword" />
 
         <EditText
             android:id="@+id/txtConfirmPassword"
@@ -115,15 +87,8 @@
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:autofillHints="@string/confirm_password"
-            android:background="@drawable/circle"
             android:hint="@string/confirm_password"
-            android:inputType="textPassword"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:textColor="#ffc791"
-            android:textColorHint="#ffc791"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:inputType="textPassword" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/sthCurator"
@@ -135,8 +100,6 @@
             android:layout_marginRight="40dp"
             android:layout_weight="1"
             android:text="@string/curator"
-            android:textColor="#403f3f"
-            android:textSize="16sp"
             android:textStyle="bold" />
 
         <Button
@@ -145,11 +108,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:background="@drawable/button"
             android:text="@string/register"
-            android:textColor="#FFF"
-            android:textSize="16sp"
-            android:textStyle="bold"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
@@ -160,8 +119,6 @@
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:text="@string/sign_in"
-            android:textColor="#403f3f"
-            android:textSize="16sp"
             android:textStyle="bold" />
 
     </LinearLayout>
