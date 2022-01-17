@@ -47,6 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:labelFor="@id/txtName"
+                    android:textStyle="bold"
                     android:text="@string/name_subject_label" />
 
                 <TextView
@@ -56,11 +57,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="16dp"
                     android:paddingLeft="24dp"
-                    android:paddingRight="24dp"
-                    android:textColor="#ffc791"
-                    android:textColorHint="#ffc791"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:paddingRight="24dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -76,6 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:labelFor="@id/txtEmail"
+                    android:textStyle="bold"
                     android:text="@string/email_subject_label" />
 
                 <TextView
@@ -85,11 +83,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="16dp"
                     android:paddingLeft="24dp"
-                    android:paddingRight="24dp"
-                    android:textColor="#ffc791"
-                    android:textColorHint="#ffc791"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:paddingRight="24dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -105,6 +99,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:labelFor="@id/txtSurname"
+                    android:textStyle="bold"
                     android:text="@string/surname_subject_label" />
 
                 <TextView
@@ -114,11 +109,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="16dp"
                     android:paddingLeft="24dp"
-                    android:paddingRight="24dp"
-                    android:textColor="#ffc791"
-                    android:textColorHint="#ffc791"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:paddingRight="24dp" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -130,10 +121,7 @@
             android:layout_marginHorizontal="56dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:background="@drawable/button"
             android:text="@string/edit"
-            android:textColor="#FFF"
-            android:textSize="16sp"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <Button
@@ -143,10 +131,7 @@
             android:layout_marginHorizontal="56dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:background="@drawable/button"
             android:text="@string/manage_places"
-            android:textColor="#FFF"
-            android:textSize="16sp"
             android:visibility="gone"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -157,10 +142,7 @@
             android:layout_marginHorizontal="56dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:background="@drawable/button"
             android:text="@string/logout"
-            android:textColor="#FFF"
-            android:textSize="16sp"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
     </LinearLayout>
