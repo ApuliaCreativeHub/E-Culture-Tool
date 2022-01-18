@@ -114,4 +114,30 @@ public class UserRepository{
         });
     }
 
+    public MutableLiveData<RepositoryNotification<Void>> changePassword(User user){
+        Call<Void> call = remoteUserDAO.ChangePassword(user);
+        MutableLiveData<RepositoryNotification<Void>> changePasswordResult = new MutableLiveData<>();
+        executor.execute(() -> {
+            try {
+                Response<Void> response = call.execute();
+                Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                if(response.isSuccessful()){
+                    repositoryNotification.setData(response.body());
+                }else{
+                    if(response.errorBody()!=null){
+                        repositoryNotification.setErrorMessage(response.errorBody().string());
+                    }
+                }
+                changePasswordResult.postValue(repositoryNotification);
+            } catch (IOException ioe) {
+                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                repositoryNotification.setException(ioe);
+                changePasswordResult.postValue(repositoryNotification);
+                Log.e("RETROFITERROR", ioe.getMessage());
+            }
+        });
+        return changePasswordResult;
+    }
+
 }

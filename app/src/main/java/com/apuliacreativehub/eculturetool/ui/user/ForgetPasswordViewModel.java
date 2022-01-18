@@ -1,10 +1,18 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
+import android.app.Application;
+
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ForgetPasswordViewModel extends ViewModel {
+import com.apuliacreativehub.eculturetool.data.entity.User;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 
-    private String email = "";
+public class ForgetPasswordViewModel extends AbstractUserViewModel {
+
+    public ForgetPasswordViewModel(Application application) {
+        super(application);
+    }
 
     public String getEmail() {
         return email;
@@ -12,6 +20,11 @@ public class ForgetPasswordViewModel extends ViewModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public MutableLiveData<RepositoryNotification<Void>> changePassword() {
+        User user = new User(email);
+        return repository.changePassword(user);
     }
 
 }

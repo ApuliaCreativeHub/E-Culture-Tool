@@ -23,7 +23,7 @@ public class ErrorStrings {
 
             instance.errors.put("50", resources.getString(R.string.e50));
             instance.errors.put("51", resources.getString(R.string.e51));
-            instance.errors.put("52", resources.getString(R.string.e51));
+            instance.errors.put("52", resources.getString(R.string.e52));
             instance.errors = Collections.unmodifiableMap(instance.errors);
         }
         return instance;
