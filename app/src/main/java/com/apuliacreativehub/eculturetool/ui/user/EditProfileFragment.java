@@ -17,10 +17,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
@@ -37,7 +41,7 @@ public class EditProfileFragment extends Fragment {
     private EditText Surname;
     private EditText Email;
     private TextView btnChangePassword;
-    private Context mcontext;
+    private Context context;
     final Observer<RepositoryNotification<User>> updatingObserver = new Observer<RepositoryNotification<User>>() {
         @Override
         public void onChanged(RepositoryNotification<User> notification) {
@@ -46,7 +50,7 @@ public class EditProfileFragment extends Fragment {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
                 if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
-                    SharedPreferences sharedPref = mcontext.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+                    SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.remove("name");
                     editor.remove("surname");
@@ -102,7 +106,11 @@ public class EditProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mcontext = getActivity();
+        context=requireContext();
+
+        Toolbar toolbar=view.findViewById(R.id.editProfileToolbar);
+        NavController navController=Navigation.findNavController(requireActivity(), R.id.navHostContainer);
+        NavigationUI.setupWithNavController(toolbar, navController);
 
         editProfileViewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
 
@@ -113,36 +121,34 @@ public class EditProfileFragment extends Fragment {
         EditText Password = view.findViewById(R.id.editNewPassword);
         EditText ConfirmPassword = view.findViewById(R.id.editConfirmPassword);
 
-        if (mcontext != null) {
-            SharedPreferences sharedPref = mcontext.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
 
-            if(editProfileViewModel.getName().equals("")){
-                editProfileViewModel.setName(sharedPref.getString("name", null));
-                Name.setText(sharedPref.getString("name", null));
-            }else{
-                Name.setText(editProfileViewModel.getName());
-            }
+        if(editProfileViewModel.getName().equals("")){
+            editProfileViewModel.setName(sharedPref.getString("name", null));
+            Name.setText(sharedPref.getString("name", null));
+        }else{
+            Name.setText(editProfileViewModel.getName());
+        }
 
-            if(editProfileViewModel.getSurname().equals("")){
-                editProfileViewModel.setSurname(sharedPref.getString("surname", null));
-                Surname.setText(sharedPref.getString("surname", null));
-            }else{
-                Surname.setText(editProfileViewModel.getSurname());
-            }
+        if(editProfileViewModel.getSurname().equals("")){
+            editProfileViewModel.setSurname(sharedPref.getString("surname", null));
+            Surname.setText(sharedPref.getString("surname", null));
+        }else{
+            Surname.setText(editProfileViewModel.getSurname());
+        }
 
-            if(editProfileViewModel.getEmail().equals("")){
-                editProfileViewModel.setEmail(sharedPref.getString("email", null));
-                Email.setText(sharedPref.getString("email", null));
-            }else{
-                Email.setText(editProfileViewModel.getEmail());
-            }
+        if(editProfileViewModel.getEmail().equals("")){
+            editProfileViewModel.setEmail(sharedPref.getString("email", null));
+            Email.setText(sharedPref.getString("email", null));
+        }else{
+            Email.setText(editProfileViewModel.getEmail());
+        }
 
-            if(btnChangePassword.getText() == getString(R.string.do_not_change_anymore)) {
-                if(!editProfileViewModel.getPassword().equals(""))
-                    Password.setText(editProfileViewModel.getPassword());
-                if(!editProfileViewModel.getConfirmPassword().equals(""))
-                    ConfirmPassword.setText(editProfileViewModel.getConfirmPassword());
-            }
+        if(btnChangePassword.getText() == getString(R.string.do_not_change_anymore)) {
+            if(!editProfileViewModel.getPassword().equals(""))
+                Password.setText(editProfileViewModel.getPassword());
+            if(!editProfileViewModel.getConfirmPassword().equals(""))
+                ConfirmPassword.setText(editProfileViewModel.getConfirmPassword());
         }
     }
 
