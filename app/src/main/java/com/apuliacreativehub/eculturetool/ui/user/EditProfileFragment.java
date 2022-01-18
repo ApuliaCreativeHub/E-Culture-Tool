@@ -36,6 +36,7 @@ public class EditProfileFragment extends Fragment {
     private EditText Name;
     private EditText Surname;
     private EditText Email;
+    private TextView btnChangePassword;
     private Context mcontext;
     final Observer<RepositoryNotification<User>> updatingObserver = new Observer<RepositoryNotification<User>>() {
         @Override
@@ -108,6 +109,9 @@ public class EditProfileFragment extends Fragment {
         Name = view.findViewById(R.id.editName);
         Surname = view.findViewById(R.id.editSurname);
         Email = view.findViewById(R.id.editEmail);
+        btnChangePassword = view.findViewById(R.id.btnChangePassword);
+        EditText Password = view.findViewById(R.id.editNewPassword);
+        EditText ConfirmPassword = view.findViewById(R.id.editConfirmPassword);
 
         if (mcontext != null) {
             SharedPreferences sharedPref = mcontext.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
@@ -131,6 +135,13 @@ public class EditProfileFragment extends Fragment {
                 Email.setText(sharedPref.getString("email", null));
             }else{
                 Email.setText(editProfileViewModel.getEmail());
+            }
+
+            if(btnChangePassword.getText() == getString(R.string.do_not_change_anymore)) {
+                if(!editProfileViewModel.getPassword().equals(""))
+                    Password.setText(editProfileViewModel.getPassword());
+                if(!editProfileViewModel.getConfirmPassword().equals(""))
+                    ConfirmPassword.setText(editProfileViewModel.getConfirmPassword());
             }
         }
     }
@@ -216,8 +227,6 @@ public class EditProfileFragment extends Fragment {
             } else {
                 Email.setError(null);
             }
-
-            TextView btnChangePassword = view.findViewById(R.id.btnChangePassword);
 
             if(btnChangePassword.getText() == getString(R.string.do_not_change_anymore)) {
                 // Check Password
