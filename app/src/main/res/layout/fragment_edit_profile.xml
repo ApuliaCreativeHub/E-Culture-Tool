@@ -93,46 +93,12 @@
                     android:inputType="textEmailAddress"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/editLinearLayoutNewPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editLinearLayoutEmail">
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/changePasswordContainerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-                <EditText
-                    android:id="@+id/editNewPassword"
-                    android:layout_width="320dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:inputType="textPassword"
-                    android:autofillHints="@string/password"
-                    android:hint="@string/password" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/editLinearLayoutConfirmPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editLinearLayoutNewPassword">
-
-                <EditText
-                    android:id="@+id/editConfirmPassword"
-                    android:layout_width="320dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:inputType="textPassword"
-                    android:autofillHints="@string/confirm_password"
-                    android:hint="@string/confirm_password" />
-
-            </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/btnChangePassword"
@@ -153,7 +119,12 @@
             android:layout_marginTop="8dp"
             android:layout_marginHorizontal="56dp"
             android:layout_weight="1"
-            android:text="@string/save" />
+            android:background="@drawable/button"
+            android:text="@string/save"
+            android:textColor="#FFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <Button
             android:id="@+id/btnDelete"
@@ -163,6 +134,5 @@
             android:layout_marginHorizontal="56dp"
             android:layout_weight="1"
             android:text="@string/delete_account" />
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
