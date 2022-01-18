@@ -31,4 +31,5 @@ public class UserWithToken {
     public void setToken(Token token) {
         this.token = token;
     }
+
 }

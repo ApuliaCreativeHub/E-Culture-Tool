@@ -8,4 +8,5 @@ public interface RepositoryNotificationInterface<T> {
     Exception getException();
 
     void setException(Exception exception);
+
 }

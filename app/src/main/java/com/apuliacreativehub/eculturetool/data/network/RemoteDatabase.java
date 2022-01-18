@@ -12,6 +12,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public abstract class RemoteDatabase {
+
     static OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
         @NonNull
         @Override
@@ -22,4 +23,5 @@ public abstract class RemoteDatabase {
             return chain.proceed(newRequest);
         }
     }).build();
+
 }

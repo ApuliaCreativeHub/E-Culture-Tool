@@ -28,4 +28,5 @@ public class ErrorStrings {
         }
         return instance;
     }
+
 }

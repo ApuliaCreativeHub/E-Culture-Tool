@@ -20,7 +20,6 @@ import com.apuliacreativehub.eculturetool.R;
 
 public class WelcomeFragment extends Fragment {
     private Activity activity;
-
     private View view;
     private final ActivityResultLauncher<Intent> loginDoneCallback = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> Navigation.findNavController(activity, R.id.navHostContainer).popBackStack(R.id.userFragment, false));
 

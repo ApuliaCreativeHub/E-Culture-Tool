@@ -32,5 +32,5 @@ public class ErrorDialog extends DialogFragment {
                 })
                 .create();
     }
-}
 
+}

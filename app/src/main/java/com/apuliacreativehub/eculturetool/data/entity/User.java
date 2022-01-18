@@ -59,4 +59,5 @@ public class User {
     public void setACurator(boolean ACurator) {
         isACurator = ACurator;
     }
+
 }
