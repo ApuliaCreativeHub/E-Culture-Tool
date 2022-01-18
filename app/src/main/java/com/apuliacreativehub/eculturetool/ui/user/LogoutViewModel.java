@@ -20,4 +20,5 @@ public class LogoutViewModel extends AndroidViewModel {
     public void logoutUser() {
         repository.logoutUser();
     }
+
 }

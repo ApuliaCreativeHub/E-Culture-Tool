@@ -18,7 +18,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -28,6 +27,8 @@ import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.User;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
+
+import java.util.Objects;
 
 public class EditProfileFragment extends Fragment {
     private View view;
@@ -49,11 +50,9 @@ public class EditProfileFragment extends Fragment {
                     editor.remove("name");
                     editor.remove("surname");
                     editor.remove("email");
-                    editor.remove("isACurator");
                     editor.putString("name", notification.getData().getName());
                     editor.putString("surname", notification.getData().getSurname());
                     editor.putString("email", notification.getData().getEmail());
-                    editor.putBoolean("isACurator", notification.getData().isACurator());
                     editor.apply();
                     Navigation.findNavController(requireActivity(), R.id.navHostContainer).navigateUp();
                 } else {
@@ -74,22 +73,17 @@ public class EditProfileFragment extends Fragment {
         setHasOptionsMenu(true);
 
         getChildFragmentManager()
-                .setFragmentResultListener("password", this, new FragmentResultListener() {
-                    @Override
-                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
-                        String result = bundle.getString("changedPassword");
-                        if(result != null){
-                            editProfileViewModel.setPassword(result);
-                        }
+                .setFragmentResultListener("password", this, (requestKey, bundle) -> {
+                    String result = bundle.getString("changedPassword");
+                    if(result != null){
+                        editProfileViewModel.setPassword(result);
+                    }
 
-                        result = bundle.getString("confirmPassword");
-                        if(result != null){
-                            editProfileViewModel.setConfirmPassword(result);
-                        }
-
+                    result = bundle.getString("confirmPassword");
+                    if(result != null){
+                        editProfileViewModel.setConfirmPassword(result);
                     }
                 });
-
     }
 
     @Override
@@ -99,8 +93,7 @@ public class EditProfileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         return view;
     }
@@ -139,12 +132,6 @@ public class EditProfileFragment extends Fragment {
             }else{
                 Email.setText(editProfileViewModel.getEmail());
             }
-
-            /*if(!editProfileViewModel.getPassword().equals(""))
-                Password.setText(editProfileViewModel.getPassword());
-
-            if(!editProfileViewModel.getConfirmPassword().equals(""))
-                ConfirmPassword.setText(editProfileViewModel.getConfirmPassword());*/
         }
     }
 
@@ -235,21 +222,21 @@ public class EditProfileFragment extends Fragment {
             if(btnChangePassword.getText() == getString(R.string.do_not_change_anymore)) {
                 // Check Password
                 if (!editProfileViewModel.isPasswordCorrect(editProfileViewModel.getPassword())) {
-                    ((EditText) getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView).requireView()
+                    ((EditText) Objects.requireNonNull(getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView)).requireView()
                             .findViewById(R.id.editNewPassword)).setError(getResources().getString(R.string.invalid_password));
                     errors = true;
                 } else {
-                    ((EditText) getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView).requireView()
+                    ((EditText) Objects.requireNonNull(getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView)).requireView()
                             .findViewById(R.id.editNewPassword)).setError(null);
                 }
 
                 // Check Confirm Password
                 if (!editProfileViewModel.isConfirmPasswordCorrect(editProfileViewModel.getPassword(), editProfileViewModel.getConfirmPassword())) {
-                    ((EditText) getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView).requireView()
+                    ((EditText) Objects.requireNonNull(getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView)).requireView()
                             .findViewById(R.id.editConfirmPassword)).setError(getResources().getString(R.string.invalid_confirm_password));
                     errors = true;
                 } else {
-                    ((EditText) getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView).requireView()
+                    ((EditText) Objects.requireNonNull(getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView)).requireView()
                             .findViewById(R.id.editConfirmPassword)).setError(null);
                 }
             }
@@ -281,4 +268,5 @@ public class EditProfileFragment extends Fragment {
 
         });
     }
+
 }

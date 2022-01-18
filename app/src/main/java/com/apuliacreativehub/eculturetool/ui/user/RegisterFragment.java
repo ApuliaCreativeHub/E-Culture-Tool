@@ -1,6 +1,5 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,7 +24,6 @@ import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class RegisterFragment extends Fragment {
-
     private View view;
     private RegisterViewModel registerViewModel;
     private EditText txtName;
@@ -58,7 +56,6 @@ public class RegisterFragment extends Fragment {
             }
         }
     };
-    private Context mcontext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,7 +66,6 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mcontext = getContext();
 
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 

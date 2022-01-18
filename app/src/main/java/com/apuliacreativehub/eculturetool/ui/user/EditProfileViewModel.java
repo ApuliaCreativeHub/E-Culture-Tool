@@ -19,4 +19,5 @@ public class EditProfileViewModel extends AbstractUserViewModel{
         User user = new User(name, surname, email, password, isCurator);
         return repository.editUser(user);
     }
+
 }

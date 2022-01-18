@@ -22,9 +22,7 @@ public class WelcomeFragment extends Fragment {
     private Activity activity;
 
     private View view;
-    private final ActivityResultLauncher<Intent> loginDoneCallback = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        Navigation.findNavController(activity, R.id.navHostContainer).popBackStack(R.id.userFragment, false);
-    });
+    private final ActivityResultLauncher<Intent> loginDoneCallback = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> Navigation.findNavController(activity, R.id.navHostContainer).popBackStack(R.id.userFragment, false));
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,9 +48,7 @@ public class WelcomeFragment extends Fragment {
         super.onStart();
 
         Button btnLogin = view.findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(view -> {
-            loginDoneCallback.launch(new Intent(this.getActivity(), FormActivity.class).putExtra(FormActivity.SHOW_FRAGMENT, FormActivity.LOGIN_FRAGMENT));
-        });
+        btnLogin.setOnClickListener(view -> loginDoneCallback.launch(new Intent(this.getActivity(), FormActivity.class).putExtra(FormActivity.SHOW_FRAGMENT, FormActivity.LOGIN_FRAGMENT)));
 
         Button btnRegister = view.findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), FormActivity.class).putExtra(FormActivity.SHOW_FRAGMENT, FormActivity.REGISTER_FRAGMENT)));
@@ -60,4 +56,5 @@ public class WelcomeFragment extends Fragment {
         TextView btnRegisterInformation = view.findViewById(R.id.btnRegisterInformation);
         btnRegisterInformation.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), FormActivity.class).putExtra(FormActivity.SHOW_FRAGMENT, FormActivity.REGISTER_INFORMATION_FRAGMENT)));
     }
+
 }

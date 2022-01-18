@@ -33,39 +33,36 @@ public class LoginFragment extends Fragment {
     private LoginViewModel loginViewModel;
     private EditText txtEmail;
     private EditText txtPassword;
-    final Observer<RepositoryNotification<UserWithToken>> loginObserver = new Observer<RepositoryNotification<UserWithToken>>() {
-        @Override
-        public void onChanged(RepositoryNotification<UserWithToken> notification) {
-            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
-            if (notification.getException() == null) {
-                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
-                Log.d("CALLBACK", String.valueOf(notification.getData()));
-                if (notification.getErrorMessage() == null) {
-                    // Add token to shared preferences
-                    Context context = getActivity();
-                    if (context != null) {
-                        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("token", notification.getData().getToken().getToken());
-                        TokenManager.setToken(notification.getData().getToken().getToken());
-                        editor.putBoolean("isLogged", true);
-                        editor.putString("name", notification.getData().getUser().getName());
-                        editor.putString("surname", notification.getData().getUser().getSurname());
-                        editor.putString("email", notification.getData().getUser().getEmail());
-                        editor.putBoolean("isACurator", notification.getData().getUser().isACurator());
-                        editor.apply();
-                        getActivity().setResult(Activity.RESULT_OK);
-                        getActivity().finish();
-                    }
-                } else {
-                    Log.d("Dialog", "show dialog here");
-                    new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "LOGIN_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+    final Observer<RepositoryNotification<UserWithToken>> loginObserver = notification -> {
+        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        if (notification.getException() == null) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(notification.getData()));
+            if (notification.getErrorMessage() == null) {
+                // Add token to shared preferences
+                Context context = getActivity();
+                if (context != null) {
+                    SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("token", notification.getData().getToken().getToken());
+                    TokenManager.setToken(notification.getData().getToken().getToken());
+                    editor.putBoolean("isLogged", true);
+                    editor.putString("name", notification.getData().getUser().getName());
+                    editor.putString("surname", notification.getData().getUser().getSurname());
+                    editor.putString("email", notification.getData().getUser().getEmail());
+                    editor.putBoolean("isACurator", notification.getData().getUser().isACurator());
+                    editor.apply();
+                    getActivity().setResult(Activity.RESULT_OK);
+                    getActivity().finish();
                 }
             } else {
-                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
-                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "LOGIN_EXCEPTION").show(getChildFragmentManager(), ErrorDialog.TAG);
+                Log.d("Dialog", "show dialog here");
+                new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "LOGIN_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
             }
+        } else {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "LOGIN_EXCEPTION").show(getChildFragmentManager(), ErrorDialog.TAG);
         }
     };
 
@@ -75,12 +72,10 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-    private Context mcontext;
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mcontext = getContext();
+        getContext();
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 

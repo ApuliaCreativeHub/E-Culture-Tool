@@ -3,7 +3,6 @@ package com.apuliacreativehub.eculturetool.ui.user;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -70,9 +69,7 @@ public class ProfileDetailsFragment extends Fragment {
         super.onStart();
 
         Button btnEdit = view.findViewById(R.id.btnEdit);
-        btnEdit.setOnClickListener(edit -> {
-            Navigation.findNavController(requireActivity(), R.id.navHostContainer).navigate(R.id.action_profileDetailsFragment_to_editProfileFragment);
-        });
+        btnEdit.setOnClickListener(edit -> Navigation.findNavController(requireActivity(), R.id.navHostContainer).navigate(R.id.action_profileDetailsFragment_to_editProfileFragment));
 
         Context context = getActivity();
 
@@ -89,4 +86,5 @@ public class ProfileDetailsFragment extends Fragment {
             }
         });
     }
+
 }
