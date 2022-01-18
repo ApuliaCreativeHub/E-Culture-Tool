@@ -50,7 +50,7 @@ public class WelcomeFragment extends Fragment {
         btnLogin.setOnClickListener(view -> loginDoneCallback.launch(new Intent(this.getActivity(), FormActivity.class).putExtra(FormActivity.SHOW_FRAGMENT, FormActivity.LOGIN_FRAGMENT)));
 
         Button btnRegister = view.findViewById(R.id.btnRegister);
-        btnRegister.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), FormActivity.class).putExtra(FormActivity.SHOW_FRAGMENT, FormActivity.REGISTER_FRAGMENT)));
+        btnRegister.setOnClickListener(view -> loginDoneCallback.launch(new Intent(this.getActivity(), FormActivity.class).putExtra(FormActivity.SHOW_FRAGMENT, FormActivity.REGISTER_FRAGMENT)));
 
         TextView btnRegisterInformation = view.findViewById(R.id.btnRegisterInformation);
         btnRegisterInformation.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), FormActivity.class).putExtra(FormActivity.SHOW_FRAGMENT, FormActivity.REGISTER_INFORMATION_FRAGMENT)));
