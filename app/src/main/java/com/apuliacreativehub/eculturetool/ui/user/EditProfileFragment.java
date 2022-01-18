@@ -11,12 +11,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -72,6 +74,24 @@ public class EditProfileFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        getChildFragmentManager()
+                .setFragmentResultListener("password", this, new FragmentResultListener() {
+                    @Override
+                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                        String result = bundle.getString("changedPassword");
+                        if(result != null){
+                            editProfileViewModel.setPassword(result);
+                        }
+
+                        result = bundle.getString("confirmPassword");
+                        if(result != null){
+                            editProfileViewModel.setConfirmPassword(result);
+                        }
+
+                    }
+                });
+
     }
 
     @Override
@@ -97,8 +117,6 @@ public class EditProfileFragment extends Fragment {
         Name = view.findViewById(R.id.editName);
         Surname = view.findViewById(R.id.editSurname);
         Email = view.findViewById(R.id.editEmail);
-        /*Password = view.findViewById(R.id.editNewPassword);
-        ConfirmPassword = view.findViewById(R.id.editConfirmPassword);*/
 
         if (mcontext != null) {
             SharedPreferences sharedPref = mcontext.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
@@ -186,40 +204,6 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        /*Password.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                editProfileViewModel.setPassword(editable.toString());
-            }
-        });
-
-        ConfirmPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                editProfileViewModel.setConfirmPassword(editable.toString());
-            }
-        });*/
-
         Button btnSave = view.findViewById(R.id.btnSave);
         btnSave.setOnClickListener(save -> {
             boolean errors = false;
@@ -248,21 +232,27 @@ public class EditProfileFragment extends Fragment {
                 Email.setError(null);
             }
 
-            // Check Password
-            /*if(!editProfileViewModel.isPasswordCorrect(editProfileViewModel.getPassword())) {
-                Password.setError(getResources().getString(R.string.invalid_password));
-                errors = true;
-            } else {
-                Password.setError(null);
-            }
+            if(!editProfileViewModel.getPassword().equals("")) {
+                // Check Password
+                if (!editProfileViewModel.isPasswordCorrect(editProfileViewModel.getPassword()) && !editProfileViewModel.getPassword().equals("")) {
+                    ((EditText) getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView).requireView()
+                            .findViewById(R.id.editNewPassword)).setError(getResources().getString(R.string.invalid_password));
+                    errors = true;
+                } else {
+                    ((EditText) getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView).requireView()
+                            .findViewById(R.id.editNewPassword)).setError(null);
+                }
 
-            // Check Confirm Password
-            if(!editProfileViewModel.isConfirmPasswordCorrect(editProfileViewModel.getPassword(), editProfileViewModel.getConfirmPassword())) {
-                ConfirmPassword.setError(getResources().getString(R.string.invalid_confirm_password));
-                errors = true;
-            } else {
-                ConfirmPassword.setError(null);
-            }*/
+                // Check Confirm Password
+                if (!editProfileViewModel.isConfirmPasswordCorrect(editProfileViewModel.getPassword(), editProfileViewModel.getConfirmPassword())) {
+                    ((EditText) getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView).requireView()
+                            .findViewById(R.id.editConfirmPassword)).setError(getResources().getString(R.string.invalid_confirm_password));
+                    errors = true;
+                } else {
+                    ((EditText) getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView).requireView()
+                            .findViewById(R.id.editConfirmPassword)).setError(null);
+                }
+            }
 
             if(!errors) {
                 editProfileViewModel.editDetails().observe(this, updatingObserver);
@@ -271,7 +261,7 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        Button btnChangePassword = view.findViewById(R.id.btnChangePassword);
+        TextView btnChangePassword = view.findViewById(R.id.btnChangePassword);
         btnChangePassword.setOnClickListener(changePassword -> {
             Fragment changePassswordFragment = getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView);
             if (changePassswordFragment != null){
