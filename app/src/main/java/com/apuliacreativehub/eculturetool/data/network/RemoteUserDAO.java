@@ -29,4 +29,8 @@ public interface RemoteUserDAO {
     @Headers("Content-Type: application/json")
     @POST("user/changepassword")
     Call<Void> ChangePassword(@Body User user);
+
+    @Headers("Content-Type: application/json")
+    @POST("user/delete")
+    Call<Void> DeleteUser(@Body User user);
 }

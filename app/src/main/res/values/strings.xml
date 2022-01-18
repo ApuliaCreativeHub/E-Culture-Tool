@@ -87,4 +87,6 @@
     <string name="manage_your_places">Manage Your Places</string>
     <string name="change_password">Change password</string>
     <string name="do_not_change_anymore">Do not change anymore</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 </resources>

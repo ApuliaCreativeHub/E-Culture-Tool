@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,11 +27,12 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.User;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
+import com.apuliacreativehub.eculturetool.ui.dialogfragments.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
 
 import java.util.Objects;
 
-public class EditProfileFragment extends Fragment {
+public class EditProfileFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
     private View view;
     private EditProfileViewModel editProfileViewModel;
     private EditText Name;
@@ -64,6 +66,28 @@ public class EditProfileFragment extends Fragment {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
                 new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+            }
+        }
+    };
+
+    final Observer<RepositoryNotification<Void>> deletingObserver = new Observer<RepositoryNotification<Void>>() {
+        @Override
+        public void onChanged(RepositoryNotification<Void> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
+                    //TODO:FEEDBACK
+                    Navigation.findNavController(requireActivity(), R.id.navHostContainer).navigateUp();
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETING_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "DELETING_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
             }
         }
     };
@@ -276,6 +300,25 @@ public class EditProfileFragment extends Fragment {
             }
 
         });
+
+        Button btnDelete = view.findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(delete -> showNoticeDialog());
+    }
+
+    public void showNoticeDialog() {
+        DialogFragment dialog = new ConfirmationDialog("WARNING!", "Are you sure you want to delete your account?", "DELETE_ACCOUNT");
+        dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Log.i("Response", "AOPOSITIVE");
+        editProfileViewModel.deleteUser().observe(this, deletingObserver);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Log.i("Response", "NEGATIVE");
     }
 
 }

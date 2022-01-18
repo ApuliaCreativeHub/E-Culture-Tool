@@ -140,4 +140,30 @@ public class UserRepository{
         return changePasswordResult;
     }
 
+    public MutableLiveData<RepositoryNotification<Void>> deleteUser(User user){
+        Call<Void> call = remoteUserDAO.DeleteUser(user);
+        MutableLiveData<RepositoryNotification<Void>> deleteUserResult = new MutableLiveData<>();
+        executor.execute(() -> {
+            try {
+                Response<Void> response = call.execute();
+                Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                if(response.isSuccessful()){
+                    repositoryNotification.setData(response.body());
+                }else{
+                    if(response.errorBody()!=null){
+                        repositoryNotification.setErrorMessage(response.errorBody().string());
+                    }
+                }
+                deleteUserResult.postValue(repositoryNotification);
+            } catch (IOException ioe) {
+                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                repositoryNotification.setException(ioe);
+                deleteUserResult.postValue(repositoryNotification);
+                Log.e("RETROFITERROR", ioe.getMessage());
+            }
+        });
+        return deleteUserResult;
+    }
+
 }

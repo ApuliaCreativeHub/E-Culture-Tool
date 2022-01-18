@@ -20,4 +20,9 @@ public class EditProfileViewModel extends AbstractUserViewModel{
         return repository.editUser(user);
     }
 
+    public MutableLiveData<RepositoryNotification<Void>> deleteUser(){
+        User user = new User(email);
+        return repository.deleteUser(user);
+    }
+
 }
