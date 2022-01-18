@@ -140,17 +140,6 @@
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <Button
-            android:id="@+id/btnManagePlaces"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="56dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="1"
-            android:text="@string/manage_places"
-            android:visibility="gone"
-            tools:ignore="DuplicateSpeakableTextCheck" />
-
-        <Button
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

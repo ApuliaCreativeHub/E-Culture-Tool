@@ -69,7 +69,6 @@
     <string name="new_password">New Password</string>
     <string name="save">Save</string>
     <string name="edit">Edit</string>
-    <string name="manage_places">Manage Places</string>
     <string name="logout">Logout</string>
     <string name="name_subject_label">Name:</string>
     <string name="surname_subject_label">Surname:</string>
@@ -83,5 +82,7 @@
     <string name="profile_details_screen_title">Profile</string>
     <string name="edit_profile_screen_title">Edit profile</string>
     <string name="sign_up_now">Sign Up Now</string>
-    <string name="delete">Delete</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="change_password">Change Password</string>
+    <string name="manage_your_places">Manage Your Places</string>
 </resources>

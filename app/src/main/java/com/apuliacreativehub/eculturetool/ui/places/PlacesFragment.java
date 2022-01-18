@@ -1,5 +1,7 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +22,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.apuliacreativehub.eculturetool.R;
 
 public class PlacesFragment extends Fragment {
+
+    private View view;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,7 +41,8 @@ public class PlacesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_places, container, false);
+        view = inflater.inflate(R.layout.fragment_places, container, false);
+        return view;
     }
 
     @Override
@@ -48,6 +54,22 @@ public class PlacesFragment extends Fragment {
         if (mapFragment == null) {
             fragmentTransaction.add(R.id.mapContainer, MapFragment.class, null);
             fragmentTransaction.commit();
+        }
+
+        boolean isACurator = false;
+        Context context = getActivity();
+        if (context != null) {
+            SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+            isACurator = sharedPref.getBoolean("isACurator", false);
+        }
+        if (isACurator) {
+            Button btnManagePlaces = view.findViewById(R.id.btnManagePlaces);
+            btnManagePlaces.setVisibility(View.VISIBLE);
+
+            btnManagePlaces.setOnClickListener(managePlaces -> {
+                // TODO: Start places management fragment
+                Log.d("TODO", "Stub! Start places management fragment");
+            });
         }
     }
 

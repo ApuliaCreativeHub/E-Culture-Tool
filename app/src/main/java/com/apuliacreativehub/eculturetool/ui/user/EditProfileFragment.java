@@ -249,7 +249,7 @@ public class EditProfileFragment extends Fragment {
             }
 
             // Check Password
-            if(!editProfileViewModel.isPasswordCorrect(editProfileViewModel.getPassword())) {
+            if(!editProfileViewModel.isPasswordCorrect(editProfileViewModel.getPassword()) && !editProfileViewModel.getPassword().equals("")) {
                 Password.setError(getResources().getString(R.string.invalid_password));
                 errors = true;
             } else {
