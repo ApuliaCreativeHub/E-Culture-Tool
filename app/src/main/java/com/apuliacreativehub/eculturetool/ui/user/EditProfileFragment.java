@@ -35,8 +35,6 @@ public class EditProfileFragment extends Fragment {
     private EditText Name;
     private EditText Surname;
     private EditText Email;
-    private EditText Password;
-    private EditText ConfirmPassword;
     private Context mcontext;
     final Observer<RepositoryNotification<User>> updatingObserver = new Observer<RepositoryNotification<User>>() {
         @Override
@@ -232,9 +230,11 @@ public class EditProfileFragment extends Fragment {
                 Email.setError(null);
             }
 
-            if(!editProfileViewModel.getPassword().equals("")) {
+            TextView btnChangePassword = view.findViewById(R.id.btnChangePassword);
+
+            if(btnChangePassword.getText() == getString(R.string.do_not_change_anymore)) {
                 // Check Password
-                if (!editProfileViewModel.isPasswordCorrect(editProfileViewModel.getPassword()) && !editProfileViewModel.getPassword().equals("")) {
+                if (!editProfileViewModel.isPasswordCorrect(editProfileViewModel.getPassword())) {
                     ((EditText) getChildFragmentManager().findFragmentById(R.id.changePasswordContainerView).requireView()
                             .findViewById(R.id.editNewPassword)).setError(getResources().getString(R.string.invalid_password));
                     errors = true;
@@ -256,8 +256,6 @@ public class EditProfileFragment extends Fragment {
 
             if(!errors) {
                 editProfileViewModel.editDetails().observe(this, updatingObserver);
-                //view.findViewById(R.id.lytUser).setVisibility(View.INVISIBLE);
-                //view.findViewById(R.id.registrationProgressionBar).setVisibility(View.VISIBLE);
             }
         });
 
