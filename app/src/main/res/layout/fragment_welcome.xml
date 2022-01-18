@@ -57,7 +57,8 @@
             android:layout_height="48dp"
             android:layout_marginTop="32dp"
             android:layout_weight="1"
-            android:text="@string/login" />
+            android:text="@string/login"
+            android:textAllCaps="true" />
 
         <Button
             android:id="@+id/btnRegister"
@@ -66,7 +67,8 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="@string/register" />
+            android:text="@string/register"
+            android:textAllCaps="true" />
 
         <TextView
             android:id="@+id/btnRegisterInformation"

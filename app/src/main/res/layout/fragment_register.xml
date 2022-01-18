@@ -36,7 +36,6 @@
             android:layout_weight="1"
             android:letterSpacing="0.03"
             android:text="@string/register"
-            android:textColor="#403f3f"
             android:textSize="40sp"
             android:textStyle="bold" />
 
@@ -58,7 +57,8 @@
             android:layout_weight="1"
             android:autofillHints="@string/surname"
             android:hint="@string/surname"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            tools:ignore="TextContrastCheck" />
 
         <EditText
             android:id="@+id/txtEmail"
@@ -88,7 +88,8 @@
             android:layout_weight="1"
             android:autofillHints="@string/confirm_password"
             android:hint="@string/confirm_password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            tools:ignore="TextContrastCheck" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/sthCurator"
@@ -109,6 +110,7 @@
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:text="@string/register"
+            android:textAllCaps="true"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView

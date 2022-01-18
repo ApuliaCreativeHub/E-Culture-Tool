@@ -26,7 +26,6 @@
         android:id="@+id/lytUser"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="56dp"
         android:gravity="center_horizontal|top"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +41,8 @@
             android:text="@string/details"
             android:textColor="#403f3f"
             android:textSize="40sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginBottom="32dp"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -131,23 +131,23 @@
 
         <Button
             android:id="@+id/btnEdit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="56dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:text="@string/edit"
-            tools:ignore="DuplicateSpeakableTextCheck" />
+            android:textAllCaps="true" />
 
         <Button
             android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
             android:layout_marginHorizontal="56dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:text="@string/logout"
-            tools:ignore="DuplicateSpeakableTextCheck" />
+            android:textAllCaps="true"
+            android:layout_marginBottom="16dp" />
 
     </LinearLayout>
 
