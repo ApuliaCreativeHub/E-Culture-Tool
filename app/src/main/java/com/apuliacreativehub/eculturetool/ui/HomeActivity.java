@@ -29,9 +29,6 @@ public class HomeActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationBar);
         NavController navController = Navigation.findNavController(this, R.id.navHostContainer);
-        AppBarConfiguration appBarConfiguration= new AppBarConfiguration.Builder(R.id.pathsFragment, R.id.placesFragment, R.id.userFragment).build();
-        Toolbar toolbar=findViewById(R.id.homeToolbar);
-        NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 
