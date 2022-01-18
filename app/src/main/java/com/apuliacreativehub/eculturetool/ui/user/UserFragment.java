@@ -30,7 +30,7 @@ public class UserFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.userContainerView);
+
         SharedPreferences sharedPref = requireActivity().getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
         assert getParentFragment() != null;
         if (sharedPref.getString("token", "").equals("")) {
