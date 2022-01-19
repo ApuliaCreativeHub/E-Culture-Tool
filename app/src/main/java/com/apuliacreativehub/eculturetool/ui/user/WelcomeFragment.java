@@ -1,6 +1,5 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,7 +23,7 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
 
 public class WelcomeFragment extends Fragment {
-    private Activity activity;
+    private AppCompatActivity activity;
     private View view;
     private final ActivityResultLauncher<Intent> loginDoneCallback = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> Navigation.findNavController(activity, R.id.navHostContainer).popBackStack(R.id.userFragment, false));
 
@@ -42,9 +41,22 @@ public class WelcomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        activity = getActivity();
         view = inflater.inflate(R.layout.fragment_welcome, container, false);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        activity = (AppCompatActivity) requireActivity();
+        Toolbar toolbar = view.findViewById(R.id.welcomeToolbar);
+        toolbar.setTitle(R.string.welcome_screen_title);
+        activity.setSupportActionBar(toolbar);
+        ActionBar actionBar = activity.getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
     }
 
     @Override
