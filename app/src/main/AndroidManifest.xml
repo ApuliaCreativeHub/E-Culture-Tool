@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.apuliacreativehub.eculturetool">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -15,24 +16,27 @@
         android:supportsRtl="true"
         android:theme="@style/ECultureTool"
         android:usesCleartextTraffic="true">
+
         <activity
-            android:name=".ui.places.ManagePlacesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.user.FormActivity"
+            android:name=".ui.SubActivity"
             android:exported="false"
-            android:screenOrientation="userPortrait" />
+            android:screenOrientation="userPortrait"
+            tools:ignore="LockedOrientationActivity" />
+
         <activity
             android:name=".ui.HomeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:exported="true"
-            android:screenOrientation="userPortrait">
+            android:screenOrientation="userPortrait"
+            tools:ignore="LockedOrientationActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
     </application>
 
 </manifest>

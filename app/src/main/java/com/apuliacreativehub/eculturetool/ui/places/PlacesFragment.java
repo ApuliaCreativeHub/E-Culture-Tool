@@ -1,6 +1,7 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.ui.SubActivity;
 
 public class PlacesFragment extends Fragment {
 
@@ -65,11 +67,7 @@ public class PlacesFragment extends Fragment {
         if (isACurator) {
             Button btnManagePlaces = view.findViewById(R.id.btnManagePlaces);
             btnManagePlaces.setVisibility(View.VISIBLE);
-
-            btnManagePlaces.setOnClickListener(managePlaces -> {
-                // TODO: Start places management fragment
-                Log.d("TODO", "Stub! Start places management fragment");
-            });
+            btnManagePlaces.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.SHOW_PLACES_FRAGMENT)));
         }
     }
 
@@ -90,4 +88,5 @@ public class PlacesFragment extends Fragment {
             }
         });
     }
+
 }

@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.ui.SubActivity;
 
 public class WelcomeFragment extends Fragment {
     private Activity activity;
@@ -47,13 +48,13 @@ public class WelcomeFragment extends Fragment {
         super.onStart();
 
         Button btnLogin = view.findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(view -> loginDoneCallback.launch(new Intent(this.getActivity(), FormActivity.class).putExtra(FormActivity.SHOW_FRAGMENT, FormActivity.LOGIN_FRAGMENT)));
+        btnLogin.setOnClickListener(view -> loginDoneCallback.launch(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.LOGIN_FRAGMENT)));
 
         Button btnRegister = view.findViewById(R.id.btnRegister);
-        btnRegister.setOnClickListener(view -> loginDoneCallback.launch(new Intent(this.getActivity(), FormActivity.class).putExtra(FormActivity.SHOW_FRAGMENT, FormActivity.REGISTER_FRAGMENT)));
+        btnRegister.setOnClickListener(view -> loginDoneCallback.launch(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.REGISTER_FRAGMENT)));
 
         TextView btnRegisterInformation = view.findViewById(R.id.btnRegisterInformation);
-        btnRegisterInformation.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), FormActivity.class).putExtra(FormActivity.SHOW_FRAGMENT, FormActivity.REGISTER_INFORMATION_FRAGMENT)));
+        btnRegisterInformation.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.REGISTER_INFORMATION_FRAGMENT)));
     }
 
 }

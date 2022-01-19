@@ -1,8 +1,11 @@
 package com.apuliacreativehub.eculturetool.ui;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -10,6 +13,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.TokenManager;
+import com.apuliacreativehub.eculturetool.ui.user.LoginFragment;
+import com.apuliacreativehub.eculturetool.ui.user.RegisterFragment;
+import com.apuliacreativehub.eculturetool.ui.user.RegisterInformationFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
