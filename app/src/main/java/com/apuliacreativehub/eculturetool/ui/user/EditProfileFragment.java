@@ -82,8 +82,11 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
                 if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
-                    //TODO:FEEDBACK
-                    Navigation.findNavController(requireActivity(), R.id.navHostContainer).navigateUp();
+                    SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.clear();
+                    editor.apply();
+                    Navigation.findNavController(requireActivity(), R.id.navHostContainer).popBackStack(R.id.placesFragment, false);
                 } else {
                     Log.d("Dialog", "show dialog here");
                     new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETING_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
