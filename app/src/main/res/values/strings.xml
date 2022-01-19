@@ -80,18 +80,13 @@
     <string name="sign_up_now">Sign Up Now</string>
     <string name="delete_your_account">Delete Your Account</string>
     <string name="manage_your_places">Manage Your Places</string>
-    <string name="change_password">Change password</string>
-    <string name="do_not_change_anymore">Do not change anymore</string>
+    <string name="change_password">Change Password</string>
+    <string name="do_not_change_anymore">Don\'t Change Password</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_manage_places">ManagePlacesActivity</string>
     <string name="recover">Recover Password</string>
-
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="create_new_place">Place</string>
 
     <!-- Screen titles -->
     <string name="paths_screen_title">Paths</string>
@@ -102,9 +97,11 @@
     <string name="login_screen_title">Login</string>
     <string name="signup_screen_title">Register</string>
     <string name="signup_information_screen_title">Why to Sign Up?</string>
-    <string name="create_new_place">Create new place</string>
     <string name="forget_password_screen_title">Recover Password</string>
     <string name="user_screen_title">User</string>
-    <string name="show_places_screen_title">Manage Your Places</string>
-    <string name="create_place_screen_title">Create New Place</string>
+    <string name="show_places_screen_title">Your Places</string>
+    <string name="create_place_screen_title">Place</string>
+    <string name="create">Create</string>
+    <string name="address">Address</string>
+    <string name="description">Description</string>
 </resources>
