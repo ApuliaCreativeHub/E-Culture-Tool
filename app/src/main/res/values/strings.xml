@@ -104,5 +104,5 @@
     <string name="signup_information_screen_title">Why to Sign Up?</string>
     <string name="create_new_place">Create new place</string>
     <string name="forget_password_screen_title">Recover Password</string>
-    <string name="user_welcome_screen_title">User</string>
+    <string name="user_screen_title">User</string>
 </resources>

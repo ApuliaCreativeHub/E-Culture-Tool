@@ -50,13 +50,12 @@ public class WelcomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         activity = (AppCompatActivity) requireActivity();
-        Toolbar toolbar = view.findViewById(R.id.welcomeToolbar);
-        toolbar.setTitle(R.string.welcome_screen_title);
+        Toolbar toolbar = view.findViewById(R.id.userToolbar);
+        toolbar.setTitle(R.string.user_screen_title);
         activity.setSupportActionBar(toolbar);
         ActionBar actionBar = activity.getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
-        }
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(false);
     }
 
     @Override

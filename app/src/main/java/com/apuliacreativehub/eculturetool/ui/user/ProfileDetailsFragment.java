@@ -49,10 +49,10 @@ public class ProfileDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Toolbar toolbar=view.findViewById(R.id.profileToolbar);
-        toolbar.setTitle(R.string.profile_details_screen_title);
+        toolbar.setTitle(R.string.user_screen_title);
         AppCompatActivity activity=(AppCompatActivity) requireActivity();
         activity.setSupportActionBar(toolbar);
-        ActionBar actionBar= activity.getSupportActionBar();
+        ActionBar actionBar = activity.getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(false);
 
