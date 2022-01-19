@@ -52,7 +52,7 @@
     <string name="invalid_password">Please enter a password between 8 and 20 characters, without spaces, includes at least 1 digit, upper/lower case letter and special character</string>
     <string name="invalid_confirm_password">Please be careful because the passwords don\'t match</string>
     <string name="recover_password">Recover Password? Sign In</string>
-    <string name="send">Send</string>
+    <string name="send">Send New Password</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -85,6 +85,7 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_manage_places">ManagePlacesActivity</string>
+    <string name="recover">Recover Password</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -97,10 +98,11 @@
     <string name="places_screen_title">Places</string>
     <string name="welcome_screen_title">Welcome</string>
     <string name="profile_details_screen_title">Profile</string>
-    <string name="edit_profile_screen_title">Edit profile</string>
+    <string name="edit_profile_screen_title">Edit</string>
     <string name="login_screen_title">Login</string>
-    <string name="signup_screen_title">Sign up</string>
-    <string name="signup_information_screen_title">Why to sign up?</string>
+    <string name="signup_screen_title">Register</string>
+    <string name="signup_information_screen_title">Why to Sign Up?</string>
     <string name="create_new_place">Create new place</string>
-    <string name="forget_password_screen_title">Recover password</string>
+    <string name="forget_password_screen_title">Recover Password</string>
+    <string name="user_welcome_screen_title">User</string>
 </resources>

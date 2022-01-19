@@ -45,10 +45,10 @@ public class SubActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new RegisterInformationFragment()).commit();
                     break;
                 case PLACES_FRAGMENT:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new ShowPlacesFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new ShowPlacesFragment()).addToBackStack(null).commit();
                     break;
                 case CREATE_PLACE_FRAGMENT:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new CreatePlaceFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new CreatePlaceFragment()).addToBackStack(null).commit();
             }
         }
     }

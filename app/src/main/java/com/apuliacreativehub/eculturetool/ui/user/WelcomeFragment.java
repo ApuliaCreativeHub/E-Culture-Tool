@@ -12,7 +12,11 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -55,6 +59,19 @@ public class WelcomeFragment extends Fragment {
 
         TextView btnRegisterInformation = view.findViewById(R.id.btnRegisterInformation);
         btnRegisterInformation.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.REGISTER_INFORMATION_FRAGMENT)));
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Toolbar toolbar=view.findViewById(R.id.userToolbar);
+        toolbar.setTitle(R.string.user_welcome_screen_title);
+        AppCompatActivity activity=(AppCompatActivity) requireActivity();
+        activity.setSupportActionBar(toolbar);
+        ActionBar actionBar= activity.getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(false);
     }
 
 }
