@@ -73,17 +73,4 @@ public class WelcomeFragment extends Fragment {
         btnRegisterInformation.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.REGISTER_INFORMATION_FRAGMENT)));
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        Toolbar toolbar=view.findViewById(R.id.userToolbar);
-        toolbar.setTitle(R.string.user_welcome_screen_title);
-        AppCompatActivity activity=(AppCompatActivity) requireActivity();
-        activity.setSupportActionBar(toolbar);
-        ActionBar actionBar= activity.getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(false);
-    }
-
 }
