@@ -77,11 +77,6 @@
     <string name="new_password_subject_label">New Password</string>
     <string name="confirm_password_subject_label">Confirm Password</string>
     <string name="close_dropbox">close dropbox</string>
-    <string name="paths_screen_title">Paths</string>
-    <string name="places_screen_title">Places</string>
-    <string name="welcome_screen_title">Welcome</string>
-    <string name="profile_details_screen_title">Profile</string>
-    <string name="edit_profile_screen_title">Edit profile</string>
     <string name="sign_up_now">Sign Up Now</string>
     <string name="delete_your_account">Delete Your Account</string>
     <string name="manage_your_places">Manage Your Places</string>
@@ -90,13 +85,21 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_manage_places">ManagePlacesActivity</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- Screen titles -->
+    <string name="paths_screen_title">Paths</string>
+    <string name="places_screen_title">Places</string>
+    <string name="welcome_screen_title">Welcome</string>
+    <string name="profile_details_screen_title">Profile</string>
+    <string name="edit_profile_screen_title">Edit profile</string>
+    <string name="login_screen_title">Login</string>
+    <string name="signup_screen_title">Sign up</string>
+    <string name="signup_information_screen_title">Why to sign up?</string>
     <string name="create_new_place">Create new place</string>
 </resources>
