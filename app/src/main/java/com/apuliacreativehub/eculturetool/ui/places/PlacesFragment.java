@@ -41,8 +41,7 @@ public class PlacesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_places, container, false);
         return view;
     }
@@ -67,7 +66,7 @@ public class PlacesFragment extends Fragment {
         if (isACurator) {
             Button btnManagePlaces = view.findViewById(R.id.btnManagePlaces);
             btnManagePlaces.setVisibility(View.VISIBLE);
-            btnManagePlaces.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.SHOW_PLACES_FRAGMENT)));
+            btnManagePlaces.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.PLACES_FRAGMENT)));
         }
     }
 
