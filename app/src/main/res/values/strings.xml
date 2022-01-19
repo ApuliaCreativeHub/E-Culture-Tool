@@ -105,4 +105,6 @@
     <string name="create_new_place">Create new place</string>
     <string name="forget_password_screen_title">Recover Password</string>
     <string name="user_screen_title">User</string>
+    <string name="show_places_screen_title">Manage Your Places</string>
+    <string name="create_place_screen_title">Create New Place</string>
 </resources>
