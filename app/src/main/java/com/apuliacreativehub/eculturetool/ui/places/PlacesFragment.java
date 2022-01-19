@@ -80,9 +80,6 @@ public class PlacesFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                /**
-                 * Do Something Here.
-                 */
                 Log.i("SUBMIT",  String.valueOf(query));
                 return true;
             }

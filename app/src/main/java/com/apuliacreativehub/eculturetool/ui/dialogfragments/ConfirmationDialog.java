@@ -1,8 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.dialogfragments;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,7 +10,6 @@ import androidx.fragment.app.DialogFragment;
 import com.apuliacreativehub.eculturetool.R;
 
 public class ConfirmationDialog extends DialogFragment {
-    public static String TAG;
     private final String title;
     private final String message;
 
@@ -38,16 +35,8 @@ public class ConfirmationDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        listener.onDialogPositiveClick(ConfirmationDialog.this);
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        listener.onDialogNegativeClick(ConfirmationDialog.this);
-                    }
-                });
+                .setPositiveButton(R.string.confirm, (dialog, id) -> listener.onDialogPositiveClick(ConfirmationDialog.this))
+                .setNegativeButton(R.string.cancel, (dialog, id) -> listener.onDialogNegativeClick(ConfirmationDialog.this));
         // Create the AlertDialog object and return it
         return builder.create();
     }

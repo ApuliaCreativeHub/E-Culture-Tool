@@ -3,7 +3,6 @@ package com.apuliacreativehub.eculturetool.ui.user;
 import android.app.Application;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.apuliacreativehub.eculturetool.data.entity.User;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
