@@ -104,4 +104,6 @@
     <string name="create">Create</string>
     <string name="address">Address</string>
     <string name="description">Description</string>
+    <string name="pick_image">Pick image from gallery</string>
+    <string name="place_image">Place image</string>
 </resources>

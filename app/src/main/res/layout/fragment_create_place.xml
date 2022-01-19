@@ -25,11 +25,21 @@
             android:textSize="40sp"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/imgPlace"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_menu_gallery"
+            android:contentDescription="@string/place_image"
+            tools:ignore="ImageContrastCheck" />
+
         <EditText
             android:id="@+id/txtName"
             android:layout_width="320dp"
             android:layout_height="48dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:autofillHints="@string/name"
             android:hint="@string/name"
@@ -54,7 +64,20 @@
             android:autofillHints="@string/description"
             android:gravity="top"
             android:hint="@string/description"
-            android:inputType="textLongMessage|textMultiLine" />
+            android:inputType="textLongMessage|textMultiLine"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/btnPickImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="40dp"
+            android:layout_weight="1"
+            android:text="@string/pick_image"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnCreatePlace"
