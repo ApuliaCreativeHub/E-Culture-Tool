@@ -4,10 +4,10 @@ import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ConfirmationDialog extends DialogFragment {
     private final String title;
@@ -32,7 +32,7 @@ public class ConfirmationDialog extends DialogFragment {
         listener = (ConfirmationDialogListener) getParentFragment();
         // Use the Builder class for convenient dialog construction
         assert getActivity() != null;
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         builder.setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(R.string.confirm, (dialog, id) -> listener.onDialogPositiveClick(ConfirmationDialog.this))
