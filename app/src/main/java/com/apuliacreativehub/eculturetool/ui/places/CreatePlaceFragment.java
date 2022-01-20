@@ -4,6 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,18 +17,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import android.provider.MediaStore;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.apuliacreativehub.eculturetool.R;
 
 @SuppressWarnings("deprecation")
 public class CreatePlaceFragment extends Fragment {
     private View view;
+    private ImageView imgPlace;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,8 +33,8 @@ public class CreatePlaceFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        TextView btnPickImage = view.findViewById(R.id.btnPickImage);
-        btnPickImage.setOnClickListener(view -> {
+        imgPlace = view.findViewById(R.id.imgPlace);
+        imgPlace.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, 3);
         });
@@ -46,7 +45,6 @@ public class CreatePlaceFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
-            ImageView imgPlace = view.findViewById(R.id.imgPlace);
             imgPlace.setImageURI(selectedImage);
         }
     }

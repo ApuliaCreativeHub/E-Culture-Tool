@@ -33,6 +33,7 @@
             android:layout_weight="1"
             android:src="@android:drawable/ic_menu_gallery"
             android:contentDescription="@string/place_image"
+            android:scaleType="centerCrop"
             tools:ignore="ImageContrastCheck" />
 
         <EditText
@@ -66,18 +67,6 @@
             android:hint="@string/description"
             android:inputType="textLongMessage|textMultiLine"
             tools:ignore="TextContrastCheck" />
-
-        <TextView
-            android:id="@+id/btnPickImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="40dp"
-            android:layout_weight="1"
-            android:text="@string/pick_image"
-            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnCreatePlace"
