@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
+import com.apuliacreativehub.eculturetool.ui.component.ErrorDialog;
 
 @SuppressWarnings("deprecation")
 public class CreatePlaceFragment extends Fragment {

@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.ui.dialogfragments;
+package com.apuliacreativehub.eculturetool.ui.component;
 
 import android.app.Dialog;
 import android.os.Bundle;

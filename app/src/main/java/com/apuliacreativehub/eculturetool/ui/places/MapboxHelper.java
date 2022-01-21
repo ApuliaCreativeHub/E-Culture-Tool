@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.ui.component;
+package com.apuliacreativehub.eculturetool.ui.places;
 
 import com.mapbox.geojson.Point;
 import java.util.Comparator;

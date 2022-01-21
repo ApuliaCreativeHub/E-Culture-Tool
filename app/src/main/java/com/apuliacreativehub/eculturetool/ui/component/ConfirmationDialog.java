@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.ui;
+package com.apuliacreativehub.eculturetool.ui.component;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ public class ConfirmationDialog extends DialogFragment {
     public ConfirmationDialog(String title, String message, String tag) {
         this.title = title;
         this.message = message;
-        com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog.TAG = tag;
+        ErrorDialog.TAG = tag;
     }
 
     @NonNull

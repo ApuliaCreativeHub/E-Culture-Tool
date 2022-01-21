@@ -29,7 +29,7 @@ import com.apuliacreativehub.eculturetool.data.TokenManager;
 import com.apuliacreativehub.eculturetool.data.UuidManager;
 import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
-import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
+import com.apuliacreativehub.eculturetool.ui.component.ErrorDialog;
 
 public class LoginFragment extends Fragment {
     private View view;

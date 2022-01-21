@@ -28,8 +28,8 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.User;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
-import com.apuliacreativehub.eculturetool.ui.ConfirmationDialog;
-import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
+import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
+import com.apuliacreativehub.eculturetool.ui.component.ErrorDialog;
 
 import java.util.Objects;
 

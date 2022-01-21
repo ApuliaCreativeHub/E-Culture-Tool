@@ -23,7 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
-import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
+import com.apuliacreativehub.eculturetool.ui.component.ErrorDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class RegisterFragment extends Fragment {
