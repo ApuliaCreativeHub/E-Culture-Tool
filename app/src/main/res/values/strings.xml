@@ -106,4 +106,9 @@
     <string name="description">Description</string>
     <string name="pick_image">Pick image from gallery</string>
     <string name="place_image">Place image</string>
+
+    <string name="invalid_place_name">Please enter a name between 2 and 25 characters</string>
+    <string name="invalid_place_address">Please enter an address between 5 and 50 characters</string>
+    <string name="invalid_place_description">Please enter a description between 10 and 100 characters</string>
+    <string name="pick_place_image">Please pick a representative image of your place from your gallery</string>
 </resources>
