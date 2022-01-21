@@ -30,6 +30,8 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.ui.component.MapboxHelper;
+import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheet;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -44,10 +46,14 @@ import com.mapbox.maps.plugin.annotation.AnnotationPluginImplKt;
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager;
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManagerKt;
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions;
+import com.mapbox.maps.plugin.gestures.OnMapClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -75,16 +81,37 @@ public class MapFragment extends Fragment {
         points = new Point[2];
         points[0] = Point.fromLngLat(10.06D, 51.31D);
         points[1] = Point.fromLngLat(11.06D, 78.31D);
-
         map = v.findViewById(R.id.mapview);
+        /**
+         * TODO: get api
+         */
         map.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS, style -> {
             for (Point point : points)
                 addAnnotationToMap(point);
         });
+        addOnClickMapboxListener(Arrays.asList(points), MapboxHelper.DEFAULT_TOLERANCE);
         requestLocationPermission();
         return v;
     }
 
+
+    public void addOnClickMapboxListener(List<Point> points, float tolerance) {
+        this.map.getMapboxMap().gesturesPlugin((gesturesPlugin -> {
+            gesturesPlugin.addOnMapClickListener(new OnMapClickListener() {
+                @Override
+                public boolean onMapClick(@NonNull Point possiblePoint) {
+                    MapboxHelper mapboxHelper = new MapboxHelper(possiblePoint, tolerance);
+                    Collections.sort(points, mapboxHelper);
+                    if(mapboxHelper.isPointValid(points.get(0))) {
+                        ModalBottomSheet modalBottomSheet = new ModalBottomSheet(R.layout.component_modal_bottom_sheet_map);
+                        modalBottomSheet.show(getChildFragmentManager(), ModalBottomSheet.TAG);
+                    }
+                    return true;
+                }
+            });
+            return true;
+        }));
+    }
 
     private void addAnnotationToMap(Point point) {
         PointAnnotationOptions pointAnnotationOptions = new PointAnnotationOptions();
