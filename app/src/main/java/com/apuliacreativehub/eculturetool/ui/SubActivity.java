@@ -8,7 +8,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.ui.places.CreatePathFragment;
 import com.apuliacreativehub.eculturetool.ui.places.CreatePlaceFragment;
+import com.apuliacreativehub.eculturetool.ui.places.PlacePathsFragment;
 import com.apuliacreativehub.eculturetool.ui.places.ShowPlacesFragment;
 import com.apuliacreativehub.eculturetool.ui.user.LoginFragment;
 import com.apuliacreativehub.eculturetool.ui.user.RegisterFragment;
@@ -22,6 +24,8 @@ public class SubActivity extends AppCompatActivity {
     public static final String REGISTER_INFORMATION_FRAGMENT = "REGISTER_INFORMATION_FRAGMENT";
     public static final String PLACES_FRAGMENT = "PLACES_FRAGMENT";
     public static final String CREATE_PLACE_FRAGMENT = "CREATE_PLACE_FRAGMENT";
+    public static final String PLACE_PATHS_FRAGMENT = "PLACE_PATHS_FRAGMENT";
+    public static final String CREATE_PATH_FRAGMENT = "CREATE_PATH_FRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,12 @@ public class SubActivity extends AppCompatActivity {
                     break;
                 case CREATE_PLACE_FRAGMENT:
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new CreatePlaceFragment()).commit();
+                    break;
+                case PLACE_PATHS_FRAGMENT:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new PlacePathsFragment()).commit();
+                    break;
+                case CREATE_PATH_FRAGMENT:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new CreatePathFragment()).commit();
                     break;
             }
         }

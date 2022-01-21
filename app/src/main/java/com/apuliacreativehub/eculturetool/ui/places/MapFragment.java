@@ -30,7 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheet;
+import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -102,8 +102,8 @@ public class MapFragment extends Fragment {
                     MapboxHelper mapboxHelper = new MapboxHelper(possiblePoint, tolerance);
                     Collections.sort(points, mapboxHelper);
                     if(mapboxHelper.isPointValid(points.get(0))) {
-                        ModalBottomSheet modalBottomSheet = new ModalBottomSheet(R.layout.component_modal_bottom_sheet_map);
-                        modalBottomSheet.show(getChildFragmentManager(), ModalBottomSheet.TAG);
+                        ModalBottomSheetPlace modalBottomSheet = new ModalBottomSheetPlace();
+                        modalBottomSheet.show(getChildFragmentManager(), ModalBottomSheetUtil.TAG);
                     }
                     return true;
                 }
