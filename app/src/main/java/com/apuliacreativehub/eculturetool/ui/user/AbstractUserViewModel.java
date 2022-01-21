@@ -95,4 +95,5 @@ abstract public class AbstractUserViewModel extends AndroidViewModel {
     public void setIsCurator(boolean isCurator) {
         this.isCurator = isCurator;
     }
+
 }

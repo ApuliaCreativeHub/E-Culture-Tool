@@ -28,4 +28,5 @@ public class RepositoryNotification<T> implements RepositoryNotificationInterfac
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+
 }

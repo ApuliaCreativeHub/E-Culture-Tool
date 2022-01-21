@@ -6,6 +6,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.user.RegisterInformationFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/signupInformationToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/imgMuseum"
         android:layout_width="wrap_content"
@@ -18,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signupInformationToolbar"
         tools:ignore="ImageContrastCheck" />
 
     <LinearLayout
@@ -39,7 +50,6 @@
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:text="@string/information"
-            android:textColor="#403f3f"
             android:textSize="48sp"
             android:textStyle="bold" />
 
@@ -50,7 +60,6 @@
             android:layout_marginTop="24dp"
             android:layout_weight="1"
             android:text="@string/information_paths"
-            android:textColor="#ffc791"
             android:textSize="16sp"
             android:textStyle="bold"
             tools:ignore="TextContrastCheck" />
@@ -62,22 +71,20 @@
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:text="@string/information_curator"
-            android:textColor="#ffc791"
             android:textSize="16sp"
             android:textStyle="bold"
             tools:ignore="TextContrastCheck" />
 
-        <TextView
+        <Button
             android:id="@+id/btnSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="@string/sign_up"
-            android:textColor="#403f3f"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:text="@string/sign_up_now"
+            android:textAllCaps="true"
+            android:textSize="16sp" />
 
     </LinearLayout>
 

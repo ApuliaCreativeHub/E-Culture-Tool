@@ -14,9 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.apuliacreativehub.eculturetool.R;
 
-
 public class UserFragment extends Fragment {
-    private View userContainerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,16 +23,14 @@ public class UserFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_user, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        userContainerView = view.findViewById(R.id.userContainerView);
+
         SharedPreferences sharedPref = requireActivity().getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
         assert getParentFragment() != null;
         if (sharedPref.getString("token", "").equals("")) {
@@ -43,4 +39,5 @@ public class UserFragment extends Fragment {
             NavHostFragment.findNavController(getParentFragment()).navigate(R.id.action_userFragment_to_profileDetailsFragment);
         }
     }
+
 }

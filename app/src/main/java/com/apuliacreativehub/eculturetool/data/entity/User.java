@@ -20,6 +20,10 @@ public class User {
         this.password = password;
     }
 
+    public User(String email) {
+        this.email = email;
+    }
+
     public String getName() {
         return name;
     }
@@ -59,4 +63,5 @@ public class User {
     public void setACurator(boolean ACurator) {
         isACurator = ACurator;
     }
+
 }

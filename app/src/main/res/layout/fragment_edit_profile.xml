@@ -6,16 +6,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.user.EditProfileFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/editProfileToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/lytEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:gravity="center_horizontal|top"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/editProfileToolbar">
 
         <TextView
             android:id="@+id/txtEdit"
@@ -27,123 +38,73 @@
             android:textSize="40sp"
             android:textStyle="bold" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <EditText
+            android:id="@+id/editName"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/name"
+            android:hint="@string/name"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/editSurname"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/surname"
+            android:hint="@string/surname"
+            android:inputType="textPersonName"
+            tools:ignore="TextContrastCheck" />
+
+        <EditText
+            android:id="@+id/editEmail"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/email"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/changePasswordContainerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/btnChangePassword"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginLeft="40dp"
             android:layout_marginTop="8dp"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:id="@+id/editLinearLayoutName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <EditText
-                    android:id="@+id/editName"
-                    android:layout_width="320dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-
-                    android:autofillHints="@string/name"
-                    android:hint="@string/name"
-                    android:inputType="textPersonName"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/editLinearLayoutSurname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editLinearLayoutName">
-
-                <EditText
-                    android:id="@+id/editSurname"
-                    android:layout_width="320dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:autofillHints="@string/surname"
-                    android:hint="@string/surname"
-                    android:inputType="textPersonName"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/editLinearLayoutEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editLinearLayoutSurname">
-
-                <EditText
-                    android:id="@+id/editEmail"
-                    android:layout_width="320dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:autofillHints="@string/email"
-                    android:hint="@string/email"
-                    android:inputType="textEmailAddress"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/editLinearLayoutNewPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editLinearLayoutEmail">
-
-                <EditText
-                    android:id="@+id/editNewPassword"
-                    android:layout_width="320dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:inputType="textPassword"
-                    android:autofillHints="@string/password"
-                    android:hint="@string/password"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/editLinearLayoutConfirmPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editLinearLayoutNewPassword">
-
-                <EditText
-                    android:id="@+id/editConfirmPassword"
-                    android:layout_width="320dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:inputType="textPassword"
-                    android:autofillHints="@string/confirm_password"
-                    
-                    android:hint="@string/confirm_password"/>
-
-            </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginRight="40dp"
+            android:layout_weight="1"
+            android:text="@string/change_password"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnSave"
             android:layout_width="320dp"
             android:layout_height="48dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginHorizontal="56dp"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:text="@string/save"
-            tools:ignore="DuplicateSpeakableTextCheck" />
+            android:text="@string/change_your_information"
+            android:textAllCaps="true" />
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="56dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/delete_your_account"
+            android:textAllCaps="true" />
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

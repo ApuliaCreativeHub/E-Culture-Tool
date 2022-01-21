@@ -6,6 +6,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.user.LoginFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/loginToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/imgMuseum"
         android:layout_width="wrap_content"
@@ -17,7 +28,7 @@
         app:layout_constraintBottom_toTopOf="@+id/lytUser"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginToolbar"
         tools:ignore="ImageContrastCheck" />
 
     <LinearLayout
@@ -31,13 +42,12 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/txtRegister"
+            android:id="@+id/txtLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:letterSpacing="0.03"
             android:text="@string/login"
-            android:textColor="#403f3f"
             android:textSize="40sp"
             android:textStyle="bold" />
 
@@ -80,6 +90,7 @@
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:text="@string/login"
+            android:textAllCaps="true"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView

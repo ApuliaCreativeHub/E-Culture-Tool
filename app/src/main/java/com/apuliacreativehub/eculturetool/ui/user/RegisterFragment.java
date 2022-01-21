@@ -1,6 +1,5 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,6 +13,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,7 +27,6 @@ import com.apuliacreativehub.eculturetool.ui.dialogfragments.ErrorDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class RegisterFragment extends Fragment {
-
     private View view;
     private RegisterViewModel registerViewModel;
     private EditText txtName;
@@ -34,6 +35,7 @@ public class RegisterFragment extends Fragment {
     private EditText txtPassword;
     private EditText txtConfirmPassword;
     private SwitchMaterial sthCurator;
+    private AppCompatActivity activity;
     final Observer<RepositoryNotification<Void>> registrationObserver = new Observer<RepositoryNotification<Void>>() {
         @Override
         public void onChanged(RepositoryNotification notification) {
@@ -41,7 +43,7 @@ public class RegisterFragment extends Fragment {
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
-                if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
+                if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit();
                 } else {
                     Log.d("Dialog", "show dialog here");
@@ -58,7 +60,6 @@ public class RegisterFragment extends Fragment {
             }
         }
     };
-    private Context mcontext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,7 +70,15 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mcontext = getContext();
+
+        activity = (AppCompatActivity) requireActivity();
+        Toolbar toolbar = view.findViewById(R.id.signupToolbar);
+        toolbar.setTitle(R.string.signup_screen_title);
+        activity.setSupportActionBar(toolbar);
+        ActionBar actionBar = activity.getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 

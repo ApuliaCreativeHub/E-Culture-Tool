@@ -10,4 +10,5 @@ abstract public class AbstractRemoteError {
     public void setMessage(String message) {
         this.message = message;
     }
+
 }

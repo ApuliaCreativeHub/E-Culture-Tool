@@ -17,4 +17,5 @@ public class RegisterViewModel extends AbstractUserViewModel {
         User user = new User(name, surname, email, password, isCurator);
         return repository.registerUser(user);
     }
+
 }

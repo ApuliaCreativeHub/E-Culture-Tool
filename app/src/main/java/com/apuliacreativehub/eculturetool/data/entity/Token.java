@@ -3,6 +3,7 @@ package com.apuliacreativehub.eculturetool.data.entity;
 import java.util.Date;
 
 public class Token {
+
     private String token;
     private Date createdAt;
     private String uuid;
@@ -36,4 +37,5 @@ public class Token {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
+
 }
