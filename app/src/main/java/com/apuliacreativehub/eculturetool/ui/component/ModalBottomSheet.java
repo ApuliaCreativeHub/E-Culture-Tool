@@ -38,7 +38,7 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
-        bottomSheetBehavior.setDraggable(true);
+        bottomSheetBehavior.setPeekHeight(BottomSheetBehavior.PEEK_HEIGHT_AUTO);
         bottomSheetBehavior.setHideable(true);
         bottomSheetBehavior.setFitToContents(true);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
