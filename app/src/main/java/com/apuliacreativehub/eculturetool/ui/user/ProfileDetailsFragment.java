@@ -1,6 +1,7 @@
 package com.apuliacreativehub.eculturetool.ui.user;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.ui.SubActivity;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 
 public class ProfileDetailsFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
@@ -71,7 +73,7 @@ public class ProfileDetailsFragment extends Fragment implements ConfirmationDial
         super.onStart();
 
         Button btnEdit = view.findViewById(R.id.btnEdit);
-        btnEdit.setOnClickListener(edit -> Navigation.findNavController(requireActivity(), R.id.navHostContainer).navigate(R.id.action_profileDetailsFragment_to_editProfileFragment));
+        btnEdit.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PROFILE_FRAGMENT)));
 
         Button btnLogout = view.findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(logout -> showNoticeDialog());

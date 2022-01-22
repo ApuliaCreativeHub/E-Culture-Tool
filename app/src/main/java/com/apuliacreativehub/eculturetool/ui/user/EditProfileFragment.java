@@ -20,9 +20,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
@@ -124,11 +122,13 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        context=requireContext();
+        context = requireContext();
 
-        Toolbar toolbar=view.findViewById(R.id.editProfileToolbar);
-        NavController navController=Navigation.findNavController(requireActivity(), R.id.navHostContainer);
-        NavigationUI.setupWithNavController(toolbar, navController);
+        Toolbar toolbar = view.findViewById(R.id.editProfileToolbar);
+        toolbar.setTitle(R.string.edit_profile_screen_title);
+
+        toolbar.setNavigationIcon(R.mipmap.ic_arrow_right_bottom_bold);
+        toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
 
         editProfileViewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
 

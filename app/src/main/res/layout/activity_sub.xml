@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/container_form_layout"
+            android:id="@+id/fragment_container_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

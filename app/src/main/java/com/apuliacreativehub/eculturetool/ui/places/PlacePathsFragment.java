@@ -1,6 +1,5 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,11 +19,10 @@ import android.widget.TextView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
-import com.apuliacreativehub.eculturetool.ui.SubActivity;
 import com.apuliacreativehub.eculturetool.ui.component.ListPathsAdapter;
+import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class PlacePathsFragment extends Fragment {
 
@@ -58,21 +56,20 @@ public class PlacePathsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        AppCompatActivity activity = (AppCompatActivity) requireActivity();
+
+        ((TextView)view.findViewById(R.id.listResultsItemPathPlace)).setText(String.valueOf(mAdapter.getItemCount()));
+
         Toolbar toolbar = view.findViewById(R.id.showPlacePathsToolbar);
         toolbar.setTitle(R.string.show_place_default_paths);
-        activity.setSupportActionBar(toolbar);
-        ActionBar actionBar = activity.getSupportActionBar();
-        ((TextView)view.findViewById(R.id.listResultsItemPathPlace)).setText(String.valueOf(mAdapter.getItemCount()));
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+
+        toolbar.setNavigationIcon(R.mipmap.ic_arrow_right_bottom_bold);
+        toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
     }
 
     @Override
     public void onStart() {
         super.onStart();
         Button btnCreateNewPath = view.findViewById(R.id.btnCreateNewPath);
-        btnCreateNewPath.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.CREATE_PATH_FRAGMENT)));
+        btnCreateNewPath.setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new CreatePathFragment()));
     }
 }
