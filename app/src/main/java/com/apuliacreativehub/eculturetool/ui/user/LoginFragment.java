@@ -27,7 +27,7 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.TokenManager;
 import com.apuliacreativehub.eculturetool.data.UuidManager;
-import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
+import com.apuliacreativehub.eculturetool.data.entity.user.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ErrorDialog;
 

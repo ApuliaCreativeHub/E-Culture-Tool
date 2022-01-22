@@ -1,4 +1,6 @@
-package com.apuliacreativehub.eculturetool.data.network;
+package com.apuliacreativehub.eculturetool.data.network.user;
+
+import com.apuliacreativehub.eculturetool.data.network.RemoteDatabase;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
