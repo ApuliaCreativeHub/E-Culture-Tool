@@ -28,6 +28,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:exported="true"
             android:screenOrientation="userPortrait"
+            android:windowSoftInputMode="adjustPan"
             tools:ignore="LockedOrientationActivity">
 
             <intent-filter>
