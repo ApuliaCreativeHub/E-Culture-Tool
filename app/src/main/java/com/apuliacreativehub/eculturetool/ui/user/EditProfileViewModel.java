@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.apuliacreativehub.eculturetool.data.entity.User;
+import com.apuliacreativehub.eculturetool.data.entity.user.User;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 
 public class EditProfileViewModel extends AbstractUserViewModel{

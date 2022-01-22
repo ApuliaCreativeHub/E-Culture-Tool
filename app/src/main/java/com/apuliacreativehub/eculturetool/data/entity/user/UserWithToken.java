@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.data.entity;
+package com.apuliacreativehub.eculturetool.data.entity.user;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

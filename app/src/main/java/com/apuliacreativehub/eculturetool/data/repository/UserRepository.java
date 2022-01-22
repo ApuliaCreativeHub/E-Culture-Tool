@@ -4,10 +4,10 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.apuliacreativehub.eculturetool.data.entity.User;
-import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
-import com.apuliacreativehub.eculturetool.data.network.RemoteUserDAO;
-import com.apuliacreativehub.eculturetool.data.network.UserRemoteDatabase;
+import com.apuliacreativehub.eculturetool.data.entity.user.User;
+import com.apuliacreativehub.eculturetool.data.entity.user.UserWithToken;
+import com.apuliacreativehub.eculturetool.data.network.user.RemoteUserDAO;
+import com.apuliacreativehub.eculturetool.data.network.user.UserRemoteDatabase;
 
 import java.io.IOException;
 import java.util.concurrent.Executor;

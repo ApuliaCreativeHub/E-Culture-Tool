@@ -13,7 +13,7 @@ import okhttp3.Response;
 
 public abstract class RemoteDatabase {
 
-    static OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
+    protected static OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
         @NonNull
         @Override
         public Response intercept(Interceptor.Chain chain) throws IOException {
