@@ -127,7 +127,7 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
         Toolbar toolbar = view.findViewById(R.id.editProfileToolbar);
         toolbar.setTitle(R.string.edit_profile_screen_title);
 
-        toolbar.setNavigationIcon(R.mipmap.ic_arrow_right_bottom_bold);
+        toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
 
         editProfileViewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);

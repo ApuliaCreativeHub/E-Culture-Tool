@@ -28,7 +28,7 @@
                 android:id="@+id/listComponentPathImage"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:src="@android:drawable/ic_menu_gallery"
+                android:src="@mipmap/outline_image_black_36"
                 />
 
             <LinearLayout
@@ -62,7 +62,7 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_gravity="center"
-                    app:icon="@mipmap/ic_arrow_right_bottom_bold"
+                    app:icon="@mipmap/outline_more_vert_black_24"
                     app:iconGravity="textEnd"
                     tools:ignore="SpeakableTextPresentCheck" />
             </LinearLayout>

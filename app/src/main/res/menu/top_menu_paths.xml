@@ -4,14 +4,14 @@
     <item
         android:title="@string/search"
         android:id="@+id/searchPaths"
-        android:icon="@mipmap/ic_action_search"
+        android:icon="@mipmap/outline_search_black_24"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
     <item
         android:title="@string/filter"
         android:id="@+id/filterPaths"
-        android:icon="@mipmap/ic_filter"
+        android:icon="@mipmap/outline_filter_list_black_24"
         app:showAsAction="ifRoom" />
 
 </menu>

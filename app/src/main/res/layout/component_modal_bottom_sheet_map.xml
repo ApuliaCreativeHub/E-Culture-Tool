@@ -52,7 +52,7 @@
                             android:layout_height="180dp"
                             android:contentDescription="@string/place_image"
                             android:scaleType="centerCrop"
-                            android:src="@android:drawable/ic_menu_gallery" />
+                            android:src="@mipmap/outline_image_black_36" />
 
                         <TextView
                             android:layout_width="180dp"

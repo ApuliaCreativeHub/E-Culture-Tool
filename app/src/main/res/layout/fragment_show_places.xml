@@ -41,6 +41,6 @@
         android:contentDescription="@string/create_new_place"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/add_fab" />
+        app:srcCompat="@mipmap/outline_add_black_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
