@@ -1,0 +1,90 @@
+package com.apuliacreativehub.eculturetool.ui.places;
+
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.ui.SubActivity;
+import com.google.android.material.card.MaterialCardView;
+
+import java.util.ArrayList;
+
+public class CardPlaceAdapter extends RecyclerView.Adapter<CardPlaceAdapter.ViewHolder> {
+    private final Context context;
+    private final ArrayList<Place> dataSet;
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final MaterialCardView cardPlace;
+        private final ImageView imgPlace;
+        private final TextView txtName;
+        private final TextView txtAddress;
+        private final TextView txtDescription;
+
+        public ViewHolder(View view) {
+            super(view);
+            cardPlace = view.findViewById(R.id.cardPlace);
+            imgPlace = view.findViewById(R.id.imgPlace);
+            txtName = view.findViewById(R.id.txtName);
+            txtAddress = view.findViewById(R.id.txtAddress);
+            txtDescription = view.findViewById(R.id.txtDescription);
+        }
+
+        public MaterialCardView getCardPlace() {
+            return cardPlace;
+        }
+
+        public ImageView getImgPlace() {
+            return imgPlace;
+        }
+
+        public TextView getTxtName() {
+            return txtName;
+        }
+
+        public TextView getTxtAddress() {
+            return txtAddress;
+        }
+
+        public TextView getTxtDescription() {
+            return txtDescription;
+        }
+    }
+
+    public CardPlaceAdapter(Context context, ArrayList<Place> dataSet) {
+        this.context = context;
+        this.dataSet = dataSet;
+    }
+
+    @Override @NonNull
+    public CardPlaceAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.component_card_place, viewGroup, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(CardPlaceAdapter.ViewHolder viewHolder, final int position) {
+        viewHolder.getTxtName().setText(this.dataSet.get(position).getName());
+        viewHolder.getTxtAddress().setText(this.dataSet.get(position).getAddress());
+        viewHolder.getTxtDescription().setText(this.dataSet.get(position).getDescription());
+        viewHolder.getCardPlace().setOnClickListener(view -> context.startActivity(new Intent(context, SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.MANAGE_PLACE_FRAGMENT)));
+        //TODO: add all value to personalize single component
+    }
+
+    @Override
+    public int getItemCount() {
+        return dataSet.size();
+    }
+
+}

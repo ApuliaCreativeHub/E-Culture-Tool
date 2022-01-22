@@ -19,7 +19,7 @@ public class ListPathsAdapter extends RecyclerView.Adapter<ListPathsAdapter.View
 
     private final ArrayList<Path> dataSet;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textPathName;
         private final TextView textPlaceName;
         private final ImageView imagePath;
@@ -67,4 +67,5 @@ public class ListPathsAdapter extends RecyclerView.Adapter<ListPathsAdapter.View
     public int getItemCount() {
         return dataSet.size();
     }
+
 }
