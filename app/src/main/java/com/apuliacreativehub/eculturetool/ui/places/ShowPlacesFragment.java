@@ -2,6 +2,9 @@ package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,15 +12,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
-import com.apuliacreativehub.eculturetool.ui.user.LoginViewModel;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ShowPlacesFragment extends Fragment {
@@ -53,6 +51,9 @@ public class ShowPlacesFragment extends Fragment {
 
         FloatingActionButton btnCreatePlace = view.findViewById(R.id.btnCreatePlace);
         btnCreatePlace.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.CREATE_PLACE_FRAGMENT)));
+
+        MaterialCardView cardPlace = view.findViewById(R.id.cardPlace);
+        cardPlace.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.MANAGE_PLACE_FRAGMENT)));
     }
 
 }

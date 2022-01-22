@@ -54,8 +54,6 @@
     <string name="recover_password">Recover Password? Sign In</string>
     <string name="send">Send New Password</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="error_dialog_title">An error occurred</string>
 
     <string name="unexpected_exception_dialog">Something went wrong with your application.</string>
@@ -115,4 +113,10 @@
     <string name="show_place_default_paths">Place Paths</string>
     <string name="create_place_path">Create Path</string>
     <string name="btn_add_path">Create a new path</string>
+    <string name="manage_place_screen_title">Manage Place</string>
+    <string name="edit_place_information">Edit place information</string>
+
+    <string name="warning_dialog_title">Warning</string>
+    <string name="warning_delete_account">Are you sure you want to delete your account?</string>
+    <string name="warning_exit_account">Are you sure you want to exit your account?</string>
 </resources>

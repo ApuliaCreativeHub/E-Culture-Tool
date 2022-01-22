@@ -306,7 +306,7 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
     }
 
     public void showNoticeDialog() {
-        DialogFragment dialog = new ConfirmationDialog("WARNING!", "Are you sure you want to delete your account?", "DELETE_ACCOUNT");
+        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_account), "DELETE_ACCOUNT");
         dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
     }
 
