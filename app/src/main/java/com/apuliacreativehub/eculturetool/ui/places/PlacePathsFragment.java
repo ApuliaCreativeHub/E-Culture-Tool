@@ -37,8 +37,6 @@ public class PlacePathsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Path[] data = new Path[]{};
         this.mDataset = new ArrayList<Path>();
         this.mDataset.add(new Path("1", "Percorso standard", "Corteo Milano", null, null, null));
         this.mDataset.add(new Path("2", "Percorso Standard2", "Corteo Roma", null, null, null));
@@ -48,7 +46,7 @@ public class PlacePathsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_place_paths, container, false);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.listPlacePaths);
+        mRecyclerView = view.findViewById(R.id.listPlacePaths);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ListPathsAdapter(mDataset);
