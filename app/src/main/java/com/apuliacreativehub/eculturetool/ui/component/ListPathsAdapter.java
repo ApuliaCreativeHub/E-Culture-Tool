@@ -52,7 +52,7 @@ public class ListPathsAdapter extends RecyclerView.Adapter<ListPathsAdapter.View
     @Override @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.component_list_row, viewGroup, false);
+                .inflate(R.layout.component_card_path, viewGroup, false);
         return new ViewHolder(view);
     }
 

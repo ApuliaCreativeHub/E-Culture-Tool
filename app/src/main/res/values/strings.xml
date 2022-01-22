@@ -113,6 +113,7 @@
     <string name="show_place_default_paths">Place Paths</string>
     <string name="create_place_path">Create Path</string>
     <string name="btn_add_path">Create a new path</string>
+    <string name="show_my_paths">Paths</string>
     <string name="manage_place_screen_title">Manage Place</string>
     <string name="edit_place_information">Edit place information</string>
 
