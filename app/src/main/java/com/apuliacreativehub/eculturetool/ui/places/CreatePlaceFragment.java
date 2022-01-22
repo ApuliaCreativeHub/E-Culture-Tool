@@ -155,14 +155,11 @@ public class CreatePlaceFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        AppCompatActivity activity = (AppCompatActivity) requireActivity();
         Toolbar toolbar = view.findViewById(R.id.createPlaceToolbar);
         toolbar.setTitle(R.string.create_place_screen_title);
-        activity.setSupportActionBar(toolbar);
-        ActionBar actionBar = activity.getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+
+        toolbar.setNavigationIcon(R.mipmap.ic_arrow_right_bottom_bold);
+        toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
 
         createPlaceViewModel = new ViewModelProvider(this).get(CreatePlaceViewModel.class);
 

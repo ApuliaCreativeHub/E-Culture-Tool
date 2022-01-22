@@ -37,7 +37,7 @@ public class ForgetPasswordFragment extends Fragment {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", String.valueOf(notification.getData()));
             if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new LoginFragment()).commit();
             } else {
                 Log.d("Dialog", "show dialog here");
                 new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "CHANGE_PASSWORD_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
@@ -59,14 +59,11 @@ public class ForgetPasswordFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        activity = (AppCompatActivity) requireActivity();
         Toolbar toolbar = view.findViewById(R.id.forgetPasswordToolbar);
         toolbar.setTitle(R.string.forget_password_screen_title);
-        activity.setSupportActionBar(toolbar);
-        ActionBar actionBar = activity.getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+
+        toolbar.setNavigationIcon(R.mipmap.ic_arrow_right_bottom_bold);
+        toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
 
         forgetPasswordViewModel = new ViewModelProvider(this).get(ForgetPasswordViewModel.class);
 
@@ -98,10 +95,10 @@ public class ForgetPasswordFragment extends Fragment {
         });
 
         TextView btnSignUp = view.findViewById(R.id.btnSignUp);
-        btnSignUp.setOnClickListener(view -> activity.getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new RegisterFragment()).commit());
+        btnSignUp.setOnClickListener(view -> activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new RegisterFragment()).commit());
 
         TextView btnSignIn = view.findViewById(R.id.btnSignIn);
-        btnSignIn.setOnClickListener(view -> activity.getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit());
+        btnSignIn.setOnClickListener(view -> activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new LoginFragment()).commit());
 
         Button btnSend = view.findViewById(R.id.btnSend);
         btnSend.setOnClickListener(view -> forgetPasswordViewModel.changePassword().observe(this, changePasswordObserver));

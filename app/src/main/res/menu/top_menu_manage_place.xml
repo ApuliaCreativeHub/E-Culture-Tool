@@ -4,7 +4,6 @@
     <item
         android:id="@+id/editPlaceInformation"
         android:title="@string/edit"
-        android:contentDescription="@string/edit_place_information"
         app:showAsAction="ifRoom" />
 
 </menu>

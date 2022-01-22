@@ -34,14 +34,11 @@ public class RegisterInformationFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        activity = (AppCompatActivity) requireActivity();
         Toolbar toolbar = view.findViewById(R.id.signupInformationToolbar);
         toolbar.setTitle(R.string.signup_information_screen_title);
-        activity.setSupportActionBar(toolbar);
-        ActionBar actionBar = activity.getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+
+        toolbar.setNavigationIcon(R.mipmap.ic_arrow_right_bottom_bold);
+        toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
     }
 
     @Override
@@ -49,7 +46,7 @@ public class RegisterInformationFragment extends Fragment {
         super.onStart();
 
         TextView btnSignUp = view.findViewById(R.id.btnSignUp);
-        btnSignUp.setOnClickListener(view -> activity.getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new RegisterFragment()).commit());
+        btnSignUp.setOnClickListener(view -> activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new RegisterFragment()).commit());
     }
 
 }

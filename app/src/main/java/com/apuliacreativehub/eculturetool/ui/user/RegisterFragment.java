@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -35,7 +33,6 @@ public class RegisterFragment extends Fragment {
     private EditText txtPassword;
     private EditText txtConfirmPassword;
     private SwitchMaterial sthCurator;
-    private AppCompatActivity activity;
     final Observer<RepositoryNotification<Void>> registrationObserver = new Observer<RepositoryNotification<Void>>() {
         @Override
         public void onChanged(RepositoryNotification notification) {
@@ -44,7 +41,7 @@ public class RegisterFragment extends Fragment {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
                 if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new LoginFragment()).commit();
                 } else {
                     Log.d("Dialog", "show dialog here");
                     new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "REGISTRATION_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
@@ -71,14 +68,11 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        activity = (AppCompatActivity) requireActivity();
         Toolbar toolbar = view.findViewById(R.id.signupToolbar);
         toolbar.setTitle(R.string.signup_screen_title);
-        activity.setSupportActionBar(toolbar);
-        ActionBar actionBar = activity.getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+
+        toolbar.setNavigationIcon(R.mipmap.ic_arrow_right_bottom_bold);
+        toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
 
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
@@ -200,7 +194,7 @@ public class RegisterFragment extends Fragment {
         sthCurator.setOnCheckedChangeListener((buttonView, isChecked) -> registerViewModel.setIsCurator(isChecked));
 
         TextView btnSignIn = view.findViewById(R.id.btnSignIn);
-        btnSignIn.setOnClickListener(view -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_form_layout, new LoginFragment()).commit());
+        btnSignIn.setOnClickListener(view -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new LoginFragment()).commit());
 
         Button btnRegister = view.findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(OnClickListener -> {

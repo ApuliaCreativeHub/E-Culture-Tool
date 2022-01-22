@@ -1,7 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
-import com.apuliacreativehub.eculturetool.ui.SubActivity;
+import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
@@ -75,8 +75,8 @@ public class CardPlaceAdapter extends RecyclerView.Adapter<CardPlaceAdapter.View
         viewHolder.getTxtName().setText(this.dataSet.get(position).getName());
         viewHolder.getTxtAddress().setText(this.dataSet.get(position).getAddress());
         viewHolder.getTxtDescription().setText(this.dataSet.get(position).getDescription());
-        viewHolder.getCardPlace().setOnClickListener(view -> context.startActivity(new Intent(context, SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.MANAGE_PLACE_FRAGMENT)));
-        //TODO: add all value to personalize single component
+        viewHolder.getCardPlace().setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new ManagePlaceFragment()));
+        // TODO: add all value to personalize single component
     }
 
     @Override

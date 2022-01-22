@@ -1,17 +1,15 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import com.apuliacreativehub.eculturetool.R;
 
@@ -26,12 +24,18 @@ public class ManagePlaceFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        AppCompatActivity activity = (AppCompatActivity) requireActivity();
         Toolbar toolbar = view.findViewById(R.id.managePlaceToolbar);
-        activity.setSupportActionBar(toolbar);
-        ActionBar actionBar = activity.getSupportActionBar();
-        if (actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle(R.string.manage_place_screen_title);
+        toolbar.inflateMenu(R.menu.top_menu_manage_place);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.editPlaceInformation) {
+                // TODO: Intent to edit place information
+            }
+            return true;
+        });
+
+        toolbar.setNavigationIcon(R.mipmap.ic_arrow_right_bottom_bold);
+        toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
     }
 
 }
