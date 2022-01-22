@@ -1,12 +1,12 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,23 +15,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
+import com.apuliacreativehub.eculturetool.ui.SubActivity;
 import com.apuliacreativehub.eculturetool.ui.component.ListPathsAdapter;
-import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PlacePathsFragment extends Fragment {
 
     private View view;
 
-    protected RecyclerView mRecyclerView;
-    protected ListPathsAdapter mAdapter;
-    protected RecyclerView.LayoutManager mLayoutManager;
-    protected ArrayList<Path> mDataset;
+    private RecyclerView mRecyclerView;
+    private ListPathsAdapter mAdapter;
+    private LinearLayout containerResults;
+    private ConstraintLayout containerNoResult;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<Path> mDataset;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,11 +49,16 @@ public class PlacePathsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_place_paths, container, false);
+        containerResults = view.findViewById(R.id.resultsContainerPlacePaths);
+        containerNoResult = view.findViewById(R.id.noResultsLayout);
         mRecyclerView = view.findViewById(R.id.listPlacePaths);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ListPathsAdapter(mDataset);
         mRecyclerView.setAdapter(mAdapter);
+        ((TextView)view.findViewById(R.id.listResultsItemPathPlace)).setText(String.valueOf(mAdapter.getItemCount()));
+        if(mAdapter.getItemCount() > 0) showResult();
+        else showNoResult();
         return view;
     }
 
@@ -71,5 +80,14 @@ public class PlacePathsFragment extends Fragment {
         super.onStart();
         Button btnCreateNewPath = view.findViewById(R.id.btnCreateNewPath);
         btnCreateNewPath.setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new CreatePathFragment()));
+    }
+
+    public void showResult() {
+        containerResults.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void showNoResult() {
+        containerNoResult.setVisibility(View.VISIBLE);
     }
 }
