@@ -33,7 +33,6 @@
                 android:text="0"/>
         </LinearLayout>
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listPlacePaths"
             android:visibility="gone"

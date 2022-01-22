@@ -38,8 +38,6 @@ public class PathsFragment extends Fragment {
         this.mDataset = new ArrayList<Path>();
         this.mDataset.add(new Path("1", "Percorso standard", "Corteo Milano", null, null, null));
         this.mDataset.add(new Path("2", "Percorso Standard2", "Corteo Roma", null, null, null));
-
-
     }
 
     @Override
@@ -54,7 +52,6 @@ public class PathsFragment extends Fragment {
         mAdapter = new ListPathsAdapter(mDataset);
         mRecyclerView.setAdapter(mAdapter);
         ((TextView)view.findViewById(R.id.listResultsItemPath)).setText(String.valueOf(mAdapter.getItemCount()));
-
         if(mAdapter.getItemCount() > 0) showResult();
         else showNoResult();
         return view;

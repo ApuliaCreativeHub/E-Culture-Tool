@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +44,6 @@ public class PlacePathsFragment extends Fragment {
         this.mDataset = new ArrayList<Path>();
         this.mDataset.add(new Path("1", "Percorso standard", "Corteo Milano", null, null, null));
         this.mDataset.add(new Path("2", "Percorso Standard2", "Corteo Roma", null, null, null));
-
     }
 
     @Override
@@ -60,7 +58,6 @@ public class PlacePathsFragment extends Fragment {
         mAdapter = new ListPathsAdapter(mDataset);
         mRecyclerView.setAdapter(mAdapter);
         ((TextView)view.findViewById(R.id.listResultsItemPathPlace)).setText(String.valueOf(mAdapter.getItemCount()));
-
         if(mAdapter.getItemCount() > 0) showResult();
         else showNoResult();
         return view;
@@ -92,7 +89,6 @@ public class PlacePathsFragment extends Fragment {
     }
 
     private void showNoResult() {
-        Log.i("i", "OKOKOK");
         containerNoResult.setVisibility(View.VISIBLE);
     }
 }
