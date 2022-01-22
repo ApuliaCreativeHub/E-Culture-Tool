@@ -33,11 +33,6 @@ public class CreatePlaceFragment extends Fragment {
     private CreatePlaceViewModel createPlaceViewModel;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
 
