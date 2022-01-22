@@ -34,7 +34,7 @@ public class ManagePlaceFragment extends Fragment {
             return true;
         });
 
-        toolbar.setNavigationIcon(R.mipmap.ic_arrow_right_bottom_bold);
+        toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
     }
 

@@ -55,7 +55,7 @@ public class ShowPlacesFragment extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.showPlacesToolbar);
         toolbar.setTitle(R.string.show_places_screen_title);
 
-        toolbar.setNavigationIcon(R.mipmap.ic_arrow_right_bottom_bold);
+        toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
     }
 

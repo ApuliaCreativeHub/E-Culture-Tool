@@ -31,7 +31,7 @@ public class CreatePathFragment extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.createPathToolbar);
         toolbar.setTitle(R.string.create_place_path);
 
-        toolbar.setNavigationIcon(R.mipmap.ic_arrow_right_bottom_bold);
+        toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
     }
 }

@@ -68,7 +68,7 @@ public class PlacePathsFragment extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.showPlacePathsToolbar);
         toolbar.setTitle(R.string.show_place_default_paths);
 
-        toolbar.setNavigationIcon(R.mipmap.ic_arrow_right_bottom_bold);
+        toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
     }
 
