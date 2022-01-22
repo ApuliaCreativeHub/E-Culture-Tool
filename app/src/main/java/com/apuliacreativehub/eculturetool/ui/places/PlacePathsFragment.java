@@ -9,6 +9,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,21 +18,41 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
+import com.apuliacreativehub.eculturetool.ui.component.ListPathsAdapter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PlacePathsFragment extends Fragment {
 
     private View view;
 
+    protected RecyclerView mRecyclerView;
+    protected ListPathsAdapter mAdapter;
+    protected RecyclerView.LayoutManager mLayoutManager;
+    protected ArrayList<Path> mDataset;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Path[] data = new Path[]{};
+        this.mDataset = new ArrayList<Path>();
+        this.mDataset.add(new Path("1", "Percorso standard", "Corteo Milano", null, null, null));
+        this.mDataset.add(new Path("2", "Percorso Standard2", "Corteo Roma", null, null, null));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_place_paths, container, false);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.listPlacePaths);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new ListPathsAdapter(mDataset);
+        mRecyclerView.setAdapter(mAdapter);
         return view;
     }
 
