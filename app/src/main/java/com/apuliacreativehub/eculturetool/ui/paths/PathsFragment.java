@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +46,7 @@ public class PathsFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ListPathsAdapter(mDataset);
         mRecyclerView.setAdapter(mAdapter);
+        ((TextView)view.findViewById(R.id.listResultsItemPath)).setText(String.valueOf(mAdapter.getItemCount()));
         return view;
     }
 

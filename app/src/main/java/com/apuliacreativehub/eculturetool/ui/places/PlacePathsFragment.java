@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
@@ -62,6 +63,7 @@ public class PlacePathsFragment extends Fragment {
         toolbar.setTitle(R.string.show_place_default_paths);
         activity.setSupportActionBar(toolbar);
         ActionBar actionBar = activity.getSupportActionBar();
+        ((TextView)view.findViewById(R.id.listResultsItemPathPlace)).setText(String.valueOf(mAdapter.getItemCount()));
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
