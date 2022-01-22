@@ -1,7 +1,12 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,20 +16,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
-import com.apuliacreativehub.eculturetool.ui.SubActivity;
 import com.apuliacreativehub.eculturetool.ui.component.ListPathsAdapter;
+import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class PlacePathsFragment extends Fragment {
 
@@ -40,7 +37,7 @@ public class PlacePathsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mDataset = new ArrayList<Path>();
+        this.mDataset = new ArrayList<>();
         this.mDataset.add(new Path("1", "Percorso standard", "Corteo Milano", null, null, null));
         this.mDataset.add(new Path("2", "Percorso Standard2", "Corteo Roma", null, null, null));
     }
