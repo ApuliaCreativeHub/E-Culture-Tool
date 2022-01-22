@@ -1,7 +1,7 @@
-package com.apuliacreativehub.eculturetool.data.network;
+package com.apuliacreativehub.eculturetool.data.network.user;
 
-import com.apuliacreativehub.eculturetool.data.entity.User;
-import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
+import com.apuliacreativehub.eculturetool.data.entity.user.User;
+import com.apuliacreativehub.eculturetool.data.entity.user.UserWithToken;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

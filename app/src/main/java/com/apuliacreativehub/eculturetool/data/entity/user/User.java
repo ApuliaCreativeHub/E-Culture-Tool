@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.data.entity;
+package com.apuliacreativehub.eculturetool.data.entity.user;
 
 public class User {
     private String name;

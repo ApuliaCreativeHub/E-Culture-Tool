@@ -5,9 +5,9 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.apuliacreativehub.eculturetool.data.entity.Token;
-import com.apuliacreativehub.eculturetool.data.entity.User;
-import com.apuliacreativehub.eculturetool.data.entity.UserWithToken;
+import com.apuliacreativehub.eculturetool.data.entity.user.Token;
+import com.apuliacreativehub.eculturetool.data.entity.user.User;
+import com.apuliacreativehub.eculturetool.data.entity.user.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.data.repository.UserRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
