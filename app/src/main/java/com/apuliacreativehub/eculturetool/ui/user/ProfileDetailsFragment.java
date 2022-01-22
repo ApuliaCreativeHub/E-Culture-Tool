@@ -3,6 +3,7 @@ package com.apuliacreativehub.eculturetool.ui.user;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +16,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 
-public class ProfileDetailsFragment extends Fragment {
+public class ProfileDetailsFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
     private View view;
     private LogoutViewModel logoutViewModel;
 
@@ -70,20 +73,32 @@ public class ProfileDetailsFragment extends Fragment {
         Button btnEdit = view.findViewById(R.id.btnEdit);
         btnEdit.setOnClickListener(edit -> Navigation.findNavController(requireActivity(), R.id.navHostContainer).navigate(R.id.action_profileDetailsFragment_to_editProfileFragment));
 
-        Context context = getActivity();
-
         Button btnLogout = view.findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(logout -> showNoticeDialog());
+    }
 
-        btnLogout.setOnClickListener(logout -> {
-            if (context != null) {
-                SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.clear();
-                editor.apply();
-                logoutViewModel.logoutUser();
-                Navigation.findNavController(requireActivity(), R.id.navHostContainer).popBackStack(R.id.placesFragment, false);
-            }
-        });
+    public void showNoticeDialog() {
+        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_exit_account), "LOGOUT_ACCOUNT");
+        dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Log.i("Response", "AOPOSITIVE");
+        Context context = getActivity();
+        if (context != null) {
+            SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.clear();
+            editor.apply();
+            logoutViewModel.logoutUser();
+            Navigation.findNavController(requireActivity(), R.id.navHostContainer).popBackStack(R.id.placesFragment, false);
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Log.i("Response", "NEGATIVE");
     }
 
 }

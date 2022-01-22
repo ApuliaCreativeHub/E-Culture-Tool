@@ -7,6 +7,6 @@
 
     <string name="e50">An error occurred while processing your request</string>
     <string name="e51">Sent data was malformed</string>
-    <string name="e52">An error occurred while updating your information</string>
-    <string name="e53">An error occurred while recovering password</string>
+    <string name="e52">Email is already used or an error occurred while updating your information</string>
+    <string name="e53">Email is incorrect or an error occurred while recovering password</string>
 </resources>
