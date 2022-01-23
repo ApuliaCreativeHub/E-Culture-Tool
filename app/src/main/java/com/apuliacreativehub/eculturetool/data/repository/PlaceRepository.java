@@ -8,9 +8,12 @@ import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.network.place.PlaceRemoteDatabase;
 import com.apuliacreativehub.eculturetool.data.network.place.RemotePlaceDAO;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executor;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -24,7 +27,13 @@ public class PlaceRepository {
     }
 
     public MutableLiveData<RepositoryNotification<Void>> addPlace(Place place) {
-        Call<Void> call = remotePlaceDAO.AddPlace(place);
+        File file = new File(place.getUriImg());
+        RequestBody imgBody = RequestBody.create(MediaType.parse("image/*"), file);
+        RequestBody name = RequestBody.create(MediaType.parse("text/plain"), place.getName());
+        RequestBody address = RequestBody.create(MediaType.parse("text/plain"), place.getAddress());
+        RequestBody description = RequestBody.create(MediaType.parse("text/plain"), place.getDescription());
+        //TODO: failure picking external res
+        Call<Void> call = remotePlaceDAO.AddPlace(name, address, description, imgBody);
         MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
         executor.execute(() -> {
             try {

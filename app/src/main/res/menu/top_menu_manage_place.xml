@@ -4,6 +4,7 @@
     <item
         android:id="@+id/editPlaceInformation"
         android:title="@string/edit"
+        android:icon="@mipmap/outline_settings_black_36"
         app:showAsAction="ifRoom" />
 
 </menu>

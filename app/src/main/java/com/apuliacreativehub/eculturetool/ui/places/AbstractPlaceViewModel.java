@@ -3,7 +3,11 @@ package com.apuliacreativehub.eculturetool.ui.places;
 import android.app.Application;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+
+import com.apuliacreativehub.eculturetool.data.repository.PlaceRepository;
+import com.apuliacreativehub.eculturetool.di.ECultureTool;
 
 abstract public class AbstractPlaceViewModel extends AndroidViewModel {
     private static final int MIN_LENGTH_NAME = 2;
@@ -12,14 +16,18 @@ abstract public class AbstractPlaceViewModel extends AndroidViewModel {
     private static final int MAX_LENGTH_ADDRESS = 50;
     private static final int MIN_LENGTH_DESCRIPTION = 10;
     private static final int MAX_LENGTH_DESCRIPTION = 100;
+    protected final PlaceRepository repository;
 
     protected String name = "";
     protected String address = "";
     protected String description = "";
     protected Uri image = null;
 
-    public AbstractPlaceViewModel(Application application) {
+
+    protected AbstractPlaceViewModel(Application application) {
         super(application);
+        ECultureTool app = getApplication();
+        repository = new PlaceRepository(app.executorService);
     }
 
     public String getName() {

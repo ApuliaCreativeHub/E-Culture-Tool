@@ -9,31 +9,39 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Place {
     @PrimaryKey
-    public int id;
+    private int id;
 
     @ColumnInfo(name="uriImg")
-    public String uriImg;
+    private String uriImg;
 
     @ColumnInfo(name="name")
-    public String name;
+    private String name;
 
     @ColumnInfo(name="address")
-    public String address;
+    private String address;
 
     @ColumnInfo(name="description")
-    public String description;
+    private String description;
 
     @ColumnInfo(name="lat")
-    public String lat;
+    private String lat;
 
     @ColumnInfo(name="longit")
-    public String longit;
+    private String longit;
 
-    public Place(String uriImg, String name, String address, String description) {
+    public Place(String name, String address, String description, String uriImg) {
         this.uriImg = uriImg;
         this.name = name;
         this.address = address;
         this.description = description;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -58,6 +66,22 @@ public class Place {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLongit() {
+        return longit;
+    }
+
+    public void setLongit(String longit) {
+        this.longit = longit;
     }
 
     public String getUriImg() {
