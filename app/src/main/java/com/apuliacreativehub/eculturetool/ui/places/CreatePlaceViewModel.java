@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.lifecycle.MutableLiveData;
 
 import com.apuliacreativehub.eculturetool.data.entity.Place;
-import com.apuliacreativehub.eculturetool.data.entity.user.User;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 
 public class CreatePlaceViewModel extends AbstractPlaceViewModel {
@@ -16,6 +15,6 @@ public class CreatePlaceViewModel extends AbstractPlaceViewModel {
 
     public MutableLiveData<RepositoryNotification<Void>> addPlace(){
         Place place = new Place(name, address, description, image.getPath());
-        return repository.addPlace(place);
+        return repository.addPlace(getApplication().getApplicationContext(), place);
     }
 }
