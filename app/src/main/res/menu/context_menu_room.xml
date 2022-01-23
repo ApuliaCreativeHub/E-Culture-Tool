@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/addRoom"
+        android:title="@string/add" />
+
+    <item android:id="@+id/editRoom"
+        android:title="@string/edit" />
+
+    <item android:id="@+id/deleteRoom"
+        android:title="@string/delete" />
+
+</menu>

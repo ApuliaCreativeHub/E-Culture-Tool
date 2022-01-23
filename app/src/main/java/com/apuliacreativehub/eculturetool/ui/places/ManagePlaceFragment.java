@@ -2,39 +2,46 @@ package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.ListArtifactsAdapter;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 
 import java.util.ArrayList;
 
-public class ManagePlaceFragment extends Fragment {
-
+public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
     private static final int NUMBER_COLUMN = 2;
+    private static final int MIN_LENGTH_NAME = 2;
+    private static final int MAX_LENGTH_NAME = 25;
 
     private View view;
     private ArrayAdapter arrayOptionsAdapter;
+    private ArrayList<String> roomsDataset;
     private AutoCompleteTextView autoCompleteTextView;
     private RecyclerView recyclerGridView;
     private GridLayoutManager gridLayoutManager;
     private ListArtifactsAdapter listArtifactsAdapter;
     private ArrayList<String> mDataset;
+    private boolean selected = false;
+    private boolean add;
+    private int roomId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,24 +86,13 @@ public class ManagePlaceFragment extends Fragment {
 
     private void setSelectElement() {
         //TODO: Fetch room
-        arrayOptionsAdapter = new ArrayAdapter(getContext(), R.layout.item_select_room, new String[]{"Stanza A", "Stanza B", " Stanza C"});
+        roomsDataset = new ArrayList<>();
+        roomsDataset.add("Stanza A");
+        roomsDataset.add("Stanza B");
+        roomsDataset.add("Stanza C");
+        arrayOptionsAdapter = new ArrayAdapter(getContext(), R.layout.item_select_room, roomsDataset);
         autoCompleteTextView = view.findViewById(R.id.selectRoomAutoComplete);
         autoCompleteTextView.setAdapter(arrayOptionsAdapter);
-
-        autoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                Log.i("ENTER", "OK");
-                return false;
-            }
-        });
-
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i("CLICK", "OK");
-            }
-        });
     }
 
     private void setDynamicRecycleView() {
@@ -105,6 +101,101 @@ public class ManagePlaceFragment extends Fragment {
         recyclerGridView.setLayoutManager(gridLayoutManager);
         listArtifactsAdapter = new ListArtifactsAdapter(mDataset);
         recyclerGridView.setAdapter(listArtifactsAdapter);
+    }
+
+    public void onStart() {
+        super.onStart();
+
+        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
+            if(autoCompleteTextView.getInputType() != EditorInfo.TYPE_NULL)
+                autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
+            selected = true;
+            roomId = position;
+        });
+
+        autoCompleteTextView.setOnEditorActionListener((textView, i, keyEvent) -> {
+            String name = textView.getText().toString();
+            if(checkRoomName(name)) {
+                autoCompleteTextView.setError(null);
+                roomsDataset.add(name);
+                if(add) {
+                    // TODO: Insert Room API
+                } else {
+                    roomsDataset.remove(roomId);
+                    // TODO: Update Room API
+                }
+            } else {
+                autoCompleteTextView.setError(getString(R.string.invalid_room));
+            }
+
+            arrayOptionsAdapter.clear();
+            arrayOptionsAdapter.addAll(roomsDataset);
+            arrayOptionsAdapter.notifyDataSetChanged();
+
+            autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
+            autoCompleteTextView.setText("");
+
+            return true;
+        });
+
+        Button btnRoomOptions = view.findViewById(R.id.btnRoomOptions);
+        btnRoomOptions.setOnClickListener(view -> {
+            showMenu(view, R.menu.context_menu_room);
+        });
+    }
+
+    private boolean checkRoomName(String name) {
+        return name.length() >= MIN_LENGTH_NAME && name.length() <= MAX_LENGTH_NAME;
+    }
+
+    private void showMenu(View view, int menu) {
+        PopupMenu popupMenu = new PopupMenu(getContext(), view);
+        popupMenu.inflate(menu);
+
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            switch(menuItem.getItemId()) {
+                case R.id.addRoom:
+                    add = true;
+                    autoCompleteTextView.setText("");
+                    autoCompleteTextView.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+                    break;
+                case R.id.editRoom:
+                    if(selected) {
+                        add = false;
+                        selected = false;
+                        autoCompleteTextView.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+                    }
+                    break;
+                case R.id.deleteRoom:
+                    showNoticeDialog();
+                    break;
+            }
+            return true;
+        });
+
+        popupMenu.show();
+    }
+
+    public void showNoticeDialog() {
+        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_room), "DELETE_ROOM");
+        dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Log.i("Response", "AOPOSITIVE");
+
+        if(selected) {
+            roomsDataset.remove(roomId);
+            autoCompleteTextView.setText("");
+            selected = false;
+            // TODO: Delete Room API
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Log.i("Response", "NEGATIVE");
     }
 
 }

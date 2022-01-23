@@ -39,7 +39,7 @@ abstract public class AbstractPlaceViewModel extends AndroidViewModel {
     }
 
     public boolean isNameCorrect(String name) {
-        return name.length() > MIN_LENGTH_NAME && name.length() < MAX_LENGTH_NAME;
+        return name.length() >= MIN_LENGTH_NAME && name.length() <= MAX_LENGTH_NAME;
     }
 
     public String getAddress() {
@@ -51,7 +51,7 @@ abstract public class AbstractPlaceViewModel extends AndroidViewModel {
     }
 
     public boolean isAddressCorrect(String address) {
-        return address.length() > MIN_LENGTH_ADDRESS && address.length() < MAX_LENGTH_ADDRESS;
+        return address.length() >= MIN_LENGTH_ADDRESS && address.length() <= MAX_LENGTH_ADDRESS;
     }
 
     public String getDescription() {
@@ -63,7 +63,7 @@ abstract public class AbstractPlaceViewModel extends AndroidViewModel {
     }
 
     public boolean isDescriptionCorrect(String description) {
-        return description.length() > MIN_LENGTH_DESCRIPTION && description.length() < MAX_LENGTH_DESCRIPTION;
+        return description.length() >= MIN_LENGTH_DESCRIPTION && description.length() <= MAX_LENGTH_DESCRIPTION;
     }
 
     public Uri getImage() {

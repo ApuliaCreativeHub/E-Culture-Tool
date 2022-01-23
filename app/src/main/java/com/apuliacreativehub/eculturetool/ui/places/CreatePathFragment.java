@@ -20,7 +20,7 @@ public class CreatePathFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    @Override //TODO: SOSTITUIRE
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_create_path, container, false);
     }
@@ -33,4 +33,5 @@ public class CreatePathFragment extends Fragment {
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
     }
+
 }
