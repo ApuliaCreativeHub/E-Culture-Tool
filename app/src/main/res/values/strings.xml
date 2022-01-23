@@ -38,6 +38,9 @@
     <string name="rationale_location_permission_message">You will now be asked to consent location permission to show you relevant culture places in your area</string>
     <string name="rationale_cancel_button">No, thanks</string>
     <string name="rationale_ok_button">Got it!</string>
+    <string name="rationale_read_external_storage_title">We need your permission to access external storage</string>
+    <string name="rationale_read_external_storage_message">You will now be asked to consent external storage permission to allow you pick photo of your place</string>
+
 
     <string name="confirm_password">Confirm Password</string>
     <string name="sign_in">Already have an account? Sign In</string>
