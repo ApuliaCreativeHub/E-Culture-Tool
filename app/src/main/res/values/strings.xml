@@ -135,4 +135,6 @@
     <string name="place_details">Place Details</string>
     <string name="change_place_information">Change Place Information</string>
     <string name="delete_your_place">Delete Your Place</string>
+    <string name="scan_qrcode">Scan QrCode</string>
+    <string name="create_new_artifact">Create new artifact</string>
 </resources>
