@@ -109,6 +109,10 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
             if(autoCompleteTextView.getInputType() != EditorInfo.TYPE_NULL)
                 autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
+
+            if(autoCompleteTextView.getError() != null)
+                autoCompleteTextView.setError(null);
+
             selected = true;
             roomId = position;
         });
