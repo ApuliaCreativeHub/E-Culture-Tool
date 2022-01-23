@@ -62,8 +62,13 @@ public class ManagePlaceFragment extends Fragment {
         toolbar.setTitle(R.string.manage_place_screen_title);
         toolbar.inflateMenu(R.menu.top_menu_manage_place);
         toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.editPlaceInformation) {
-                TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new EditPlaceFragment());
+            switch(item.getItemId()) {
+                case R.id.editPlaceInformation:
+                    TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new EditPlaceFragment());
+                    break;
+                case R.id.editArtifactByQrCode:
+                    // TODO: Scan QR Code Here (Intent with camera)
+                    break;
             }
             return true;
         });
@@ -101,4 +106,5 @@ public class ManagePlaceFragment extends Fragment {
         listArtifactsAdapter = new ListArtifactsAdapter(mDataset);
         recyclerGridView.setAdapter(listArtifactsAdapter);
     }
+
 }
