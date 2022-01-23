@@ -20,7 +20,8 @@ public class CreatePlaceViewModel extends AbstractPlaceViewModel {
 
     public MutableLiveData<RepositoryNotification<Void>> addPlace(){
         Place place = new Place(name, address, description, getRealPathFromURI(getApplication().getApplicationContext(), image));
-        return repository.addPlace(getApplication().getApplicationContext(), place);
+        Log.i("pathUri", place.getUriImg());
+        return repository.addPlace(place);
     }
 
     private String getRealPathFromURI(Context context, Uri contentUri) {

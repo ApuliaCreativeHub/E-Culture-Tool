@@ -29,7 +29,7 @@ public class PlaceRepository {
         this.executor = executor;
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> addPlace(Context context, Place place) {
+    public MutableLiveData<RepositoryNotification<Void>> addPlace(Place place) {
         MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
             RequestBody imgBody = RequestBody.create( "file://" + place.getUriImg(), MediaType.parse("image/*"));
             RequestBody name = RequestBody.create(place.getName(), MediaType.parse("text/plain"));
