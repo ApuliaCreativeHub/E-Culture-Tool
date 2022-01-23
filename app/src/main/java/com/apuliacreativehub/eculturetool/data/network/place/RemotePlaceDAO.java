@@ -12,9 +12,10 @@ import retrofit2.http.Part;
 
 public interface RemotePlaceDAO {
     @Multipart
+    @Headers("Content-Type: multipart/form-data")
     @POST("user/add")
     Call<Void> AddPlace( @Part("name")RequestBody name,
                         @Part("address")RequestBody address,
                         @Part("description")RequestBody description,
-                         @Part("file") RequestBody file);
+                         @Part("img") RequestBody file);
 }

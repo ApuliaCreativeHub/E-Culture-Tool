@@ -1,5 +1,7 @@
 package com.apuliacreativehub.eculturetool.data.repository;
 
+import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -8,8 +10,9 @@ import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.network.place.PlaceRemoteDatabase;
 import com.apuliacreativehub.eculturetool.data.network.place.RemotePlaceDAO;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
@@ -27,34 +30,32 @@ public class PlaceRepository {
     }
 
     public MutableLiveData<RepositoryNotification<Void>> addPlace(Place place) {
-        File file = new File(place.getUriImg());
-        RequestBody imgBody = RequestBody.create(MediaType.parse("image/*"), file);
-        RequestBody name = RequestBody.create(MediaType.parse("text/plain"), place.getName());
-        RequestBody address = RequestBody.create(MediaType.parse("text/plain"), place.getAddress());
-        RequestBody description = RequestBody.create(MediaType.parse("text/plain"), place.getDescription());
-        //TODO: failure picking external res
-        Call<Void> call = remotePlaceDAO.AddPlace(name, address, description, imgBody);
         MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
-        executor.execute(() -> {
-            try {
-                Response<Void> response = call.execute();
-                Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
-                if(response.isSuccessful()){
-                    repositoryNotification.setData(response.body());
-                }else{
-                    if(response.errorBody()!=null){
-                        repositoryNotification.setErrorMessage(response.errorBody().string());
+            RequestBody imgBody = RequestBody.create( "file://" + place.getUriImg(), MediaType.parse("image/*"));
+            RequestBody name = RequestBody.create(place.getName(), MediaType.parse("text/plain"));
+            RequestBody address = RequestBody.create( place.getAddress(), MediaType.parse("text/plain"));
+            RequestBody description = RequestBody.create( place.getDescription(), MediaType.parse("text/plain"));
+            Call<Void> call = remotePlaceDAO.AddPlace(name, address, description, imgBody);
+            executor.execute(() -> {
+                try {
+                    Response<Void> response = call.execute();
+                    Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    if (response.isSuccessful()) {
+                        repositoryNotification.setData(response.body());
+                    } else {
+                        if (response.errorBody() != null) {
+                            repositoryNotification.setErrorMessage(response.errorBody().string());
+                        }
                     }
+                    addResult.postValue(repositoryNotification);
+                } catch (IOException ioe) {
+                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    repositoryNotification.setException(ioe);
+                    addResult.postValue(repositoryNotification);
+                    Log.e("RETROFITERROR", ioe.getMessage());
                 }
-                addResult.postValue(repositoryNotification);
-            } catch (IOException ioe) {
-                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
-                repositoryNotification.setException(ioe);
-                addResult.postValue(repositoryNotification);
-                Log.e("RETROFITERROR", ioe.getMessage());
-            }
-        });
+            });
         return addResult;
     }
 }
