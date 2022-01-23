@@ -31,13 +31,10 @@ public class PlaceRepository {
 
     public MutableLiveData<RepositoryNotification<Void>> addPlace(Context context, Place place) {
         MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
-        try {
-            InputStream image = context.getContentResolver().openInputStream(Uri.parse(place.getUriImg()));
-            RequestBody imgBody = RequestBody.create(MediaType.parse("image/*"), image.read());
-            RequestBody name = RequestBody.create(MediaType.parse("text/plain"), place.getName());
-            RequestBody address = RequestBody.create(MediaType.parse("text/plain"), place.getAddress());
-            RequestBody description = RequestBody.create(MediaType.parse("text/plain"), place.getDescription());
-            //TODO: failure picking external res
+            RequestBody imgBody = RequestBody.create( "file://" + place.getUriImg(), MediaType.parse("image/*"));
+            RequestBody name = RequestBody.create(place.getName(), MediaType.parse("text/plain"));
+            RequestBody address = RequestBody.create( place.getAddress(), MediaType.parse("text/plain"));
+            RequestBody description = RequestBody.create( place.getDescription(), MediaType.parse("text/plain"));
             Call<Void> call = remotePlaceDAO.AddPlace(name, address, description, imgBody);
             executor.execute(() -> {
                 try {
@@ -59,15 +56,6 @@ public class PlaceRepository {
                     Log.e("RETROFITERROR", ioe.getMessage());
                 }
             });
-        } catch (FileNotFoundException e) {
-            RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
-            repositoryNotification.setException(e);
-            addResult.postValue(repositoryNotification);
-        } catch (IOException e) {
-            RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
-            repositoryNotification.setException(e);
-            addResult.postValue(repositoryNotification);
-        }
         return addResult;
     }
 }
