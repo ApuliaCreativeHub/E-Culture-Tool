@@ -95,6 +95,7 @@
     <string name="invalid_place_address">Please enter an address between 5 and 50 characters</string>
     <string name="invalid_place_description">Please enter a description between 10 and 100 characters</string>
     <string name="pick_place_image">Please pick a representative image of your place from your gallery</string>
+    <string name="pick_object_image">Please pick a representative image of your object from your gallery</string>
     <string name="show_place_default_paths">Place Paths</string>
     <string name="create_place_path">Create Path</string>
     <string name="btn_add_path">Create a new path</string>
@@ -133,4 +134,7 @@
     <string name="search_for_objects_in_the_path">Search for objects in the path</string>
     <string name="select_filters">Select Filters</string>
     <string name="place_name_and_address">Place name and place address</string>
+    <string name="create_object_title_screen">Create Object</string>
+    <string name="object_information">Object Information</string>
+    <string name="room_not_selected">Please select a room</string>
 </resources>

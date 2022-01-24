@@ -41,4 +41,5 @@ public class CreatePlaceViewModel extends AbstractPlaceViewModel {
             }
         }
     }
+
 }
