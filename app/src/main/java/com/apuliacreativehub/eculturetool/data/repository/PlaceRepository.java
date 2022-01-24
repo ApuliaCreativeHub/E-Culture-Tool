@@ -90,7 +90,7 @@ public class PlaceRepository {
                     Response<Void> response = call.execute();
                     if (response.isSuccessful()) {
                         repositoryNotification.setData(response.body());
-
+                        localPlaceDAO.deletePlace(place);
                     } else {
                         if (response.errorBody() != null) {
                             repositoryNotification.setErrorMessage(response.errorBody().string());
