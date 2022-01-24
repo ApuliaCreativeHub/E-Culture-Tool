@@ -69,4 +69,31 @@ public class PlaceRepository {
 
         return addResult;
     }
+
+    public MutableLiveData<RepositoryNotification<Void>> deletePlace(Place place) {
+        MutableLiveData<RepositoryNotification<Void>> deleteResult = new MutableLiveData<>();
+        Call<Void> call = remotePlaceDAO.deletePlace(place);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                try {
+                    Response<Void> response = call.execute();
+                    if (response.isSuccessful()) {
+                        repositoryNotification.setData(response.body());
+                    } else {
+                        if (response.errorBody() != null) {
+                            repositoryNotification.setErrorMessage(response.errorBody().string());
+                        }
+                    }
+                    Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                } catch (IOException ioe) {
+                    repositoryNotification.setException(ioe);
+                    Log.e("RETROFITERROR", ioe.getMessage());
+                }
+                deleteResult.postValue(repositoryNotification);
+            }
+        });
+        return deleteResult;
+    }
 }
