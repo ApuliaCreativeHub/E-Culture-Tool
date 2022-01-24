@@ -1,9 +1,8 @@
 package com.apuliacreativehub.eculturetool.data.entity;
 
-import android.net.Uri;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -29,11 +28,27 @@ public class Place {
     @ColumnInfo(name="longit")
     private String longit;
 
+    private String normalSizeImg;
+    private String thumbnail;
+
+    public Place(){
+
+    }
+    @Ignore
     public Place(String name, String address, String description, String uriImg) {
         this.uriImg = uriImg;
         this.name = name;
         this.address = address;
         this.description = description;
+    }
+
+    @Ignore
+    public Place(String name, String address, String description, String normalSizeImg, String thumbnail) {
+        this.name = name;
+        this.address = address;
+        this.description = description;
+        this.normalSizeImg = normalSizeImg;
+        this.thumbnail = thumbnail;
     }
 
     public int getId() {
@@ -92,4 +107,19 @@ public class Place {
         this.uriImg = uriImg;
     }
 
+    public String getNormalSizeImg() {
+        return normalSizeImg;
+    }
+
+    public void setNormalSizeImg(String normalSizeImg) {
+        this.normalSizeImg = normalSizeImg;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
 }

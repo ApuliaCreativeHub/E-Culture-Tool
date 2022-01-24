@@ -7,14 +7,15 @@ import androidx.lifecycle.MutableLiveData;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 
-public class EditPlaceViewModel extends AbstractPlaceViewModel {
+import java.util.ArrayList;
 
-    public EditPlaceViewModel(Application application) {
+public class ShowPlacesViewModel extends AbstractPlaceViewModel{
+
+    public ShowPlacesViewModel(Application application) {
         super(application);
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> deletePlace(Place place) {
-        return repository.deletePlace(place);
+    public MutableLiveData<RepositoryNotification<ArrayList<Place>>> getPlaces(){
+        return repository.getYourPlaces();
     }
-
 }
