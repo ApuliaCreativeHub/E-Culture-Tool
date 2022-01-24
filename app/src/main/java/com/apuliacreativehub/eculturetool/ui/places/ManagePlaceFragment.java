@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.ListArtifactsAdapter;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
@@ -42,6 +43,12 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     private boolean selected = false;
     private boolean add;
     private int roomId;
+    private final Place place;
+
+    public ManagePlaceFragment(Place place) {
+        super();
+        this.place = place;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +78,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         toolbar.setOnMenuItemClickListener(item -> {
             switch(item.getItemId()) {
                 case R.id.editPlaceInformation:
-                    TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new EditPlaceFragment());
+                    TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new EditPlaceFragment(place));
                     break;
                 case R.id.editArtifactByQrCode:
                     // TODO: Scan QR Code Here (Intent with camera)
