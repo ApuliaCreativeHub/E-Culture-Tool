@@ -40,7 +40,7 @@ public class PlaceRepository {
             RequestBody name = RequestBody.create(place.getName(), MediaType.parse("text/plain"));
             RequestBody address = RequestBody.create(place.getAddress(), MediaType.parse("text/plain"));
             RequestBody description = RequestBody.create(place.getDescription(), MediaType.parse("text/plain"));
-            Call<Void> call = remotePlaceDAO.AddPlace(name, address, description, imgPart);
+            Call<Void> call = remotePlaceDAO.addPlace(name, address, description, imgPart);
             executor.execute(() -> {
                 try {
                     Response<Void> response = call.execute();
@@ -100,7 +100,7 @@ public class PlaceRepository {
 
     public MutableLiveData<RepositoryNotification<ArrayList<Place>>> getYourPlaces() {
         MutableLiveData<RepositoryNotification<ArrayList<Place>>> getResult = new MutableLiveData<>();
-        Call<ArrayList<Place>> call = remotePlaceDAO.GetYourPlaces();
+        Call<ArrayList<Place>> call = remotePlaceDAO.getYourPlaces();
         executor.execute(() -> {
             try {
                 Response<ArrayList<Place>> response = call.execute();
