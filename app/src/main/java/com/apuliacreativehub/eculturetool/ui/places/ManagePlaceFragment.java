@@ -24,6 +24,7 @@ import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.ListArtifactsAdapter;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -53,16 +54,18 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: Read Object API
         mDataset = new ArrayList<>();
         mDataset.add("CIAO");
         mDataset.add("CIAO1");
         mDataset.add("CIAO2");
         mDataset.add("CIAO3");
         mDataset.add("CIAO4");
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_manage_place, container, false);
     }
 
@@ -92,7 +95,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     }
 
     private void setSelectElement() {
-        //TODO: Fetch room
+        //TODO: Read Room API
         roomsDataset = new ArrayList<>();
         roomsDataset.add("Stanza A");
         roomsDataset.add("Stanza B");
@@ -150,9 +153,10 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         });
 
         Button btnRoomOptions = view.findViewById(R.id.btnRoomOptions);
-        btnRoomOptions.setOnClickListener(view -> {
-            showMenu(view, R.menu.context_menu_room);
-        });
+        btnRoomOptions.setOnClickListener(view -> showMenu(view, R.menu.context_menu_room));
+
+        FloatingActionButton btnCreateObject = view.findViewById(R.id.btnCreateObject);
+        btnCreateObject.setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new CreateObjectFragment()));
     }
 
     private boolean checkRoomName(String name) {

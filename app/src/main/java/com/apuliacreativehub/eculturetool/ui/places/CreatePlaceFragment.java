@@ -76,9 +76,7 @@ public class CreatePlaceFragment extends Fragment {
         super.onStart();
 
         imgPlace = view.findViewById(R.id.imgPlace);
-        imgPlace.setOnClickListener(view -> {
-            requestPermission();
-        });
+        imgPlace.setOnClickListener(view -> requestPermission());
 
         txtName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -245,10 +243,10 @@ public class CreatePlaceFragment extends Fragment {
             txtName.setText(createPlaceViewModel.getName());
 
         if(!createPlaceViewModel.getAddress().equals(""))
-            txtName.setText(createPlaceViewModel.getAddress());
+            txtAddress.setText(createPlaceViewModel.getAddress());
 
         if(!createPlaceViewModel.getDescription().equals(""))
-            txtName.setText(createPlaceViewModel.getDescription());
+            txtDescription.setText(createPlaceViewModel.getDescription());
     }
 
 }
