@@ -37,8 +37,8 @@ public class ShowPlacesFragment extends Fragment {
 
 
         this.mDataset = new ArrayList<>();
-        this.mDataset.add(new Place(null, "Prova1", "Via Roma, 23", "Primo museo di Modugno"));
-        this.mDataset.add(new Place(null, "Prova2", "Via Adige, 5b", "Secondo museo di Modugno"));
+        this.mDataset.add(new Place("Prova1", "Via Roma, 23", "Primo museo di Modugno", ""));
+        this.mDataset.add(new Place("Prova2", "Via Adige, 5b", "Secondo museo di Modugno", ""));
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.listPlaceCards);
         mLayoutManager = new LinearLayoutManager(getActivity());
