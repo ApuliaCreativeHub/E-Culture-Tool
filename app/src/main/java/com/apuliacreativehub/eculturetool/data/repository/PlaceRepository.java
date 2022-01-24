@@ -90,6 +90,7 @@ public class PlaceRepository {
                     Response<Void> response = call.execute();
                     if (response.isSuccessful()) {
                         repositoryNotification.setData(response.body());
+
                     } else {
                         if (response.errorBody() != null) {
                             repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -119,7 +120,7 @@ public class PlaceRepository {
         return getResult;
     }
 
-    private void syncLocalPlacesWithRemote(List<Place> places) {
+    private void saveRemotePlacesToLocal(List<Place> places) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -141,12 +142,12 @@ public class PlaceRepository {
                 RepositoryNotification<ArrayList<Place>> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(response.body());
+                    saveRemotePlacesToLocal(repositoryNotification.getData());
                 } else {
                     if (response.errorBody() != null) {
                         repositoryNotification.setErrorMessage(response.errorBody().string());
                     }
                 }
-                syncLocalPlacesWithRemote(repositoryNotification.getData());
                 getResult.postValue(repositoryNotification);
             } catch (IOException ioe) {
                 RepositoryNotification<ArrayList<Place>> repositoryNotification = new RepositoryNotification<>();
