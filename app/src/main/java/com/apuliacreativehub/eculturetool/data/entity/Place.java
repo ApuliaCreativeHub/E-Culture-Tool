@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 @Entity
 public class Place {
     @PrimaryKey
@@ -16,24 +18,26 @@ public class Place {
     @ColumnInfo(name="name")
     private String name;
 
-    @ColumnInfo(name="address")
+    @ColumnInfo(name = "address")
     private String address;
 
-    @ColumnInfo(name="description")
+    @ColumnInfo(name = "description")
     private String description;
 
-    @ColumnInfo(name="lat")
+    @ColumnInfo(name = "lat")
     private String lat;
 
-    @ColumnInfo(name="longit")
-    private String longit;
+    @SerializedName("long")
+    @ColumnInfo(name = "long")
+    private String lon;
 
     private String normalSizeImg;
     private String thumbnail;
 
-    public Place(){
+    public Place() {
 
     }
+
     @Ignore
     public Place(String name, String address, String description, String uriImg) {
         this.uriImg = uriImg;
@@ -91,12 +95,12 @@ public class Place {
         this.lat = lat;
     }
 
-    public String getLongit() {
-        return longit;
+    public String getLon() {
+        return lon;
     }
 
-    public void setLongit(String longit) {
-        this.longit = longit;
+    public void setLon(String lon) {
+        this.lon = lon;
     }
 
     public String getUriImg() {
