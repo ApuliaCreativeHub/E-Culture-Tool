@@ -1,18 +1,22 @@
 package com.apuliacreativehub.eculturetool.data.repository;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
+import com.apuliacreativehub.eculturetool.data.local.LocalPlaceDAO;
 import com.apuliacreativehub.eculturetool.data.network.place.PlaceRemoteDatabase;
 import com.apuliacreativehub.eculturetool.data.network.place.RemotePlaceDAO;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
@@ -24,10 +28,14 @@ import retrofit2.Response;
 
 public class PlaceRepository {
     private final RemotePlaceDAO remotePlaceDAO;
+    private final LocalPlaceDAO localPlaceDAO;
     private final Executor executor;
+    private final ConnectivityManager connectivityManager;
 
-    public PlaceRepository(Executor executor) {
+    public PlaceRepository(Executor executor, LocalDatabase localDatabase, ConnectivityManager connectivityManager) {
         remotePlaceDAO = PlaceRemoteDatabase.provideRemotePlaceDAO();
+        localPlaceDAO = localDatabase.placeDAO();
+        this.connectivityManager = connectivityManager;
         this.executor = executor;
     }
 
@@ -99,6 +107,31 @@ public class PlaceRepository {
     }
 
     public MutableLiveData<RepositoryNotification<ArrayList<Place>>> getYourPlaces() {
+        MutableLiveData<RepositoryNotification<ArrayList<Place>>> getResult;
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            getResult = getYourPlacesFromRemoteDatabase();
+        } else {
+            Log.d("SHOULDFETCH", "local");
+            getResult = getYourPlacesFromLocalDatabase();
+        }
+
+        return getResult;
+    }
+
+    private void syncLocalPlacesWithRemote(List<Place> places) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (Place place : places) {
+                    if (localPlaceDAO.getPlaceById(1) != null) localPlaceDAO.insertPlace(place);
+                    else localPlaceDAO.updatePlace(place);
+                }
+            }
+        });
+    }
+
+    private MutableLiveData<RepositoryNotification<ArrayList<Place>>> getYourPlacesFromRemoteDatabase() {
         MutableLiveData<RepositoryNotification<ArrayList<Place>>> getResult = new MutableLiveData<>();
         Call<ArrayList<Place>> call = remotePlaceDAO.getYourPlaces();
         executor.execute(() -> {
@@ -113,6 +146,7 @@ public class PlaceRepository {
                         repositoryNotification.setErrorMessage(response.errorBody().string());
                     }
                 }
+                syncLocalPlacesWithRemote(repositoryNotification.getData());
                 getResult.postValue(repositoryNotification);
             } catch (IOException ioe) {
                 RepositoryNotification<ArrayList<Place>> repositoryNotification = new RepositoryNotification<>();
@@ -121,6 +155,20 @@ public class PlaceRepository {
                 Log.e("RETROFITERROR", ioe.getMessage());
             }
         });
+        return getResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<ArrayList<Place>>> getYourPlacesFromLocalDatabase() {
+        MutableLiveData<RepositoryNotification<ArrayList<Place>>> getResult = new MutableLiveData<>();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                RepositoryNotification<ArrayList<Place>> repositoryNotification = new RepositoryNotification<>();
+                repositoryNotification.setData((ArrayList<Place>) localPlaceDAO.getAllPlaces());
+                getResult.postValue(repositoryNotification);
+            }
+        });
+
         return getResult;
     }
 }

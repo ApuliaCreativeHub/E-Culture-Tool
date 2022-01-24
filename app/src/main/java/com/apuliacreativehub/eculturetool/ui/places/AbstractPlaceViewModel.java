@@ -1,9 +1,10 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.apuliacreativehub.eculturetool.data.repository.PlaceRepository;
@@ -27,7 +28,7 @@ abstract public class AbstractPlaceViewModel extends AndroidViewModel {
     protected AbstractPlaceViewModel(Application application) {
         super(application);
         ECultureTool app = getApplication();
-        repository = new PlaceRepository(app.executorService);
+        repository = new PlaceRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
     }
 
     public String getName() {
