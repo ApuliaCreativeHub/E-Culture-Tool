@@ -75,7 +75,7 @@ public class CardPlaceAdapter extends RecyclerView.Adapter<CardPlaceAdapter.View
         viewHolder.getTxtName().setText(this.dataSet.get(position).getName());
         viewHolder.getTxtAddress().setText(this.dataSet.get(position).getAddress());
         viewHolder.getTxtDescription().setText(this.dataSet.get(position).getDescription());
-        viewHolder.getCardPlace().setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new ManagePlaceFragment()));
+        viewHolder.getCardPlace().setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new ManagePlaceFragment(this.dataSet.get(position))));
         // TODO: add all value to personalize single component
     }
 

@@ -4,14 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,8 +14,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.ErrorDialog;
 
@@ -35,6 +36,11 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
     private EditText txtAddress;
     private EditText txtDescription;
     private EditPlaceViewModel editPlaceViewModel;
+    private final Place place;
+
+    public EditPlaceFragment(Place place) {
+        this.place = place;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +51,11 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // TODO: Set image with Glide
+        ((TextView) view.findViewById(R.id.txtName)).setText(place.getName());
+        ((TextView) view.findViewById(R.id.txtAddress)).setText(place.getAddress());
+        ((TextView) view.findViewById(R.id.txtDescription)).setText(place.getDescription());
 
         Toolbar toolbar = view.findViewById(R.id.editPlaceToolbar);
         toolbar.setTitle(R.string.edit_place_screen_title);
