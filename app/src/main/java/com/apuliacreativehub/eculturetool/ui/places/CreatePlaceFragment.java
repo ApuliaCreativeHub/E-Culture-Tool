@@ -57,6 +57,7 @@ public class CreatePlaceFragment extends Fragment {
             Log.d("CALLBACK", String.valueOf(notification.getData()));
             if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
                 Log.i("addPlace", "OK");
+
             } else {
                 Log.i("addPlace", "Not OK");
                 Log.d("Dialog", "show dialog here");

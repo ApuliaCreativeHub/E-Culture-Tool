@@ -10,13 +10,14 @@ import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.network.place.PlaceRemoteDatabase;
 import com.apuliacreativehub.eculturetool.data.network.place.RemotePlaceDAO;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okio.ByteString;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -29,13 +30,16 @@ public class PlaceRepository {
         this.executor = executor;
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> addPlace(Place place) {
+    public MutableLiveData<RepositoryNotification<Void>> addPlace(Context context, Place place) {
         MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
-            RequestBody imgBody = RequestBody.create( "file://" + place.getUriImg(), MediaType.parse("image/*"));
+        try {
+            InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse("file://" + place.getUriImg()));
+            RequestBody imgBody = RequestBody.create(ByteString.read(imgStream, imgStream.available()), MediaType.parse("image/*"));
+            MultipartBody.Part imgPart = MultipartBody.Part.createFormData("img", "img.png", imgBody);
             RequestBody name = RequestBody.create(place.getName(), MediaType.parse("text/plain"));
-            RequestBody address = RequestBody.create( place.getAddress(), MediaType.parse("text/plain"));
-            RequestBody description = RequestBody.create( place.getDescription(), MediaType.parse("text/plain"));
-            Call<Void> call = remotePlaceDAO.AddPlace(name, address, description, imgBody);
+            RequestBody address = RequestBody.create(place.getAddress(), MediaType.parse("text/plain"));
+            RequestBody description = RequestBody.create(place.getDescription(), MediaType.parse("text/plain"));
+            Call<Void> call = remotePlaceDAO.AddPlace(name, address, description, imgPart);
             executor.execute(() -> {
                 try {
                     Response<Void> response = call.execute();
@@ -56,6 +60,13 @@ public class PlaceRepository {
                     Log.e("RETROFITERROR", ioe.getMessage());
                 }
             });
+        } catch (IOException ioe) {
+            RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+            repositoryNotification.setException(ioe);
+            addResult.postValue(repositoryNotification);
+            Log.e("RETROFITERROR", ioe.getMessage());
+        }
+
         return addResult;
     }
 }
