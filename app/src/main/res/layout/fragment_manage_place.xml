@@ -39,18 +39,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
+                    android:labelFor="@id/selectRoomAutoComplete"
                     android:popupElevation="16dp"
-                    android:labelFor="@id/selectRoomAutoComplete" />
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/btnRoomOptions"
+                style="@style/Widget.Material3.Button.IconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@mipmap/outline_more_vert_black_48"
                 app:iconGravity="textEnd"
-                style="@style/Widget.Material3.Button.IconButton"/>
+                tools:ignore="SpeakableTextPresentCheck" />
 
         </LinearLayout>
 

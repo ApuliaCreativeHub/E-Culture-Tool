@@ -27,7 +27,7 @@
             <ImageView
                 android:layout_width="140dp"
                 android:layout_height="140dp"
-                android:contentDescription="text blabla"
+                android:contentDescription="@string/object_image"
                 android:scaleType="centerCrop"
                 android:layout_gravity="center"
                 app:srcCompat="@mipmap/outline_image_black_48" />
@@ -36,10 +36,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:gravity="center">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Vaso di terra"
+                    android:text="@string/name"
                     android:textAlignment="center" />
 
             </LinearLayout>
@@ -49,19 +50,24 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center">
+
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/edit"
-                    style="?attr/borderlessButtonStyle"
-                    />
+                    style="?attr/borderlessButtonStyle" />
+
                 <Button
+                    style="@style/Widget.Material3.Button.IconButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    style="@style/Widget.Material3.Button.IconButton"
                     app:icon="@mipmap/outline_info_black_36"
-                    />
+                    tools:ignore="SpeakableTextPresentCheck" />
+
             </LinearLayout>
+
         </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

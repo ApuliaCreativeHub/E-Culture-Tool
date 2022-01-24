@@ -4,7 +4,6 @@
     <string name="e41">A user with the given email already exists</string>
     <string name="e42">A user with the given email does not exist</string>
     <string name="e43">Email or password are incorrect</string>
-
     <string name="e50">An error occurred while processing your request</string>
     <string name="e51">Sent data was malformed</string>
     <string name="e52">Email is already used or an error occurred while updating your information</string>

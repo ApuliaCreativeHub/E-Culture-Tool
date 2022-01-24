@@ -6,11 +6,9 @@
     <string name="nav_paths">Paths</string>
     <string name="nav_places">Places</string>
     <string name="nav_user">User</string>
-
     <string name="search">Search</string>
     <string name="filter">Filter</string>>
     <string name="filter_description">Select a filter</string>
-
     <string name="list_paths_results">Results:</string>
     <string name="list_paths_no_results">No results found</string>
     <string name="list_paths_no_results_description">No paths has been found</string>
@@ -19,36 +17,28 @@
     <string name="list_paths_filter_place">Search by place:</string>
     <string name="list_paths_filter_date">Search by date used:</string>
     <string name="apply_filter">APPLY FILTER</string>
-
     <string name="museum">Museum</string>
     <string name="welcome">Welcome</string>
     <string name="new_account">Create a new account</string>
     <string name="register">Register</string>
-
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="forget_password">Forget Password?</string>
     <string name="login">Login</string>
     <string name="sign_up">Don\'t have an account? Sign Up</string>
-
     <string name="options_user">Account details</string>
     <string name="options_logout">Logout</string>
-
     <string name="rationale_location_permission_title">We need your permission to access location</string>
     <string name="rationale_location_permission_message">You will now be asked to consent location permission to show you relevant culture places in your area</string>
     <string name="rationale_cancel_button">No, thanks</string>
     <string name="rationale_ok_button">Got it!</string>
     <string name="rationale_read_external_storage_title">We need your permission to access external storage</string>
     <string name="rationale_read_external_storage_message">You will now be asked to consent external storage permission to allow you pick photo of your place</string>
-
-
     <string name="confirm_password">Confirm Password</string>
     <string name="sign_in">Already have an account? Sign In</string>
-    <string name="name">Name</string>
     <string name="surname">Surname</string>
     <string name="curator">Are you a curator?</string>
     <string name="why_sign_up">Why should I Sign Up?</string>
-
     <string name="invalid_name">Please enter a name between 3 and 15 characters with the first letter capitalized and without spaces</string>
     <string name="invalid_surname">Please enter a surname between 3 and 15 characters with the first letter capitalized and with at most one space</string>
     <string name="invalid_email">Please enter a valid email</string>
@@ -56,12 +46,9 @@
     <string name="invalid_confirm_password">Please be careful because the passwords don\'t match</string>
     <string name="recover_password">Recover Password? Sign In</string>
     <string name="send">Send New Password</string>
-
     <string name="error_dialog_title">An error occurred</string>
-
     <string name="unexpected_exception_dialog">Something went wrong with your application.</string>
     <string name="ok">OK</string>
-
     <string name="information_paths">By registering we will save all your paths so that you can retrieve them from any device.</string>
     <string name="information_curator">In addition, if you are a curator of one or more places you can manage them by entering, in addition to all the information, even the paths visible to all users.</string>
     <string name="information">Information</string>
@@ -87,8 +74,6 @@
     <string name="title_activity_manage_places">ManagePlacesActivity</string>
     <string name="recover">Recover Password</string>
     <string name="create_new_place">Place Information</string>
-
-    <!-- Screen titles -->
     <string name="paths_screen_title">Paths</string>
     <string name="places_screen_title">Places</string>
     <string name="welcome_screen_title">Welcome</string>
@@ -106,29 +91,22 @@
     <string name="description">Description</string>
     <string name="pick_image">Pick image from gallery</string>
     <string name="place_image">Place image</string>
-
     <string name="invalid_place_name">Please enter a name between 2 and 25 characters</string>
     <string name="invalid_place_address">Please enter an address between 5 and 50 characters</string>
     <string name="invalid_place_description">Please enter a description between 10 and 100 characters</string>
     <string name="pick_place_image">Please pick a representative image of your place from your gallery</string>
-
     <string name="show_place_default_paths">Place Paths</string>
     <string name="create_place_path">Create Path</string>
     <string name="btn_add_path">Create a new path</string>
     <string name="show_my_paths">Paths</string>
     <string name="manage_place_screen_title">Manage Place</string>
     <string name="edit_place_information">Edit place information</string>
-
     <string name="warning_dialog_title">Warning</string>
     <string name="warning_delete_account">Are you sure you want to delete your account?</string>
     <string name="warning_exit_account">Are you sure you want to exit your account?</string>
     <string name="warning_delete_place">Are you sure you want to delete your place?</string>
     <string name="warning_delete_room">Are you sure you want to delete this room?</string>
-
     <string name="paths_section">Go to paths section</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="not_found_text">Sorry, not found</string>
     <string name="not_found_text_explanation">The results requested are not found, can be deleted or never be added</string>
     <string name="edit_place_screen_title">Edit Place</string>
@@ -141,6 +119,18 @@
     <string name="add">Add</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
-
     <string name="invalid_room">Please enter a room name between 2 and 25 characters</string>
+    <string name="name">Name</string>
+    <string name="object_image">Object Image</string>
+    <string name="book">Book</string>
+    <string name="path_name">Path name</string>
+    <string name="date_change">Date of last modification</string>
+    <string name="_0">0</string>
+    <string name="apply_filters">Apply Filters</string>
+    <string name="search_by_path_name">Search by path name</string>
+    <string name="search_by_place_name">Search by place name</string>
+    <string name="search_by_address_place">Search by place address</string>
+    <string name="search_for_objects_in_the_path">Search for objects in the path</string>
+    <string name="select_filters">Select Filters</string>
+    <string name="place_name_and_address">Place name and place address</string>
 </resources>

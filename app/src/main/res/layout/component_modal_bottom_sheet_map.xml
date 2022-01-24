@@ -1,90 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            tools:context=".ui.component.ModalBottomSheet"
-            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textSize="48sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:padding="8dp">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="8dp">
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imgPlace"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:contentDescription="@string/place_image"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/outline_image_black_36" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:text="Title"
-                        android:textSize="48sp" />
+                        android:padding="8dp"
+                        android:text="@string/address"
+                        android:textSize="12sp" />
+
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="144dp"
+                android:padding="16sp"
+                android:text="@string/description"
+                android:textSize="16sp" />
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+        </LinearLayout>
 
-                        <ImageView
-                            android:id="@+id/imgPlace"
-                            android:layout_width="180dp"
-                            android:layout_height="180dp"
-                            android:contentDescription="@string/place_image"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/outline_image_black_36" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:gravity="center">
 
-                        <TextView
-                            android:layout_width="180dp"
-                            android:layout_height="wrap_content"
-                            android:padding="8dp"
-                            android:text="Via le mani dal naso, 50 Scrotoli"
-                            android:textSize="12sp" />
+            <Button
+                android:id="@+id/sectionPathLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/paths_section" />
 
-                    </LinearLayout>
+        </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:maxHeight="144dp"
-                        android:padding="16sp"
-                        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-                        android:textSize="16sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:gravity="center">
-
-                    <Button
-                        android:id="@+id/sectionPathLink"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/paths_section" />
-                </LinearLayout>
-            </LinearLayout>
-        </FrameLayout>
     </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
