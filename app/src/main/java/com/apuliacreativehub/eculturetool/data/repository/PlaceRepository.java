@@ -12,6 +12,7 @@ import com.apuliacreativehub.eculturetool.data.network.place.RemotePlaceDAO;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
@@ -95,5 +96,31 @@ public class PlaceRepository {
             }
         });
         return deleteResult;
+    }
+
+    public MutableLiveData<RepositoryNotification<ArrayList<Place>>> getYourPlaces() {
+        MutableLiveData<RepositoryNotification<ArrayList<Place>>> getResult = new MutableLiveData<>();
+        Call<ArrayList<Place>> call = remotePlaceDAO.GetYourPlaces();
+        executor.execute(() -> {
+            try {
+                Response<ArrayList<Place>> response = call.execute();
+                Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                RepositoryNotification<ArrayList<Place>> repositoryNotification = new RepositoryNotification<>();
+                if (response.isSuccessful()) {
+                    repositoryNotification.setData(response.body());
+                } else {
+                    if (response.errorBody() != null) {
+                        repositoryNotification.setErrorMessage(response.errorBody().string());
+                    }
+                }
+                getResult.postValue(repositoryNotification);
+            } catch (IOException ioe) {
+                RepositoryNotification<ArrayList<Place>> repositoryNotification = new RepositoryNotification<>();
+                repositoryNotification.setException(ioe);
+                getResult.postValue(repositoryNotification);
+                Log.e("RETROFITERROR", ioe.getMessage());
+            }
+        });
+        return getResult;
     }
 }

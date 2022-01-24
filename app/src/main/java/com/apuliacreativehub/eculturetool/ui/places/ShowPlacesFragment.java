@@ -1,6 +1,10 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +13,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
+import com.apuliacreativehub.eculturetool.data.TokenManager;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.entity.user.UserWithToken;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
+import com.apuliacreativehub.eculturetool.ui.component.ErrorDialog;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
+import com.apuliacreativehub.eculturetool.ui.user.LoginViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -25,6 +37,31 @@ public class ShowPlacesFragment extends Fragment {
     protected CardPlaceAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected ArrayList<Place> mDataset;
+    private ShowPlacesViewModel showPlacesViewModel;
+
+    final Observer<RepositoryNotification<ArrayList<Place>>> getPlacesObserver = notification -> {
+        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        if (notification.getException() == null) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(notification.getData()));
+            if (notification.getErrorMessage() == null) {
+                mDataset = notification.getData();
+
+                mRecyclerView = (RecyclerView) view.findViewById(R.id.listPlaceCards);
+                mLayoutManager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mAdapter = new CardPlaceAdapter(getActivity(), mDataset);
+                mRecyclerView.setAdapter(mAdapter);
+            } else {
+                Log.d("Dialog", "show dialog here");
+                new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "LOGIN_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+            }
+        } else {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "LOGIN_EXCEPTION").show(getChildFragmentManager(), ErrorDialog.TAG);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,16 +72,8 @@ public class ShowPlacesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_show_places, container, false);
 
-
-        this.mDataset = new ArrayList<>();
-        this.mDataset.add(new Place("Prova1", "Via Roma, 23", "Primo museo di Modugno", ""));
-        this.mDataset.add(new Place("Prova2", "Via Adige, 5b", "Secondo museo di Modugno", ""));
-
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.listPlaceCards);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new CardPlaceAdapter(getActivity(), mDataset);
-        mRecyclerView.setAdapter(mAdapter);
+        showPlacesViewModel = new ViewModelProvider(this).get(ShowPlacesViewModel.class);
+        showPlacesViewModel.getPlaces().observe(getViewLifecycleOwner(), getPlacesObserver);
         return view;
     }
 
