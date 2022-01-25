@@ -98,7 +98,7 @@ public class ManagePlaceFragment extends Fragment {
         recyclerGridView = view.findViewById(R.id.recyclerContainerObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerGridView.setLayoutManager(gridLayoutManager);
-        listArtifactsAdapter = new ListArtifactsAdapter(mDataset);
+        listArtifactsAdapter = new ListArtifactsAdapter(R.layout.component_card_artifact, mDataset, requireActivity());
         recyclerGridView.setAdapter(listArtifactsAdapter);
     }
 }
