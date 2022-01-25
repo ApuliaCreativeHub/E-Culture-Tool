@@ -1,6 +1,5 @@
 package com.apuliacreativehub.eculturetool.ui.component;
 
-import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,12 +22,12 @@ public class ConfirmationDialog extends DialogFragment {
     public ConfirmationDialog(String title, String message, String tag) {
         this.title = title;
         this.message = message;
-        ErrorDialog.TAG = tag;
+        Dialog.TAG = tag;
     }
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
         listener = (ConfirmationDialogListener) getParentFragment();
         // Use the Builder class for convenient dialog construction
         assert getActivity() != null;

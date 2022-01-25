@@ -29,7 +29,7 @@ import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
-import com.apuliacreativehub.eculturetool.ui.component.ErrorDialog;
+import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 
 @SuppressWarnings("deprecation")
 public class EditPlaceFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
@@ -52,12 +52,12 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
                     requireActivity().finish();
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETE_PLACE_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETE_PLACE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "DELETE_PLACE_EXCEPTION").show(getChildFragmentManager(), ErrorDialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "DELETE_PLACE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
@@ -196,7 +196,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
                 if(editPlaceViewModel.isImageUploaded(editPlaceViewModel.getImage())) {
                     // TODO: Update place API
                 } else {
-                    new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.pick_place_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_place_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }
             }
         });

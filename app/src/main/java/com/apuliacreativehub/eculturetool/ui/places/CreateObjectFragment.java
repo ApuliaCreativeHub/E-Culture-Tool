@@ -29,7 +29,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.ui.component.ErrorDialog;
+import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 
 import java.util.ArrayList;
 
@@ -180,7 +180,7 @@ public class CreateObjectFragment extends Fragment {
                 if(createObjectViewModel.isImageUploaded(createObjectViewModel.getImage())) {
                     // TODO: Insert Object API
                 } else {
-                    new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.pick_object_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_object_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }
             }
         });
