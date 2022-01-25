@@ -12,6 +12,9 @@ public class Zone {
     @ColumnInfo(name = "name")
     private String name;
 
+    @ColumnInfo(name = "place_id")
+    private String placeId;
+
     public Zone() {
     }
 
