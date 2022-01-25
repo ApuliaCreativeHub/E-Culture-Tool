@@ -66,7 +66,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
                 if (notification.getErrorMessage() == null) {
-                    requireActivity().getSupportFragmentManager().popBackStackImmediate();
+                    requireActivity().finish();
                 } else {
                     Log.d("Dialog", "show dialog here");
                     new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETE_PLACE_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
