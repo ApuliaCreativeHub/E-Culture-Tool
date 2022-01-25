@@ -14,7 +14,9 @@ public class EditPlaceViewModel extends AbstractPlaceViewModel {
         super(application);
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> deletePlace(Place place) {
+    public MutableLiveData<RepositoryNotification<Void>> deletePlace() {
+        Place place;
+        place = new Place(id, name, address, description, "");
         return repository.deletePlace(place);
     }
 

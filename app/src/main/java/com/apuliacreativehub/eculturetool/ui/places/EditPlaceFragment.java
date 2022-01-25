@@ -120,6 +120,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
         toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
 
         editPlaceViewModel = new ViewModelProvider(this).get(EditPlaceViewModel.class);
+        editPlaceViewModel.id = place.getId();
 
         txtName = view.findViewById(R.id.txtName);
         txtAddress = view.findViewById(R.id.txtAddress);
@@ -241,7 +242,6 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
 
             if(!errors) {
                 if(editPlaceViewModel.isImageUploaded(editPlaceViewModel.getImage())) {
-                    editPlaceViewModel.id = place.getId();
                     editPlaceViewModel.editPlace().observe(this, editPlaceObserver);
                 } else {
                     new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_place_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
@@ -266,7 +266,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i("Response", "AOPOSITIVE");
-        editPlaceViewModel.deletePlace(place).observe(this, deletePlaceObserver);
+        editPlaceViewModel.deletePlace().observe(this, deletePlaceObserver);
     }
 
     @Override
