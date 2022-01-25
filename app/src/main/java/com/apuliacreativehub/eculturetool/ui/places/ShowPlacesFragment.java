@@ -41,19 +41,19 @@ public class ShowPlacesFragment extends Fragment {
             if (notification.getErrorMessage() == null) {
                 mDataset = notification.getData();
 
-                mRecyclerView = (RecyclerView) view.findViewById(R.id.listPlaceCards);
+                mRecyclerView = view.findViewById(R.id.listPlaceCards);
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mAdapter = new CardPlaceAdapter(getActivity(), mDataset);
                 mRecyclerView.setAdapter(mAdapter);
             } else {
                 Log.d("Dialog", "show dialog here");
-                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "LOGIN_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_PLACES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "LOGIN_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_PLACES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
         }
     };
 
