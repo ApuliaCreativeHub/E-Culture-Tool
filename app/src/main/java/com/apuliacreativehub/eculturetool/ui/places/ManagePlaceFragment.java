@@ -202,7 +202,13 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
 
         if(selected) {
             roomsDataset.remove(roomId);
+
+            arrayOptionsAdapter.clear();
+            arrayOptionsAdapter.addAll(roomsDataset);
+            arrayOptionsAdapter.notifyDataSetChanged();
+
             autoCompleteTextView.setText("");
+
             selected = false;
             // TODO: Delete Room API
         }

@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -37,7 +36,6 @@ import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
-import com.apuliacreativehub.eculturetool.ui.component.ErrorDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
