@@ -47,6 +47,15 @@ public class Place {
     }
 
     @Ignore
+    public Place(int id, String name, String address, String description, String uriImg) {
+        this.id = id;
+        this.uriImg = uriImg;
+        this.name = name;
+        this.address = address;
+        this.description = description;
+    }
+
+    @Ignore
     public Place(String name, String address, String description, String normalSizeImg, String thumbnail) {
         this.name = name;
         this.address = address;
