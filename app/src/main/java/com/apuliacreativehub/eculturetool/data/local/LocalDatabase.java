@@ -4,10 +4,13 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.entity.Zone;
 
-@Database(entities = {Place.class}, version = 1, exportSchema = false)
+@Database(entities = {Place.class, Zone.class}, version = 1, exportSchema = false)
 public abstract class LocalDatabase extends RoomDatabase {
     public abstract LocalPlaceDAO placeDAO();
+
+    public abstract LocalZoneDAO zoneDAO();
 
     // Add other DAOs abstract methods here
 }
