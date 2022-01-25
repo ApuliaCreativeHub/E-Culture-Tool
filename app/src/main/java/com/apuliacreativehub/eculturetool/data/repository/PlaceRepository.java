@@ -42,7 +42,7 @@ public class PlaceRepository {
     public MutableLiveData<RepositoryNotification<Void>> addPlace(Context context, Place place) {
         MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
         try {
-            InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse("file://" + place.getUriImg()));
+            InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse(place.getUriImg()));
             RequestBody imgBody = RequestBody.create(ByteString.read(imgStream, imgStream.available()), MediaType.parse("image/*"));
             MultipartBody.Part imgPart = MultipartBody.Part.createFormData("img", "img.png", imgBody);
             RequestBody name = RequestBody.create(place.getName(), MediaType.parse("text/plain"));

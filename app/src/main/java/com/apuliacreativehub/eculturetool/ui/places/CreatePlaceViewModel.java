@@ -1,10 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.app.Application;
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -20,7 +16,12 @@ public class CreatePlaceViewModel extends AbstractPlaceViewModel {
     }
 
     public MutableLiveData<RepositoryNotification<Void>> addPlace(){
-        Place place = new Place(name, address, description, Utils.getRealPathFromURI(getApplication().getApplicationContext(), image));
+        Place place;
+        if (image.getScheme().equals("android.resource")) {
+            place = new Place(name, address, description, image.toString());
+        } else {
+            place = new Place(name, address, description, "file://" + Utils.getRealPathFromURI(getApplication().getApplicationContext(), image));
+        }
         Log.i("pathUri", place.getUriImg());
         return repository.addPlace(getApplication().getApplicationContext(), place);
     }

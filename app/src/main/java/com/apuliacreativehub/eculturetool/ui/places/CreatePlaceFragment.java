@@ -172,7 +172,7 @@ public class CreatePlaceFragment extends Fragment {
 
     private void takeStandardImg(){
         imgPlace.setImageResource(R.drawable.museum);
-        createPlaceViewModel.setImage(Uri.parse(String.valueOf(R.drawable.museum)));
+        createPlaceViewModel.setImage(Uri.parse("android.resource://com.apuliacreativehub.eculturetool/drawable/museum"));
     }
 
     private void requestPermission(){
