@@ -17,7 +17,7 @@ public class CreatePlaceViewModel extends AbstractPlaceViewModel {
 
     public MutableLiveData<RepositoryNotification<Void>> addPlace(){
         Place place;
-        if (image.getScheme().equals("android.resource")) {
+        if (image.getScheme().equals(Utils.SCHEME_ANDROID_RESOURCE)) {
             place = new Place(name, address, description, image.toString());
         } else {
             place = new Place(name, address, description, "file://" + Utils.getRealPathFromURI(getApplication().getApplicationContext(), image));

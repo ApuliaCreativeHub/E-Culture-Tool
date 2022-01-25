@@ -9,6 +9,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 public class Utils {
+    public final static String SCHEME_ANDROID_RESOURCE = "android.resource";
+
     public static boolean checkConnection(ConnectivityManager connectivityManager) {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
@@ -17,7 +19,7 @@ public class Utils {
     public static String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
+            String[] proj = {MediaStore.Images.Media.DATA};
             cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
