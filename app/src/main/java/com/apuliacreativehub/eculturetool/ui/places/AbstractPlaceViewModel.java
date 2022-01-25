@@ -2,8 +2,12 @@ package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.Cursor;
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 
