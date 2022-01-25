@@ -129,7 +129,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
         txtName.setText(place.getName());
         txtAddress.setText(place.getAddress());
         txtDescription.setText(place.getDescription());
-        Glide.with(requireContext())
+        Glide.with(requireContext()).asBitmap()
                 .load("https://hiddenfile.ml/ecultureapi/" + place.getNormalSizeImg())
                 //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -241,11 +241,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
             }
 
             if(!errors) {
-                if(editPlaceViewModel.isImageUploaded(editPlaceViewModel.getImage())) {
-                    editPlaceViewModel.editPlace().observe(this, editPlaceObserver);
-                } else {
-                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_place_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
-                }
+                editPlaceViewModel.editPlace().observe(this, editPlaceObserver);
             }
         });
 

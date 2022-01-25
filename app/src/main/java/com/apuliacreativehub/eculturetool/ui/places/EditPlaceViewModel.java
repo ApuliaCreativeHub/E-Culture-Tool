@@ -22,10 +22,14 @@ public class EditPlaceViewModel extends AbstractPlaceViewModel {
 
     public MutableLiveData<RepositoryNotification<Void>> editPlace() {
         Place place;
-        if (image.getScheme().equals(Utils.SCHEME_ANDROID_RESOURCE)) {
-            place = new Place(id, name, address, description, image.toString());
-        } else {
-            place = new Place(id, name, address, description, "file://" + Utils.getRealPathFromURI(getApplication().getApplicationContext(), image));
+        if(image != null){
+            if (image.getScheme().equals(Utils.SCHEME_ANDROID_RESOURCE)) {
+                place = new Place(id, name, address, description, image.toString());
+            } else {
+                place = new Place(id, name, address, description, "file://" + Utils.getRealPathFromURI(getApplication().getApplicationContext(), image));
+            }
+        }else{
+            place = new Place(id, name, address, description, null);
         }
         return repository.editPlace(getApplication().getApplicationContext(), place);
     }

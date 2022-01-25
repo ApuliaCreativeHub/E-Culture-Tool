@@ -110,14 +110,19 @@ public class PlaceRepository {
     public MutableLiveData<RepositoryNotification<Void>> editPlace(Context context, Place place){
         MutableLiveData<RepositoryNotification<Void>> editResult = new MutableLiveData<>();
         try {
-            InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse(place.getUriImg()));
-            RequestBody imgBody = RequestBody.create(ByteString.read(imgStream, imgStream.available()), MediaType.parse("image/*"));
-            MultipartBody.Part imgPart = MultipartBody.Part.createFormData("img", "img.png", imgBody);
+            Call<Void> call;
             RequestBody id = RequestBody.create(String.valueOf(place.getId()), MediaType.parse("text/plain"));
             RequestBody name = RequestBody.create(place.getName(), MediaType.parse("text/plain"));
             RequestBody address = RequestBody.create(place.getAddress(), MediaType.parse("text/plain"));
             RequestBody description = RequestBody.create(place.getDescription(), MediaType.parse("text/plain"));
-            Call<Void> call = remotePlaceDAO.EditPlace(id, name, address, description, imgPart);
+            if(place.getUriImg() != null){
+                InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse(place.getUriImg()));
+                RequestBody imgBody = RequestBody.create(ByteString.read(imgStream, imgStream.available()), MediaType.parse("image/*"));
+                MultipartBody.Part imgPart = MultipartBody.Part.createFormData("img", "img.png", imgBody);
+                call = remotePlaceDAO.EditPlace(id, name, address, description, imgPart);
+            }else {
+                call = remotePlaceDAO.EditPlaceNoImg(id, name, address, description);
+            }
             executor.execute(() -> {
                 try {
                     Response<Void> response = call.execute();

@@ -1,5 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.component;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -7,6 +8,9 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+
+import androidx.annotation.AnyRes;
+import androidx.annotation.NonNull;
 
 public class Utils {
     public final static String SCHEME_ANDROID_RESOURCE = "android.resource";

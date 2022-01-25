@@ -39,7 +39,8 @@ public interface RemotePlaceDAO {
 
     @Multipart
     @POST("place/update")
-    Call<Void> EditPlaceNoImg(@Part("name") RequestBody name,
-                         @Part("address") RequestBody address,
-                         @Part("description") RequestBody description);
+    Call<Void> EditPlaceNoImg(@Part("id") RequestBody id,
+                              @Part("name") RequestBody name,
+                              @Part("address") RequestBody address,
+                              @Part("description") RequestBody description);
 }
