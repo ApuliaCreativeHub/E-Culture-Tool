@@ -27,5 +27,19 @@ public interface RemotePlaceDAO {
     Call<ArrayList<Place>> getYourPlaces();
 
     @POST("place/delete")
-    Call<Void> deletePlace(@Body Place place);
+    Call<Void> DeletePlace(@Body Place place);
+
+    @Multipart
+    @POST("place/update")
+    Call<Void> EditPlace(@Part("id") RequestBody id,
+                        @Part("name") RequestBody name,
+                        @Part("address") RequestBody address,
+                        @Part("description") RequestBody description,
+                        @Part() MultipartBody.Part file);
+
+    @Multipart
+    @POST("place/update")
+    Call<Void> EditPlaceNoImg(@Part("name") RequestBody name,
+                         @Part("address") RequestBody address,
+                         @Part("description") RequestBody description);
 }

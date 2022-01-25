@@ -1,7 +1,11 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -16,9 +20,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -30,6 +37,10 @@ import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.ErrorDialog;
+import com.apuliacreativehub.eculturetool.ui.component.Utils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 @SuppressWarnings("deprecation")
 public class EditPlaceFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
@@ -40,6 +51,13 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
     private EditText txtDescription;
     private EditPlaceViewModel editPlaceViewModel;
     private final Place place;
+    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+        if (isGranted) {
+            takeImgFromGallery();
+        }else {
+            takeStandardImg();
+        }
+    });
 
     private final Observer<RepositoryNotification<Void>> deletePlaceObserver = new Observer<RepositoryNotification<Void>>() {
         @Override
@@ -62,6 +80,28 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
         }
     };
 
+    final Observer<RepositoryNotification<Void>> editPlaceObserver = notification -> {
+        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        if (notification.getException() == null) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(notification.getData()));
+            if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
+                Log.i("addPlace", "OK");
+                //TODO:Replace with transaction helper
+                requireActivity().getSupportFragmentManager().popBackStackImmediate();
+            } else {
+                Log.i("addPlace", "Not OK");
+                Log.d("Dialog", "show dialog here");
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        } else {
+            Log.i("addPlace", "Not OK exception");
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+        }
+    };
+
     public EditPlaceFragment(Place place) {
         this.place = place;
     }
@@ -76,11 +116,6 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // TODO: Set image with Glide
-        ((TextView) view.findViewById(R.id.txtName)).setText(place.getName());
-        ((TextView) view.findViewById(R.id.txtAddress)).setText(place.getAddress());
-        ((TextView) view.findViewById(R.id.txtDescription)).setText(place.getDescription());
-
         Toolbar toolbar = view.findViewById(R.id.editPlaceToolbar);
         toolbar.setTitle(R.string.edit_place_screen_title);
 
@@ -92,18 +127,33 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
         txtName = view.findViewById(R.id.txtName);
         txtAddress = view.findViewById(R.id.txtAddress);
         txtDescription = view.findViewById(R.id.txtDescription);
+        imgPlace = view.findViewById(R.id.imgPlace);
+        txtName.setText(place.getName());
+        txtAddress.setText(place.getAddress());
+        txtDescription.setText(place.getDescription());
+        Glide.with(requireContext())
+                .load("https://hiddenfile.ml/ecultureapi/" + place.getNormalSizeImg())
+                //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .into(imgPlace);
 
         if(editPlaceViewModel.getImage() != null)
             imgPlace.setImageURI(editPlaceViewModel.getImage());
 
         if(!editPlaceViewModel.getName().equals(""))
             txtName.setText(editPlaceViewModel.getName());
+        else
+            editPlaceViewModel.setName(txtName.getText().toString());
 
         if(!editPlaceViewModel.getAddress().equals(""))
             txtName.setText(editPlaceViewModel.getAddress());
+        else
+            editPlaceViewModel.setAddress(txtAddress.getText().toString());
 
         if(!editPlaceViewModel.getDescription().equals(""))
-            txtName.setText(editPlaceViewModel.getDescription());
+            txtDescription.setText(editPlaceViewModel.getDescription());
+        else
+            editPlaceViewModel.setDescription(txtDescription.getText().toString());
     }
 
     @Override
@@ -194,15 +244,25 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
 
             if(!errors) {
                 if(editPlaceViewModel.isImageUploaded(editPlaceViewModel.getImage())) {
-                    // TODO: Update place API
+                    place.setName(txtName.getText().toString());
+                    place.setAddress(txtAddress.getText().toString());
+                    place.setDescription(txtDescription.getText().toString());
+                    place.setUriImg(Utils.getRealPathFromURI(requireContext(), editPlaceViewModel.getImage()));
+
+                    editPlaceViewModel.editPlace(place).observe(this, editPlaceObserver);
                 } else {
                     new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_place_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }
             }
         });
 
+        imgPlace.setOnClickListener(view -> {
+            requestPermission();
+        });
+
         Button btnDeletePlace = view.findViewById(R.id.btnDeletePlace);
         btnDeletePlace.setOnClickListener(delete -> showNoticeDialog());
+
     }
 
     public void showNoticeDialog() {
@@ -213,7 +273,6 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i("Response", "AOPOSITIVE");
-        // TODO: Delete place API
         editPlaceViewModel.deletePlace(place).observe(this, deletePlaceObserver);
     }
 
@@ -228,8 +287,48 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
         if(resultCode == Activity.RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             imgPlace.setImageURI(selectedImage);
+            place.setUriImg(selectedImage.getPath());
             editPlaceViewModel.setImage(selectedImage);
         }
     }
 
+    private void requestPermission(){
+        if (ContextCompat.checkSelfPermission(
+                requireContext()
+                , Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            takeImgFromGallery();
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            showRationaleDialog(getString(R.string.rationale_read_external_storage_title));
+        } else {
+            requestPermissionLauncher.launch(
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            );
+        }
+    }
+
+    private void takeImgFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, 3);
+    }
+
+    private void showRationaleDialog(String title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(title).setMessage(R.string.rationale_read_external_storage_message)
+                .setPositiveButton(R.string.rationale_ok_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        requestPermissionLauncher.launch(
+                                Manifest.permission.READ_EXTERNAL_STORAGE);
+                    }
+                }).setNegativeButton(R.string.rationale_cancel_button, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                takeStandardImg();
+            }
+        });
+        builder.create().show();
+    }
+
+    private void takeStandardImg(){
+        imgPlace.setImageResource(R.drawable.museum);
+        editPlaceViewModel.setImage(Uri.parse(String.valueOf(R.drawable.museum)));
+    }
 }
