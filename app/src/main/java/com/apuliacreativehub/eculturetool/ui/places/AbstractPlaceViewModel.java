@@ -2,12 +2,8 @@ package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.app.Application;
 import android.content.Context;
-import android.database.Cursor;
-import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 
@@ -23,6 +19,7 @@ abstract public class AbstractPlaceViewModel extends AndroidViewModel {
     private static final int MAX_LENGTH_DESCRIPTION = 100;
     protected final PlaceRepository repository;
 
+    protected int id;
     protected String name = "";
     protected String address = "";
     protected String description = "";

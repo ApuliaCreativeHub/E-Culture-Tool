@@ -33,6 +33,7 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.Utils;
 
 @SuppressWarnings("deprecation")
 public class CreatePlaceFragment extends Fragment {
@@ -172,7 +173,7 @@ public class CreatePlaceFragment extends Fragment {
 
     private void takeStandardImg(){
         imgPlace.setImageResource(R.drawable.museum);
-        createPlaceViewModel.setImage(Uri.parse("android.resource://com.apuliacreativehub.eculturetool/drawable/museum"));
+        createPlaceViewModel.setImage(Uri.parse(Utils.DRAWABLE_URI_BASE_PATH + "museum"));
     }
 
     private void requestPermission(){

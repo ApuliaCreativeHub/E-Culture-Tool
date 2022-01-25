@@ -85,7 +85,6 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
             Log.d("CALLBACK", String.valueOf(notification.getData()));
             if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
                 Log.i("addPlace", "OK");
-                //TODO:Replace with transaction helper
                 requireActivity().getSupportFragmentManager().popBackStackImmediate();
             } else {
                 Log.i("addPlace", "Not OK");
@@ -242,12 +241,8 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
 
             if(!errors) {
                 if(editPlaceViewModel.isImageUploaded(editPlaceViewModel.getImage())) {
-                    place.setName(txtName.getText().toString());
-                    place.setAddress(txtAddress.getText().toString());
-                    place.setDescription(txtDescription.getText().toString());
-                    place.setUriImg(Utils.getRealPathFromURI(requireContext(), editPlaceViewModel.getImage()));
-
-                    editPlaceViewModel.editPlace(place).observe(this, editPlaceObserver);
+                    editPlaceViewModel.id = place.getId();
+                    editPlaceViewModel.editPlace().observe(this, editPlaceObserver);
                 } else {
                     new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_place_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }
@@ -327,6 +322,6 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
 
     private void takeStandardImg(){
         imgPlace.setImageResource(R.drawable.museum);
-        editPlaceViewModel.setImage(Uri.parse(String.valueOf(R.drawable.museum)));
+        editPlaceViewModel.setImage(Uri.parse(Utils.DRAWABLE_URI_BASE_PATH + "museum"));
     }
 }

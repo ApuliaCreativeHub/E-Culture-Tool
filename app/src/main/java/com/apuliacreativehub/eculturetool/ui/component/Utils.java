@@ -10,6 +10,7 @@ import android.util.Log;
 
 public class Utils {
     public final static String SCHEME_ANDROID_RESOURCE = "android.resource";
+    public final static String DRAWABLE_URI_BASE_PATH = SCHEME_ANDROID_RESOURCE + "://com.apuliacreativehub.eculturetool/drawable/";
 
     public static boolean checkConnection(ConnectivityManager connectivityManager) {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();

@@ -1,7 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -19,7 +18,13 @@ public class EditPlaceViewModel extends AbstractPlaceViewModel {
         return repository.deletePlace(place);
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> editPlace(Place place) {
+    public MutableLiveData<RepositoryNotification<Void>> editPlace() {
+        Place place;
+        if (image.getScheme().equals(Utils.SCHEME_ANDROID_RESOURCE)) {
+            place = new Place(id, name, address, description, image.toString());
+        } else {
+            place = new Place(id, name, address, description, "file://" + Utils.getRealPathFromURI(getApplication().getApplicationContext(), image));
+        }
         return repository.editPlace(getApplication().getApplicationContext(), place);
     }
 
