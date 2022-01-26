@@ -160,7 +160,7 @@ public class PlaceRepository {
             getResult = getYourPlacesFromRemoteDatabase();
         } else {
             Log.d("SHOULDFETCH", "local");
-            getResult = getYourPlacesFromLocalDatabase();
+            getResult = getAllPlacesFromLocalDatabase();
         }
 
         return getResult;
@@ -206,7 +206,7 @@ public class PlaceRepository {
         return getResult;
     }
 
-    private MutableLiveData<RepositoryNotification<ArrayList<Place>>> getYourPlacesFromLocalDatabase() {
+    private MutableLiveData<RepositoryNotification<ArrayList<Place>>> getAllPlacesFromLocalDatabase() {
         MutableLiveData<RepositoryNotification<ArrayList<Place>>> getResult = new MutableLiveData<>();
         executor.execute(new Runnable() {
             @Override
@@ -221,6 +221,19 @@ public class PlaceRepository {
     }
 
     public MutableLiveData<RepositoryNotification<ArrayList<Place>>> getAllPlaces() {
+        MutableLiveData<RepositoryNotification<ArrayList<Place>>> getResult;
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            getResult = getAllPlacesFromRemoteDatabase();
+        } else {
+            Log.d("SHOULDFETCH", "local");
+            getResult = getAllPlacesFromLocalDatabase();
+        }
+
+        return getResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<ArrayList<Place>>> getAllPlacesFromRemoteDatabase() {
         MutableLiveData<RepositoryNotification<ArrayList<Place>>> getResult = new MutableLiveData<>();
         Call<ArrayList<Place>> call = remotePlaceDAO.getAllPlaces();
         executor.execute(() -> {
@@ -230,7 +243,6 @@ public class PlaceRepository {
                 RepositoryNotification<ArrayList<Place>> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(response.body());
-                    saveRemotePlacesToLocal(repositoryNotification.getData());
                 } else {
                     if (response.errorBody() != null) {
                         repositoryNotification.setErrorMessage(response.errorBody().string());
