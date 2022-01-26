@@ -2,6 +2,7 @@ package com.apuliacreativehub.eculturetool.data.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -18,6 +19,7 @@ public class Zone {
     public Zone() {
     }
 
+    @Ignore
     public Zone(int id, String name) {
         this.id = id;
         this.name = name;
@@ -37,5 +39,13 @@ public class Zone {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
     }
 }
