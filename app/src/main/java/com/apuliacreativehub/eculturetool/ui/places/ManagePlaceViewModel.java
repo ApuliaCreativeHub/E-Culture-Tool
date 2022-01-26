@@ -50,4 +50,13 @@ public class ManagePlaceViewModel extends AndroidViewModel {
     public void setZones(List<Zone> zones) {
         this.zones = zones;
     }
+
+    public MutableLiveData<RepositoryNotification<Void>> addZonesToDatabase(String name) {
+        if (place != null) {
+            Zone zone = new Zone(name, place.getId());
+            return zoneRepository.addZone(zone);
+        } else {
+            return new MutableLiveData<>();
+        }
+    }
 }

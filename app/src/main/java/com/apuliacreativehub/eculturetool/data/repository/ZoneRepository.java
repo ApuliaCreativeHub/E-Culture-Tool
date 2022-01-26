@@ -14,6 +14,7 @@ import com.apuliacreativehub.eculturetool.data.network.zone.ZoneRemoteDatabase;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -97,5 +98,59 @@ public class ZoneRepository {
                 }
             }
         });
+    }
+
+    public MutableLiveData<RepositoryNotification<Void>> addZone(Zone zone) {
+        MutableLiveData<RepositoryNotification<Void>> addResult;
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            addResult = addZoneToRemoteDatabase(zone);
+        } else {
+            Log.d("SHOULDFETCH", "local");
+            addResult = addZoneLocalDatabase(zone);
+        }
+
+        return addResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Void>> addZoneToRemoteDatabase(Zone zone) {
+        MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
+        Call<Void> call = remoteZoneDAO.addZone(zone);
+        executor.execute(() -> {
+            try {
+                Response<Void> response = call.execute();
+                Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                if (response.isSuccessful()) {
+                    repositoryNotification.setData(response.body());
+                    saveRemoteZonesToLocal(Collections.singletonList(zone));
+                } else {
+                    if (response.errorBody() != null) {
+                        repositoryNotification.setErrorMessage(response.errorBody().string());
+                    }
+                }
+                addResult.postValue(repositoryNotification);
+            } catch (IOException ioe) {
+                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                repositoryNotification.setException(ioe);
+                addResult.postValue(repositoryNotification);
+                Log.e("RETROFITERROR", ioe.getMessage());
+            }
+        });
+        return addResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Void>> addZoneLocalDatabase(Zone zone) {
+        MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                localZoneDAO.insertZone(zone);
+                addResult.postValue(repositoryNotification);
+            }
+        });
+
+        return addResult;
     }
 }
