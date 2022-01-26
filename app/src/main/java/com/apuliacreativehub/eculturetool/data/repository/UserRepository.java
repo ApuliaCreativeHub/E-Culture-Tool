@@ -25,7 +25,7 @@ public class UserRepository{
     }
 
     public MutableLiveData<RepositoryNotification<Void>> registerUser(User user) {
-        Call<Void> call = remoteUserDAO.RegisterUser(user);
+        Call<Void> call = remoteUserDAO.registerUser(user);
         MutableLiveData<RepositoryNotification<Void>> registrationResult = new MutableLiveData<>();
         executor.execute(() -> {
             try {
@@ -51,7 +51,7 @@ public class UserRepository{
     }
 
     public MutableLiveData<RepositoryNotification<User>> editUser(User user) {
-        Call<User> call = remoteUserDAO.UpdateUser(user);
+        Call<User> call = remoteUserDAO.updateUser(user);
         MutableLiveData<RepositoryNotification<User>> updatingResult = new MutableLiveData<>();
         executor.execute(() -> {
             try {
@@ -77,7 +77,7 @@ public class UserRepository{
     }
 
     public MutableLiveData<RepositoryNotification<UserWithToken>> loginUser(UserWithToken uwt) {
-        Call<UserWithToken> call = remoteUserDAO.LoginUser(uwt);
+        Call<UserWithToken> call = remoteUserDAO.loginUser(uwt);
         MutableLiveData<RepositoryNotification<UserWithToken>> loginResult = new MutableLiveData<>();
         executor.execute(() -> {
             try {
@@ -103,7 +103,7 @@ public class UserRepository{
     }
 
     public void logoutUser() {
-        Call<Void> call = remoteUserDAO.LogoutUser();
+        Call<Void> call = remoteUserDAO.logoutUser();
         executor.execute(() -> {
             try {
                 Response<Void> response = call.execute();
@@ -115,7 +115,7 @@ public class UserRepository{
     }
 
     public MutableLiveData<RepositoryNotification<Void>> changePassword(User user){
-        Call<Void> call = remoteUserDAO.ChangePassword(user);
+        Call<Void> call = remoteUserDAO.changePassword(user);
         MutableLiveData<RepositoryNotification<Void>> changePasswordResult = new MutableLiveData<>();
         executor.execute(() -> {
             try {
@@ -141,7 +141,7 @@ public class UserRepository{
     }
 
     public MutableLiveData<RepositoryNotification<Void>> deleteUser(User user){
-        Call<Void> call = remoteUserDAO.DeleteUser(user);
+        Call<Void> call = remoteUserDAO.deleteUser(user);
         MutableLiveData<RepositoryNotification<Void>> deleteUserResult = new MutableLiveData<>();
         executor.execute(() -> {
             try {

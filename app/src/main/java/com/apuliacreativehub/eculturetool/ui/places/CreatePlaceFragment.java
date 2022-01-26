@@ -32,7 +32,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
-import com.apuliacreativehub.eculturetool.ui.component.ErrorDialog;
+import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.Utils;
 
 @SuppressWarnings("deprecation")
 public class CreatePlaceFragment extends Fragment {
@@ -57,16 +58,18 @@ public class CreatePlaceFragment extends Fragment {
             Log.d("CALLBACK", String.valueOf(notification.getData()));
             if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
                 Log.i("addPlace", "OK");
+                //TODO:Replace with transaction helper
+                requireActivity().getSupportFragmentManager().popBackStackImmediate();
             } else {
                 Log.i("addPlace", "Not OK");
                 Log.d("Dialog", "show dialog here");
-                new ErrorDialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.i("addPlace", "Not OK exception");
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-            new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
         }
     };
 
@@ -75,9 +78,7 @@ public class CreatePlaceFragment extends Fragment {
         super.onStart();
 
         imgPlace = view.findViewById(R.id.imgPlace);
-        imgPlace.setOnClickListener(view -> {
-            requestPermission();
-        });
+        imgPlace.setOnClickListener(view -> requestPermission());
 
         txtName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -159,7 +160,7 @@ public class CreatePlaceFragment extends Fragment {
                 if(createPlaceViewModel.isImageUploaded(createPlaceViewModel.getImage())) {
                     createPlaceViewModel.addPlace().observe(this, addPlaceObserver);
                 } else {
-                    new ErrorDialog(getString(R.string.error_dialog_title), getString(R.string.pick_place_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), ErrorDialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_place_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }
             }
         });
@@ -172,7 +173,7 @@ public class CreatePlaceFragment extends Fragment {
 
     private void takeStandardImg(){
         imgPlace.setImageResource(R.drawable.museum);
-        createPlaceViewModel.setImage(Uri.parse(String.valueOf(R.drawable.museum)));
+        createPlaceViewModel.setImage(Uri.parse(Utils.DRAWABLE_URI_BASE_PATH + "museum"));
     }
 
     private void requestPermission(){
@@ -244,10 +245,10 @@ public class CreatePlaceFragment extends Fragment {
             txtName.setText(createPlaceViewModel.getName());
 
         if(!createPlaceViewModel.getAddress().equals(""))
-            txtName.setText(createPlaceViewModel.getAddress());
+            txtAddress.setText(createPlaceViewModel.getAddress());
 
         if(!createPlaceViewModel.getDescription().equals(""))
-            txtName.setText(createPlaceViewModel.getDescription());
+            txtDescription.setText(createPlaceViewModel.getDescription());
     }
 
 }

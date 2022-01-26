@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/lytProfileDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.paths.PathsFragment">
@@ -23,16 +22,19 @@
             android:layout_margin="8dp"
             android:visibility="gone"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/list_paths_results"/>
+
             <TextView
                 android:id="@+id/listResultsItemPath"
-                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"/>
+                android:text="@string/_0"/>
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -44,7 +46,8 @@
         <include
             android:id="@+id/noResultsLayoutPaths"
             android:visibility="gone"
-            layout="@layout/component_card_empty_result"/>
+            layout="@layout/component_card_empty_result" />
+
     </LinearLayout>
 
     <androidx.appcompat.widget.Toolbar

@@ -8,10 +8,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.OptIn;
 import androidx.cardview.widget.CardView;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
@@ -20,17 +22,17 @@ import com.google.android.material.badge.BadgeUtils;
 
 import java.util.ArrayList;
 
-
 public class ListArtifactsAdapter extends RecyclerView.Adapter<ListArtifactsAdapter.ViewHolder> {
 
     private int layout;
+    private final Context context;
     private final ArrayList<String> dataSet;
-    private Context context;
     private int progressiveCounter;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private View view;
         private BadgeDrawable badgeDrawable;
+        private final Button btnDescription;
 
         @OptIn(markerClass = com.google.android.material.badge.ExperimentalBadgeUtils.class)
         public ViewHolder(View view, Context context) {
@@ -42,8 +44,13 @@ public class ListArtifactsAdapter extends RecyclerView.Adapter<ListArtifactsAdap
             badgeDrawable.setNumber(30); //TODO: RESOLVE BADGE NOT UPDATING
             badgeDrawable.setVisible(true);
             BadgeUtils.attachBadgeDrawable(badgeDrawable, view.findViewById(R.id.cardArtifactPath), view.findViewById(R.id.frameLayoutBadge));
+            btnDescription = view.findViewById(R.id.btnDescription);
         }
 
+        public Button getBtnDescription() {
+            return btnDescription;
+        }
+        
         public View getView() {
             return view;
         }
@@ -72,10 +79,13 @@ public class ListArtifactsAdapter extends RecyclerView.Adapter<ListArtifactsAdap
 
         });
         //TODO: add all value to personalize single component
+        // TODO: Show object description in the second message of dialog
+        viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), "Object description", "OBJECT_DESCRIPTION").show(((AppCompatActivity)context).getSupportFragmentManager(), Dialog.TAG));
     }
 
     @Override
     public int getItemCount() {
         return dataSet.size();
     }
+
 }

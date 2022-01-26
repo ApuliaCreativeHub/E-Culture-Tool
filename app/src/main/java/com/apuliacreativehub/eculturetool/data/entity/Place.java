@@ -1,10 +1,11 @@
 package com.apuliacreativehub.eculturetool.data.entity;
 
-import android.net.Uri;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import com.google.gson.annotations.SerializedName;
 
 @Entity
 public class Place {
@@ -17,23 +18,50 @@ public class Place {
     @ColumnInfo(name="name")
     private String name;
 
-    @ColumnInfo(name="address")
+    @ColumnInfo(name = "address")
     private String address;
 
-    @ColumnInfo(name="description")
+    @ColumnInfo(name = "description")
     private String description;
 
-    @ColumnInfo(name="lat")
+    @ColumnInfo(name = "lat")
     private String lat;
 
-    @ColumnInfo(name="longit")
-    private String longit;
+    @SerializedName("long")
+    @ColumnInfo(name = "long")
+    private String lon;
 
+    private String normalSizeImg;
+    private String thumbnail;
+
+    public Place() {
+
+    }
+
+    @Ignore
     public Place(String name, String address, String description, String uriImg) {
         this.uriImg = uriImg;
         this.name = name;
         this.address = address;
         this.description = description;
+    }
+
+    @Ignore
+    public Place(int id, String name, String address, String description, String uriImg) {
+        this.id = id;
+        this.uriImg = uriImg;
+        this.name = name;
+        this.address = address;
+        this.description = description;
+    }
+
+    @Ignore
+    public Place(String name, String address, String description, String normalSizeImg, String thumbnail) {
+        this.name = name;
+        this.address = address;
+        this.description = description;
+        this.normalSizeImg = normalSizeImg;
+        this.thumbnail = thumbnail;
     }
 
     public int getId() {
@@ -76,12 +104,12 @@ public class Place {
         this.lat = lat;
     }
 
-    public String getLongit() {
-        return longit;
+    public String getLon() {
+        return lon;
     }
 
-    public void setLongit(String longit) {
-        this.longit = longit;
+    public void setLon(String lon) {
+        this.lon = lon;
     }
 
     public String getUriImg() {
@@ -92,4 +120,19 @@ public class Place {
         this.uriImg = uriImg;
     }
 
+    public String getNormalSizeImg() {
+        return normalSizeImg;
+    }
+
+    public void setNormalSizeImg(String normalSizeImg) {
+        this.normalSizeImg = normalSizeImg;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
 }

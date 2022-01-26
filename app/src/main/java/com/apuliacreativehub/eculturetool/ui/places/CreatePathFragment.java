@@ -54,7 +54,7 @@ public class CreatePathFragment extends Fragment {
         mDataset.add(R.mipmap.outline_travel_explore_black_36);
     }
 
-    @Override //TODO: SOSTITUIRE
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_create_path, container, false);
     }
@@ -95,7 +95,7 @@ public class CreatePathFragment extends Fragment {
         recyclerArtifactsGridView = view.findViewById(R.id.recyclerContainerObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerArtifactsGridView.setLayoutManager(gridLayoutManager);
-        listArtifactsAdapter = new ListArtifactsAdapter(R.layout.component_card_link_artifact, mArtifactDataset, requireActivity());
+        listArtifactsAdapter = new ListArtifactsAdapter(R.layout.component_card_link_artifact, mArtifactDataset, getContext());
         recyclerArtifactsGridView.setAdapter(listArtifactsAdapter);
     }
 

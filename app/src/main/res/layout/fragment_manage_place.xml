@@ -23,14 +23,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="16dp">
+
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingRight="8dp"
                 android:layout_weight="1"
                 android:ellipsize="end"
-                android:hint="SELEZIONA UNA STANZA"
+                android:hint="@string/rooms"
                 android:maxLines="1"
                 android:textAppearance="?attr/textAppearanceSubtitle1">
 
@@ -38,16 +38,22 @@
                     android:id="@+id/selectRoomAutoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:popupElevation="16dp" />
+                    android:inputType="none"
+                    android:labelFor="@id/selectRoomAutoComplete"
+                    android:popupElevation="16dp"
+                    tools:ignore="TextContrastCheck" />
+
             </com.google.android.material.textfield.TextInputLayout>
+
             <Button
-                android:id="@+id/elevatedButton"
+                android:id="@+id/btnRoomOptions"
+                style="@style/Widget.Material3.Button.IconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:icon="@mipmap/outline_mode_edit_black_48"
+                app:icon="@mipmap/outline_more_vert_black_48"
                 app:iconGravity="textEnd"
-                style="@style/Widget.Material3.Button.IconButton"/>
+                tools:ignore="SpeakableTextPresentCheck" />
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -56,6 +62,7 @@
             android:layout_height="match_parent" />
 
     </LinearLayout>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/managePlaceToolbar"
         android:layout_width="match_parent"
@@ -68,7 +75,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnCreateArtifact"
+        android:id="@+id/btnCreateObject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

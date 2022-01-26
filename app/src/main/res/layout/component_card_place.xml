@@ -19,7 +19,7 @@
 
             <ImageView
                 android:id="@+id/imgPlace"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="194dp"
                 android:contentDescription="@string/place_image"
                 android:scaleType="centerCrop"
@@ -35,7 +35,7 @@
                     android:id="@+id/txtName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name"
+                    android:text="@string/name"
                     android:textAppearance="?attr/textAppearanceTitleMedium" />
 
                 <TextView
@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Address"
+                    android:text="@string/address"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="?android:attr/textColorSecondary" />
 
@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Description"
+                    android:text="@string/description"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="?android:attr/textColorSecondary" />
 

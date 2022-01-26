@@ -12,25 +12,25 @@ import retrofit2.http.POST;
 public interface RemoteUserDAO {
     @Headers("Content-Type: application/json")
     @POST("user/add")
-    Call<Void> RegisterUser(@Body User user);
+    Call<Void> registerUser(@Body User user);
 
     @Headers("Content-Type: application/json")
     @POST("user/update")
-    Call<User> UpdateUser(@Body User user);
+    Call<User> updateUser(@Body User user);
 
     @Headers("Content-Type: application/json")
     @POST("user/auth")
-    Call<UserWithToken> LoginUser(@Body UserWithToken user);
+    Call<UserWithToken> loginUser(@Body UserWithToken user);
 
     @Headers("Content-Type: application/json")
     @GET("user/logout")
-    Call<Void> LogoutUser();
+    Call<Void> logoutUser();
 
     @Headers("Content-Type: application/json")
     @POST("user/changepassword")
-    Call<Void> ChangePassword(@Body User user);
+    Call<Void> changePassword(@Body User user);
 
     @Headers("Content-Type: application/json")
     @POST("user/delete")
-    Call<Void> DeleteUser(@Body User user);
+    Call<Void> deleteUser(@Body User user);
 }

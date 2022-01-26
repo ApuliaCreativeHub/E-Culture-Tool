@@ -1,35 +1,27 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.app.Application;
-import android.content.Context;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.apuliacreativehub.eculturetool.data.repository.PlaceRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
 
-abstract public class AbstractPlaceViewModel extends AndroidViewModel {
+abstract public class AbstractObjectViewModel extends AndroidViewModel {
     private static final int MIN_LENGTH_NAME = 2;
     private static final int MAX_LENGTH_NAME = 25;
-    private static final int MIN_LENGTH_ADDRESS = 5;
-    private static final int MAX_LENGTH_ADDRESS = 50;
     private static final int MIN_LENGTH_DESCRIPTION = 10;
     private static final int MAX_LENGTH_DESCRIPTION = 100;
-    protected final PlaceRepository repository;
 
-    protected int id;
     protected String name = "";
-    protected String address = "";
+    protected String room = "";
     protected String description = "";
     protected Uri image = null;
 
-
-    protected AbstractPlaceViewModel(Application application) {
+    protected AbstractObjectViewModel(Application application) {
         super(application);
-        ECultureTool app = getApplication();
-        repository = new PlaceRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
     }
 
     public String getName() {
@@ -44,16 +36,16 @@ abstract public class AbstractPlaceViewModel extends AndroidViewModel {
         return name.length() >= MIN_LENGTH_NAME && name.length() <= MAX_LENGTH_NAME;
     }
 
-    public String getAddress() {
-        return address;
+    public String getRoom() {
+        return room;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setRoom(String room) {
+        this.room = room;
     }
 
-    public boolean isAddressCorrect(String address) {
-        return address.length() >= MIN_LENGTH_ADDRESS && address.length() <= MAX_LENGTH_ADDRESS;
+    public boolean isRoomSelected(String room) {
+        return !room.equals("");
     }
 
     public String getDescription() {
