@@ -107,6 +107,7 @@ public class UserRepository{
         executor.execute(() -> {
             try {
                 Response<Void> response = call.execute();
+                // TODO: remove everything from local database
                 Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
             } catch (IOException ioe) {
                 Log.e("RETROFITERROR", ioe.getMessage());
