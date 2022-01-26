@@ -6,8 +6,9 @@ import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface RemoteZoneDAO {
     @GET("zone/getPlaceZones")
-    Call<ArrayList<Zone>> getAllPlaceZones();
+    Call<ArrayList<Zone>> getAllPlaceZones(@Query("placeId") int placeId);
 }

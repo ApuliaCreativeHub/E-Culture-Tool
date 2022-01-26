@@ -22,6 +22,7 @@ public class ErrorStrings {
             instance.errors.put("43", resources.getString(R.string.e43));
             instance.errors.put("44", resources.getString(R.string.e44));
             instance.errors.put("45", resources.getString(R.string.e45));
+            instance.errors.put("46", resources.getString(R.string.e46));
 
             instance.errors.put("50", resources.getString(R.string.e50));
             instance.errors.put("51", resources.getString(R.string.e51));

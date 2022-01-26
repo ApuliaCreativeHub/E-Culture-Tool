@@ -21,7 +21,7 @@ public class ManagePlaceViewModel extends AndroidViewModel {
     private List<Zone> zones;
     private Place place;
 
-    protected ManagePlaceViewModel(Application application) {
+    public ManagePlaceViewModel(Application application) {
         super(application);
         ECultureTool app = getApplication();
         zoneRepository = new ZoneRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
