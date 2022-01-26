@@ -160,7 +160,7 @@ public class PlaceRepository {
             getResult = getYourPlacesFromRemoteDatabase();
         } else {
             Log.d("SHOULDFETCH", "local");
-            getResult = getYourPlacesFromLocalDatabase();
+            getResult = getAllPlacesFromLocalDatabase();
         }
 
         return getResult;
@@ -171,7 +171,8 @@ public class PlaceRepository {
             @Override
             public void run() {
                 for (Place place : places) {
-                    if (localPlaceDAO.getPlaceById(1) != null) localPlaceDAO.insertPlace(place);
+                    if (localPlaceDAO.getPlaceById(place.getId()) == null)
+                        localPlaceDAO.insertPlace(place);
                     else localPlaceDAO.updatePlace(place);
                 }
             }
@@ -205,7 +206,7 @@ public class PlaceRepository {
         return getResult;
     }
 
-    private MutableLiveData<RepositoryNotification<ArrayList<Place>>> getYourPlacesFromLocalDatabase() {
+    private MutableLiveData<RepositoryNotification<ArrayList<Place>>> getAllPlacesFromLocalDatabase() {
         MutableLiveData<RepositoryNotification<ArrayList<Place>>> getResult = new MutableLiveData<>();
         executor.execute(new Runnable() {
             @Override
@@ -216,6 +217,45 @@ public class PlaceRepository {
             }
         });
 
+        return getResult;
+    }
+
+    public MutableLiveData<RepositoryNotification<ArrayList<Place>>> getAllPlaces() {
+        MutableLiveData<RepositoryNotification<ArrayList<Place>>> getResult;
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            getResult = getAllPlacesFromRemoteDatabase();
+        } else {
+            Log.d("SHOULDFETCH", "local");
+            getResult = getAllPlacesFromLocalDatabase();
+        }
+
+        return getResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<ArrayList<Place>>> getAllPlacesFromRemoteDatabase() {
+        MutableLiveData<RepositoryNotification<ArrayList<Place>>> getResult = new MutableLiveData<>();
+        Call<ArrayList<Place>> call = remotePlaceDAO.getAllPlaces();
+        executor.execute(() -> {
+            try {
+                Response<ArrayList<Place>> response = call.execute();
+                Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                RepositoryNotification<ArrayList<Place>> repositoryNotification = new RepositoryNotification<>();
+                if (response.isSuccessful()) {
+                    repositoryNotification.setData(response.body());
+                } else {
+                    if (response.errorBody() != null) {
+                        repositoryNotification.setErrorMessage(response.errorBody().string());
+                    }
+                }
+                getResult.postValue(repositoryNotification);
+            } catch (IOException ioe) {
+                RepositoryNotification<ArrayList<Place>> repositoryNotification = new RepositoryNotification<>();
+                repositoryNotification.setException(ioe);
+                getResult.postValue(repositoryNotification);
+                Log.e("RETROFITERROR", ioe.getMessage());
+            }
+        });
         return getResult;
     }
 }

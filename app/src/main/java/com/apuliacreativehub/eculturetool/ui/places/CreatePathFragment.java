@@ -1,7 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.ui.component.ListArtifactsAdapter;
-import com.google.android.material.badge.BadgeDrawable;
 
 import java.util.ArrayList;
 
@@ -37,7 +34,7 @@ public class CreatePathFragment extends Fragment {
     private RecyclerView recyclerArtifactsCircleLinearView;
     private GridLayoutManager gridLayoutManager;
     private LinearLayoutManager linearLayoutManager;
-    private ListArtifactsAdapter listArtifactsAdapter;
+    private ListArtifactsCreateAdapter listArtifactsCreateAdapter;
     private ListCircleArtifactsAdapter listCircleArtifactsAdapter;
     private ArrayList<Integer> mDataset;
     private ArrayList<String> mArtifactDataset;
@@ -61,6 +58,7 @@ public class CreatePathFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         setSelectElement();
@@ -70,6 +68,7 @@ public class CreatePathFragment extends Fragment {
         toolbar.setTitle(R.string.create_place_path);
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+
     }
 
     private void setSelectElement() {
@@ -92,11 +91,11 @@ public class CreatePathFragment extends Fragment {
     }
 
     private void setDynamicArtifactRecycleView() {
-        recyclerArtifactsGridView = view.findViewById(R.id.recyclerContainerObject);
+        recyclerArtifactsGridView = view.findViewById(R.id.recyclerContainerCreateObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerArtifactsGridView.setLayoutManager(gridLayoutManager);
-        listArtifactsAdapter = new ListArtifactsAdapter(R.layout.component_card_link_artifact, mArtifactDataset, getContext());
-        recyclerArtifactsGridView.setAdapter(listArtifactsAdapter);
+        listArtifactsCreateAdapter = new ListArtifactsCreateAdapter(R.layout.component_card_link_artifact, mArtifactDataset, getContext());
+        recyclerArtifactsGridView.setAdapter(listArtifactsCreateAdapter);
     }
 
     private void setDynamicCircleArtifactRecycleView() {

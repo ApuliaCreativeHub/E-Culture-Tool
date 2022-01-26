@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
-import com.apuliacreativehub.eculturetool.ui.component.ListArtifactsAdapter;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -39,7 +38,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     private AutoCompleteTextView autoCompleteTextView;
     private RecyclerView recyclerGridView;
     private GridLayoutManager gridLayoutManager;
-    private ListArtifactsAdapter listArtifactsAdapter;
+    private ListArtifactsManageAdapter listArtifactsManageAdapter;
     private ArrayList<String> mDataset;
     private boolean selected = false;
     private boolean add;
@@ -109,10 +108,11 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         recyclerGridView = view.findViewById(R.id.recyclerContainerObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerGridView.setLayoutManager(gridLayoutManager);
-        listArtifactsAdapter = new ListArtifactsAdapter(R.layout.component_card_artifact, mDataset, getContext());
-        recyclerGridView.setAdapter(listArtifactsAdapter);
+        listArtifactsManageAdapter = new ListArtifactsManageAdapter(R.layout.component_card_artifact, mDataset, getContext());
+        recyclerGridView.setAdapter(listArtifactsManageAdapter);
     }
 
+    @Override
     public void onStart() {
         super.onStart();
 
