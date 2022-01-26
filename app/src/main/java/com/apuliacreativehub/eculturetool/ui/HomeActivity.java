@@ -21,13 +21,14 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        TokenManager.setTokenFromSharedPreferences(this);
+        ((ECultureTool) getApplication()).localDatabase = Room.databaseBuilder(this, LocalDatabase.class, "ECultureTool").enableMultiInstanceInvalidation().build();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        TokenManager.setTokenFromSharedPreferences(this);
-        ((ECultureTool) getApplication()).localDatabase = Room.databaseBuilder(this, LocalDatabase.class, "ECultureTool").enableMultiInstanceInvalidation().build();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationBar);
         NavController navController = Navigation.findNavController(this, R.id.navHostContainer);
