@@ -219,4 +219,31 @@ public class PlaceRepository {
 
         return getResult;
     }
+
+    public MutableLiveData<RepositoryNotification<ArrayList<Place>>> getAllPlaces() {
+        MutableLiveData<RepositoryNotification<ArrayList<Place>>> getResult = new MutableLiveData<>();
+        Call<ArrayList<Place>> call = remotePlaceDAO.getAllPlaces();
+        executor.execute(() -> {
+            try {
+                Response<ArrayList<Place>> response = call.execute();
+                Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                RepositoryNotification<ArrayList<Place>> repositoryNotification = new RepositoryNotification<>();
+                if (response.isSuccessful()) {
+                    repositoryNotification.setData(response.body());
+                    saveRemotePlacesToLocal(repositoryNotification.getData());
+                } else {
+                    if (response.errorBody() != null) {
+                        repositoryNotification.setErrorMessage(response.errorBody().string());
+                    }
+                }
+                getResult.postValue(repositoryNotification);
+            } catch (IOException ioe) {
+                RepositoryNotification<ArrayList<Place>> repositoryNotification = new RepositoryNotification<>();
+                repositoryNotification.setException(ioe);
+                getResult.postValue(repositoryNotification);
+                Log.e("RETROFITERROR", ioe.getMessage());
+            }
+        });
+        return getResult;
+    }
 }

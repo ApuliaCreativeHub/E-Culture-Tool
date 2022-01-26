@@ -12,6 +12,11 @@ import android.util.Log;
 import androidx.annotation.AnyRes;
 import androidx.annotation.NonNull;
 
+import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.mapbox.geojson.Point;
+
+import java.util.ArrayList;
+
 public class Utils {
     public final static String SCHEME_ANDROID_RESOURCE = "android.resource";
     public final static String DRAWABLE_URI_BASE_PATH = SCHEME_ANDROID_RESOURCE + "://com.apuliacreativehub.eculturetool/drawable/";

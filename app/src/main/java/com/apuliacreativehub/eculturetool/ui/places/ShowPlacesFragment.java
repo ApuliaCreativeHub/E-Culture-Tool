@@ -67,7 +67,7 @@ public class ShowPlacesFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_show_places, container, false);
 
         showPlacesViewModel = new ViewModelProvider(this).get(ShowPlacesViewModel.class);
-        showPlacesViewModel.getPlaces().observe(getViewLifecycleOwner(), getPlacesObserver);
+        showPlacesViewModel.getYourPlaces().observe(getViewLifecycleOwner(), getPlacesObserver);
         return view;
     }
 
