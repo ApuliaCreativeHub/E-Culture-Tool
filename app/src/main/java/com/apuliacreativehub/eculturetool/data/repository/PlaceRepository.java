@@ -171,7 +171,8 @@ public class PlaceRepository {
             @Override
             public void run() {
                 for (Place place : places) {
-                    if (localPlaceDAO.getPlaceById(1) != null) localPlaceDAO.insertPlace(place);
+                    if (localPlaceDAO.getPlaceById(place.getId()) == null)
+                        localPlaceDAO.insertPlace(place);
                     else localPlaceDAO.updatePlace(place);
                 }
             }
