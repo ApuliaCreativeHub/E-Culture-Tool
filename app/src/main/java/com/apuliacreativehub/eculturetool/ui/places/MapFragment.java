@@ -19,10 +19,14 @@ import android.view.ViewGroup;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.core.os.ConfigurationCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,7 +34,12 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
+import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
+import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtil;
+import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -50,6 +59,7 @@ import com.mapbox.maps.plugin.gestures.OnMapClickListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -59,7 +69,7 @@ import java.util.Objects;
 
 public class MapFragment extends Fragment {
     private MapView map;
-    private Point[] points;
+    private MapFragmentViewModel mapFragmentViewModel;
     View v;
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
         if (isGranted) {
@@ -69,6 +79,30 @@ public class MapFragment extends Fragment {
         }
     });
 
+    final Observer<RepositoryNotification<ArrayList<Place>>> getPlacesObserver = notification -> {
+        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        if (notification.getException() == null) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(notification.getData()));
+            if (notification.getErrorMessage() == null) {
+                mapFragmentViewModel.setPointsAndPlaces(notification.getData());
+                map.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS, style -> {
+                    for (Point point : mapFragmentViewModel.getPoints())
+                        addAnnotationToMap(point);
+                });
+                addOnClickMapboxListener(Arrays.asList(mapFragmentViewModel.getPoints()), MapboxHelper.DEFAULT_TOLERANCE);
+                requestLocationPermission();
+            } else {
+                Log.d("Dialog", "show dialog here");
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_PLACES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        } else {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_PLACES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+        }
+    };
+
     public MapFragment() {
         super(R.layout.osm_map);
     }
@@ -77,22 +111,12 @@ public class MapFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.osm_map, null);
 
-        points = new Point[2];
-        points[0] = Point.fromLngLat(10.06D, 51.31D);
-        points[1] = Point.fromLngLat(11.06D, 78.31D);
         map = v.findViewById(R.id.mapview);
-        /**
-         * TODO: get api
-         */
-        map.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS, style -> {
-            for (Point point : points)
-                addAnnotationToMap(point);
-        });
-        addOnClickMapboxListener(Arrays.asList(points), MapboxHelper.DEFAULT_TOLERANCE);
-        requestLocationPermission();
+
+        mapFragmentViewModel = new ViewModelProvider(this).get(MapFragmentViewModel.class);
+        mapFragmentViewModel.getAllPlaces().observe(getViewLifecycleOwner(), getPlacesObserver);
         return v;
     }
-
 
     public void addOnClickMapboxListener(List<Point> points, float tolerance) {
         this.map.getMapboxMap().gesturesPlugin((gesturesPlugin -> {
@@ -102,7 +126,7 @@ public class MapFragment extends Fragment {
                     MapboxHelper mapboxHelper = new MapboxHelper(possiblePoint, tolerance);
                     Collections.sort(points, mapboxHelper);
                     if(mapboxHelper.isPointValid(points.get(0))) {
-                        ModalBottomSheetPlace modalBottomSheet = new ModalBottomSheetPlace();
+                        ModalBottomSheetPlace modalBottomSheet = new ModalBottomSheetPlace(getContext(), mapFragmentViewModel.getPlaceFromPoint(points.get(0)));
                         modalBottomSheet.show(getChildFragmentManager(), ModalBottomSheetUtil.TAG);
                     }
                     return true;

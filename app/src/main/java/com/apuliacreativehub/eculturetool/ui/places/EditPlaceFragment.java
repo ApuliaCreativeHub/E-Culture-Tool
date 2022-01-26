@@ -245,13 +245,10 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
             }
         });
 
-        imgPlace.setOnClickListener(view -> {
-            requestPermission();
-        });
+        imgPlace.setOnClickListener(view -> requestPermission());
 
         Button btnDeletePlace = view.findViewById(R.id.btnDeletePlace);
         btnDeletePlace.setOnClickListener(delete -> showNoticeDialog());
-
     }
 
     public void showNoticeDialog() {

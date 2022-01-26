@@ -15,7 +15,7 @@ public class ShowPlacesViewModel extends AbstractPlaceViewModel{
         super(application);
     }
 
-    public MutableLiveData<RepositoryNotification<ArrayList<Place>>> getPlaces(){
+    public MutableLiveData<RepositoryNotification<ArrayList<Place>>> getYourPlaces(){
         return repository.getYourPlaces();
     }
 }

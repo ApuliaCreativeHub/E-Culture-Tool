@@ -26,6 +26,10 @@ public interface RemotePlaceDAO {
     @GET("place/getYours")
     Call<ArrayList<Place>> getYourPlaces();
 
+    @Headers("Content-Type: application/json")
+    @GET("place/getAll")
+    Call<ArrayList<Place>> getAllPlaces();
+
     @POST("place/delete")
     Call<Void> DeletePlace(@Body Place place);
 

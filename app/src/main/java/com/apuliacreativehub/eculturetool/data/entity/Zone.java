@@ -25,6 +25,14 @@ public class Zone {
         this.name = name;
     }
 
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
+
     public int getId() {
         return id;
     }
@@ -39,13 +47,5 @@ public class Zone {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPlaceId() {
-        return placeId;
-    }
-
-    public void setPlaceId(String placeId) {
-        this.placeId = placeId;
     }
 }
