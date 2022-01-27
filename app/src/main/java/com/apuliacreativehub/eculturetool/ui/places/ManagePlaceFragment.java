@@ -198,7 +198,6 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     }
 
     private void setSelectElement() {
-        //TODO: Read Room API
         managePlaceViewModel.getZonesFromDatabase().observe(getViewLifecycleOwner(), getZonesObserver);
         autoCompleteTextView = view.findViewById(R.id.selectRoomAutoComplete);
         autoCompleteTextView.setAdapter(arrayOptionsAdapter);
