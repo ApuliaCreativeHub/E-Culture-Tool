@@ -35,7 +35,8 @@
     </style>
 
     <style name="ECultureTool.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="ECultureTool.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

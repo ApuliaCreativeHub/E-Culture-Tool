@@ -21,7 +21,7 @@ public class ManagePlaceViewModel extends AndroidViewModel {
     private List<Zone> zones;
     private Place place;
 
-    protected ManagePlaceViewModel(Application application) {
+    public ManagePlaceViewModel(Application application) {
         super(application);
         ECultureTool app = getApplication();
         zoneRepository = new ZoneRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
@@ -49,5 +49,14 @@ public class ManagePlaceViewModel extends AndroidViewModel {
 
     public void setZones(List<Zone> zones) {
         this.zones = zones;
+    }
+
+    public MutableLiveData<RepositoryNotification<Void>> addZonesToDatabase(String name) {
+        if (place != null) {
+            Zone zone = new Zone(name, place.getId());
+            return zoneRepository.addZone(zone);
+        } else {
+            return new MutableLiveData<>();
+        }
     }
 }

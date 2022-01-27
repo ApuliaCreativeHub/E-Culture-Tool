@@ -14,22 +14,29 @@ public class Zone {
     private String name;
 
     @ColumnInfo(name = "place_id")
-    private String placeId;
+    private int placeId;
 
     public Zone() {
     }
 
     @Ignore
-    public Zone(int id, String name) {
-        this.id = id;
+    public Zone(String name, int placeId) {
         this.name = name;
+        this.placeId = placeId;
     }
 
-    public String getPlaceId() {
+    @Ignore
+    public Zone(int id, String name, int placeId) {
+        this.id = id;
+        this.name = name;
+        this.placeId = placeId;
+    }
+
+    public int getPlaceId() {
         return placeId;
     }
 
-    public void setPlaceId(String placeId) {
+    public void setPlaceId(int placeId) {
         this.placeId = placeId;
     }
 
