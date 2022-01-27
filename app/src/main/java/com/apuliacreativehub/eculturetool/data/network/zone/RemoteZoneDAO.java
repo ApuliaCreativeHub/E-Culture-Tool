@@ -17,7 +17,7 @@ public interface RemoteZoneDAO {
     @POST("zone/add")
     Call<Void> AddZone(@Body Zone zone);
 
-    @POST("zone/edit")
+    @POST("zone/update")
     Call<Void> EditZone(@Body Zone zone);
 
     @POST("zone/delete")
