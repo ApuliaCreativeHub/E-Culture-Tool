@@ -13,13 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Artifact;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
 
 public class ListCircleArtifactsAdapter extends RecyclerView.Adapter<ListCircleArtifactsAdapter.ViewHolder> {
 
-    private ArrayList<Integer> dataSet;
+    private ArrayList<Artifact> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private View view;
@@ -48,7 +49,7 @@ public class ListCircleArtifactsAdapter extends RecyclerView.Adapter<ListCircleA
         }
     }
 
-    public ListCircleArtifactsAdapter(ArrayList<Integer> dataSet) {
+    public ListCircleArtifactsAdapter(ArrayList<Artifact> dataSet) {
         this.dataSet = dataSet;
     }
 
@@ -81,9 +82,9 @@ public class ListCircleArtifactsAdapter extends RecyclerView.Adapter<ListCircleA
     }
 
     private void moveValue(int posStart, int posEnd) {
-        Integer objectStart = dataSet.get(posStart); //TODO: ADD ALL DROP CONTAINER TO RENDER THE DRAG&DROP INTUITIVE
+        Artifact artifactStart = dataSet.get(posStart); //TODO: ADD ALL DROP CONTAINER TO RENDER THE DRAG&DROP INTUITIVE
         dataSet.remove(posStart);
-        dataSet.add(posEnd, objectStart);
+        dataSet.add(posEnd, artifactStart);
         notifyDataSetChanged();
     }
 
@@ -95,7 +96,7 @@ public class ListCircleArtifactsAdapter extends RecyclerView.Adapter<ListCircleA
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.getCircle().setImageResource(dataSet.get(position));
+        holder.getCircle().setImageResource(R.mipmap.outline_qr_code_scanner_black_18);
         ShapeableImageView shapeableImageView = holder.getCircle();
         LinearLayout linearLayout = holder.getDropContainer();
         shapeableImageView.setTag(position);
@@ -103,6 +104,7 @@ public class ListCircleArtifactsAdapter extends RecyclerView.Adapter<ListCircleA
         setOnDragListener(shapeableImageView);
         setOnDropListener(linearLayout);
         if(position+1 == dataSet.size()) holder.getArrowIcon().setVisibility(View.GONE);
+        else holder.getArrowIcon().setVisibility(View.VISIBLE);
     }
 
     @Override

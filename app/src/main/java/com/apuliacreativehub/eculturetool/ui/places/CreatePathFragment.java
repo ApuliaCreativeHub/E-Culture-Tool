@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Artifact;
 
 import java.util.ArrayList;
 
@@ -36,19 +37,19 @@ public class CreatePathFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private ListArtifactsCreateAdapter listArtifactsCreateAdapter;
     private ListCircleArtifactsAdapter listCircleArtifactsAdapter;
-    private ArrayList<Integer> mDataset;
-    private ArrayList<String> mArtifactDataset;
+    private ArrayList<Artifact> mCircleArtifactDataset;
+    private ArrayList<Artifact> mArtifactDataset;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Artifact testArtifact = new Artifact(100, "Opera d'arte", "Opera d'arte antica", "img");
+        Artifact testArtifact2 = new Artifact(101, "Opera d'arte 2", "Opera d'arte antica 2", "img2");
+
+        mCircleArtifactDataset = new ArrayList<>();
         mArtifactDataset = new ArrayList<>();
-        mArtifactDataset.add("Vaso di terra");
-        mDataset = new ArrayList<>();
-        mDataset.add(R.mipmap.outline_info_black_36);
-        mDataset.add(R.mipmap.outline_qr_code_scanner_black_36);
-        mDataset.add(R.mipmap.outline_search_black_36);
-        mDataset.add(R.mipmap.outline_travel_explore_black_36);
+        mArtifactDataset.add(testArtifact);
+        mArtifactDataset.add(testArtifact2);
     }
 
     @Override
@@ -62,8 +63,8 @@ public class CreatePathFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         setSelectElement();
-        setDynamicArtifactRecycleView();
         setDynamicCircleArtifactRecycleView();
+        setDynamicArtifactRecycleView();
         Toolbar toolbar = view.findViewById(R.id.createPathToolbar);
         toolbar.setTitle(R.string.create_place_path);
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
@@ -94,7 +95,7 @@ public class CreatePathFragment extends Fragment {
         recyclerArtifactsGridView = view.findViewById(R.id.recyclerContainerCreateObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerArtifactsGridView.setLayoutManager(gridLayoutManager);
-        listArtifactsCreateAdapter = new ListArtifactsCreateAdapter(R.layout.component_card_link_artifact, mArtifactDataset, getContext());
+        listArtifactsCreateAdapter = new ListArtifactsCreateAdapter(R.layout.component_card_link_artifact, mArtifactDataset, mCircleArtifactDataset, listCircleArtifactsAdapter, getContext());
         recyclerArtifactsGridView.setAdapter(listArtifactsCreateAdapter);
     }
 
@@ -103,7 +104,7 @@ public class CreatePathFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerArtifactsCircleLinearView.setLayoutManager(linearLayoutManager);
-        listCircleArtifactsAdapter = new ListCircleArtifactsAdapter(mDataset);
+        listCircleArtifactsAdapter = new ListCircleArtifactsAdapter(mCircleArtifactDataset);
         recyclerArtifactsCircleLinearView.setAdapter(listCircleArtifactsAdapter);
     }
 
