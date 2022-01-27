@@ -1,7 +1,6 @@
 package com.apuliacreativehub.eculturetool.data.repository;
 
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -14,16 +13,11 @@ import com.apuliacreativehub.eculturetool.data.network.zone.RemoteZoneDAO;
 import com.apuliacreativehub.eculturetool.data.network.zone.ZoneRemoteDatabase;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okio.ByteString;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -106,29 +100,28 @@ public class ZoneRepository {
         });
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> addZone(Zone zone) {
-        MutableLiveData<RepositoryNotification<Void>> addResult;
+    public MutableLiveData<RepositoryNotification<Zone>> addZone(Zone zone) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Zone>> addResult;
         if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
             Log.d("SHOULDFETCH", "remote");
             addResult = addZoneToRemoteDatabase(zone);
         } else {
-            Log.d("SHOULDFETCH", "local");
-            addResult = addZoneLocalDatabase(zone);
+            throw new NoInternetConnectionException();
         }
 
         return addResult;
     }
 
-    private MutableLiveData<RepositoryNotification<Void>> addZoneToRemoteDatabase(Zone zone) {
-        MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
+    private MutableLiveData<RepositoryNotification<Zone>> addZoneToRemoteDatabase(Zone zone) {
+        MutableLiveData<RepositoryNotification<Zone>> addResult = new MutableLiveData<>();
         Call<Void> call = remoteZoneDAO.AddZone(zone);
         executor.execute(() -> {
             try {
                 Response<Void> response = call.execute();
                 Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                RepositoryNotification<Zone> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
-                    repositoryNotification.setData(response.body());
+                    repositoryNotification.setData(zone);
                     saveRemoteZonesToLocal(Collections.singletonList(zone));
                 } else {
                     if (response.errorBody() != null) {
@@ -137,7 +130,7 @@ public class ZoneRepository {
                 }
                 addResult.postValue(repositoryNotification);
             } catch (IOException ioe) {
-                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                RepositoryNotification<Zone> repositoryNotification = new RepositoryNotification<>();
                 repositoryNotification.setException(ioe);
                 addResult.postValue(repositoryNotification);
                 Log.e("RETROFITERROR", ioe.getMessage());

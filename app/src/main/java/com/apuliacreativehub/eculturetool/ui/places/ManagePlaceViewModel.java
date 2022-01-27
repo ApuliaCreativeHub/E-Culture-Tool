@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.data.repository.ZoneRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
@@ -19,11 +20,13 @@ import java.util.List;
 public class ManagePlaceViewModel extends AndroidViewModel {
     private final ZoneRepository zoneRepository;
     private List<Zone> zones;
+    private List<String> zoneNames;
     private Place place;
 
     public ManagePlaceViewModel(Application application) {
         super(application);
         ECultureTool app = getApplication();
+        zoneNames = new ArrayList<>();
         zoneRepository = new ZoneRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
     }
 
@@ -51,12 +54,24 @@ public class ManagePlaceViewModel extends AndroidViewModel {
         this.zones = zones;
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> addZonesToDatabase(String name) {
+    public MutableLiveData<RepositoryNotification<Zone>> addZonesToDatabase(String name) throws NoInternetConnectionException {
         if (place != null) {
             Zone zone = new Zone(name, place.getId());
             return zoneRepository.addZone(zone);
         } else {
             return new MutableLiveData<>();
         }
+    }
+
+    public void addZone(Zone zone) {
+        zones.add(zone);
+    }
+
+    public List<String> getZoneNames() {
+        return zoneNames;
+    }
+
+    public void setZoneNames(List<String> zoneNames) {
+        this.zoneNames = zoneNames;
     }
 }
