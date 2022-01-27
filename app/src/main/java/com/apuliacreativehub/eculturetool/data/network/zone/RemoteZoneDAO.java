@@ -12,8 +12,14 @@ import retrofit2.http.Query;
 
 public interface RemoteZoneDAO {
     @GET("zone/getPlaceZones")
-    Call<ArrayList<Zone>> getAllPlaceZones(@Query("placeId") int placeId);
+    Call<ArrayList<Zone>> GetAllPlaceZones(@Query("placeId") int placeId);
 
     @POST("zone/add")
-    Call<Void> addZone(@Body Zone zone);
+    Call<Void> AddZone(@Body Zone zone);
+
+    @POST("zone/edit")
+    Call<Void> EditZone(@Body Zone zone);
+
+    @POST("zone/delete")
+    Call<Void> DeleteZone(@Body Zone zone);
 }
