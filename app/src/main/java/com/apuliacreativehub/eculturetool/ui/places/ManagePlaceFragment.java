@@ -232,7 +232,6 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
             if(checkRoomName(name)) {
                 autoCompleteTextView.setError(null);
                 if(add) {
-                    // TODO: Insert zone: create an observer for zone insertion and add zone to zones list in ManageViewModel on success
                     try {
                         managePlaceViewModel.addZonesToDatabase(name).observe(this, addZonesObserver);
                     } catch (NoInternetConnectionException e) {
