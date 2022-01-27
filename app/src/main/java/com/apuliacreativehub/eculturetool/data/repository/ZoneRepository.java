@@ -92,9 +92,9 @@ public class ZoneRepository {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                for (Zone place : zones) {
-                    if (localZoneDAO.getZoneById(1) != null) localZoneDAO.insertZone(place);
-                    else localZoneDAO.updateZone(place);
+                for (Zone zone : zones) {
+                    if (localZoneDAO.getZoneById(1) != null) localZoneDAO.insertZone(zone);
+                    else localZoneDAO.updateZone(zone);
                 }
             }
         });
@@ -153,18 +153,17 @@ public class ZoneRepository {
         return addResult;
     }
 
-    private MutableLiveData<RepositoryNotification<Void>> editZone(Zone zone){
-        MutableLiveData<RepositoryNotification<Void>> editResult = new MutableLiveData<>();
+    private MutableLiveData<RepositoryNotification<Zone>> editZoneToRemoteDatabase(Zone zone) {
+        MutableLiveData<RepositoryNotification<Zone>> editResult = new MutableLiveData<>();
         Call<Void> call = remoteZoneDAO.EditZone(zone);
         executor.execute(() -> {
             try {
                 Response<Void> response = call.execute();
                 Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                RepositoryNotification<Zone> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
-                    repositoryNotification.setData(response.body());
-                    //TODO: return zone and update (?)
-                    //localZoneDAO.updateZone(zone);
+                    repositoryNotification.setData(zone);
+                    saveRemoteZonesToLocal(Collections.singletonList(zone));
                 } else {
                     if (response.errorBody() != null) {
                         repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -172,7 +171,7 @@ public class ZoneRepository {
                 }
                 editResult.postValue(repositoryNotification);
             } catch (IOException ioe) {
-                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                RepositoryNotification<Zone> repositoryNotification = new RepositoryNotification<>();
                 repositoryNotification.setException(ioe);
                 editResult.postValue(repositoryNotification);
                 Log.e("RETROFITERROR", ioe.getMessage());
