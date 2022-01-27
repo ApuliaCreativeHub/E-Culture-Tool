@@ -139,20 +139,6 @@ public class ZoneRepository {
         return addResult;
     }
 
-    private MutableLiveData<RepositoryNotification<Void>> addZoneLocalDatabase(Zone zone) {
-        MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
-                localZoneDAO.insertZone(zone);
-                addResult.postValue(repositoryNotification);
-            }
-        });
-
-        return addResult;
-    }
-
     private MutableLiveData<RepositoryNotification<Zone>> editZoneToRemoteDatabase(Zone zone) {
         MutableLiveData<RepositoryNotification<Zone>> editResult = new MutableLiveData<>();
         Call<Void> call = remoteZoneDAO.EditZone(zone);
