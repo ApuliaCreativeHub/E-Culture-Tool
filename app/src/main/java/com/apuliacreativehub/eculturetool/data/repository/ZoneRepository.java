@@ -139,7 +139,19 @@ public class ZoneRepository {
         return addResult;
     }
 
-    private MutableLiveData<RepositoryNotification<Zone>> editZoneToRemoteDatabase(Zone zone) {
+    public MutableLiveData<RepositoryNotification<Zone>> editZone(Zone zone) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Zone>> editResult;
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            editResult = editZoneOnRemoteDatabase(zone);
+        } else {
+            throw new NoInternetConnectionException();
+        }
+
+        return editResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Zone>> editZoneOnRemoteDatabase(Zone zone) {
         MutableLiveData<RepositoryNotification<Zone>> editResult = new MutableLiveData<>();
         Call<Void> call = remoteZoneDAO.EditZone(zone);
         executor.execute(() -> {
