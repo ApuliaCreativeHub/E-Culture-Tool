@@ -1,6 +1,7 @@
 package com.apuliacreativehub.eculturetool.data.local;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -22,4 +23,7 @@ public interface LocalZoneDAO {
 
     @Update
     void updateZone(Zone zone);
+
+    @Delete
+    void deleteZone(Zone zone);
 }
