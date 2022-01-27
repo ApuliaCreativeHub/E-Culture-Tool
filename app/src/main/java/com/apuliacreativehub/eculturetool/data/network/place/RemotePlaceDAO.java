@@ -17,18 +17,18 @@ import retrofit2.http.Part;
 public interface RemotePlaceDAO {
     @Multipart
     @POST("place/add")
-    Call<Void> addPlace(@Part("name") RequestBody name,
+    Call<Void> AddPlace(@Part("name") RequestBody name,
                         @Part("address") RequestBody address,
                         @Part("description") RequestBody description,
                         @Part() MultipartBody.Part file);
 
     @Headers("Content-Type: application/json")
     @GET("place/getYours")
-    Call<ArrayList<Place>> getYourPlaces();
+    Call<ArrayList<Place>> GetYourPlaces();
 
     @Headers("Content-Type: application/json")
     @GET("place/getAll")
-    Call<ArrayList<Place>> getAllPlaces();
+    Call<ArrayList<Place>> GetAllPlaces();
 
     @POST("place/delete")
     Call<Void> DeletePlace(@Body Place place);
