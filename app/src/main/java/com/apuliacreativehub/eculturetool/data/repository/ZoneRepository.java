@@ -49,7 +49,7 @@ public class ZoneRepository {
 
     private MutableLiveData<RepositoryNotification<ArrayList<Zone>>> getAllPlaceZonesFromRemoteDatabase(Place place) {
         MutableLiveData<RepositoryNotification<ArrayList<Zone>>> getResult = new MutableLiveData<>();
-        Call<ArrayList<Zone>> call = remoteZoneDAO.getAllPlaceZones(place.getId());
+        Call<ArrayList<Zone>> call = remoteZoneDAO.GetAllPlaceZones(place.getId());
         executor.execute(() -> {
             try {
                 Response<ArrayList<Zone>> response = call.execute();
@@ -115,7 +115,7 @@ public class ZoneRepository {
 
     private MutableLiveData<RepositoryNotification<Void>> addZoneToRemoteDatabase(Zone zone) {
         MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
-        Call<Void> call = remoteZoneDAO.addZone(zone);
+        Call<Void> call = remoteZoneDAO.AddZone(zone);
         executor.execute(() -> {
             try {
                 Response<Void> response = call.execute();
