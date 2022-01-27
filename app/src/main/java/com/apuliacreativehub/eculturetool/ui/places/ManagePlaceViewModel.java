@@ -74,4 +74,13 @@ public class ManagePlaceViewModel extends AndroidViewModel {
     public void setZoneNames(List<String> zoneNames) {
         this.zoneNames = zoneNames;
     }
+
+    public MutableLiveData<RepositoryNotification<Zone>> editZoneOnDatabase(String name) throws NoInternetConnectionException {
+        if (place != null) {
+            Zone zone = new Zone(name, place.getId());
+            return zoneRepository.editZone(zone);
+        } else {
+            return new MutableLiveData<>();
+        }
+    }
 }
