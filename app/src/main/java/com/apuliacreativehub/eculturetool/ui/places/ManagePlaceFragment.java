@@ -1,5 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,11 +24,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
+import com.apuliacreativehub.eculturetool.ui.component.QRCodeHelper;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("deprecation")
 public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
     private static final int NUMBER_COLUMN = 2;
     private static final int MIN_LENGTH_NAME = 2;
@@ -83,7 +89,20 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new EditPlaceFragment(place));
                     break;
                 case R.id.editArtifactByQrCode:
-                    // TODO: Scan QR Code Here (Intent with camera)
+                    // Initialize intent integrator
+                    IntentIntegrator intentIntegrator = new IntentIntegrator(
+                            requireActivity()
+                    );
+                    // Set prompt text
+                    intentIntegrator.setPrompt(getString(R.string.scan_qrcode_prompt));
+                    // Set beep
+                    intentIntegrator.setBeepEnabled(true);
+                    // Locked orientation
+                    intentIntegrator.setOrientationLocked(true);
+                    // Set capture activity
+                    intentIntegrator.setCaptureActivity(QRCodeHelper.class);
+                    // Initialize scan
+                    intentIntegrator.initiateScan();
                     break;
             }
             return true;
@@ -91,6 +110,26 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
 
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Initialize intent result
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(
+                requestCode, resultCode, data
+        );
+        // Check condition
+        if(intentResult.getContents() != null) {
+            // When result content is not null
+            // Initialize alert dialog
+            Log.i("Object ID", intentResult.getContents());
+            // TODO: Transaction to EditObjectFragment with putExtra(intentResult.getContents())
+        } else {
+            // When result content is null
+            // Display toast
+            Toast.makeText(requireActivity().getApplicationContext(), getString(R.string.scan_qrcode_error), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setSelectElement() {

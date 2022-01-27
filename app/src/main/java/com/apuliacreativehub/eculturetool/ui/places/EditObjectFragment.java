@@ -5,19 +5,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,12 +21,32 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.QRCodeHelper;
+import com.google.zxing.WriterException;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 @SuppressWarnings("deprecation")
 public class EditObjectFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
@@ -192,8 +203,52 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
         Button btnDeleteObject = view.findViewById(R.id.btnDeleteObject);
         btnDeleteObject.setOnClickListener(view -> showNoticeDialog());
 
-        Button btnDownloadQRCode = view.findViewById(R.id.btnDownloadQRCode);
-        // TODO: Intent Download Image (QR Code)
+        TextView btnDownloadQRCode = view.findViewById(R.id.btnDownloadQRCode);
+        btnDownloadQRCode.setOnClickListener(view -> {
+            // TODO: Insert the correct ObjectID
+           downloadQRCode("ID");
+        });
+    }
+
+    private void downloadQRCode(String objectID) {
+        ActivityCompat.requestPermissions(requireActivity(), new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+        FileOutputStream fileOutputStream = null;
+        File file = getDisc();
+
+        if(!file.exists() && !file.mkdirs()) {
+            file.mkdirs();
+        }
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyymmsshhmmss");
+        String date = simpleDateFormat.format(new Date());
+        String name = "IMG" + date + ".png";
+        String file_name = file.getAbsolutePath() + "/" + name;
+        File new_file = new File(file_name);
+
+        try {
+            Bitmap QRCode = QRCodeHelper.generateQRCode(objectID);
+            fileOutputStream = new FileOutputStream(new_file);
+            QRCode.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            Toast.makeText(requireActivity().getApplicationContext(), getString(R.string.qrcode_download_success), Toast.LENGTH_SHORT).show();
+        } catch(WriterException | IOException exception) {
+            Toast.makeText(requireActivity().getApplicationContext(), getString(R.string.qrcode_download_error), Toast.LENGTH_SHORT).show();
+        }
+
+        refreshGallery(new_file);
+    }
+
+    private void refreshGallery(File file) {
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        intent.setData(Uri.fromFile(file));
+        requireActivity().getApplicationContext().sendBroadcast(intent);
+    }
+
+    private File getDisc() {
+        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        return new File(file, "Download");
     }
 
     public void showNoticeDialog() {

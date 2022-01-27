@@ -142,4 +142,8 @@
     <string name="change_object_information">Change Object Information</string>
     <string name="delete_your_object">Delete This Object</string>
     <string name="edit_object_screen_title">Edit Object</string>
+    <string name="scan_qrcode_prompt">For flash use volume up key</string>
+    <string name="scan_qrcode_error">You did not scan anything</string>
+    <string name="qrcode_download_success">QRCode downloaded</string>
+    <string name="qrcode_download_error">Error during download</string>
 </resources>
