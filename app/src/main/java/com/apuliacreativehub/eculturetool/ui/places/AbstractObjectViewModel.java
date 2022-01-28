@@ -1,11 +1,14 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.apuliacreativehub.eculturetool.data.repository.ObjectRepository;
 import com.apuliacreativehub.eculturetool.data.repository.PlaceRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
 
@@ -19,9 +22,12 @@ abstract public class AbstractObjectViewModel extends AndroidViewModel {
     protected String room = "";
     protected String description = "";
     protected Uri image = null;
+    protected ObjectRepository repository;
 
     protected AbstractObjectViewModel(Application application) {
         super(application);
+        ECultureTool app = getApplication();
+        repository = new ObjectRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
     }
 
     public String getName() {
