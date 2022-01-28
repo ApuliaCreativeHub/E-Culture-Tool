@@ -182,13 +182,11 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     arrayOptionsAdapter.notifyDataSetChanged();
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    // TODO: Fix dialog tag
                     new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETE_ZONE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                // TODO: Fix dialog tag
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "DELETE_ZONE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
             }
         }
@@ -389,7 +387,6 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         if(selected) {
             autoCompleteTextView.setText("");
             selected = false;
-            // TODO: Delete zone: create an observer for zone deletion and remove zone from zones list in ManageViewModel on success
             try {
                 managePlaceViewModel.deleteZoneFromDatabase(managePlaceViewModel.getCurrentlySelectedZoneName()).observe(this, deleteZoneObserver);
             } catch (NoInternetConnectionException e) {
