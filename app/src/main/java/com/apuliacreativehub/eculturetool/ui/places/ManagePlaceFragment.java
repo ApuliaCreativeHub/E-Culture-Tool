@@ -68,6 +68,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
                 if (notification.getErrorMessage() == null) {
                     managePlaceViewModel.setZones(notification.getData());
+                    managePlaceViewModel.getZoneNames().clear();
                     arrayOptionsAdapter.clear();
                     for (Zone zone : notification.getData()) {
                         managePlaceViewModel.getZoneNames().add(zone.getName());
@@ -219,7 +220,8 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
-        setSelectElement();
+
+
         Toolbar toolbar = view.findViewById(R.id.managePlaceToolbar);
         toolbar.setTitle(R.string.manage_place_screen_title);
         toolbar.inflateMenu(R.menu.top_menu_manage_place);
@@ -290,11 +292,13 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     public void onStart() {
         super.onStart();
 
+        setSelectElement();
+
         autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
-            if(autoCompleteTextView.getInputType() != EditorInfo.TYPE_NULL)
+            if (autoCompleteTextView.getInputType() != EditorInfo.TYPE_NULL)
                 autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
 
-            if(autoCompleteTextView.getError() != null)
+            if (autoCompleteTextView.getError() != null)
                 autoCompleteTextView.setError(null);
 
             managePlaceViewModel.setCurrentlySelectedZoneName((String) ((TextView) view.findViewById(R.id.zoneName)).getText());
