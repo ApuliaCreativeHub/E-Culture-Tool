@@ -110,7 +110,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         }
     };
 
-    final Observer<RepositoryNotification<Zone>> addZonesObserver = new Observer<RepositoryNotification<Zone>>() {
+    final Observer<RepositoryNotification<Zone>> addZoneObserver = new Observer<RepositoryNotification<Zone>>() {
         @Override
         public void onChanged(RepositoryNotification<Zone> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
@@ -136,7 +136,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         }
     };
 
-    final Observer<RepositoryNotification<Zone>> updateObserver = new Observer<RepositoryNotification<Zone>>() {
+    final Observer<RepositoryNotification<Zone>> updateZoneObserver = new Observer<RepositoryNotification<Zone>>() {
         @Override
         public void onChanged(RepositoryNotification<Zone> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
@@ -310,13 +310,13 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                 autoCompleteTextView.setError(null);
                 if(add) {
                     try {
-                        managePlaceViewModel.addZonesToDatabase(name).observe(this, addZonesObserver);
+                        managePlaceViewModel.addZonesToDatabase(name).observe(this, addZoneObserver);
                     } catch (NoInternetConnectionException e) {
                         new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                     }
                 } else {
                     try {
-                        managePlaceViewModel.editZoneOnDatabase(name).observe(this, updateObserver);
+                        managePlaceViewModel.editZoneOnDatabase(name).observe(this, updateZoneObserver);
                     } catch (NoInternetConnectionException e) {
                         new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                     }
