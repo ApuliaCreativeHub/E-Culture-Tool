@@ -13,14 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.data.entity.Artifact;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
 
-public class ListCircleArtifactsAdapter extends RecyclerView.Adapter<ListCircleArtifactsAdapter.ViewHolder> {
+public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObjectsAdapter.ViewHolder> {
 
-    private ArrayList<Artifact> dataSet;
+    private ArrayList<Object> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private View view;
@@ -49,7 +49,7 @@ public class ListCircleArtifactsAdapter extends RecyclerView.Adapter<ListCircleA
         }
     }
 
-    public ListCircleArtifactsAdapter(ArrayList<Artifact> dataSet) {
+    public ListCircleObjectsAdapter(ArrayList<Object> dataSet) {
         this.dataSet = dataSet;
     }
 
@@ -82,7 +82,7 @@ public class ListCircleArtifactsAdapter extends RecyclerView.Adapter<ListCircleA
     }
 
     private void moveValue(int posStart, int posEnd) {
-        Artifact artifactStart = dataSet.get(posStart); //TODO: ADD ALL DROP CONTAINER TO RENDER THE DRAG&DROP INTUITIVE
+        Object artifactStart = dataSet.get(posStart); //TODO: ADD ALL DROP CONTAINER TO RENDER THE DRAG&DROP INTUITIVE
         dataSet.remove(posStart);
         dataSet.add(posEnd, artifactStart);
         notifyDataSetChanged();

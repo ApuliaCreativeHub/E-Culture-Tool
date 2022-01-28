@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.data.entity.Artifact;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 
 import java.util.ArrayList;
 
@@ -35,16 +35,16 @@ public class CreatePathFragment extends Fragment {
     private RecyclerView recyclerArtifactsCircleLinearView;
     private GridLayoutManager gridLayoutManager;
     private LinearLayoutManager linearLayoutManager;
-    private ListArtifactsCreateAdapter listArtifactsCreateAdapter;
-    private ListCircleArtifactsAdapter listCircleArtifactsAdapter;
-    private ArrayList<Artifact> mCircleArtifactDataset;
-    private ArrayList<Artifact> mArtifactDataset;
+    private ListObjectsCreateAdapter listObjectsCreateAdapter;
+    private ListCircleObjectsAdapter listCircleObjectsAdapter;
+    private ArrayList<Object> mCircleArtifactDataset;
+    private ArrayList<Object> mArtifactDataset;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Artifact testArtifact = new Artifact(100, "Opera d'arte", "Opera d'arte antica", "img");
-        Artifact testArtifact2 = new Artifact(101, "Opera d'arte 2", "Opera d'arte antica 2", "img2");
+        Object testArtifact = new Object("Opera d'arte", "Opera d'arte antica", null, 24);
+        Object testArtifact2 = new Object("Opera d'arte2", "Opera d'arte antica2", null, 24);
 
         mCircleArtifactDataset = new ArrayList<>();
         mArtifactDataset = new ArrayList<>();
@@ -95,8 +95,8 @@ public class CreatePathFragment extends Fragment {
         recyclerArtifactsGridView = view.findViewById(R.id.recyclerContainerCreateObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerArtifactsGridView.setLayoutManager(gridLayoutManager);
-        listArtifactsCreateAdapter = new ListArtifactsCreateAdapter(R.layout.component_card_link_artifact, mArtifactDataset, mCircleArtifactDataset, listCircleArtifactsAdapter, getContext());
-        recyclerArtifactsGridView.setAdapter(listArtifactsCreateAdapter);
+        listObjectsCreateAdapter = new ListObjectsCreateAdapter(R.layout.component_card_link_artifact, mArtifactDataset, mCircleArtifactDataset, listCircleObjectsAdapter, getContext());
+        recyclerArtifactsGridView.setAdapter(listObjectsCreateAdapter);
     }
 
     private void setDynamicCircleArtifactRecycleView() {
@@ -104,8 +104,8 @@ public class CreatePathFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerArtifactsCircleLinearView.setLayoutManager(linearLayoutManager);
-        listCircleArtifactsAdapter = new ListCircleArtifactsAdapter(mCircleArtifactDataset);
-        recyclerArtifactsCircleLinearView.setAdapter(listCircleArtifactsAdapter);
+        listCircleObjectsAdapter = new ListCircleObjectsAdapter(mCircleArtifactDataset);
+        recyclerArtifactsCircleLinearView.setAdapter(listCircleObjectsAdapter);
     }
 
 }

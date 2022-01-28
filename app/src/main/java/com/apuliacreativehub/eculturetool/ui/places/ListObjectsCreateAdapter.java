@@ -13,19 +13,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.data.entity.Artifact;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class ListArtifactsCreateAdapter extends RecyclerView.Adapter<ListArtifactsCreateAdapter.ViewHolder> {
+public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCreateAdapter.ViewHolder> {
 
     private final int layout;
     private final Context context;
-    private ArrayList<Artifact> dataSet;
-    private ArrayList<Artifact> circleDataset;
-    private ListCircleArtifactsAdapter listCircleArtifactsAdapter;
+    private ArrayList<Object> dataSet;
+    private ArrayList<Object> circleDataset;
+    private ListCircleObjectsAdapter listCircleObjectsAdapter;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private View view;
@@ -70,12 +69,12 @@ public class ListArtifactsCreateAdapter extends RecyclerView.Adapter<ListArtifac
 
     }
 
-    public ListArtifactsCreateAdapter(int layout, ArrayList<Artifact> dataSet, ArrayList<Artifact> circleDataset, ListCircleArtifactsAdapter listCircleArtifactsAdapter, Context mContext) {
+    public ListObjectsCreateAdapter(int layout, ArrayList<Object> dataSet, ArrayList<Object> circleDataset, ListCircleObjectsAdapter listCircleObjectsAdapter, Context mContext) {
         this.layout = layout;
         this.dataSet = dataSet;
         this.context = mContext;
         this.circleDataset = circleDataset;
-        this.listCircleArtifactsAdapter = listCircleArtifactsAdapter;
+        this.listCircleObjectsAdapter = listCircleObjectsAdapter;
     }
 
     @Override @NonNull
@@ -104,7 +103,7 @@ public class ListArtifactsCreateAdapter extends RecyclerView.Adapter<ListArtifac
                     }
                 }
             }
-            listCircleArtifactsAdapter.notifyDataSetChanged();
+            listCircleObjectsAdapter.notifyDataSetChanged();
         });
         //TODO: add all value to personalize single component
         // TODO: Show object description in the second message of dialog
