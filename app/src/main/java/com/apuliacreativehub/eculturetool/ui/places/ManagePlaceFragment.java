@@ -125,6 +125,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     Zone editedZone = managePlaceViewModel.getZoneById(notification.getData().getId());
                     if (editedZone != null) {
                         int i = managePlaceViewModel.getZones().indexOf(editedZone);
+                        managePlaceViewModel.getZones().set(i, notification.getData());
                         managePlaceViewModel.getZoneNames().set(i, notification.getData().getName());
                         arrayOptionsAdapter.clear();
                         arrayOptionsAdapter = new ArrayAdapter<>(requireContext(), R.layout.item_select_room, managePlaceViewModel.getZoneNames());
