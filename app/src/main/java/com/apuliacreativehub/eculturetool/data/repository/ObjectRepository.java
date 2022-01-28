@@ -8,19 +8,16 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.apuliacreativehub.eculturetool.data.entity.Object;
-import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
 import com.apuliacreativehub.eculturetool.data.local.LocalObjectDAO;
-import com.apuliacreativehub.eculturetool.data.local.LocalPlaceDAO;
 import com.apuliacreativehub.eculturetool.data.network.object.ObjectRemoteDatabase;
 import com.apuliacreativehub.eculturetool.data.network.object.RemoteObjectDAO;
-import com.apuliacreativehub.eculturetool.data.network.place.PlaceRemoteDatabase;
-import com.apuliacreativehub.eculturetool.data.network.place.RemotePlaceDAO;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
@@ -82,9 +79,22 @@ public class ObjectRepository {
         return addResult;
     }
 
-    public MutableLiveData<RepositoryNotification<ArrayList<Object>>> getObjects(Zone zone, Place place){
+    public MutableLiveData<RepositoryNotification<ArrayList<Object>>> getObjects(Zone zone) {
+        MutableLiveData<RepositoryNotification<ArrayList<Object>>> getResult;
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            getResult = getObjectsFromRemoteDatabase(zone);
+        } else {
+            Log.d("SHOULDFETCH", "remote");
+            getResult = getObjectsFromLocalDatabase(zone);
+        }
+
+        return getResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<ArrayList<Object>>> getObjectsFromRemoteDatabase(Zone zone) {
         MutableLiveData<RepositoryNotification<ArrayList<Object>>> getResult = new MutableLiveData<>();
-        Call<ArrayList<Object>> call = remoteObjectDAO.GetObjectByZoneAndPlace(zone, place);
+        Call<ArrayList<Object>> call = remoteObjectDAO.GetObjectByZoneAndPlace(zone);
         executor.execute(() -> {
             try {
                 Response<ArrayList<Object>> response = call.execute();
@@ -92,7 +102,7 @@ public class ObjectRepository {
                 RepositoryNotification<ArrayList<Object>> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(response.body());
-                    //saveRemotePlacesToLocal(repositoryNotification.getData());
+                    saveRemoteObjectsToLocal(repositoryNotification.getData());
                 } else {
                     if (response.errorBody() != null) {
                         repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -107,5 +117,32 @@ public class ObjectRepository {
             }
         });
         return getResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<ArrayList<Object>>> getObjectsFromLocalDatabase(Zone zone) {
+        MutableLiveData<RepositoryNotification<ArrayList<Object>>> getResult = new MutableLiveData<>();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                RepositoryNotification<ArrayList<Object>> repositoryNotification = new RepositoryNotification<>();
+                repositoryNotification.setData((ArrayList<Object>) localObjectDAO.getAllObjectsByZoneId(zone.getId()));
+                getResult.postValue(repositoryNotification);
+            }
+        });
+
+        return getResult;
+    }
+
+    private void saveRemoteObjectsToLocal(List<Object> objects) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (Object object : objects) {
+                    if (localObjectDAO.getObjectById(1) != null)
+                        localObjectDAO.insertObject(object);
+                    else localObjectDAO.updateObject(object);
+                }
+            }
+        });
     }
 }
