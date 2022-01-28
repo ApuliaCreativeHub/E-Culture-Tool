@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,16 +27,24 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.room.Room;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
+import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.entity.Zone;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 
 import java.util.ArrayList;
 
 @SuppressWarnings("deprecation")
 public class CreateObjectFragment extends Fragment {
     private View view;
+    private Zone zone;
     private ImageView imgObject;
     private EditText txtName;
     private AutoCompleteTextView txtRoom;
@@ -50,6 +59,31 @@ public class CreateObjectFragment extends Fragment {
             takeStandardImg();
         }
     });
+
+    final Observer<RepositoryNotification<Void>> addObjectObserver = notification -> {
+        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        if (notification.getException() == null) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(notification.getData()));
+            if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
+                Log.i("addObject", "OK");
+                requireActivity().getSupportFragmentManager().popBackStackImmediate();
+            } else {
+                Log.i("addObject", "Not OK");
+                Log.d("Dialog", "show dialog here");
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "ADD_OBJECT_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        } else {
+            Log.i("addObject", "Not OK (exception)");
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "ADD_OBJECT_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+        }
+    };
+
+    public CreateObjectFragment(Zone zone){
+        this.zone = zone;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,6 +111,7 @@ public class CreateObjectFragment extends Fragment {
         txtRoom.setAdapter(arrayOptionsAdapter);
 
         createObjectViewModel = new ViewModelProvider(this).get(CreateObjectViewModel.class);
+        createObjectViewModel.setZoneID(zone.getId());
 
         txtName = view.findViewById(R.id.txtName);
         txtDescription = view.findViewById(R.id.txtDescription);
@@ -178,7 +213,7 @@ public class CreateObjectFragment extends Fragment {
 
             if(!errors) {
                 if(createObjectViewModel.isImageUploaded(createObjectViewModel.getImage())) {
-                    // TODO: Insert Object API
+                    createObjectViewModel.addObject().observe(this, addObjectObserver);
                 } else {
                     new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_object_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }
