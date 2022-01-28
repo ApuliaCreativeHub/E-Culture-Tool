@@ -12,5 +12,7 @@ public abstract class LocalDatabase extends RoomDatabase {
 
     public abstract LocalZoneDAO zoneDAO();
 
+    public abstract LocalObjectDAO objectDAO();
+
     // Add other DAOs abstract methods here
 }
