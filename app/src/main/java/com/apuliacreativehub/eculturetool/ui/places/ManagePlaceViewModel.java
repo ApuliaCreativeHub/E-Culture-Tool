@@ -22,6 +22,7 @@ public class ManagePlaceViewModel extends AndroidViewModel {
     private List<Zone> zones;
     private List<String> zoneNames;
     private Place place;
+    private String currentlySelectedZoneName = "";
 
     public ManagePlaceViewModel(Application application) {
         super(application);
@@ -54,6 +55,7 @@ public class ManagePlaceViewModel extends AndroidViewModel {
         this.zones = zones;
     }
 
+    // TODO: Rename method using singular
     public MutableLiveData<RepositoryNotification<Zone>> addZonesToDatabase(String name) throws NoInternetConnectionException {
         if (place != null) {
             Zone zone = new Zone(name, place.getId());
@@ -77,10 +79,37 @@ public class ManagePlaceViewModel extends AndroidViewModel {
 
     public MutableLiveData<RepositoryNotification<Zone>> editZoneOnDatabase(String name) throws NoInternetConnectionException {
         if (place != null) {
-            Zone zone = new Zone(name, place.getId());
-            return zoneRepository.editZone(zone);
+            Zone zoneToEdit = getZoneByName(currentlySelectedZoneName);
+            if (zoneToEdit != null) {
+                Zone zone = new Zone(zoneToEdit.getId(), name, place.getId());
+                return zoneRepository.editZone(zone);
+            } else {
+                return new MutableLiveData<>();
+            }
         } else {
             return new MutableLiveData<>();
         }
+    }
+
+    public Zone getZoneById(int id) {
+        for (Zone zone : zones) {
+            if (zone.getId() == id) return zone;
+        }
+        return null;
+    }
+
+    public Zone getZoneByName(String name) {
+        for (Zone zone : zones) {
+            if (zone.getName().equals(name)) return zone;
+        }
+        return null;
+    }
+
+    public String getCurrentlySelectedZoneName() {
+        return currentlySelectedZoneName;
+    }
+
+    public void setCurrentlySelectedZoneName(String currentlySelectedZoneName) {
+        this.currentlySelectedZoneName = currentlySelectedZoneName;
     }
 }
