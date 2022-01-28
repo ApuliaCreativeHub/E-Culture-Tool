@@ -1,7 +1,6 @@
 package com.apuliacreativehub.eculturetool.data.network.object;
 
 import com.apuliacreativehub.eculturetool.data.entity.Object;
-import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 
 import java.util.ArrayList;
@@ -24,5 +23,5 @@ public interface RemoteObjectDAO {
                         @Part() MultipartBody.Part file);
 
     @GET("object/getByZoneAndPlace")
-    Call<ArrayList<Object>> GetObjectByZoneAndPlace(@Body Zone zone, @Body Place place);
+    Call<ArrayList<Object>> GetObjectByZoneAndPlace(@Body Zone zone);
 }
