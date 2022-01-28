@@ -114,15 +114,16 @@ public class ZoneRepository {
 
     private MutableLiveData<RepositoryNotification<Zone>> addZoneToRemoteDatabase(Zone zone) {
         MutableLiveData<RepositoryNotification<Zone>> addResult = new MutableLiveData<>();
-        Call<Void> call = remoteZoneDAO.AddZone(zone);
+        Call<Zone> call = remoteZoneDAO.AddZone(zone);
         executor.execute(() -> {
             try {
-                Response<Void> response = call.execute();
+                Response<Zone> response = call.execute();
                 Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
                 RepositoryNotification<Zone> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
-                    repositoryNotification.setData(zone);
-                    saveRemoteZonesToLocal(Collections.singletonList(zone));
+                    repositoryNotification.setData(response.body());
+                    // Add zone to local database too
+                    saveRemoteZonesToLocal(Collections.singletonList(response.body()));
                 } else {
                     if (response.errorBody() != null) {
                         repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -161,6 +162,7 @@ public class ZoneRepository {
                 RepositoryNotification<Zone> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(zone);
+                    // Edit zone on local database too
                     saveRemoteZonesToLocal(Collections.singletonList(zone));
                 } else {
                     if (response.errorBody() != null) {
@@ -178,17 +180,30 @@ public class ZoneRepository {
         return editResult;
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> deletePlace(Zone zone) {
-        MutableLiveData<RepositoryNotification<Void>> deleteResult = new MutableLiveData<>();
+    public MutableLiveData<RepositoryNotification<Zone>> deleteZone(Zone zone) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Zone>> deleteResult;
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            deleteResult = deleteZoneFromRemoteDatabase(zone);
+        } else {
+            throw new NoInternetConnectionException();
+        }
+
+        return deleteResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Zone>> deleteZoneFromRemoteDatabase(Zone zone) {
+        MutableLiveData<RepositoryNotification<Zone>> deleteResult = new MutableLiveData<>();
         Call<Void> call = remoteZoneDAO.DeleteZone(zone);
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                RepositoryNotification<Zone> repositoryNotification = new RepositoryNotification<>();
                 try {
                     Response<Void> response = call.execute();
                     if (response.isSuccessful()) {
-                        repositoryNotification.setData(response.body());
+                        repositoryNotification.setData(zone);
+                        // Delete zone from local database too
                         localZoneDAO.deleteZone(zone);
                     } else {
                         if (response.errorBody() != null) {
