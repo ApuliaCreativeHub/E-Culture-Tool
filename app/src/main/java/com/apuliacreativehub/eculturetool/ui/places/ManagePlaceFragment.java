@@ -100,12 +100,12 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     setDynamicRecycleView();
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_ZONES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_OBJECTS_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_ZONES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_OBJECTS_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
@@ -126,14 +126,12 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     arrayOptionsAdapter.notifyDataSetChanged();
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    // TODO: Fix dialog tag
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_ZONES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "ADD_ZONE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                // TODO: Fix dialog tag
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_ZONES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "ADD_ZONE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
