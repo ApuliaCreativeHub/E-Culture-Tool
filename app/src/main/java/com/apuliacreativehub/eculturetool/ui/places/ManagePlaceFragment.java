@@ -144,6 +144,34 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         }
     };
 
+    final Observer<RepositoryNotification<Zone>> deleteZoneObserver = new Observer<RepositoryNotification<Zone>>() {
+        @Override
+        public void onChanged(RepositoryNotification<Zone> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage() == null) {
+                    managePlaceViewModel.removeZoneById(notification.getData().getId());
+                    managePlaceViewModel.getZoneNames().remove(notification.getData().getName());
+                    arrayOptionsAdapter.clear();
+                    arrayOptionsAdapter = new ArrayAdapter<>(requireContext(), R.layout.item_select_room, managePlaceViewModel.getZoneNames());
+                    autoCompleteTextView.setAdapter(arrayOptionsAdapter);
+                    arrayOptionsAdapter.notifyDataSetChanged();
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    // TODO: Fix dialog tag
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETE_ZONE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                // TODO: Fix dialog tag
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "DELETE_ZONE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        }
+    };
+
     public ManagePlaceFragment(Place place) {
         super();
         this.place = place;
@@ -336,16 +364,14 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         Log.i("Response", "AOPOSITIVE");
 
         if(selected) {
-            //roomsDataset.remove(roomId);
-
-            arrayOptionsAdapter.clear();
-            //arrayOptionsAdapter.addAll(roomsDataset);
-            arrayOptionsAdapter.notifyDataSetChanged();
-
             autoCompleteTextView.setText("");
-
             selected = false;
             // TODO: Delete zone: create an observer for zone deletion and remove zone from zones list in ManageViewModel on success
+            try {
+                managePlaceViewModel.deleteZoneFromDatabase(managePlaceViewModel.getCurrentlySelectedZoneName()).observe(this, deleteZoneObserver);
+            } catch (NoInternetConnectionException e) {
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
         }
     }
 

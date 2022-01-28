@@ -15,7 +15,7 @@ public interface RemoteZoneDAO {
     Call<ArrayList<Zone>> GetAllPlaceZones(@Query("placeId") int placeId);
 
     @POST("zone/add")
-    Call<Void> AddZone(@Body Zone zone);
+    Call<Zone> AddZone(@Body Zone zone);
 
     @POST("zone/update")
     Call<Void> EditZone(@Body Zone zone);

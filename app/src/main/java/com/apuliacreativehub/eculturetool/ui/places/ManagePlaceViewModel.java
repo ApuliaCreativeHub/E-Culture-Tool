@@ -69,6 +69,13 @@ public class ManagePlaceViewModel extends AndroidViewModel {
         zones.add(zone);
     }
 
+    public boolean removeZoneById(int id) {
+        for (Zone zone : zones) {
+            if (zone.getId() == id) return zones.remove(zone);
+        }
+        return false;
+    }
+
     public List<String> getZoneNames() {
         return zoneNames;
     }
@@ -111,5 +118,19 @@ public class ManagePlaceViewModel extends AndroidViewModel {
 
     public void setCurrentlySelectedZoneName(String currentlySelectedZoneName) {
         this.currentlySelectedZoneName = currentlySelectedZoneName;
+    }
+
+    public MutableLiveData<RepositoryNotification<Zone>> deleteZoneFromDatabase(String name) throws NoInternetConnectionException {
+        if (place != null) {
+            Zone zoneToDelete = getZoneByName(currentlySelectedZoneName);
+            if (zoneToDelete != null) {
+                Zone zone = new Zone(zoneToDelete.getId(), name, place.getId());
+                return zoneRepository.deleteZone(zone);
+            } else {
+                return new MutableLiveData<>();
+            }
+        } else {
+            return new MutableLiveData<>();
+        }
     }
 }
