@@ -59,8 +59,7 @@ public class ManagePlaceViewModel extends AndroidViewModel {
         this.zones = zones;
     }
 
-    // TODO: Rename method using singular
-    public MutableLiveData<RepositoryNotification<Zone>> addZonesToDatabase(String name) throws NoInternetConnectionException {
+    public MutableLiveData<RepositoryNotification<Zone>> addZoneToDatabase(String name) throws NoInternetConnectionException {
         if (place != null) {
             Zone zone = new Zone(name, place.getId());
             return zoneRepository.addZone(zone);

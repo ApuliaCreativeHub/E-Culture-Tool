@@ -310,7 +310,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                 autoCompleteTextView.setError(null);
                 if(add) {
                     try {
-                        managePlaceViewModel.addZonesToDatabase(name).observe(this, addZoneObserver);
+                        managePlaceViewModel.addZoneToDatabase(name).observe(this, addZoneObserver);
                     } catch (NoInternetConnectionException e) {
                         new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                     }
