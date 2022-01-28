@@ -7,9 +7,11 @@ import android.net.ConnectivityManager;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
+import com.apuliacreativehub.eculturetool.data.repository.ObjectRepository;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.data.repository.ZoneRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
@@ -19,6 +21,7 @@ import java.util.List;
 
 public class ManagePlaceViewModel extends AndroidViewModel {
     private final ZoneRepository zoneRepository;
+    private final ObjectRepository objectRepository;
     private List<Zone> zones;
     private List<String> zoneNames;
     private Place place;
@@ -29,6 +32,7 @@ public class ManagePlaceViewModel extends AndroidViewModel {
         ECultureTool app = getApplication();
         zoneNames = new ArrayList<>();
         zoneRepository = new ZoneRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
+        objectRepository = new ObjectRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
     }
 
     public Place getPlace() {
@@ -132,5 +136,16 @@ public class ManagePlaceViewModel extends AndroidViewModel {
         } else {
             return new MutableLiveData<>();
         }
+    }
+
+    public MutableLiveData<RepositoryNotification<ArrayList<Object>>> getObjectByZone(){
+        //return objectRepository.getObjects(getZoneByName(currentlySelectedZoneName), place);
+        ArrayList<Object> stub = new ArrayList<>();
+        stub.add(new Object("Name", "Description", "xd", 2));
+        RepositoryNotification<ArrayList<Object>> stub1 = new RepositoryNotification<>();
+        stub1.setData(stub);
+        MutableLiveData<RepositoryNotification<ArrayList<Object>>> a = new MutableLiveData<>();
+        a.postValue(stub1);
+        return a;
     }
 }

@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
@@ -51,8 +52,8 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     private AutoCompleteTextView autoCompleteTextView;
     private RecyclerView recyclerGridView;
     private GridLayoutManager gridLayoutManager;
-    private ListArtifactsManageAdapter listArtifactsManageAdapter;
-    private ArrayList<String> mDataset;
+    private ListObjectsManageAdapter listObjectsManageAdapter;
+    private ArrayList<Object> mDataset;
     private boolean selected = false;
     private boolean add;
     private int roomId;
@@ -74,6 +75,28 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     arrayOptionsAdapter.addAll(managePlaceViewModel.getZoneNames());
                     autoCompleteTextView.setAdapter(arrayOptionsAdapter);
                     arrayOptionsAdapter.notifyDataSetChanged();
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_ZONES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_ZONES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        }
+    };
+
+    final Observer<RepositoryNotification<ArrayList<Object>>> getObjectObserver = new Observer<RepositoryNotification<ArrayList<Object>>>() {
+        @Override
+        public void onChanged(RepositoryNotification<ArrayList<Object>> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage() == null) {
+                    mDataset = notification.getData();
+                    setDynamicRecycleView();
                 } else {
                     Log.d("Dialog", "show dialog here");
                     new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_ZONES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
@@ -189,14 +212,6 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
 
         arrayOptionsAdapter = new ArrayAdapter<>(requireContext(), R.layout.item_select_room);
 
-        // TODO: Read Object API
-        mDataset = new ArrayList<>();
-        mDataset.add("CIAO");
-        mDataset.add("CIAO1");
-        mDataset.add("CIAO2");
-        mDataset.add("CIAO3");
-        mDataset.add("CIAO4");
-
         return inflater.inflate(R.layout.fragment_manage_place, container, false);
     }
 
@@ -205,7 +220,6 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         setSelectElement();
-        setDynamicRecycleView();
         Toolbar toolbar = view.findViewById(R.id.managePlaceToolbar);
         toolbar.setTitle(R.string.manage_place_screen_title);
         toolbar.inflateMenu(R.menu.top_menu_manage_place);
@@ -268,8 +282,8 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         recyclerGridView = view.findViewById(R.id.recyclerContainerObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerGridView.setLayoutManager(gridLayoutManager);
-        listArtifactsManageAdapter = new ListArtifactsManageAdapter(R.layout.component_card_artifact, mDataset, getContext());
-        recyclerGridView.setAdapter(listArtifactsManageAdapter);
+        listObjectsManageAdapter = new ListObjectsManageAdapter(R.layout.component_card_artifact, mDataset, getContext());
+        recyclerGridView.setAdapter(listObjectsManageAdapter);
     }
 
     @Override
@@ -286,6 +300,8 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
             managePlaceViewModel.setCurrentlySelectedZoneName((String) ((TextView) view.findViewById(R.id.zoneName)).getText());
             selected = true;
             roomId = position;
+
+            managePlaceViewModel.getObjectByZone().observe(getViewLifecycleOwner(), getObjectObserver);
         });
 
         autoCompleteTextView.setOnEditorActionListener((textView, i, keyEvent) -> {
@@ -319,7 +335,12 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         btnRoomOptions.setOnClickListener(view -> showMenu(view, R.menu.context_menu_room));
 
         FloatingActionButton btnCreateObject = view.findViewById(R.id.btnCreateObject);
-        btnCreateObject.setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new CreateObjectFragment()));
+        //TODO: Remove zone driver
+        btnCreateObject.setOnClickListener(view ->
+                TransactionHelper.transactionWithAddToBackStack(requireActivity(),
+                        R.id.fragment_container_layout,
+                        new CreateObjectFragment(managePlaceViewModel.getZoneByName(managePlaceViewModel.getCurrentlySelectedZoneName())))
+        );
     }
 
     private boolean checkRoomName(String name) {
