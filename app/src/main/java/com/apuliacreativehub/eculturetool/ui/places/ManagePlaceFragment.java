@@ -271,7 +271,6 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                         new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                     }
                 } else {
-                    // TODO: Update zone: create an observer for zone update and update zone in zones list in ManageViewModel on success
                     try {
                         managePlaceViewModel.editZoneOnDatabase(name).observe(this, updateObserver);
                     } catch (NoInternetConnectionException e) {
