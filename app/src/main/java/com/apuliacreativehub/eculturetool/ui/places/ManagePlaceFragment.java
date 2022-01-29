@@ -290,6 +290,10 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
 
         setSelectElement();
 
+        if(!managePlaceViewModel.getCurrentlySelectedZoneName().equals("")){
+            managePlaceViewModel.getObjectByZone().observe(getViewLifecycleOwner(), getObjectObserver);
+        }
+
         autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
             if (autoCompleteTextView.getInputType() != EditorInfo.TYPE_NULL)
                 autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
