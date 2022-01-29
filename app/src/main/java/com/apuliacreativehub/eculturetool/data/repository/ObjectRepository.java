@@ -6,17 +6,13 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
-import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
 import com.apuliacreativehub.eculturetool.data.local.LocalObjectDAO;
 import com.apuliacreativehub.eculturetool.data.network.object.ObjectRemoteDatabase;
 import com.apuliacreativehub.eculturetool.data.network.object.RemoteObjectDAO;
-import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 
 import java.io.IOException;
 import java.io.InputStream;
