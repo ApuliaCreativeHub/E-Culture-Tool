@@ -1,12 +1,13 @@
-package com.apuliacreativehub.eculturetool.data.network.zone;
+package com.apuliacreativehub.eculturetool.data.network.object;
 
 import com.apuliacreativehub.eculturetool.data.network.RemoteDatabase;
+import com.apuliacreativehub.eculturetool.data.network.place.RemotePlaceDAO;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ZoneRemoteDatabase extends RemoteDatabase {
-    public static RemoteZoneDAO provideRemoteZoneDAO() {
+public class ObjectRemoteDatabase extends RemoteDatabase {
+    public static RemoteObjectDAO provideRemoteObjectDAO() {
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
                 .baseUrl("https://hiddenfile.ml/ecultureapi/")
@@ -14,6 +15,6 @@ public class ZoneRemoteDatabase extends RemoteDatabase {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        return retrofit.create(RemoteZoneDAO.class);
+        return retrofit.create(RemoteObjectDAO.class);
     }
 }

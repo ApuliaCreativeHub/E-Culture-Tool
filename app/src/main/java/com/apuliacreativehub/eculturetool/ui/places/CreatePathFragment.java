@@ -26,6 +26,7 @@ import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -44,8 +45,8 @@ public class CreatePathFragment extends Fragment {
     private RecyclerView recyclerArtifactsCircleLinearView;
     private GridLayoutManager gridLayoutManager;
     private LinearLayoutManager linearLayoutManager;
-    private ListArtifactsCreateAdapter listArtifactsCreateAdapter;
-    private ListCircleArtifactsAdapter listCircleArtifactsAdapter;
+    private ListObjectsCreateAdapter listArtifactsCreateAdapter;
+    private ListCircleObjectsAdapter listCircleObjectsAdapter;
     private MutableGraph<NodeArtifact> graphArtifactDataset;
     private ArrayList<NodeArtifact> mArtifactDataset;
 
@@ -68,9 +69,9 @@ public class CreatePathFragment extends Fragment {
 
 
         //TODO: FETCH ARTIFACT OF PLACE
-        NodeArtifact testArtifact = new NodeArtifact(100, "AAA", "Opera d'arte antica", "img");
-        NodeArtifact testArtifact2 = new NodeArtifact(101, "BBB", "Opera d'arte antica 2", "img2");
-        NodeArtifact testArtifact3 = new NodeArtifact(102, "CCC", "Opera d'arte antica 3", "img2");
+        NodeArtifact testArtifact = new NodeArtifact(100, "AAA", "Opera d'arte antica",  "img1", 1);
+        NodeArtifact testArtifact2 = new NodeArtifact(101, "BBB", "Opera d'arte antica 2", "img1",2);
+        NodeArtifact testArtifact3 = new NodeArtifact(102, "CCC", "Opera d'arte antica 3", "img1",3);
         mArtifactDataset = new ArrayList<>();
         mArtifactDataset.add(testArtifact);
         mArtifactDataset.add(testArtifact2);
@@ -132,7 +133,7 @@ public class CreatePathFragment extends Fragment {
         recyclerArtifactsGridView = view.findViewById(R.id.recyclerContainerCreateObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerArtifactsGridView.setLayoutManager(gridLayoutManager);
-        listArtifactsCreateAdapter = new ListArtifactsCreateAdapter(R.layout.component_card_link_artifact, mArtifactDataset, graphArtifactDataset, listCircleArtifactsAdapter, getContext());
+        listArtifactsCreateAdapter = new ListObjectsCreateAdapter(R.layout.component_card_link_artifact, mArtifactDataset, graphArtifactDataset, listCircleObjectsAdapter, getContext());
         recyclerArtifactsGridView.setAdapter(listArtifactsCreateAdapter);
     }
 
@@ -141,8 +142,8 @@ public class CreatePathFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerArtifactsCircleLinearView.setLayoutManager(linearLayoutManager);
-        listCircleArtifactsAdapter = new ListCircleArtifactsAdapter(graphArtifactDataset);
-        recyclerArtifactsCircleLinearView.setAdapter(listCircleArtifactsAdapter);
+        listCircleObjectsAdapter = new ListCircleObjectsAdapter(graphArtifactDataset);
+        recyclerArtifactsCircleLinearView.setAdapter(listCircleObjectsAdapter);
     }
 
 

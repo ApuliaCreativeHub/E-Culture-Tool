@@ -1,24 +1,14 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
-import com.apuliacreativehub.eculturetool.data.entity.Artifact;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 
-public class NodeArtifact extends Artifact {
+public class NodeArtifact extends Object {
 
     private Double weight;
 
-    public NodeArtifact(int id, String name, String description, String thumbnail) {
-        super(id, name, description, thumbnail);
-        weight = null;
-    }
-
-    public NodeArtifact(int id, String name, String description, String thumbnail, Double weight) {
-        super(id, name, description, thumbnail);
-        this.weight = weight;
-    }
-
-    public NodeArtifact(Artifact artifact, Double weight) {
-        super(artifact.getId(), artifact.getName(), artifact.getDescription(), artifact.getThumbnail());
-        this.weight = weight;
+    public NodeArtifact(int id, String name, String description, String uriImg, int zoneId) {
+        super(id, name, description, uriImg, zoneId);
+        this.weight = null;
     }
 
     public Double getWeight() {
@@ -29,7 +19,4 @@ public class NodeArtifact extends Artifact {
         this.weight = weight;
     }
 
-    public String toString() {
-        return getWeight() + " - " + getName();
-    }
 }

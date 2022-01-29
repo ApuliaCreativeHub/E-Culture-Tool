@@ -10,9 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_marginTop="72dp"
-        android:layout_marginBottom="80dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/showUserPathsToolbar">
 
         <LinearLayout
@@ -20,33 +20,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:visibility="gone"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/txtResults"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/list_paths_results"/>
-
-            <TextView
-                android:id="@+id/listResultsItemPath"
-                android:layout_marginStart="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/_0"/>
+                android:layout_marginStart="4dp" />
 
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/userListPaths"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
         <include
             android:id="@+id/noResultsLayoutPaths"
-            android:visibility="gone"
-            layout="@layout/component_card_empty_result" />
+            layout="@layout/component_card_empty_result"
+            android:visibility="gone" />
 
     </LinearLayout>
 

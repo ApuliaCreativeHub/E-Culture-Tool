@@ -9,7 +9,6 @@
     <string name="search">Search</string>
     <string name="filter">Filter</string>>
     <string name="filter_description">Select a filter</string>
-    <string name="list_paths_results">Results:</string>
     <string name="list_paths_no_results">No results found</string>
     <string name="list_paths_no_results_description">No paths has been found</string>
     <string name="list_paths_last_used">Last used:</string>
@@ -149,4 +148,9 @@
     <string name="create_path">Create path</string>
     <string name="path_name_here">Path name here</string>
     <item type="id" name="artifact_tag_id"></item>
+    <string name="err_no_internet_connection">You must be connected to Internet to perform this action</string>
+    <plurals name="list_paths_results">
+        <item quantity="one">Result: 1</item>
+        <item quantity="other">Results: %d</item>
+    </plurals>
 </resources>

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -33,12 +34,19 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.QRCodeHelper;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.zxing.WriterException;
 
 import java.io.File;
@@ -50,9 +58,13 @@ import java.util.Date;
 
 @SuppressWarnings("deprecation")
 public class EditObjectFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
+    private final String initialSelectedZone;
     private View view;
     private ImageView imgObject;
     private EditText txtName;
+    private Object object;
+    private Bundle bundleZoneNameId;
+    private ArrayAdapter<String> listZones;
     private AutoCompleteTextView txtRoom;
     private ArrayAdapter arrayOptionsAdapter;
     private ArrayList<String> roomsDataset;
@@ -61,10 +73,59 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
         if (isGranted) {
             takeImgFromGallery();
-        }else {
+        } else {
             takeStandardImg();
         }
     });
+
+    final Observer<RepositoryNotification<Object>> editObjectObserver = notification -> {
+        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        if (notification.getException() == null) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(notification.getData()));
+            if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
+                Log.i("addPlace", "OK");
+                requireActivity().getSupportFragmentManager().popBackStackImmediate();
+            } else {
+                Log.i("addPlace", "Not OK");
+                Log.d("Dialog", "show dialog here");
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        } else {
+            Log.i("addPlace", "Not OK exception");
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+        }
+    };
+
+    final Observer<RepositoryNotification<Void>> deleteObserver = notification -> {
+        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        if (notification.getException() == null) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(notification.getData()));
+            if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
+                Log.i("addPlace", "OK");
+                requireActivity().getSupportFragmentManager().popBackStackImmediate();
+            } else {
+                Log.i("addPlace", "Not OK");
+                Log.d("Dialog", "show dialog here");
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        } else {
+            Log.i("addPlace", "Not OK exception");
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+        }
+    };
+
+    public EditObjectFragment(Object object, Bundle zoneNameID, ArrayAdapter<String> listZones, String selectedZone){
+        this.bundleZoneNameId = zoneNameID;
+        this.listZones = listZones;
+        this.object = object;
+        this.initialSelectedZone = selectedZone;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,31 +143,44 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
 
-        //TODO: Read Room API
-        roomsDataset = new ArrayList<>();
-        roomsDataset.add("Stanza A");
-        roomsDataset.add("Stanza B");
-        roomsDataset.add("Stanza C");
-        arrayOptionsAdapter = new ArrayAdapter(getContext(), R.layout.item_select_room, roomsDataset);
+        arrayOptionsAdapter = listZones;
         txtRoom = view.findViewById(R.id.txtRoom);
         txtRoom.setAdapter(arrayOptionsAdapter);
 
         editObjectViewModel = new ViewModelProvider(this).get(EditObjectViewModel.class);
+        editObjectViewModel.setObjectID(object.getId());
 
         txtName = view.findViewById(R.id.txtName);
         txtDescription = view.findViewById(R.id.txtDescription);
+        imgObject = view.findViewById(R.id.imgObject);
+        txtRoom.setText(initialSelectedZone, false);
+        txtName.setText(object.getName());
+        txtDescription.setText(object.getDescription());
+        Glide.with(requireContext()).asBitmap()
+                //.load("https://hiddenfile.ml/ecultureapi/" + object.getNormalSizeImg())
+                .load("http://10.0.2.2:8080/" + object.getNormalSizeImg())
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .into(imgObject);
 
         if(editObjectViewModel.getImage() != null)
             imgObject.setImageURI(editObjectViewModel.getImage());
 
         if(!editObjectViewModel.getName().equals(""))
             txtName.setText(editObjectViewModel.getName());
+        else
+            editObjectViewModel.setName(txtName.getText().toString());
 
-        if(!editObjectViewModel.getRoom().equals(""))
-            txtRoom.setText(editObjectViewModel.getRoom());
+        if(!editObjectViewModel.getZone().equals(""))
+            txtRoom.setText(editObjectViewModel.getZone());
+        else{
+            editObjectViewModel.setZoneID(bundleZoneNameId.getInt(txtRoom.getText().toString()));
+            editObjectViewModel.setZone(txtRoom.getText().toString());
+        }
 
         if(!editObjectViewModel.getDescription().equals(""))
             txtDescription.setText(editObjectViewModel.getDescription());
+        else
+            editObjectViewModel.setDescription(txtDescription.getText().toString());
     }
 
     public void onStart() {
@@ -145,7 +219,7 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
 
             @Override
             public void afterTextChanged(Editable editable) {
-                editObjectViewModel.setRoom(editable.toString());
+                editObjectViewModel.setZone(editable.toString());
             }
         });
 
@@ -177,7 +251,7 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
                 txtName.setError(null);
             }
 
-            if(!editObjectViewModel.isRoomSelected(editObjectViewModel.getRoom())) {
+            if(!editObjectViewModel.isRoomSelected(editObjectViewModel.getZone())) {
                 txtRoom.setError(getResources().getString(R.string.room_not_selected));
                 errors = true;
             } else {
@@ -192,11 +266,11 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
             }
 
             if(!errors) {
-                if(editObjectViewModel.isImageUploaded(editObjectViewModel.getImage())) {
-                    // TODO: Update Object API
-                } else {
-                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_object_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
-                }
+                    try {
+                        editObjectViewModel.editObject().observe(this, editObjectObserver);
+                    } catch (NoInternetConnectionException e) {
+                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    }
             }
         });
 
@@ -205,8 +279,17 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
 
         TextView btnDownloadQRCode = view.findViewById(R.id.btnDownloadQRCode);
         btnDownloadQRCode.setOnClickListener(view -> {
-            // TODO: Insert the correct ObjectID
-           downloadQRCode("ID");
+           downloadQRCode(String.valueOf(object.getId()));
+        });
+
+        txtRoom.setOnItemClickListener((parent, view, position, id) -> {
+            if (txtRoom.getInputType() != EditorInfo.TYPE_NULL)
+                txtRoom.setInputType(EditorInfo.TYPE_NULL);
+
+            if (txtRoom.getError() != null)
+                txtRoom.setError(null);
+
+            editObjectViewModel.setZoneID(bundleZoneNameId.getInt((String) ((TextView) view.findViewById(R.id.zoneName)).getText(), 0));
         });
     }
 
@@ -259,7 +342,11 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i("Response", "AOPOSITIVE");
-        // TODO: Delete Object API
+        try {
+            editObjectViewModel.deleteObject().observe(this, deleteObserver);
+        } catch (NoInternetConnectionException e) {
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+        }
     }
 
     @Override

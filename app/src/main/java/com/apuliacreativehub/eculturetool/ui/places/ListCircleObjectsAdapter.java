@@ -13,12 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.graph.MutableGraph;
 
-public class ListCircleArtifactsAdapter extends RecyclerView.Adapter<ListCircleArtifactsAdapter.ViewHolder> {
+public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObjectsAdapter.ViewHolder> {
 
     private MutableGraph<NodeArtifact> dataSet;
 
@@ -59,7 +60,7 @@ public class ListCircleArtifactsAdapter extends RecyclerView.Adapter<ListCircleA
         }
     }
 
-    public ListCircleArtifactsAdapter(MutableGraph<NodeArtifact> dataSet) {
+    public ListCircleObjectsAdapter(MutableGraph<NodeArtifact> dataSet) {
         this.dataSet = dataSet;
     }
 

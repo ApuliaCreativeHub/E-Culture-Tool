@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,12 +19,21 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.entity.Zone;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
+import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.QRCodeHelper;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,17 +49,170 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     private static final int MAX_LENGTH_NAME = 25;
 
     private View view;
-    private ArrayAdapter arrayOptionsAdapter;
-    private ArrayList<String> roomsDataset;
+    private ArrayAdapter<String> arrayOptionsAdapter;
     private AutoCompleteTextView autoCompleteTextView;
     private RecyclerView recyclerGridView;
     private GridLayoutManager gridLayoutManager;
-    private ListArtifactsManageAdapter listArtifactsManageAdapter;
-    private ArrayList<String> mDataset;
+    private ListObjectsManageAdapter listObjectsManageAdapter;
+    private ArrayList<Object> mDataset;
     private boolean selected = false;
     private boolean add;
     private int roomId;
     private final Place place;
+    private ManagePlaceViewModel managePlaceViewModel;
+    final Observer<RepositoryNotification<ArrayList<Zone>>> getZonesObserver = new Observer<RepositoryNotification<ArrayList<Zone>>>() {
+        @Override
+        public void onChanged(RepositoryNotification<ArrayList<Zone>> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage() == null) {
+                    managePlaceViewModel.setZones(notification.getData());
+                    managePlaceViewModel.getZoneNames().clear();
+                    arrayOptionsAdapter.clear();
+                    for (Zone zone : notification.getData()) {
+                        managePlaceViewModel.getZoneNames().add(zone.getName());
+                    }
+                    arrayOptionsAdapter.addAll(managePlaceViewModel.getZoneNames());
+                    autoCompleteTextView.setAdapter(arrayOptionsAdapter);
+                    arrayOptionsAdapter.notifyDataSetChanged();
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_ZONES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_ZONES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        }
+    };
+
+    final Observer<RepositoryNotification<ArrayList<Object>>> getObjectObserver = new Observer<RepositoryNotification<ArrayList<Object>>>() {
+        @Override
+        public void onChanged(RepositoryNotification<ArrayList<Object>> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage() == null) {
+                    mDataset = notification.getData();
+                    setDynamicRecycleView();
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_OBJECTS_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_OBJECTS_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        }
+    };
+
+    final Observer<RepositoryNotification<Zone>> addZoneObserver = new Observer<RepositoryNotification<Zone>>() {
+        @Override
+        public void onChanged(RepositoryNotification<Zone> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage() == null) {
+                    managePlaceViewModel.addZone(notification.getData());
+                    managePlaceViewModel.getZoneNames().add(notification.getData().getName());
+                    arrayOptionsAdapter.clear();
+                    arrayOptionsAdapter = new ArrayAdapter<>(requireContext(), R.layout.item_select_room, managePlaceViewModel.getZoneNames());
+                    autoCompleteTextView.setAdapter(arrayOptionsAdapter);
+                    arrayOptionsAdapter.notifyDataSetChanged();
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "ADD_ZONE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "ADD_ZONE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        }
+    };
+
+    final Observer<RepositoryNotification<Zone>> updateZoneObserver = new Observer<RepositoryNotification<Zone>>() {
+        @Override
+        public void onChanged(RepositoryNotification<Zone> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage() == null) {
+                    Zone editedZone = managePlaceViewModel.getZoneById(notification.getData().getId());
+                    if (editedZone != null) {
+                        int i = managePlaceViewModel.getZones().indexOf(editedZone);
+                        managePlaceViewModel.getZones().set(i, notification.getData());
+                        managePlaceViewModel.getZoneNames().set(i, notification.getData().getName());
+                        arrayOptionsAdapter.clear();
+                        arrayOptionsAdapter = new ArrayAdapter<>(requireContext(), R.layout.item_select_room, managePlaceViewModel.getZoneNames());
+                        autoCompleteTextView.setAdapter(arrayOptionsAdapter);
+                        arrayOptionsAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATE_ZONE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATE_ZONE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        }
+    };
+
+    final Observer<RepositoryNotification<Zone>> deleteZoneObserver = new Observer<RepositoryNotification<Zone>>() {
+        @Override
+        public void onChanged(RepositoryNotification<Zone> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage() == null) {
+                    managePlaceViewModel.removeZoneById(notification.getData().getId());
+                    managePlaceViewModel.getZoneNames().remove(notification.getData().getName());
+                    arrayOptionsAdapter.clear();
+                    arrayOptionsAdapter = new ArrayAdapter<>(requireContext(), R.layout.item_select_room, managePlaceViewModel.getZoneNames());
+                    autoCompleteTextView.setAdapter(arrayOptionsAdapter);
+                    arrayOptionsAdapter.notifyDataSetChanged();
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETE_ZONE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "DELETE_ZONE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        }
+    };
+
+    final Observer<RepositoryNotification<Object>> getObjectFromQR = new Observer<RepositoryNotification<Object>>() {
+        @Override
+        public void onChanged(RepositoryNotification<Object> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage() == null) {
+                    TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new EditObjectFragment(notification.getData(), managePlaceViewModel.getZonesBundle(), arrayOptionsAdapter, managePlaceViewModel.getZoneById(notification.getData().getZoneId()).getName()));
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_OBJECTS_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_OBJECTS_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        }
+    };
 
     public ManagePlaceFragment(Place place) {
         super();
@@ -63,13 +226,10 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: Read Object API
-        mDataset = new ArrayList<>();
-        mDataset.add("CIAO");
-        mDataset.add("CIAO1");
-        mDataset.add("CIAO2");
-        mDataset.add("CIAO3");
-        mDataset.add("CIAO4");
+        managePlaceViewModel = new ViewModelProvider(this).get(ManagePlaceViewModel.class);
+        managePlaceViewModel.setPlace(place);
+
+        arrayOptionsAdapter = new ArrayAdapter<>(requireContext(), R.layout.item_select_room);
 
         return inflater.inflate(R.layout.fragment_manage_place, container, false);
     }
@@ -78,8 +238,8 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
-        setSelectElement();
-        setDynamicRecycleView();
+
+
         Toolbar toolbar = view.findViewById(R.id.managePlaceToolbar);
         toolbar.setTitle(R.string.manage_place_screen_title);
         toolbar.inflateMenu(R.menu.top_menu_manage_place);
@@ -90,9 +250,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     break;
                 case R.id.editArtifactByQrCode:
                     // Initialize intent integrator
-                    IntentIntegrator intentIntegrator = new IntentIntegrator(
-                            requireActivity()
-                    );
+                    IntentIntegrator intentIntegrator = IntentIntegrator.forSupportFragment(ManagePlaceFragment.this);
                     // Set prompt text
                     intentIntegrator.setPrompt(getString(R.string.scan_qrcode_prompt));
                     // Set beep
@@ -124,7 +282,12 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
             // When result content is not null
             // Initialize alert dialog
             Log.i("Object ID", intentResult.getContents());
-            // TODO: Transaction to EditObjectFragment with putExtra(intentResult.getContents())
+            try {
+                managePlaceViewModel.getObjectById(Integer.parseInt(intentResult.getContents())).observe(this, getObjectFromQR);
+            } catch (NoInternetConnectionException e) {
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+
         } else {
             // When result content is null
             // Display toast
@@ -133,12 +296,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     }
 
     private void setSelectElement() {
-        //TODO: Read Room API
-        roomsDataset = new ArrayList<>();
-        roomsDataset.add("Stanza A");
-        roomsDataset.add("Stanza B");
-        roomsDataset.add("Stanza C");
-        arrayOptionsAdapter = new ArrayAdapter(getContext(), R.layout.item_select_room, roomsDataset);
+        managePlaceViewModel.getZonesFromDatabase().observe(getViewLifecycleOwner(), getZonesObserver);
         autoCompleteTextView = view.findViewById(R.id.selectRoomAutoComplete);
         autoCompleteTextView.setAdapter(arrayOptionsAdapter);
     }
@@ -147,43 +305,54 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         recyclerGridView = view.findViewById(R.id.recyclerContainerObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerGridView.setLayoutManager(gridLayoutManager);
-        listArtifactsManageAdapter = new ListArtifactsManageAdapter(R.layout.component_card_artifact, mDataset, getContext());
-        recyclerGridView.setAdapter(listArtifactsManageAdapter);
+        listObjectsManageAdapter = new ListObjectsManageAdapter(R.layout.component_card_artifact, mDataset, getContext(), arrayOptionsAdapter, managePlaceViewModel.getZonesBundle(), managePlaceViewModel.getCurrentlySelectedZoneName());
+        recyclerGridView.setAdapter(listObjectsManageAdapter);
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
+        setSelectElement();
+
+        if(!managePlaceViewModel.getCurrentlySelectedZoneName().equals("")){
+            managePlaceViewModel.getObjectByZone().observe(getViewLifecycleOwner(), getObjectObserver);
+        }
+
         autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
-            if(autoCompleteTextView.getInputType() != EditorInfo.TYPE_NULL)
+            if (autoCompleteTextView.getInputType() != EditorInfo.TYPE_NULL)
                 autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
 
-            if(autoCompleteTextView.getError() != null)
+            if (autoCompleteTextView.getError() != null)
                 autoCompleteTextView.setError(null);
 
+            managePlaceViewModel.setCurrentlySelectedZoneName((String) ((TextView) view.findViewById(R.id.zoneName)).getText());
             selected = true;
             roomId = position;
+
+            managePlaceViewModel.getObjectByZone().observe(getViewLifecycleOwner(), getObjectObserver);
         });
 
         autoCompleteTextView.setOnEditorActionListener((textView, i, keyEvent) -> {
             String name = textView.getText().toString();
             if(checkRoomName(name)) {
                 autoCompleteTextView.setError(null);
-                roomsDataset.add(name);
                 if(add) {
-                    // TODO: Insert Room API
+                    try {
+                        managePlaceViewModel.addZoneToDatabase(name).observe(this, addZoneObserver);
+                    } catch (NoInternetConnectionException e) {
+                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    }
                 } else {
-                    roomsDataset.remove(roomId);
-                    // TODO: Update Room API
+                    try {
+                        managePlaceViewModel.editZoneOnDatabase(name).observe(this, updateZoneObserver);
+                    } catch (NoInternetConnectionException e) {
+                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    }
                 }
             } else {
                 autoCompleteTextView.setError(getString(R.string.invalid_room));
             }
-
-            arrayOptionsAdapter.clear();
-            arrayOptionsAdapter.addAll(roomsDataset);
-            arrayOptionsAdapter.notifyDataSetChanged();
 
             autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
             autoCompleteTextView.setText("");
@@ -195,7 +364,11 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         btnRoomOptions.setOnClickListener(view -> showMenu(view, R.menu.context_menu_room));
 
         FloatingActionButton btnCreateObject = view.findViewById(R.id.btnCreateObject);
-        btnCreateObject.setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new CreateObjectFragment()));
+        btnCreateObject.setOnClickListener(view ->
+                TransactionHelper.transactionWithAddToBackStack(requireActivity(),
+                        R.id.fragment_container_layout,
+                        new CreateObjectFragment(managePlaceViewModel.getZonesBundle(), arrayOptionsAdapter))
+        );
     }
 
     private boolean checkRoomName(String name) {
@@ -240,16 +413,13 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         Log.i("Response", "AOPOSITIVE");
 
         if(selected) {
-            roomsDataset.remove(roomId);
-
-            arrayOptionsAdapter.clear();
-            arrayOptionsAdapter.addAll(roomsDataset);
-            arrayOptionsAdapter.notifyDataSetChanged();
-
             autoCompleteTextView.setText("");
-
             selected = false;
-            // TODO: Delete Room API
+            try {
+                managePlaceViewModel.deleteZoneFromDatabase(managePlaceViewModel.getCurrentlySelectedZoneName()).observe(this, deleteZoneObserver);
+            } catch (NoInternetConnectionException e) {
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
         }
     }
 

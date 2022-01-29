@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.ui.component;
+package com.apuliacreativehub.eculturetool.ui.paths;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,21 +14,20 @@ import com.apuliacreativehub.eculturetool.data.entity.Path;
 
 import java.util.ArrayList;
 
-
-public class ListPathsAdapter extends RecyclerView.Adapter<ListPathsAdapter.ViewHolder> {
+public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.ViewHolder> {
 
     private final ArrayList<Path> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textPathName;
-        private final TextView textPlaceName;
+        private final TextView textPlaceNameAndAddress;
         private final ImageView imagePath;
 
         public ViewHolder(View view) {
             super(view);
             //TODO: Define click listener for the ViewHolder's View
             textPathName = view.findViewById(R.id.listComponentPathName);
-            textPlaceName = view.findViewById(R.id.listComponentPathPlace);
+            textPlaceNameAndAddress = view.findViewById(R.id.listComponentPathPlace);
             imagePath = view.findViewById(R.id.listComponentPathImage);
         }
 
@@ -36,8 +35,8 @@ public class ListPathsAdapter extends RecyclerView.Adapter<ListPathsAdapter.View
             return textPathName;
         }
 
-        public TextView getTextPlaceName() {
-            return textPlaceName;
+        public TextView getTextPlaceNameAndAddress() {
+            return textPlaceNameAndAddress;
         }
 
         public ImageView getImagePath() {
@@ -45,21 +44,20 @@ public class ListPathsAdapter extends RecyclerView.Adapter<ListPathsAdapter.View
         }
     }
 
-    public ListPathsAdapter(ArrayList<Path> dataSet) {
+    public PlacePathsAdapter(ArrayList<Path> dataSet) {
         this.dataSet = dataSet;
     }
 
     @Override @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.component_card_path, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.component_card_curator_path, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        viewHolder.getTextPathName().setText(this.dataSet.get(position).getName());
-        viewHolder.getTextPlaceName().setText(this.dataSet.get(position).getPlaceName());
+        viewHolder.getTextPathName().setText(this.dataSet.get(position).getPathName());
+        viewHolder.getTextPlaceNameAndAddress().setText(this.dataSet.get(position).getPlaceName() + " - " + this.dataSet.get(position).getPlaceAddress());
         //TODO: add all value to personalize single component
     }
 

@@ -56,7 +56,7 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
                     editor.putString("surname", notification.getData().getSurname());
                     editor.putString("email", notification.getData().getEmail());
                     editor.apply();
-                    Navigation.findNavController(requireActivity(), R.id.navHostContainer).navigateUp();
+                    requireActivity().finish();
                 } else {
                     Log.d("Dialog", "show dialog here");
                     new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);

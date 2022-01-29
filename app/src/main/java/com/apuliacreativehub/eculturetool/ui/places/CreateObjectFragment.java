@@ -10,14 +10,17 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -26,21 +29,24 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
-
-import java.util.ArrayList;
 
 @SuppressWarnings("deprecation")
 public class CreateObjectFragment extends Fragment {
     private View view;
+    private Bundle bundleZoneNameId;
+    private ArrayAdapter<String> listZones;
     private ImageView imgObject;
     private EditText txtName;
     private AutoCompleteTextView txtRoom;
     private ArrayAdapter arrayOptionsAdapter;
-    private ArrayList<String> roomsDataset;
     private EditText txtDescription;
     private CreateObjectViewModel createObjectViewModel;
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -50,6 +56,32 @@ public class CreateObjectFragment extends Fragment {
             takeStandardImg();
         }
     });
+
+    final Observer<RepositoryNotification<Object>> addObjectObserver = notification -> {
+        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        if (notification.getException() == null) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(notification.getData()));
+            if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
+                Log.i("addObject", "OK");
+                requireActivity().getSupportFragmentManager().popBackStackImmediate();
+            } else {
+                Log.i("addObject", "Not OK");
+                Log.d("Dialog", "show dialog here");
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "ADD_OBJECT_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        } else {
+            Log.i("addObject", "Not OK (exception)");
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "ADD_OBJECT_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+        }
+    };
+
+    public CreateObjectFragment(Bundle zoneNameID, ArrayAdapter<String> listZones){
+        this.bundleZoneNameId = zoneNameID;
+        this.listZones = listZones;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,12 +99,7 @@ public class CreateObjectFragment extends Fragment {
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
 
-        //TODO: Read Room API
-        roomsDataset = new ArrayList<>();
-        roomsDataset.add("Stanza A");
-        roomsDataset.add("Stanza B");
-        roomsDataset.add("Stanza C");
-        arrayOptionsAdapter = new ArrayAdapter(getContext(), R.layout.item_select_room, roomsDataset);
+        arrayOptionsAdapter = listZones;
         txtRoom = view.findViewById(R.id.txtRoom);
         txtRoom.setAdapter(arrayOptionsAdapter);
 
@@ -87,8 +114,8 @@ public class CreateObjectFragment extends Fragment {
         if(!createObjectViewModel.getName().equals(""))
             txtName.setText(createObjectViewModel.getName());
 
-        if(!createObjectViewModel.getRoom().equals(""))
-            txtRoom.setText(createObjectViewModel.getRoom());
+        if(!createObjectViewModel.getZone().equals(""))
+            txtRoom.setText(createObjectViewModel.getZone());
 
         if(!createObjectViewModel.getDescription().equals(""))
             txtDescription.setText(createObjectViewModel.getDescription());
@@ -130,7 +157,7 @@ public class CreateObjectFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                createObjectViewModel.setRoom(editable.toString());
+                createObjectViewModel.setZone(editable.toString());
             }
         });
 
@@ -162,7 +189,7 @@ public class CreateObjectFragment extends Fragment {
                 txtName.setError(null);
             }
 
-            if(!createObjectViewModel.isRoomSelected(createObjectViewModel.getRoom())) {
+            if(!createObjectViewModel.isRoomSelected(createObjectViewModel.getZone())) {
                 txtRoom.setError(getResources().getString(R.string.room_not_selected));
                 errors = true;
             } else {
@@ -178,11 +205,21 @@ public class CreateObjectFragment extends Fragment {
 
             if(!errors) {
                 if(createObjectViewModel.isImageUploaded(createObjectViewModel.getImage())) {
-                    // TODO: Insert Object API
+                    createObjectViewModel.addObject().observe(this, addObjectObserver);
                 } else {
                     new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_object_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }
             }
+        });
+
+        txtRoom.setOnItemClickListener((parent, view, position, id) -> {
+            if (txtRoom.getInputType() != EditorInfo.TYPE_NULL)
+                txtRoom.setInputType(EditorInfo.TYPE_NULL);
+
+            if (txtRoom.getError() != null)
+                txtRoom.setError(null);
+
+            createObjectViewModel.setZoneID(bundleZoneNameId.getInt((String) ((TextView) view.findViewById(R.id.zoneName)).getText(), 0));
         });
     }
 

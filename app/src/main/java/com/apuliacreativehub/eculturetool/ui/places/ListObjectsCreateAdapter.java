@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.google.common.collect.Iterables;
 import com.google.common.graph.MutableGraph;
@@ -22,13 +23,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
-public class ListArtifactsCreateAdapter extends RecyclerView.Adapter<ListArtifactsCreateAdapter.ViewHolder> {
+public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCreateAdapter.ViewHolder> {
 
     private final int layout;
     private final Context context;
     private ArrayList<NodeArtifact> dataSet;
     private MutableGraph<NodeArtifact> circleDataset;
-    private ListCircleArtifactsAdapter listCircleArtifactsAdapter;
+    private ListCircleObjectsAdapter listCircleObjectsAdapter;
 
     private NodeArtifact utilNodeTemp;
 
@@ -74,12 +75,12 @@ public class ListArtifactsCreateAdapter extends RecyclerView.Adapter<ListArtifac
         }
     }
 
-    public ListArtifactsCreateAdapter(int layout, ArrayList<NodeArtifact> dataSet, MutableGraph<NodeArtifact> graphArtifactDataset, ListCircleArtifactsAdapter listCircleArtifactsAdapter, Context mContext) {
+    public ListObjectsCreateAdapter(int layout, ArrayList<NodeArtifact> dataSet, MutableGraph<NodeArtifact> graphArtifactDataset, ListCircleObjectsAdapter listCircleObjectsAdapter, Context mContext) {
         this.layout = layout;
         this.dataSet = dataSet;
         this.context = mContext;
         this.circleDataset = graphArtifactDataset;
-        this.listCircleArtifactsAdapter = listCircleArtifactsAdapter;
+        this.listCircleObjectsAdapter = listCircleObjectsAdapter;
     }
 
     @Override @NonNull
@@ -98,7 +99,7 @@ public class ListArtifactsCreateAdapter extends RecyclerView.Adapter<ListArtifac
                 viewHolder.getCheckBox().setVisibility(View.INVISIBLE);
                 decreaseGraph(dataSet.get(position));
             }
-            listCircleArtifactsAdapter.notifyDataSetChanged();
+            listCircleObjectsAdapter.notifyDataSetChanged();
         });
         //TODO: add all value to personalize single component
         // TODO: Show object description in the second message of dialog

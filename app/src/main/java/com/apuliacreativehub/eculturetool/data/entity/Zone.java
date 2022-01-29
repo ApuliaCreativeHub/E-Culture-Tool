@@ -20,6 +20,10 @@ public class Zone {
     }
 
     @Ignore
+    public Zone(int id){
+        this.id = id;
+    }
+    @Ignore
     public Zone(String name, int placeId) {
         this.name = name;
         this.placeId = placeId;
