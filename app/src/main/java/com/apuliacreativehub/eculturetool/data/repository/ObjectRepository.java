@@ -94,7 +94,7 @@ public class ObjectRepository {
 
     private MutableLiveData<RepositoryNotification<ArrayList<Object>>> getObjectsFromRemoteDatabase(Zone zone) {
         MutableLiveData<RepositoryNotification<ArrayList<Object>>> getResult = new MutableLiveData<>();
-        Call<ArrayList<Object>> call = remoteObjectDAO.GetObjectByZoneAndPlace(zone);
+        Call<ArrayList<Object>> call = remoteObjectDAO.GetObjectByZoneAndPlace(zone.getId());
         executor.execute(() -> {
             try {
                 Response<ArrayList<Object>> response = call.execute();

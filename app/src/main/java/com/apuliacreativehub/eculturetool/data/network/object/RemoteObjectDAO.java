@@ -1,7 +1,6 @@
 package com.apuliacreativehub.eculturetool.data.network.object;
 
 import com.apuliacreativehub.eculturetool.data.entity.Object;
-import com.apuliacreativehub.eculturetool.data.entity.Zone;
 
 import java.util.ArrayList;
 
@@ -13,15 +12,16 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 
 public interface RemoteObjectDAO {
     @Multipart
     @POST("object/add")
     Call<Void> AddObject(@Part("name") @Body RequestBody name,
-                        @Part("description") RequestBody description,
-                        @Part("zoneId") RequestBody zoneId,
-                        @Part() MultipartBody.Part file);
+                         @Part("description") RequestBody description,
+                         @Part("zoneId") RequestBody zoneId,
+                         @Part() MultipartBody.Part file);
 
-    @GET("object/getByZoneAndPlace")
-    Call<ArrayList<Object>> GetObjectByZoneAndPlace(@Body Zone zone);
+    @GET("object/getZoneObjects")
+    Call<ArrayList<Object>> GetObjectByZoneAndPlace(@Query("zoneId") int zoneId);
 }
