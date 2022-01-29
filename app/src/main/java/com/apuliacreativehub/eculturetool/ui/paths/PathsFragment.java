@@ -1,11 +1,11 @@
 package com.apuliacreativehub.eculturetool.ui.paths;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,12 +26,12 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class PathsFragment extends Fragment {
-    private View view;
+    private static final int FILTER_PATHS = R.id.filterPaths;
+    private static final int SEARCH_PATHS = R.id.searchPaths;
+
     private RecyclerView mRecyclerView;
-    private LinearLayout containerResults;
     private ConstraintLayout containerNoResult;
     private ListPathsAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<Path> mDataset;
     private ArrayList<Path> paths;
     private Toolbar toolbar;
@@ -40,14 +40,13 @@ public class PathsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_paths, container, false);
+        View view = inflater.inflate(R.layout.fragment_paths, container, false);
 
         modalBottomSheet = new ModalBottomSheetPaths();
-        containerResults = view.findViewById(R.id.resultsContainerPaths);
         containerNoResult = view.findViewById(R.id.noResultsLayoutPaths);
 
         mRecyclerView = view.findViewById(R.id.userListPaths);
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // TODO: Read Paths API
@@ -74,6 +73,7 @@ public class PathsFragment extends Fragment {
         MenuItem searchPaths = toolbar.getMenu().findItem(R.id.searchPaths);
         SearchView searchView = (SearchView) searchPaths.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public boolean onQueryTextSubmit(String query) {
                 mDataset.clear();
@@ -106,6 +106,7 @@ public class PathsFragment extends Fragment {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -115,10 +116,10 @@ public class PathsFragment extends Fragment {
         toolbar.inflateMenu(R.menu.top_menu_paths);
         toolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
-                case R.id.filterPaths:
+                case FILTER_PATHS:
                     modalBottomSheet.show(getChildFragmentManager(), ModalBottomSheetUtil.TAG);
                     break;
-                case R.id.searchPaths:
+                case SEARCH_PATHS:
                     mDataset.clear();
                     mDataset.addAll(paths);
                     mAdapter.notifyDataSetChanged();
@@ -137,7 +138,6 @@ public class PathsFragment extends Fragment {
     }
 
     private void showResult() {
-        containerResults.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
