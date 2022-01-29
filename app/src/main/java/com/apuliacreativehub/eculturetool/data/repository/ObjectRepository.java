@@ -6,17 +6,22 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
+import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
 import com.apuliacreativehub.eculturetool.data.local.LocalObjectDAO;
 import com.apuliacreativehub.eculturetool.data.network.object.ObjectRemoteDatabase;
 import com.apuliacreativehub.eculturetool.data.network.object.RemoteObjectDAO;
+import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -138,11 +143,68 @@ public class ObjectRepository {
             @Override
             public void run() {
                 for (Object object : objects) {
-                    if (localObjectDAO.getObjectById(1) != null)
+                    if (localObjectDAO.getObjectById(object.getId()) != null)
                         localObjectDAO.insertObject(object);
                     else localObjectDAO.updateObject(object);
                 }
             }
         });
+    }
+
+    public MutableLiveData<RepositoryNotification<Void>> editObject(Context context, Object object) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Void>> editResult;
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            editResult = editObjectOnRemoteDatabase(context, object);
+        } else {
+            throw new NoInternetConnectionException();
+        }
+
+        return editResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Void>> editObjectOnRemoteDatabase(Context context, Object object) {
+        MutableLiveData<RepositoryNotification<Void>> editResult = new MutableLiveData<>();
+        try {
+            RequestBody id = RequestBody.create(String.valueOf(object.getId()), MediaType.parse("text/plain"));
+            RequestBody name = RequestBody.create(object.getName(), MediaType.parse("text/plain"));
+            RequestBody description = RequestBody.create(object.getDescription(), MediaType.parse("text/plain"));
+            RequestBody zoneId = RequestBody.create(String.valueOf(object.getZoneId()), MediaType.parse("text/plain"));
+            Call<Void> call;
+            if(object.getUriImg() != null){
+                InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse(object.getUriImg()));
+                RequestBody imgBody = RequestBody.create(ByteString.read(imgStream, imgStream.available()), MediaType.parse("image/*"));
+                MultipartBody.Part imgPart = MultipartBody.Part.createFormData("img", "img.png", imgBody);
+                call = remoteObjectDAO.EditObject(id, name, description, zoneId, imgPart);
+            }else {
+                call = remoteObjectDAO.EditObjectNoImg(id, name, description, zoneId);
+            }
+            executor.execute(() -> {
+                try {
+                    Response<Void> response = call.execute();
+                    Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    if (response.isSuccessful()) {
+                        repositoryNotification.setData(response.body());
+                    } else {
+                        if (response.errorBody() != null) {
+                            repositoryNotification.setErrorMessage(response.errorBody().string());
+                        }
+                    }
+                    editResult.postValue(repositoryNotification);
+                } catch (IOException ioe) {
+                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    repositoryNotification.setException(ioe);
+                    editResult.postValue(repositoryNotification);
+                    Log.e("RETROFITERROR", ioe.getMessage());
+                }
+            });
+        } catch (IOException ioe) {
+            RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+            repositoryNotification.setException(ioe);
+            editResult.postValue(repositoryNotification);
+            Log.e("RETROFITERROR", ioe.getMessage());
+        }
+            return editResult;
     }
 }

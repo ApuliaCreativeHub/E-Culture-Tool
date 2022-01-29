@@ -10,11 +10,6 @@ import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification
 import com.apuliacreativehub.eculturetool.ui.component.Utils;
 
 public class CreateObjectViewModel extends AbstractObjectViewModel {
-    private int zoneID;
-
-    public void setZoneID(int zoneID){
-        this.zoneID = zoneID;
-    }
 
     public CreateObjectViewModel(Application application) {
         super(application);

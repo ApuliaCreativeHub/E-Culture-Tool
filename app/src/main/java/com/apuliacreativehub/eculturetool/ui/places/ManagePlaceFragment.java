@@ -280,7 +280,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         recyclerGridView = view.findViewById(R.id.recyclerContainerObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerGridView.setLayoutManager(gridLayoutManager);
-        listObjectsManageAdapter = new ListObjectsManageAdapter(R.layout.component_card_artifact, mDataset, getContext());
+        listObjectsManageAdapter = new ListObjectsManageAdapter(R.layout.component_card_artifact, mDataset, getContext(), arrayOptionsAdapter, managePlaceViewModel.getZonesBundle(), managePlaceViewModel.getCurrentlySelectedZoneName());
         recyclerGridView.setAdapter(listObjectsManageAdapter);
     }
 

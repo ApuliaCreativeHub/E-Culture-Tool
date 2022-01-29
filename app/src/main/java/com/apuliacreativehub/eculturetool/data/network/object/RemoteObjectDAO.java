@@ -24,4 +24,19 @@ public interface RemoteObjectDAO {
 
     @GET("object/getZoneObjects")
     Call<ArrayList<Object>> GetObjectByZoneAndPlace(@Query("zoneId") int zoneId);
+
+    @Multipart
+    @POST("object/update")
+    Call<Void> EditObject(@Part("id") RequestBody id,
+                          @Part("name") RequestBody name,
+                          @Part("description") RequestBody description,
+                          @Part("zoneId") RequestBody zoneId,
+                          @Part() MultipartBody.Part file);
+
+    @Multipart
+    @POST("object/update")
+    Call<Void> EditObjectNoImg(@Part("id") RequestBody id,
+                               @Part("name") RequestBody name,
+                               @Part("description") RequestBody description,
+                               @Part("zoneId") RequestBody zoneId);
 }

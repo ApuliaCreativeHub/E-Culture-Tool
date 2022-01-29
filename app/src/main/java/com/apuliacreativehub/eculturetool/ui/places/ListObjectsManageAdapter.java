@@ -1,10 +1,12 @@
 package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,18 +18,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
+import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListObjectsManageAdapter extends RecyclerView.Adapter<ListObjectsManageAdapter.ViewHolder> {
 
+    private final Bundle bundleZoneNameId;
+    private final String inizialSelectedZone;
     private int layout;
     private final Context context;
     private final ArrayList<Object> dataSet;
+    private ArrayAdapter<String> listZones;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private View view;
@@ -75,10 +82,13 @@ public class ListObjectsManageAdapter extends RecyclerView.Adapter<ListObjectsMa
         }
     }
 
-    public ListObjectsManageAdapter(int layout, ArrayList<Object> dataSet, Context mContext) {
+    public ListObjectsManageAdapter(int layout, ArrayList<Object> dataSet, Context mContext, ArrayAdapter<String> listZones, Bundle zoneNameId, String inizialSelectedZone) {
         this.layout = layout;
         this.dataSet = dataSet;
         this.context = mContext;
+        this.listZones = listZones;
+        this.bundleZoneNameId = zoneNameId;
+        this.inizialSelectedZone = inizialSelectedZone;
     }
 
     @Override @NonNull
@@ -98,7 +108,7 @@ public class ListObjectsManageAdapter extends RecyclerView.Adapter<ListObjectsMa
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(viewHolder.getImgObject());
         viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), this.dataSet.get(position).getDescription(), "OBJECT_DESCRIPTION").show(((AppCompatActivity)context).getSupportFragmentManager(), Dialog.TAG));
-        viewHolder.getBtnEditObject().setOnClickListener(v -> TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new EditObjectFragment()));
+        viewHolder.getBtnEditObject().setOnClickListener(v -> TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new EditObjectFragment(this.dataSet.get(position), bundleZoneNameId, listZones, inizialSelectedZone)));
     }
 
     @Override
