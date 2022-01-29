@@ -81,6 +81,41 @@ public class ObjectRepository {
         return addResult;
     }
 
+    public MutableLiveData<RepositoryNotification<Object>> getObjectById(int id) throws NoInternetConnectionException {
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            return getObjectByIdFromDB(id);
+        } else {
+            throw new NoInternetConnectionException();
+        }
+    }
+
+    private MutableLiveData<RepositoryNotification<Object>> getObjectByIdFromDB(int id) {
+        MutableLiveData<RepositoryNotification<Object>> getResult = new MutableLiveData<>();
+        Call<Object> call = remoteObjectDAO.getObjectById(id);
+        executor.execute(() -> {
+            try {
+                Response<Object> response = call.execute();
+                Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                RepositoryNotification<Object> repositoryNotification = new RepositoryNotification<>();
+                if (response.isSuccessful()) {
+                    repositoryNotification.setData(response.body());
+                } else {
+                    if (response.errorBody() != null) {
+                        repositoryNotification.setErrorMessage(response.errorBody().string());
+                    }
+                }
+                getResult.postValue(repositoryNotification);
+            } catch (IOException ioe) {
+                RepositoryNotification<Object> repositoryNotification = new RepositoryNotification<>();
+                repositoryNotification.setException(ioe);
+                getResult.postValue(repositoryNotification);
+                Log.e("RETROFITERROR", ioe.getMessage());
+            }
+        });
+        return getResult;
+    }
+
     public MutableLiveData<RepositoryNotification<ArrayList<Object>>> getObjects(Zone zone) {
         MutableLiveData<RepositoryNotification<ArrayList<Object>>> getResult;
         if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {

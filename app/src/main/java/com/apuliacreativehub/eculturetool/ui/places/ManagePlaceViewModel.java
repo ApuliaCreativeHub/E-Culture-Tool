@@ -152,6 +152,10 @@ public class ManagePlaceViewModel extends AndroidViewModel {
         }
     }
 
+    public MutableLiveData<RepositoryNotification<Object>> getObjectById(int id) throws NoInternetConnectionException{
+        return objectRepository.getObjectById(id);
+    }
+
     public Bundle getZonesBundle(){
         Bundle bundle = new Bundle();
 
