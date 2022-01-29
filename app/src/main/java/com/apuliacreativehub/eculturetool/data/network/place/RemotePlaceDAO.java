@@ -17,10 +17,10 @@ import retrofit2.http.Part;
 public interface RemotePlaceDAO {
     @Multipart
     @POST("place/add")
-    Call<Void> AddPlace(@Part("name") RequestBody name,
-                        @Part("address") RequestBody address,
-                        @Part("description") RequestBody description,
-                        @Part() MultipartBody.Part file);
+    Call<Place> AddPlace(@Part("name") RequestBody name,
+                         @Part("address") RequestBody address,
+                         @Part("description") RequestBody description,
+                         @Part() MultipartBody.Part file);
 
     @Headers("Content-Type: application/json")
     @GET("place/getYours")

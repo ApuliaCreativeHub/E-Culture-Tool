@@ -16,6 +16,7 @@ import com.apuliacreativehub.eculturetool.data.network.place.RemotePlaceDAO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -26,6 +27,7 @@ import okio.ByteString;
 import retrofit2.Call;
 import retrofit2.Response;
 
+// TODO: Refactoring methods as the ZoneRepository ones
 public class PlaceRepository {
     private final RemotePlaceDAO remotePlaceDAO;
     private final LocalPlaceDAO localPlaceDAO;
@@ -39,8 +41,8 @@ public class PlaceRepository {
         this.executor = executor;
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> addPlace(Context context, Place place) {
-        MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
+    public MutableLiveData<RepositoryNotification<Place>> addPlace(Context context, Place place) {
+        MutableLiveData<RepositoryNotification<Place>> addResult = new MutableLiveData<>();
         try {
             InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse(place.getUriImg()));
             RequestBody imgBody = RequestBody.create(ByteString.read(imgStream, imgStream.available()), MediaType.parse("image/*"));
@@ -48,14 +50,15 @@ public class PlaceRepository {
             RequestBody name = RequestBody.create(place.getName(), MediaType.parse("text/plain"));
             RequestBody address = RequestBody.create(place.getAddress(), MediaType.parse("text/plain"));
             RequestBody description = RequestBody.create(place.getDescription(), MediaType.parse("text/plain"));
-            Call<Void> call = remotePlaceDAO.AddPlace(name, address, description, imgPart);
+            Call<Place> call = remotePlaceDAO.AddPlace(name, address, description, imgPart);
             executor.execute(() -> {
                 try {
-                    Response<Void> response = call.execute();
+                    Response<Place> response = call.execute();
                     Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<Place> repositoryNotification = new RepositoryNotification<>();
                     if (response.isSuccessful()) {
                         repositoryNotification.setData(response.body());
+                        saveRemotePlacesToLocal(Collections.singletonList(response.body()));
                     } else {
                         if (response.errorBody() != null) {
                             repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -63,14 +66,14 @@ public class PlaceRepository {
                     }
                     addResult.postValue(repositoryNotification);
                 } catch (IOException ioe) {
-                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<Place> repositoryNotification = new RepositoryNotification<>();
                     repositoryNotification.setException(ioe);
                     addResult.postValue(repositoryNotification);
                     Log.e("RETROFITERROR", ioe.getMessage());
                 }
             });
         } catch (IOException ioe) {
-            RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+            RepositoryNotification<Place> repositoryNotification = new RepositoryNotification<>();
             repositoryNotification.setException(ioe);
             addResult.postValue(repositoryNotification);
             Log.e("RETROFITERROR", ioe.getMessage());
