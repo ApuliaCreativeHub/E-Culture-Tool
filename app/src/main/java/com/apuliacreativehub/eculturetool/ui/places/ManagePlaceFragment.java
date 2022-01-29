@@ -228,9 +228,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     break;
                 case R.id.editArtifactByQrCode:
                     // Initialize intent integrator
-                    IntentIntegrator intentIntegrator = new IntentIntegrator(
-                            requireActivity()
-                    );
+                    IntentIntegrator intentIntegrator = IntentIntegrator.forSupportFragment(ManagePlaceFragment.this);
                     // Set prompt text
                     intentIntegrator.setPrompt(getString(R.string.scan_qrcode_prompt));
                     // Set beep
