@@ -138,13 +138,16 @@ public class ManagePlaceViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<RepositoryNotification<ArrayList<Object>>> getObjectByZone(){
-        //return objectRepository.getObjects(getZoneByName(currentlySelectedZoneName), place);
-        ArrayList<Object> stub = new ArrayList<>();
-        stub.add(new Object("Name", "Description", "xd", 2));
-        RepositoryNotification<ArrayList<Object>> stub1 = new RepositoryNotification<>();
-        stub1.setData(stub);
-        MutableLiveData<RepositoryNotification<ArrayList<Object>>> a = new MutableLiveData<>();
-        a.postValue(stub1);
-        return a;
+        if (place != null) {
+            Zone selectedZone = getZoneByName(currentlySelectedZoneName);
+            if (selectedZone != null) {
+                selectedZone.setPlaceId(place.getId());
+                return objectRepository.getObjects(selectedZone);
+            } else {
+                return new MutableLiveData<>();
+            }
+        } else {
+            return new MutableLiveData<>();
+        }
     }
 }
