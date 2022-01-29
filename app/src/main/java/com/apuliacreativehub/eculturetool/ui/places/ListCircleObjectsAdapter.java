@@ -15,33 +15,44 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.google.android.material.imageview.ShapeableImageView;
-
-import java.util.ArrayList;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.graph.MutableGraph;
 
 public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObjectsAdapter.ViewHolder> {
 
-    private ArrayList<Object> dataSet;
+    private MutableGraph<NodeArtifact> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private View view;
         private ShapeableImageView circle;
-        private LinearLayout dropContainer;
+        private LinearLayout dropLeftContainer;
+        private LinearLayout dropRightContainer;
         private ImageView arrowIcon;
 
         public ViewHolder(View view) {
             super(view);
             this.view = view;
             this.circle = view.findViewById(R.id.pathCircleImage);
-            this.dropContainer = view.findViewById(R.id.pathContainerDropImage);
+            this.dropLeftContainer = view.findViewById(R.id.pathContainerLeftDropImage);
+            this.dropRightContainer = view.findViewById(R.id.pathContainerRightDropImage);
             this.arrowIcon = view.findViewById(R.id.arrowLinkIcon);
+        }
+
+        public View getView() {
+            return view;
         }
 
         public ShapeableImageView getCircle() {
             return circle;
         }
 
-        public LinearLayout getDropContainer() {
-            return dropContainer;
+        public LinearLayout getLeftDropContainer() {
+            return dropLeftContainer;
+        }
+
+        public LinearLayout getRightDropContainer() {
+            return dropRightContainer;
         }
 
         public ImageView getArrowIcon() {
@@ -49,7 +60,7 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
         }
     }
 
-    public ListCircleObjectsAdapter(ArrayList<Object> dataSet) {
+    public ListCircleObjectsAdapter(MutableGraph<NodeArtifact> dataSet) {
         this.dataSet = dataSet;
     }
 
@@ -63,29 +74,102 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
 
     private void setOnDragListener(ShapeableImageView view) {
         view.setOnLongClickListener(v ->  {
-            ClipData.Item item = new ClipData.Item(view.getTag().toString());
-            ClipData dragData = new ClipData(view.getTag().toString(), new String[] { ClipDescription.MIMETYPE_TEXT_PLAIN }, item);
+            View parent = (View) v.getParent();
+
+            ClipData.Item itemId = new ClipData.Item(parent.getTag(R.id.artifact_tag_id).toString());
+            ClipData dragData = new ClipData("node_artifact", new String[] { ClipDescription.MIMETYPE_TEXT_PLAIN }, itemId);
+
             View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);
             v.startDragAndDrop(dragData, myShadow, null,0);
             return true;
         });
     }
 
+    /**
+     * DON'T TOUCH THIS FUNCTION (SHOULD BE MODIFIED BY ME)
+     * @param view
+     */
     private void setOnDropListener(LinearLayout view) {
         view.setOnDragListener((V, e) -> {
             if(e.getAction() == DragEvent.ACTION_DROP) {
-                int idResult = Integer.valueOf(e.getClipData().getItemAt(0).getText().toString());
-                moveValue(idResult, Integer.valueOf(V.getTag().toString()));
+                String moveOrientationAction = V.getTag().toString();
+                View parent = (View) V.getParent();
+
+                int rebornDragArtifactId =  Integer.valueOf(e.getClipData().getItemAt(0).getText().toString());
+                NodeArtifact rebornDragArtifact = Iterables.find(dataSet.nodes(), new Predicate<NodeArtifact>() {
+                    @Override
+                    public boolean apply(NodeArtifact input) {
+                        return input.getId() == rebornDragArtifactId;
+                    }
+                });
+
+                int rebornDropAtifactId = (Integer) parent.getTag(R.id.artifact_tag_id);
+                NodeArtifact rebornDropArtifact = Iterables.find(dataSet.nodes(), new Predicate<NodeArtifact>() {
+                    @Override
+                    public boolean apply(NodeArtifact input) {
+                        return input.getId() == rebornDropAtifactId;
+                    }
+                });
+
+                NodeArtifact nodeArtifactDraggedLeft = null;
+                NodeArtifact nodeArtifactDraggedRight = null;
+                NodeArtifact[] rawLeftNodes = dataSet.predecessors(rebornDragArtifact).toArray(new NodeArtifact[0]);
+                NodeArtifact[] rawRightNodes = dataSet.successors(rebornDragArtifact).toArray(new NodeArtifact[0]);
+                if(rawLeftNodes.length == 0 && rawRightNodes.length == 0) return true;
+
+                if(rawLeftNodes.length == 1) nodeArtifactDraggedLeft = rawLeftNodes[0];
+                if(rawRightNodes.length == 1) nodeArtifactDraggedRight = rawRightNodes[0];
+
+                dataSet.removeNode(rebornDragArtifact);
+                if(nodeArtifactDraggedLeft != null && nodeArtifactDraggedRight != null) dataSet.putEdge(nodeArtifactDraggedLeft, nodeArtifactDraggedRight);
+
+                NodeArtifact nodeArtifactDroppedLeft = null;
+                NodeArtifact nodeArtifactDroppedRight = null;
+                rawLeftNodes = dataSet.predecessors(rebornDropArtifact).toArray(new NodeArtifact[0]);
+                rawRightNodes = dataSet.successors(rebornDropArtifact).toArray(new NodeArtifact[0]);
+
+                if(rawLeftNodes.length == 1) nodeArtifactDroppedLeft = rawLeftNodes[0];
+                if(rawRightNodes.length == 1) nodeArtifactDroppedRight = rawRightNodes[0];
+
+                if(nodeArtifactDroppedLeft != null && nodeArtifactDroppedRight != null) {
+                    if(moveOrientationAction == "LEFT") {
+                        rebornDragArtifact.setWeight((nodeArtifactDroppedLeft.getWeight() + rebornDropArtifact.getWeight())/2);
+                        dataSet.removeEdge(nodeArtifactDroppedLeft, rebornDropArtifact);
+                        dataSet.putEdge(nodeArtifactDroppedLeft, rebornDragArtifact);
+                        dataSet.putEdge(rebornDragArtifact, rebornDropArtifact);
+                    } else {
+                        rebornDragArtifact.setWeight((rebornDropArtifact.getWeight() + nodeArtifactDroppedRight.getWeight())/2);
+                        dataSet.removeEdge(rebornDropArtifact, nodeArtifactDroppedRight);
+                        dataSet.putEdge(rebornDropArtifact, rebornDragArtifact);
+                        dataSet.putEdge(rebornDragArtifact, nodeArtifactDroppedRight);
+                    }
+                } else {
+                    if(nodeArtifactDroppedLeft == null) {
+                        if(moveOrientationAction == "LEFT") {
+                            rebornDropArtifact.setWeight(rebornDropArtifact.getWeight()/2);
+                            dataSet.putEdge(rebornDragArtifact, rebornDropArtifact);
+                        } else {
+                            rebornDragArtifact.setWeight((rebornDropArtifact.getWeight() + nodeArtifactDroppedRight.getWeight())/2);
+                            dataSet.removeEdge(rebornDropArtifact, nodeArtifactDroppedRight);
+                            dataSet.putEdge(rebornDropArtifact, rebornDragArtifact);
+                            dataSet.putEdge(rebornDragArtifact, nodeArtifactDroppedRight);
+                        }
+                    } else {
+                        if(moveOrientationAction == "LEFT") {
+                            rebornDragArtifact.setWeight((nodeArtifactDroppedLeft.getWeight() + rebornDropArtifact.getWeight())/2);
+                            dataSet.removeEdge(nodeArtifactDroppedLeft, rebornDropArtifact);
+                            dataSet.putEdge(nodeArtifactDroppedLeft, rebornDragArtifact);
+                            dataSet.putEdge(rebornDragArtifact, rebornDropArtifact);
+                        } else {
+                            rebornDragArtifact.setWeight(rebornDropArtifact.getWeight()*2);
+                            dataSet.putEdge(rebornDropArtifact, rebornDragArtifact);
+                        }
+                    }
+                }
+                notifyDataSetChanged();
             }
             return true;
         });
-    }
-
-    private void moveValue(int posStart, int posEnd) {
-        Object artifactStart = dataSet.get(posStart); //TODO: ADD ALL DROP CONTAINER TO RENDER THE DRAG&DROP INTUITIVE
-        dataSet.remove(posStart);
-        dataSet.add(posEnd, artifactStart);
-        notifyDataSetChanged();
     }
 
     /**
@@ -96,19 +180,27 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.getCircle().setImageResource(R.mipmap.outline_qr_code_scanner_black_18);
+        NodeArtifact[] node = dataSet.nodes().toArray(new NodeArtifact[0]);
+
+        View view = holder.getView();
         ShapeableImageView shapeableImageView = holder.getCircle();
-        LinearLayout linearLayout = holder.getDropContainer();
-        shapeableImageView.setTag(position);
-        linearLayout.setTag(position);
+        view.setTag(R.id.artifact_tag_id, node[position].getId());
+
+        //ONLY FOR SEE THE CIRCLE DIFFERENCE
+        if(node[position].getId() == 100)  holder.getCircle().setImageResource(R.mipmap.outline_qr_code_scanner_black_18);
+        if(node[position].getId() == 101)  holder.getCircle().setImageResource(R.mipmap.outline_add_photo_alternate_black_20);
+        if(node[position].getId() == 102)  holder.getCircle().setImageResource(R.mipmap.outline_search_black_18);
+        LinearLayout linearRightLayout = holder.getRightDropContainer();
+        LinearLayout linearLeftLayout = holder.getLeftDropContainer();
         setOnDragListener(shapeableImageView);
-        setOnDropListener(linearLayout);
-        if(position+1 == dataSet.size()) holder.getArrowIcon().setVisibility(View.GONE);
+        setOnDropListener(linearRightLayout);
+        setOnDropListener(linearLeftLayout);
+        if(position+1 == getItemCount()) holder.getArrowIcon().setVisibility(View.GONE);
         else holder.getArrowIcon().setVisibility(View.VISIBLE);
     }
 
     @Override
     public int getItemCount() {
-        return this.dataSet.size();
+        return this.dataSet.nodes().size();
     }
 }

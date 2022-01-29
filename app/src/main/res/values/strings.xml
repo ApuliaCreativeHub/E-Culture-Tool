@@ -146,6 +146,9 @@
     <string name="scan_qrcode_error">You did not scan anything</string>
     <string name="qrcode_download_success">QRCode downloaded</string>
     <string name="qrcode_download_error">Error during download</string>
+    <string name="create_path">Create path</string>
+    <string name="path_name_here">Path name here</string>
+    <item type="id" name="artifact_tag_id"></item>
     <string name="err_no_internet_connection">You must be connected to Internet to perform this action</string>
     <string name="share">Share</string>
     <string name="download">Download</string>
