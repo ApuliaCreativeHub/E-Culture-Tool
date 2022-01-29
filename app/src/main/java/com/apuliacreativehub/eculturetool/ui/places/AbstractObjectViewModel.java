@@ -5,11 +5,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.apuliacreativehub.eculturetool.data.repository.ObjectRepository;
-import com.apuliacreativehub.eculturetool.data.repository.PlaceRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
 
 abstract public class AbstractObjectViewModel extends AndroidViewModel {
@@ -19,10 +17,11 @@ abstract public class AbstractObjectViewModel extends AndroidViewModel {
     private static final int MAX_LENGTH_DESCRIPTION = 100;
 
     protected String name = "";
-    protected String room = "";
+    protected String zone = "";
     protected String description = "";
     protected Uri image = null;
     protected ObjectRepository repository;
+    protected int zoneID;
 
     protected AbstractObjectViewModel(Application application) {
         super(application);
@@ -42,12 +41,12 @@ abstract public class AbstractObjectViewModel extends AndroidViewModel {
         return name.length() >= MIN_LENGTH_NAME && name.length() <= MAX_LENGTH_NAME;
     }
 
-    public String getRoom() {
-        return room;
+    public String getZone() {
+        return zone;
     }
 
-    public void setRoom(String room) {
-        this.room = room;
+    public void setZone(String zone) {
+        this.zone = zone;
     }
 
     public boolean isRoomSelected(String room) {
@@ -78,4 +77,7 @@ abstract public class AbstractObjectViewModel extends AndroidViewModel {
         return image != null;
     }
 
+    public void setZoneID(int zoneID){
+        this.zoneID = zoneID;
+    }
 }

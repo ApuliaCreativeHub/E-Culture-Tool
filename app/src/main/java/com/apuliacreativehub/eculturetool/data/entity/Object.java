@@ -3,6 +3,7 @@ package com.apuliacreativehub.eculturetool.data.entity;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
@@ -30,10 +31,28 @@ public class Object {
     }
 
     @Ignore
-    public Object(String name, String description, String uriImg, int zoneId) {
+    public Object(int id, String name, String description, String uriImg, int zoneId) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.uriImg = uriImg;
+        this.zoneId = zoneId;
+    }
+
+    @Ignore
+    public Object(String name, String description, String uriImg, int zoneId) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.uriImg = uriImg;
+        this.zoneId = zoneId;
+    }
+
+    @Ignore
+    public Object(int id, String name, String description, int zoneId) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
         this.zoneId = zoneId;
     }
 

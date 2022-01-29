@@ -43,8 +43,8 @@ public class CreatePathFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Object testArtifact = new Object("Opera d'arte", "Opera d'arte antica", null, 24);
-        Object testArtifact2 = new Object("Opera d'arte2", "Opera d'arte antica2", null, 24);
+        Object testArtifact = new Object(1, "Opera d'arte", "Opera d'arte antica", null, 24);
+        Object testArtifact2 = new Object(1, "Opera d'arte2", "Opera d'arte antica2", null, 24);
 
         mCircleArtifactDataset = new ArrayList<>();
         mArtifactDataset = new ArrayList<>();

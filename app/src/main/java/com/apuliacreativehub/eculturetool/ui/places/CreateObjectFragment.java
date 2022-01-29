@@ -113,8 +113,8 @@ public class CreateObjectFragment extends Fragment {
         if(!createObjectViewModel.getName().equals(""))
             txtName.setText(createObjectViewModel.getName());
 
-        if(!createObjectViewModel.getRoom().equals(""))
-            txtRoom.setText(createObjectViewModel.getRoom());
+        if(!createObjectViewModel.getZone().equals(""))
+            txtRoom.setText(createObjectViewModel.getZone());
 
         if(!createObjectViewModel.getDescription().equals(""))
             txtDescription.setText(createObjectViewModel.getDescription());
@@ -156,7 +156,7 @@ public class CreateObjectFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                createObjectViewModel.setRoom(editable.toString());
+                createObjectViewModel.setZone(editable.toString());
             }
         });
 
@@ -188,7 +188,7 @@ public class CreateObjectFragment extends Fragment {
                 txtName.setError(null);
             }
 
-            if(!createObjectViewModel.isRoomSelected(createObjectViewModel.getRoom())) {
+            if(!createObjectViewModel.isRoomSelected(createObjectViewModel.getZone())) {
                 txtRoom.setError(getResources().getString(R.string.room_not_selected));
                 errors = true;
             } else {
