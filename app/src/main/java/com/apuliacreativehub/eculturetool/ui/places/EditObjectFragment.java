@@ -99,6 +99,27 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
         }
     };
 
+    final Observer<RepositoryNotification<Void>> deleteObserver = notification -> {
+        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        if (notification.getException() == null) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(notification.getData()));
+            if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
+                Log.i("addPlace", "OK");
+                requireActivity().getSupportFragmentManager().popBackStackImmediate();
+            } else {
+                Log.i("addPlace", "Not OK");
+                Log.d("Dialog", "show dialog here");
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        } else {
+            Log.i("addPlace", "Not OK exception");
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+        }
+    };
+
     public EditObjectFragment(Object object, Bundle zoneNameID, ArrayAdapter<String> listZones, String selectedZone){
         this.bundleZoneNameId = zoneNameID;
         this.listZones = listZones;
@@ -322,7 +343,11 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i("Response", "AOPOSITIVE");
-        // TODO: Delete Object API
+        try {
+            editObjectViewModel.deleteObject().observe(this, deleteObserver);
+        } catch (NoInternetConnectionException e) {
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+        }
     }
 
     @Override

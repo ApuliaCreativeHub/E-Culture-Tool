@@ -205,4 +205,45 @@ public class ObjectRepository {
         }
             return editResult;
     }
+
+    public MutableLiveData<RepositoryNotification<Void>> deleteObject(Object object) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Void>> deleteResult;
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            deleteResult = deleteZoneFromRemoteDatabase(object);
+        } else {
+            throw new NoInternetConnectionException();
+        }
+
+        return deleteResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Void>> deleteZoneFromRemoteDatabase(Object object) {
+        MutableLiveData<RepositoryNotification<Void>> deleteResult = new MutableLiveData<>();
+        Call<Void> call = remoteObjectDAO.DeleteObject(object);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                try {
+                    Response<Void> response = call.execute();
+                    if (response.isSuccessful()) {
+                        repositoryNotification.setData(response.body());
+                        // Delete zone from local database too
+                        localObjectDAO.deleteObject(object);
+                    } else {
+                        if (response.errorBody() != null) {
+                            repositoryNotification.setErrorMessage(response.errorBody().string());
+                        }
+                    }
+                    Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                } catch (IOException ioe) {
+                    repositoryNotification.setException(ioe);
+                    Log.e("RETROFITERROR", ioe.getMessage());
+                }
+                deleteResult.postValue(repositoryNotification);
+            }
+        });
+        return deleteResult;
+    }
 }

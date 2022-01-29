@@ -31,6 +31,11 @@ public class Object {
     }
 
     @Ignore
+    public Object(int id) {
+        this.id = id;
+    }
+
+    @Ignore
     public Object(int id, String name, String description, String uriImg, int zoneId) {
         this.id = id;
         this.name = name;

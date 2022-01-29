@@ -39,4 +39,7 @@ public interface RemoteObjectDAO {
                                @Part("name") RequestBody name,
                                @Part("description") RequestBody description,
                                @Part("zoneId") RequestBody zoneId);
+
+    @POST("object/delete")
+    Call<Void> DeleteObject(@Body Object object);
 }
