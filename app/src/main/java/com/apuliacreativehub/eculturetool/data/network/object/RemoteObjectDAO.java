@@ -17,7 +17,7 @@ import retrofit2.http.Query;
 public interface RemoteObjectDAO {
     @Multipart
     @POST("object/add")
-    Call<Void> AddObject(@Part("name") @Body RequestBody name,
+    Call<Void> AddObject(@Part("name") RequestBody name,
                          @Part("description") RequestBody description,
                          @Part("zoneId") RequestBody zoneId,
                          @Part() MultipartBody.Part file);

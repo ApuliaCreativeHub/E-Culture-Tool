@@ -335,11 +335,10 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         btnRoomOptions.setOnClickListener(view -> showMenu(view, R.menu.context_menu_room));
 
         FloatingActionButton btnCreateObject = view.findViewById(R.id.btnCreateObject);
-        //TODO: Remove zone driver
         btnCreateObject.setOnClickListener(view ->
                 TransactionHelper.transactionWithAddToBackStack(requireActivity(),
                         R.id.fragment_container_layout,
-                        new CreateObjectFragment(managePlaceViewModel.getZoneByName(managePlaceViewModel.getCurrentlySelectedZoneName())))
+                        new CreateObjectFragment(managePlaceViewModel.getZonesBundle(), arrayOptionsAdapter))
         );
     }
 
