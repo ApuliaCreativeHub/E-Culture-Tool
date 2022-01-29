@@ -175,7 +175,7 @@ public class ObjectRepository {
             @Override
             public void run() {
                 for (Object object : objects) {
-                    if (localObjectDAO.getObjectById(object.getId()) != null)
+                    if (localObjectDAO.getObjectById(object.getId()) == null)
                         localObjectDAO.insertObject(object);
                     else localObjectDAO.updateObject(object);
                 }
