@@ -94,9 +94,7 @@ public class ZoneRepository {
             public void run() {
                 for (Zone zone : zones) {
                     Zone z = localZoneDAO.getZoneById(zone.getId());
-                    Log.d("ZONELOC", String.valueOf(z));
                     if (z == null) {
-                        Log.d("ZONELOC", "null");
                         localZoneDAO.insertZone(zone);
                     } else localZoneDAO.updateZone(zone);
                 }
