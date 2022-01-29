@@ -122,6 +122,7 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="invalid_room">Please enter a room name between 2 and 25 characters</string>
+    <string name="invalid_path">Please enter a path name between 2 and 25 characters</string>
     <string name="name">Name</string>
     <string name="object_image">Object Image</string>
     <string name="book">Book</string>
@@ -152,6 +153,7 @@
     <string name="err_no_internet_connection">You must be connected to Internet to perform this action</string>
     <string name="share">Share</string>
     <string name="download">Download</string>
+    <string name="path_error">You have to insert at least one object</string>
     <plurals name="list_paths_results">
         <item quantity="one">Result: 1</item>
         <item quantity="other">Results: %d</item>

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.graph.ElementOrder;
 import com.google.common.graph.GraphBuilder;
@@ -33,8 +35,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 public class CreatePathFragment extends Fragment {
-
     private static final int NUMBER_COLUMN = 2;
+    private static final int MIN_LENGTH_NAME = 2;
+    private static final int MAX_LENGTH_NAME = 25;
 
     private View view;
     private ArrayAdapter arrayOptionsAdapter;
@@ -148,18 +151,35 @@ public class CreatePathFragment extends Fragment {
 
 
     private void handleCreatePath() {
-        NodeArtifact[] rawResultsGraph = graphArtifactDataset.nodes().toArray(new NodeArtifact[0]);
+        EditText txtPathName = view.findViewById(R.id.txtPathName);
+        String pathName = txtPathName.getText().toString();
 
-        //HASHMAP VALUES: ORDER INTO THE GRAPH - ID OF THE OBJECT
-        HashMap<Integer, Integer> graphIdPath = new HashMap<>();
-        for(int i = 0; i < rawResultsGraph.length; i++) {
-            graphIdPath.put(i, rawResultsGraph[i].getId());
+
+        if(checkPathName(pathName)) {
+            NodeArtifact[] rawResultsGraph = graphArtifactDataset.nodes().toArray(new NodeArtifact[0]);
+
+            if(rawResultsGraph.length > 0) {
+                //HASHMAP VALUES: ORDER INTO THE GRAPH - ID OF THE OBJECT
+                HashMap<Integer, Integer> graphIdPath = new HashMap<>();
+                for (int i = 0; i < rawResultsGraph.length; i++) {
+                    graphIdPath.put(i, rawResultsGraph[i].getId());
+                }
+                Gson gson = new Gson();
+                JsonElement resultJson = gson.toJsonTree(graphIdPath, HashMap.class);
+                Log.i("JSON?", resultJson.toString());
+
+                //TO GET FROM JSON TO HASHMAP: (WE NEED AN ARRAY OF ARTIFACT NOT OBJECT LIKE THIS, IS ONLY AN EXAMPLE)
+                //HashMap<Integer, Integer> result = gson.fromJson(newJson, HashMap.class);
+            } else {
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.path_error), "PATH_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        } else {
+            txtPathName.setError(getString(R.string.invalid_path));
         }
-        Gson gson = new Gson();
-        JsonElement resultJson = gson.toJsonTree(graphIdPath, HashMap.class);
-        Log.i("JSON?", resultJson.toString());
-
-        //TO GET FROM JSON TO HASHMAP: (WE NEED AN ARRAY OF ARTIFACT NOT OBJECT LIKE THIS, IS ONLY AN EXAMPLE)
-        //HashMap<Integer, Integer> result = gson.fromJson(newJson, HashMap.class);
     }
+
+    private boolean checkPathName(String name) {
+        return name.length() >= MIN_LENGTH_NAME && name.length() <= MAX_LENGTH_NAME;
+    }
+
 }
