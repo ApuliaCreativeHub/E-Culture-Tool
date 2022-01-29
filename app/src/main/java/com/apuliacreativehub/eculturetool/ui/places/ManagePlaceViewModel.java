@@ -3,6 +3,7 @@ package com.apuliacreativehub.eculturetool.ui.places;
 import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.os.Bundle;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
@@ -149,5 +150,14 @@ public class ManagePlaceViewModel extends AndroidViewModel {
         } else {
             return new MutableLiveData<>();
         }
+    }
+
+    public Bundle getZonesBundle(){
+        Bundle bundle = new Bundle();
+
+        for (String zoneName : zoneNames){
+            bundle.putInt(zoneName, getZoneByName(zoneName).getId());
+        }
+        return bundle;
     }
 }
