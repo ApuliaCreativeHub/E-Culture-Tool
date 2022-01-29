@@ -279,8 +279,7 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
 
         TextView btnDownloadQRCode = view.findViewById(R.id.btnDownloadQRCode);
         btnDownloadQRCode.setOnClickListener(view -> {
-            // TODO: Insert the correct ObjectID
-           downloadQRCode("ID");
+           downloadQRCode(String.valueOf(object.getId()));
         });
 
         txtRoom.setOnItemClickListener((parent, view, position, id) -> {
