@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
-import com.apuliacreativehub.eculturetool.ui.component.ListPathsAdapter;
+import com.apuliacreativehub.eculturetool.ui.paths.PlacePathsAdapter;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class PlacePathsFragment extends Fragment {
         mDataset.add(new Path(2, "Percorso 2", "Museo 2", "Indirizzo 2", null));
         mDataset.add(new Path(3, "Percorso 3", "Museo 3", "Indirizzo 3", null));
 
-        ListPathsAdapter mAdapter = new ListPathsAdapter(mDataset);
+        PlacePathsAdapter mAdapter = new PlacePathsAdapter(mDataset);
         mRecyclerView.setAdapter(mAdapter);
 
         TextView txtResults = view.findViewById(R.id.txtResults);

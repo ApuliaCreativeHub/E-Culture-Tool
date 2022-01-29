@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
-import com.apuliacreativehub.eculturetool.ui.component.ListPathsAdapter;
 import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtil;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class PathsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private ConstraintLayout containerNoResult;
-    private ListPathsAdapter mAdapter;
+    private PathsAdapter mAdapter;
     private ArrayList<Path> mDataset;
     private ArrayList<Path> paths;
     private Toolbar toolbar;
@@ -57,7 +56,7 @@ public class PathsFragment extends Fragment {
         mDataset = new ArrayList<>();
         mDataset.addAll(paths);
 
-        mAdapter = new ListPathsAdapter(mDataset);
+        mAdapter = new PathsAdapter(mDataset);
         mRecyclerView.setAdapter(mAdapter);
 
         txtResults = view.findViewById(R.id.txtResults);

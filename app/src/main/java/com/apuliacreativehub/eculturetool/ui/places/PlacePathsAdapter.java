@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.ui.component;
+package com.apuliacreativehub.eculturetool.ui.paths;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +14,7 @@ import com.apuliacreativehub.eculturetool.data.entity.Path;
 
 import java.util.ArrayList;
 
-
-public class ListPathsAdapter extends RecyclerView.Adapter<ListPathsAdapter.ViewHolder> {
+public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.ViewHolder> {
 
     private final ArrayList<Path> dataSet;
 
@@ -45,13 +44,13 @@ public class ListPathsAdapter extends RecyclerView.Adapter<ListPathsAdapter.View
         }
     }
 
-    public ListPathsAdapter(ArrayList<Path> dataSet) {
+    public PlacePathsAdapter(ArrayList<Path> dataSet) {
         this.dataSet = dataSet;
     }
 
     @Override @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.component_card_path, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.component_card_curator_path, viewGroup, false);
         return new ViewHolder(view);
     }
 
