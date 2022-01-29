@@ -20,7 +20,7 @@ public class EditObjectViewModel extends AbstractObjectViewModel {
         this.objectID = objectID;
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> editObject() throws NoInternetConnectionException {
+    public MutableLiveData<RepositoryNotification<Object>> editObject() throws NoInternetConnectionException {
         Object object;
         if(image != null){
             if (image.getScheme().equals(Utils.SCHEME_ANDROID_RESOURCE)) {

@@ -78,7 +78,7 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
         }
     });
 
-    final Observer<RepositoryNotification<Void>> editObjectObserver = notification -> {
+    final Observer<RepositoryNotification<Object>> editObjectObserver = notification -> {
         ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
         if (notification.getException() == null) {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());

@@ -34,6 +34,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 
@@ -56,7 +57,7 @@ public class CreateObjectFragment extends Fragment {
         }
     });
 
-    final Observer<RepositoryNotification<Void>> addObjectObserver = notification -> {
+    final Observer<RepositoryNotification<Object>> addObjectObserver = notification -> {
         ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
         if (notification.getException() == null) {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());

@@ -17,7 +17,7 @@ import retrofit2.http.Query;
 public interface RemoteObjectDAO {
     @Multipart
     @POST("object/add")
-    Call<Void> AddObject(@Part("name") RequestBody name,
+    Call<Object> AddObject(@Part("name") RequestBody name,
                          @Part("description") RequestBody description,
                          @Part("zoneId") RequestBody zoneId,
                          @Part() MultipartBody.Part file);
@@ -27,7 +27,7 @@ public interface RemoteObjectDAO {
 
     @Multipart
     @POST("object/update")
-    Call<Void> EditObject(@Part("id") RequestBody id,
+    Call<Object> EditObject(@Part("id") RequestBody id,
                           @Part("name") RequestBody name,
                           @Part("description") RequestBody description,
                           @Part("zoneId") RequestBody zoneId,
@@ -35,7 +35,7 @@ public interface RemoteObjectDAO {
 
     @Multipart
     @POST("object/update")
-    Call<Void> EditObjectNoImg(@Part("id") RequestBody id,
+    Call<Object> EditObjectNoImg(@Part("id") RequestBody id,
                                @Part("name") RequestBody name,
                                @Part("description") RequestBody description,
                                @Part("zoneId") RequestBody zoneId);

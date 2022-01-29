@@ -15,7 +15,7 @@ public class CreateObjectViewModel extends AbstractObjectViewModel {
         super(application);
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> addObject(){
+    public MutableLiveData<RepositoryNotification<Object>> addObject(){
         Object object;
         if (image.getScheme().equals(Utils.SCHEME_ANDROID_RESOURCE)) {
             object = new Object(name, description, image.toString(), zoneID);

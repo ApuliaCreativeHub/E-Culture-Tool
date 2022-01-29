@@ -45,8 +45,8 @@ public class ObjectRepository {
         this.executor = executor;
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> addObject(Context context, Object object) {
-        MutableLiveData<RepositoryNotification<Void>> addResult = new MutableLiveData<>();
+    public MutableLiveData<RepositoryNotification<Object>> addObject(Context context, Object object) {
+        MutableLiveData<RepositoryNotification<Object>> addResult = new MutableLiveData<>();
         try {
             InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse(object.getUriImg()));
             RequestBody imgBody = RequestBody.create(ByteString.read(imgStream, imgStream.available()), MediaType.parse("image/*"));
@@ -54,14 +54,15 @@ public class ObjectRepository {
             RequestBody name = RequestBody.create(object.getName(), MediaType.parse("text/plain"));
             RequestBody description = RequestBody.create(object.getDescription(), MediaType.parse("text/plain"));
             RequestBody zoneId = RequestBody.create(String.valueOf(object.getZoneId()), MediaType.parse("text/plain"));
-            Call<Void> call = remoteObjectDAO.AddObject(name, description, zoneId, imgPart);
+            Call<Object> call = remoteObjectDAO.AddObject(name, description, zoneId, imgPart);
             executor.execute(() -> {
                 try {
-                    Response<Void> response = call.execute();
+                    Response<Object> response = call.execute();
                     Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<Object> repositoryNotification = new RepositoryNotification<>();
                     if (response.isSuccessful()) {
                         repositoryNotification.setData(response.body());
+                        saveRemoteObjectsToLocal(Collections.singletonList(response.body()));
                     } else {
                         if (response.errorBody() != null) {
                             repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -69,14 +70,14 @@ public class ObjectRepository {
                     }
                     addResult.postValue(repositoryNotification);
                 } catch (IOException ioe) {
-                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<Object> repositoryNotification = new RepositoryNotification<>();
                     repositoryNotification.setException(ioe);
                     addResult.postValue(repositoryNotification);
                     Log.e("RETROFITERROR", ioe.getMessage());
                 }
             });
         } catch (IOException ioe) {
-            RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+            RepositoryNotification<Object> repositoryNotification = new RepositoryNotification<>();
             repositoryNotification.setException(ioe);
             addResult.postValue(repositoryNotification);
             Log.e("RETROFITERROR", ioe.getMessage());
@@ -151,8 +152,8 @@ public class ObjectRepository {
         });
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> editObject(Context context, Object object) throws NoInternetConnectionException {
-        MutableLiveData<RepositoryNotification<Void>> editResult;
+    public MutableLiveData<RepositoryNotification<Object>> editObject(Context context, Object object) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Object>> editResult;
         if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
             Log.d("SHOULDFETCH", "remote");
             editResult = editObjectOnRemoteDatabase(context, object);
@@ -163,14 +164,14 @@ public class ObjectRepository {
         return editResult;
     }
 
-    private MutableLiveData<RepositoryNotification<Void>> editObjectOnRemoteDatabase(Context context, Object object) {
-        MutableLiveData<RepositoryNotification<Void>> editResult = new MutableLiveData<>();
+    private MutableLiveData<RepositoryNotification<Object>> editObjectOnRemoteDatabase(Context context, Object object) {
+        MutableLiveData<RepositoryNotification<Object>> editResult = new MutableLiveData<>();
         try {
             RequestBody id = RequestBody.create(String.valueOf(object.getId()), MediaType.parse("text/plain"));
             RequestBody name = RequestBody.create(object.getName(), MediaType.parse("text/plain"));
             RequestBody description = RequestBody.create(object.getDescription(), MediaType.parse("text/plain"));
             RequestBody zoneId = RequestBody.create(String.valueOf(object.getZoneId()), MediaType.parse("text/plain"));
-            Call<Void> call;
+            Call<Object> call;
             if(object.getUriImg() != null){
                 InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse(object.getUriImg()));
                 RequestBody imgBody = RequestBody.create(ByteString.read(imgStream, imgStream.available()), MediaType.parse("image/*"));
@@ -181,11 +182,12 @@ public class ObjectRepository {
             }
             executor.execute(() -> {
                 try {
-                    Response<Void> response = call.execute();
+                    Response<Object> response = call.execute();
                     Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<Object> repositoryNotification = new RepositoryNotification<>();
                     if (response.isSuccessful()) {
                         repositoryNotification.setData(response.body());
+                        saveRemoteObjectsToLocal(Collections.singletonList(response.body()));
                     } else {
                         if (response.errorBody() != null) {
                             repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -193,14 +195,14 @@ public class ObjectRepository {
                     }
                     editResult.postValue(repositoryNotification);
                 } catch (IOException ioe) {
-                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<Object> repositoryNotification = new RepositoryNotification<>();
                     repositoryNotification.setException(ioe);
                     editResult.postValue(repositoryNotification);
                     Log.e("RETROFITERROR", ioe.getMessage());
                 }
             });
         } catch (IOException ioe) {
-            RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+            RepositoryNotification<Object> repositoryNotification = new RepositoryNotification<>();
             repositoryNotification.setException(ioe);
             editResult.postValue(repositoryNotification);
             Log.e("RETROFITERROR", ioe.getMessage());
