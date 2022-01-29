@@ -1,33 +1,37 @@
 package com.apuliacreativehub.eculturetool.data.entity;
 
-import java.util.Date;
-
 public class Path {
 
-    private String id;
-    private String name;
-    private String shortDescription;
+    private int placeId;
+    private String pathName;
     private String placeName;
-    private String imageURL;
-    private Date lastUpdate;
-    //TODO: check all field
+    private String placeAddress;
+    private String placeImage;
 
-    public Path(String id, String name, String placeName, String shortDescription, String imageUrl, Date lastUpdate) {
-        this.id = id;
-        this.name = name;
+    public Path(int placeId, String pathName, String placeName, String placeAddress, String placeImage) {
+        this.placeId = placeId;
+        this.pathName = pathName;
         this.placeName = placeName;
-        this.shortDescription = shortDescription;
-        this.imageURL = imageUrl;
-        this.lastUpdate = lastUpdate;
+        this.placeAddress = placeAddress;
+        this.placeImage = placeImage;
     }
 
-    public String getId() {
-        return id;
+    public int getPlaceId() {
+        return placeId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPlaceId(int placeId) {
+        this.placeId = placeId;
     }
+
+    public String getPathName() {
+        return pathName;
+    }
+
+    public void setPathName(String pathName) {
+        this.pathName = pathName;
+    }
+
 
     public String getPlaceName() {
         return placeName;
@@ -37,35 +41,20 @@ public class Path {
         this.placeName = placeName;
     }
 
-    public String getName() {
-        return name;
+    public String getPlaceAddress() {
+        return placeAddress;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPlaceAddress(String placeAddress) {
+        this.placeAddress = placeAddress;
     }
 
-    public String getShortDescription() {
-        return shortDescription;
+    public String getPlaceImage() {
+        return placeImage;
     }
 
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
+    public void setPlaceImage(String placeImage) {
+        this.placeImage = placeImage;
     }
 
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
-
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
 }

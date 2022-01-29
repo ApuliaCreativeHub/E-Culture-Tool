@@ -24,22 +24,26 @@
             android:orientation="vertical">
 
             <CheckBox
+                android:id="@+id/filterPathName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:checked="true"
                 android:text="@string/search_by_path_name"/>
 
             <CheckBox
+                android:id="@+id/filterPlaceName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/search_by_place_name"/>
 
             <CheckBox
+                android:id="@+id/filterPlaceAddress"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/search_by_address_place"/>
 
             <CheckBox
+                android:id="@+id/filterObjectInPath"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/search_for_objects_in_the_path"/>
@@ -53,7 +57,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/sectionPathLink"
+                android:id="@+id/btnApplyFilters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/apply_filters"

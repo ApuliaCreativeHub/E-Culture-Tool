@@ -38,13 +38,13 @@ public class PlacePathsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mDataset = new ArrayList<>();
-        this.mDataset.add(new Path("1", "Percorso standard", "Corteo Milano", null, null, null));
-        this.mDataset.add(new Path("2", "Percorso Standard2", "Corteo Roma", null, null, null));
+        this.mDataset.add(new Path(1, "Percorso 1", "Museo 1", "Indirizzo 1", null));
+        this.mDataset.add(new Path(2, "Percorso 2", "Museo 2", "Indirizzo 2", null));
+        this.mDataset.add(new Path(3, "Percorso 3", "Museo 3", "Indirizzo 3", null));
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_place_paths, container, false);
         containerResults = view.findViewById(R.id.resultsContainerPlacePaths);
         containerNoResult = view.findViewById(R.id.noResultsLayout);
@@ -53,7 +53,7 @@ public class PlacePathsFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ListPathsAdapter(mDataset);
         mRecyclerView.setAdapter(mAdapter);
-        ((TextView)view.findViewById(R.id.listResultsItemPathPlace)).setText(String.valueOf(mAdapter.getItemCount()));
+        ((TextView)view.findViewById(R.id.txtResults)).setText(String.valueOf(mAdapter.getItemCount()));
         if(mAdapter.getItemCount() > 0) showResult();
         else showNoResult();
         return view;
@@ -63,7 +63,7 @@ public class PlacePathsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((TextView)view.findViewById(R.id.listResultsItemPathPlace)).setText(String.valueOf(mAdapter.getItemCount()));
+        ((TextView)view.findViewById(R.id.txtResults)).setText(String.valueOf(mAdapter.getItemCount()));
 
         Toolbar toolbar = view.findViewById(R.id.showPlacePathsToolbar);
         toolbar.setTitle(R.string.show_place_default_paths);
@@ -87,4 +87,5 @@ public class PlacePathsFragment extends Fragment {
     private void showNoResult() {
         containerNoResult.setVisibility(View.VISIBLE);
     }
+
 }
