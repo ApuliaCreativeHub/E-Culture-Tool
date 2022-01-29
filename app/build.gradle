@@ -60,4 +60,7 @@ dependencies {
 
     // Library for QRCode
     implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
+
+    // Guava library
+    implementation "com.google.guava:guava:31.0.1-android"
 }
