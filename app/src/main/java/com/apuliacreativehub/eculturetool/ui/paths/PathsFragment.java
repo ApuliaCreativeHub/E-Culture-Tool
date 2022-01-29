@@ -56,7 +56,7 @@ public class PathsFragment extends Fragment {
         mDataset = new ArrayList<>();
         mDataset.addAll(paths);
 
-        mAdapter = new PathsAdapter(mDataset);
+        mAdapter = new PathsAdapter(requireContext(), mDataset);
         mRecyclerView.setAdapter(mAdapter);
 
         txtResults = view.findViewById(R.id.txtResults);
