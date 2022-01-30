@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -18,13 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
-import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
-import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 
 import java.util.ArrayList;
 
 public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> implements ConfirmationDialog.ConfirmationDialogListener {
+    private final static int SHARE_PATH = R.id.sharePath;
+    private final static int DOWNLOAD_PATH = R.id.downloadPath;
+    private final static int DELETE_PATH = R.id.deletePath;
     private final Context context;
     private final ArrayList<Path> dataSet;
 
@@ -73,7 +73,8 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.getTextPathName().setText(this.dataSet.get(position).getPathName());
-        viewHolder.getTextPlaceNameAndAddress().setText(this.dataSet.get(position).getPlaceName() + " - " + this.dataSet.get(position).getPlaceAddress());
+        String placeNameAndAddress = this.dataSet.get(position).getPlaceName() + " - " + this.dataSet.get(position).getPlaceAddress();
+        viewHolder.getTextPlaceNameAndAddress().setText(placeNameAndAddress);
         viewHolder.getBtnOptions().setOnClickListener(view -> showMenu(view, R.menu.context_menu_path));
     }
 
@@ -83,13 +84,13 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
 
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             switch(menuItem.getItemId()) {
-                case R.id.sharePath:
+                case SHARE_PATH:
                     // TODO: Share Path API
                     break;
-                case R.id.downloadPath:
+                case DOWNLOAD_PATH:
                     // TODO: Download Path API
                     break;
-                case R.id.deletePath:
+                case DELETE_PATH:
                     showNoticeDialog();
                     break;
             }
