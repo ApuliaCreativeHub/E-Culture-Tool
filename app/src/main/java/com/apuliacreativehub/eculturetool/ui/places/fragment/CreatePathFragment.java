@@ -1,5 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.places.fragment;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -137,7 +138,6 @@ public class CreatePathFragment extends Fragment {
         listCircleObjectsAdapter = new ListCircleObjectsAdapter(graphArtifactDataset);
         recyclerArtifactsCircleLinearView.setAdapter(listCircleObjectsAdapter);
     }
-
 
     private void handleCreatePath() {
         EditText txtPathName = view.findViewById(R.id.txtPathName);

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
+import com.apuliacreativehub.eculturetool.ui.places.fragment.CreatePathFragment;
 import com.apuliacreativehub.eculturetool.ui.places.fragment.PlacePathsFragment;
 import com.apuliacreativehub.eculturetool.ui.places.fragment.ShowPlacesFragment;
 import com.apuliacreativehub.eculturetool.ui.user.fragment.EditProfileFragment;
@@ -21,6 +22,7 @@ public class SubActivity extends AppCompatActivity {
     public static final String PLACES_FRAGMENT = "PLACES_FRAGMENT";
     public static final String PLACE_PATHS_FRAGMENT = "PLACE_PATHS_FRAGMENT";
     public static final String EDIT_PROFILE_FRAGMENT = "EDIT_PROFILE_FRAGMENT";
+    public static final String EDIT_PATH_FRAGMENT = "EDIT_PATH_FRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,9 @@ public class SubActivity extends AppCompatActivity {
                     break;
                 case EDIT_PROFILE_FRAGMENT:
                     TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new EditProfileFragment());
+                    break;
+                case EDIT_PATH_FRAGMENT:
+                    TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new CreatePathFragment());
                     break;
             }
         }

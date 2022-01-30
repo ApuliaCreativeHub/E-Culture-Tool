@@ -149,11 +149,12 @@
     <string name="qrcode_download_error">Error during download</string>
     <string name="create_path">Create path</string>
     <string name="path_name_here">Path name here</string>
-    <item type="id" name="artifact_tag_id"></item>
     <string name="err_no_internet_connection">You must be connected to Internet to perform this action</string>
     <string name="share">Share</string>
     <string name="download">Download</string>
     <string name="path_error">You have to insert at least one object</string>
+    <string name="show_path_screen_title">Show Path</string>
+    <item name="artifact_tag_id" type="id"></item>
     <plurals name="list_paths_results">
         <item quantity="one">Result: 1</item>
         <item quantity="other">Results: %d</item>
