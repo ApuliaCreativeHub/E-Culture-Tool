@@ -1,59 +1,46 @@
 package com.apuliacreativehub.eculturetool.data.entity;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Path {
+    @PrimaryKey
+    private int id;
 
-    private int pathId;
-    private String pathName;
-    private String placeName;
-    private String placeAddress;
-    private String placeImage;
+    @ColumnInfo(name = "name")
+    private String name;
 
-    public Path(int pathId, String pathName, String placeName, String placeAddress, String placeImage) {
-        this.pathId = pathId;
-        this.pathName = pathName;
-        this.placeName = placeName;
-        this.placeAddress = placeAddress;
-        this.placeImage = placeImage;
+    @ColumnInfo(name = "user_id")
+    private int userId;
+
+    public Path(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public int getPathId() {
-        return pathId;
+    public int getId() {
+        return id;
     }
 
-    public void setPathId(int pathId) {
-        this.pathId = pathId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getPathName() {
-        return pathName;
+    public String getName() {
+        return name;
     }
 
-    public void setPathName(String pathName) {
-        this.pathName = pathName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPlaceName() {
-        return placeName;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setPlaceName(String placeName) {
-        this.placeName = placeName;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
-
-    public String getPlaceAddress() {
-        return placeAddress;
-    }
-
-    public void setPlaceAddress(String placeAddress) {
-        this.placeAddress = placeAddress;
-    }
-
-    public String getPlaceImage() {
-        return placeImage;
-    }
-
-    public void setPlaceImage(String placeImage) {
-        this.placeImage = placeImage;
-    }
-
 }
