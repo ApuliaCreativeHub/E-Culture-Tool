@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/editArtifactByQrCode"
+        android:title="@string/scan_qrcode"
+        android:icon="@mipmap/outline_qr_code_scanner_black_36"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/editPlaceInformation"
+        android:title="@string/edit"
+        android:icon="@mipmap/outline_settings_black_36"
+        app:showAsAction="ifRoom" />
+
+</menu>

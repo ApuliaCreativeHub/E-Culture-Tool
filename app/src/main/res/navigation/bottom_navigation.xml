@@ -4,49 +4,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_navigation"
     app:startDestination="@id/placesFragment">
+
     <fragment
         android:id="@+id/pathsFragment"
         android:name="com.apuliacreativehub.eculturetool.ui.paths.PathsFragment"
-        android:label="fragment_paths"
+        android:label="@string/paths_screen_title"
         tools:layout="@layout/fragment_paths" />
+
     <fragment
         android:id="@+id/placesFragment"
         android:name="com.apuliacreativehub.eculturetool.ui.places.PlacesFragment"
-        android:label="fragment_places"
+        android:label="@string/places_screen_title"
         tools:layout="@layout/fragment_places" />
+
     <fragment
         android:id="@+id/welcomeFragment"
         android:name="com.apuliacreativehub.eculturetool.ui.user.WelcomeFragment"
-        android:label="fragment_welcome"
+        android:label="@string/welcome_screen_title"
         tools:layout="@layout/fragment_welcome" />
+
     <fragment
         android:id="@+id/profileDetailsFragment"
         android:name="com.apuliacreativehub.eculturetool.ui.user.ProfileDetailsFragment"
-        android:label="fragment_profile_details"
+        android:label="@string/profile_details_screen_title"
         tools:layout="@layout/fragment_profile_details">
+
         <action
             android:id="@+id/action_profileDetailsFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+
     </fragment>
+
     <fragment
         android:id="@+id/userFragment"
         android:name="com.apuliacreativehub.eculturetool.ui.user.UserFragment"
         android:label="fragment_user"
         tools:layout="@layout/fragment_user">
+
         <action
             android:id="@+id/action_userFragment_to_welcomeFragment"
             app:destination="@id/welcomeFragment" />
+
         <action
             android:id="@+id/action_userFragment_to_profileDetailsFragment"
             app:destination="@id/profileDetailsFragment" />
+
     </fragment>
+
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.apuliacreativehub.eculturetool.ui.user.EditProfileFragment"
-        android:label="EditProfileFragment">
+        android:label="@string/edit_profile_screen_title">
+
         <action
             android:id="@+id/action_editProfileFragment_to_profileDetailsFragment"
             app:destination="@id/profileDetailsFragment" />
+
     </fragment>
 
 </navigation>

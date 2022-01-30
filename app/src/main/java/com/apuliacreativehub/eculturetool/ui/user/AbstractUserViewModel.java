@@ -22,7 +22,7 @@ abstract public class AbstractUserViewModel extends AndroidViewModel {
     protected boolean isCurator = Boolean.parseBoolean(null);
     private String confirmPassword = "";
 
-    public AbstractUserViewModel(Application application) {
+    protected AbstractUserViewModel(Application application) {
         super(application);
         ECultureTool app = getApplication();
         this.repository = new UserRepository(app.executorService);
@@ -95,4 +95,5 @@ abstract public class AbstractUserViewModel extends AndroidViewModel {
     public void setIsCurator(boolean isCurator) {
         this.isCurator = isCurator;
     }
+
 }

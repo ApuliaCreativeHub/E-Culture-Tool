@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bottom_sheet_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_filters"
+            android:textSize="48sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/filterPathName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checked="true"
+                android:text="@string/search_by_path_name"/>
+
+            <CheckBox
+                android:id="@+id/filterPlaceName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/search_by_place_name"/>
+
+            <CheckBox
+                android:id="@+id/filterPlaceAddress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/search_by_address_place"/>
+
+            <CheckBox
+                android:id="@+id/filterObjectInPath"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/search_for_objects_in_the_path"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnApplyFilters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/apply_filters"
+                android:textAllCaps="true" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

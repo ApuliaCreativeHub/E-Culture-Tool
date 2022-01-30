@@ -4,8 +4,13 @@
     <string name="e41">A user with the given email already exists</string>
     <string name="e42">A user with the given email does not exist</string>
     <string name="e43">Email or password are incorrect</string>
-
+    <string name="e44">A place with this address already exists</string>
+    <string name="e45">Your address was not find on Earth</string>
+    <string name="e46">Your place already has a zone with this name</string>
     <string name="e50">An error occurred while processing your request</string>
     <string name="e51">Sent data was malformed</string>
-    <string name="e52">An error occurred while updating your information</string>
+    <string name="e52">Email is already used or an error occurred while updating your information</string>
+    <string name="e53">Email is incorrect or an error occurred while recovering password</string>
+    <string name="e54">Image processing has failed. Try with a different image</string>
+    <string name="e55">No place was found for this user</string>
 </resources>

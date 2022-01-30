@@ -7,16 +7,30 @@
     android:layout_height="match_parent"
     tools:context=".ui.user.ProfileDetailsFragment">
 
+    <ImageView
+        android:id="@+id/imgMuseum"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="false"
+        android:contentDescription="@string/museum"
+        android:scaleType="centerCrop"
+        android:src="@drawable/museum"
+        app:layout_constraintBottom_toTopOf="@+id/lytUser"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ImageContrastCheck" />
+
     <LinearLayout
         android:id="@+id/lytUser"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:gravity="center_horizontal|top"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/txtDetails"
@@ -27,7 +41,8 @@
             android:text="@string/details"
             android:textColor="#403f3f"
             android:textSize="40sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginBottom="32dp"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -44,10 +59,11 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:labelFor="@id/txtName"
-                    android:text="@string/name_subject_label" />
+                    android:text="@string/name_subject_label"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtName"
@@ -56,11 +72,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="16dp"
                     android:paddingLeft="24dp"
-                    android:paddingRight="24dp"
-                    android:textColor="#ffc791"
-                    android:textColorHint="#ffc791"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:paddingRight="24dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -72,11 +84,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:labelFor="@id/txtEmail"
-                    android:text="@string/email_subject_label" />
+                    android:text="@string/email_subject_label"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtEmail"
@@ -85,11 +98,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="16dp"
                     android:paddingLeft="24dp"
-                    android:paddingRight="24dp"
-                    android:textColor="#ffc791"
-                    android:textColorHint="#ffc791"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:paddingRight="24dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -101,11 +110,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:labelFor="@id/txtSurname"
-                    android:text="@string/surname_subject_label" />
+                    android:text="@string/surname_subject_label"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtSurname"
@@ -114,55 +124,42 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="16dp"
                     android:paddingLeft="24dp"
-                    android:paddingRight="24dp"
-                    android:textColor="#ffc791"
-                    android:textColorHint="#ffc791"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:paddingRight="24dp" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/btnEdit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="56dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:background="@drawable/button"
             android:text="@string/edit"
-            android:textColor="#FFF"
-            android:textSize="16sp"
-            tools:ignore="DuplicateSpeakableTextCheck" />
-
-        <Button
-            android:id="@+id/btnManagePlaces"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="56dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/button"
-            android:text="@string/manage_places"
-            android:textColor="#FFF"
-            android:textSize="16sp"
-            android:visibility="gone"
-            tools:ignore="DuplicateSpeakableTextCheck" />
+            android:textAllCaps="true" />
 
         <Button
             android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
             android:layout_marginHorizontal="56dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:background="@drawable/button"
             android:text="@string/logout"
-            android:textColor="#FFF"
-            android:textSize="16sp"
-            tools:ignore="DuplicateSpeakableTextCheck" />
+            android:textAllCaps="true"
+            android:layout_marginBottom="16dp" />
 
     </LinearLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/profileToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

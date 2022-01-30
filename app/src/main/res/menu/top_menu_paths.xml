@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:title="@string/search"
         android:id="@+id/searchPaths"
-        android:icon="@mipmap/ic_action_search"
+        android:icon="@mipmap/outline_search_black_24"
         app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        />
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
     <item
         android:title="@string/filter"
         android:id="@+id/filterPaths"
-        android:icon="@mipmap/ic_filter"
-        app:showAsAction="ifRoom"
-        />
+        android:icon="@mipmap/outline_filter_list_black_24"
+        app:showAsAction="ifRoom" />
+
 </menu>

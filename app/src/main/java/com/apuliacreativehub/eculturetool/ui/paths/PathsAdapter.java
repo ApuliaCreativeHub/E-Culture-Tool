@@ -1,128 +1,121 @@
 package com.apuliacreativehub.eculturetool.ui.paths;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Path;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
-public class PathsAdapter extends BaseAdapter {
+public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> {
+    private final static int SHARE_PATH = R.id.sharePath;
+    private final static int DOWNLOAD_PATH = R.id.downloadPath;
+    private final static int DELETE_PATH = R.id.deletePath;
+    private final Context context;
+    private final FragmentManager fragmentManager;
+    private final ArrayList<Path> dataSet;
 
-    private List<PathViewModel> paths = getPathsList();
-    private List<PathViewModel> listPaths;
-    private Boolean filterPlaces;
-    private Boolean filterName;
-    private Boolean filterDate;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView imagePath;
+        private final TextView textPathName;
+        private final TextView textPlaceNameAndAddress;
+        private final Button btnOptions;
 
-    private final Context mContext;
-    private int mResource;
-    private final String outputLastDate;
+        public ViewHolder(View view) {
+            super(view);
+            imagePath = view.findViewById(R.id.listComponentPathImage);
+            textPathName = view.findViewById(R.id.listComponentPathName);
+            textPlaceNameAndAddress = view.findViewById(R.id.listComponentPathPlace);
+            btnOptions = view.findViewById(R.id.btnPathOptions);
+        }
+        
+        public ImageView getImagePath() {
+            return imagePath;
+        }
 
-    public PathsAdapter(Context context) {
-        mContext = context;
-        outputLastDate = context.getString(R.string.list_paths_last_used);
-        paths = getPathsList();
-        listPaths = paths;
-        filterPlaces = true;
-        filterName = true;
-        filterDate = true;
-    }
+        public TextView getTextPathName() {
+            return textPathName;
+        }
 
-    public void setFilterPlaces(Boolean filterPlaces) {
-        this.filterPlaces = filterPlaces;
-    }
+        public TextView getTextPlaceNameAndAddress() {
+            return textPlaceNameAndAddress;
+        }
 
-    public void setFilterName(Boolean filterName) {
-        this.filterName = filterName;
-    }
-
-    public void setFilterDate(Boolean filterDate) {
-        this.filterDate = filterDate;
-    }
-
-    public boolean getFilterPlaces() { return this.filterPlaces; }
-
-    public boolean getFilterName() { return this.filterName; }
-
-    public boolean getFilterDate() { return this.filterDate; }
-
-
-    public void applyFilter(String query) {
-        listPaths = new ArrayList<PathViewModel>();
-        Boolean canAdd;
-        for (PathViewModel path : paths) {
-            canAdd = (filterPlaces && findString(path.getPlace(), query)) ||
-                    (filterDate && findString(path.getLastUsed().toString(), query)) ||
-                    (filterName && findString(path.getName(), query));
-
-            if (canAdd) listPaths.add(path);
+        public Button getBtnOptions() {
+            return btnOptions;
         }
     }
 
-    public void restoreAll() {
-        listPaths = new ArrayList<>(paths);
+    public PathsAdapter(Context context, FragmentManager fragmentManager, ArrayList<Path> dataSet) {
+        this.context = context;
+        this.fragmentManager = fragmentManager;
+        this.dataSet = dataSet;
+    }
+
+    @Override @NonNull
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.component_card_path, viewGroup, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public int getCount() {
-        return listPaths.size();
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+        viewHolder.getTextPathName().setText(this.dataSet.get(position).getPathName());
+        String placeNameAndAddress = this.dataSet.get(position).getPlaceName() + " - " + this.dataSet.get(position).getPlaceAddress();
+        viewHolder.getTextPlaceNameAndAddress().setText(placeNameAndAddress);
+        viewHolder.getBtnOptions().setOnClickListener(view -> showMenu(view, R.menu.context_menu_path, position));
+    }
+
+    private void showMenu(View view, int menu, int position) {
+        PopupMenu popupMenu = new PopupMenu(context, view);
+        popupMenu.inflate(menu);
+
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            switch(menuItem.getItemId()) {
+                case SHARE_PATH:
+                    // TODO: Parse JSON Path Here
+                    sharePath("JSON Parse");
+                    break;
+                case DOWNLOAD_PATH:
+                    // TODO: Download Path API
+                    break;
+                case DELETE_PATH:
+                    Bundle result = new Bundle();
+                    result.putInt("pathId", this.dataSet.get(position).getPathId());
+                    fragmentManager.setFragmentResult("pathKey", result);
+                    break;
+            }
+            return true;
+        });
+
+        popupMenu.show();
+    }
+
+    private void sharePath(String text) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        context.startActivity(shareIntent);
     }
 
     @Override
-    public PathViewModel getItem(int i) {
-        return listPaths.get(i);
+    public int getItemCount() {
+        return dataSet.size();
     }
 
-    @Override
-    public long getItemId(int i) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if (view == null) {
-            LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-            view = layoutInflater.inflate(R.layout.list_paths, viewGroup, false);
-        }
-
-        PathViewModel path = getItem(i);
-        return setOneViewItem(path, view);
-    }
-
-    private View setOneViewItem(PathViewModel path, View view) {
-        ((TextView) view.findViewById(R.id.textListPathName)).setText(path.getName());
-        ((TextView) view.findViewById(R.id.textListPathPlace)).setText(path.getPlace());
-
-        Calendar pathLastUsed = Calendar.getInstance();
-        pathLastUsed.setTime(path.getLastUsed());
-        ((TextView) view.findViewById(R.id.textListPathLastDate)).setText(
-                outputLastDate + " " + pathLastUsed.get(Calendar.DAY_OF_MONTH) + "/" + pathLastUsed.get(Calendar.MONTH) + "/" + pathLastUsed.get(Calendar.YEAR)
-        );
-        return view;
-    }
-
-    /**
-     * TODO: We have to implement the API to fetch data
-     */
-    private List<PathViewModel> getPathsList() {
-        return new ArrayList<>(Arrays.asList(
-                new PathViewModel("Museo d'arte Bari", "Percorso Mio", new Date()),
-                new PathViewModel("Museo d'arte Torino", "Percorso Standard", new Date()),
-                new PathViewModel("Museo Scultura Matera", "Percorso Avventuriero", new Date()),
-                new PathViewModel("Museo d'arte Bari", "Percorso Standard", new Date())));
-    }
-
-    private static Boolean findString(String source, String matcher) {
-        return source.toLowerCase(Locale.ROOT).contains(matcher.toLowerCase(Locale.ROOT));
-    }
 }

@@ -1,143 +1,177 @@
 package com.apuliacreativehub.eculturetool.ui.paths;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentResultListener;
-import androidx.fragment.app.ListFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Path;
+import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
+import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtil;
 
-public class PathsFragment extends ListFragment {
+import java.util.ArrayList;
+import java.util.Locale;
 
-    private FragmentActivity master;
-    private PathsAdapter pathsAdapter;
-    private boolean isFilterChildOpened = false;
-    private Fragment child;
-    private View view;
+public class PathsFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
+    private static final int FILTER_PATHS = R.id.filterPaths;
+    private static final int SEARCH_PATHS = R.id.searchPaths;
 
-    public void setFilterChildOpened(boolean value) {
-        this.isFilterChildOpened = value;
+    private RecyclerView mRecyclerView;
+    private ConstraintLayout containerNoResult;
+    private PathsAdapter mAdapter;
+    private ArrayList<Path> mDataset;
+    private ArrayList<Path> paths;
+    private Toolbar toolbar;
+    private ModalBottomSheetPaths modalBottomSheet;
+    private TextView txtResults;
+    private int pathId;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_paths, container, false);
+
+        modalBottomSheet = new ModalBottomSheetPaths();
+        containerNoResult = view.findViewById(R.id.noResultsLayoutPaths);
+
+        mRecyclerView = view.findViewById(R.id.userListPaths);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // TODO: Read Paths API
+        paths = new ArrayList<>();
+        paths.add(new Path(1, "Percorso 1", "Museo 1", "Indirizzo 1", null));
+        paths.add(new Path(2, "Percorso 2", "Museo 2", "Indirizzo 1", null));
+        paths.add(new Path(3, "Percorso 3", "Museo 3", "Indirizzo 3", null));
+        mDataset = new ArrayList<>();
+        mDataset.addAll(paths);
+
+        mAdapter = new PathsAdapter(requireContext(), getParentFragmentManager(), mDataset);
+        mRecyclerView.setAdapter(mAdapter);
+
+        txtResults = view.findViewById(R.id.txtResults);
+        show();
+
+        return view;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        master = getActivity();
+    public void onStart() {
+        super.onStart();
 
-        getChildFragmentManager().setFragmentResultListener("closingBackdrop", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                getChildFragmentManager()
-                        .beginTransaction()
-                        .setReorderingAllowed(true)
-                        .remove(child)
-                        .commit();
-                isFilterChildOpened = false;
-            }
-        });
-
-        getChildFragmentManager().setFragmentResultListener("applyFilter", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                pathsAdapter.setFilterDate(result.getBoolean("switchFilterDate"));
-                pathsAdapter.setFilterPlaces(result.getBoolean("switchFilterPlaces"));
-                pathsAdapter.setFilterName(result.getBoolean("switchFilterName"));
-            }
-        });
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.top_menu_paths, menu);
-        defineSearchActionBar(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int filterId = master.findViewById(R.id.filterPaths).getId();
-        if(item.getItemId() == filterId) {
-            if(!isFilterChildOpened) {
-                setFilterChildOpened(true);
-
-                child = new PathsFilterFragment(pathsAdapter.getFilterPlaces(), pathsAdapter.getFilterName(), pathsAdapter.getFilterDate());
-                this.getChildFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(
-                                R.anim.slide_in,
-                                R.anim.fade_out,
-                                R.anim.slide_out,
-                                R.anim.fade_out
-                        )
-                        .add(R.id.container_filter_paths, child)
-                        .setReorderingAllowed(true)
-                        .commit();
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        pathsAdapter = new PathsAdapter(getContext());
-        setListAdapter(pathsAdapter);
-        return view = inflater.inflate(R.layout.fragment_paths, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setCountResult();
-    }
-
-    private void defineSearchActionBar(@NonNull Menu menu) {
-        MenuItem menuItem = menu.findItem(R.id.searchPaths);
-        SearchView searchView = (SearchView) menuItem.getActionView();
+        MenuItem searchPaths = toolbar.getMenu().findItem(R.id.searchPaths);
+        SearchView searchView = (SearchView) searchPaths.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public boolean onQueryTextSubmit(String query) {
-                pathsAdapter.applyFilter(query);
-                setListAdapter(pathsAdapter);
-                setCountResult();
+                mDataset.clear();
+
+                for(Path path : paths) {
+                    if((modalBottomSheet.getFilterPathName() && path.getPathName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
+                            || (modalBottomSheet.getFilterPlaceName() && path.getPlaceName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
+                            || (modalBottomSheet.getFilterPlaceAddress() && path.getPlaceAddress().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))))
+                        mDataset.add(path);
+                }
+
+                if(modalBottomSheet.getFilterObjectInPath()) {
+                    // TODO: Perform BackEnd research if we want or delete this fragment of code and
+                    //       CheckBox in component_modal_bottom_sheet_paths.xml
+                }
+
+                mAdapter.notifyDataSetChanged();
+                show();
+
+                if(!searchView.isIconified())
+                    searchView.setIconified(true);
+                searchPaths.collapseActionView();
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(newText.isEmpty()) {
-                    pathsAdapter.restoreAll();
-                    setListAdapter(pathsAdapter);
-                    setCountResult();
-                }
                 return true;
+            }
+        });
+
+        getParentFragmentManager().setFragmentResultListener("pathKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                pathId = bundle.getInt("pathId");
+                showNoticeDialog();
             }
         });
     }
 
-    private void setCountResult() {
-        TextView textCountResult = master.findViewById(R.id.textListPathsResult);
-        if(pathsAdapter.getCount() > 0) {
-            textCountResult.setVisibility(View.VISIBLE);
-            textCountResult.setText(getString(R.string.list_paths_results) + " " + pathsAdapter.getCount());
-            ((ImageView) master.findViewById(R.id.frameNotFoundPaths)).setVisibility(View.INVISIBLE);
-        } else {
-            ((ImageView) master.findViewById(R.id.frameNotFoundPaths)).setVisibility(View.VISIBLE);
-            textCountResult.setVisibility(View.INVISIBLE);
-        }
+    public void showNoticeDialog() {
+        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_path), "DELETE_PATH");
+        dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
     }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Log.i("Response", "AOPOSITIVE");
+        // TODO: Delete Path API
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Log.i("Response", "NEGATIVE");
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        toolbar = view.findViewById(R.id.showUserPathsToolbar);
+        toolbar.setTitle(R.string.show_my_paths);
+        toolbar.inflateMenu(R.menu.top_menu_paths);
+        toolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case FILTER_PATHS:
+                    modalBottomSheet.show(getChildFragmentManager(), ModalBottomSheetUtil.TAG);
+                    break;
+                case SEARCH_PATHS:
+                    mDataset.clear();
+                    mDataset.addAll(paths);
+                    mAdapter.notifyDataSetChanged();
+                    show();
+                    break;
+            }
+            return true;
+        });
+    }
+
+    private void show() {
+        int item = mAdapter.getItemCount();
+        txtResults.setText(requireContext().getResources().getQuantityString(R.plurals.list_paths_results, item, item));
+        if(item > 0) showResult();
+        else showNoResult();
+    }
+
+    private void showResult() {
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void showNoResult() {
+        mRecyclerView.setVisibility(View.GONE);
+        containerNoResult.setVisibility(View.VISIBLE);
+    }
+
 }

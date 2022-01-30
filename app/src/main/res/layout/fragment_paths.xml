@@ -1,64 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.paths.PathsFragment">
 
-    <TextView
-        android:id="@+id/textListPathsResult"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="12sp"
-        android:text="@string/list_paths_results" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="72dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showUserPathsToolbar">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/resultsContainerPaths"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_margin="8dp"
+            android:orientation="horizontal">
 
-            <ListView
-                android:layout_marginTop="24dp"
-                android:id="@android:id/list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:headerDividersEnabled="true"
-                android:footerDividersEnabled="true"/>
+            <TextView
+                android:id="@+id/txtResults"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp" />
+
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/frameNotFoundPaths"
-            android:visibility="invisible"
-            android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/userListPaths"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/not_found_background"
-            android:contentDescription="@string/list_paths_no_results_description"/>
+            android:visibility="gone" />
 
-        <TextView
-            android:layout_marginTop="120dp"
-            android:gravity="center"
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/list_paths_no_results"
-            android:textSize="40sp"
-            android:textStyle="bold" />
+        <include
+            android:id="@+id/noResultsLayoutPaths"
+            layout="@layout/component_card_empty_result"
+            android:visibility="gone" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/container_filter_paths"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="32dp"
-            android:background="@color/white"
-            android:elevation="20dp" />
+    </LinearLayout>
 
-    </FrameLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/showUserPathsToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

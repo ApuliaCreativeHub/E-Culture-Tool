@@ -10,4 +10,5 @@ public class RemoteError extends AbstractRemoteError {
     public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
     }
+
 }
