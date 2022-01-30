@@ -6,7 +6,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RemotePathDatabase extends RemoteDatabase {
-    public static RemotePathDAO provideRemoteZoneDAO() {
+    public static RemotePathDAO provideRemotePathDAO() {
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
                 .baseUrl("https://hiddenfile.ml/ecultureapi/")
