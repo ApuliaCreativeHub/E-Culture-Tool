@@ -19,14 +19,12 @@ import android.view.ViewGroup;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.core.os.ConfigurationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,7 +37,6 @@ import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtil;
-import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -114,8 +111,13 @@ public class MapFragment extends Fragment {
         map = v.findViewById(R.id.mapview);
 
         mapFragmentViewModel = new ViewModelProvider(this).get(MapFragmentViewModel.class);
-        mapFragmentViewModel.getAllPlaces().observe(getViewLifecycleOwner(), getPlacesObserver);
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapFragmentViewModel.getAllPlaces().observe(getViewLifecycleOwner(), getPlacesObserver);
     }
 
     public void addOnClickMapboxListener(List<Point> points, float tolerance) {
@@ -125,7 +127,7 @@ public class MapFragment extends Fragment {
                 public boolean onMapClick(@NonNull Point possiblePoint) {
                     MapboxHelper mapboxHelper = new MapboxHelper(possiblePoint, tolerance);
                     Collections.sort(points, mapboxHelper);
-                    if(mapboxHelper.isPointValid(points.get(0))) {
+                    if (mapboxHelper.isPointValid(points.get(0))) {
                         ModalBottomSheetPlace modalBottomSheet = new ModalBottomSheetPlace(getContext(), mapFragmentViewModel.getPlaceFromPoint(points.get(0)));
                         modalBottomSheet.show(getChildFragmentManager(), ModalBottomSheetUtil.TAG);
                     }
