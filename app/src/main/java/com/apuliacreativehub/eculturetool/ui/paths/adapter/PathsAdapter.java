@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
+import com.apuliacreativehub.eculturetool.data.entity.Place;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
     private final Context context;
     private final FragmentManager fragmentManager;
     private final ArrayList<Path> dataSet;
+    private final Place place;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imagePath;
@@ -59,10 +61,11 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         }
     }
 
-    public PathsAdapter(Context context, FragmentManager fragmentManager, ArrayList<Path> dataSet) {
+    public PathsAdapter(Context context, FragmentManager fragmentManager, ArrayList<Path> dataSet, Place place) {
         this.context = context;
         this.fragmentManager = fragmentManager;
         this.dataSet = dataSet;
+        this.place = place;
     }
 
     @Override @NonNull
@@ -73,8 +76,8 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        viewHolder.getTextPathName().setText(this.dataSet.get(position).getPathName());
-        String placeNameAndAddress = this.dataSet.get(position).getPlaceName() + " - " + this.dataSet.get(position).getPlaceAddress();
+        viewHolder.getTextPathName().setText(this.dataSet.get(position).getName());
+        String placeNameAndAddress = place.getName() + " - " + place.getAddress();
         viewHolder.getTextPlaceNameAndAddress().setText(placeNameAndAddress);
         viewHolder.getBtnOptions().setOnClickListener(view -> showMenu(view, R.menu.context_menu_path, position));
     }
@@ -94,7 +97,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
                     break;
                 case DELETE_PATH:
                     Bundle result = new Bundle();
-                    result.putInt("pathId", this.dataSet.get(position).getPathId());
+                    result.putInt("pathId", this.dataSet.get(position).getId());
                     fragmentManager.setFragmentResult("pathKey", result);
                     break;
             }
