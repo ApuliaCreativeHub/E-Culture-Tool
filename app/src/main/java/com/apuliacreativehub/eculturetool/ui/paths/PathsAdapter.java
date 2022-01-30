@@ -1,6 +1,7 @@
 package com.apuliacreativehub.eculturetool.ui.paths;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,7 +86,8 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             switch(menuItem.getItemId()) {
                 case SHARE_PATH:
-                    // TODO: Share Path API
+                    // TODO: Parse JSON Path Here
+                    sharePath("JSON Parse");
                     break;
                 case DOWNLOAD_PATH:
                     // TODO: Download Path API
@@ -98,6 +100,15 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         });
 
         popupMenu.show();
+    }
+
+    private void sharePath(String text) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        context.startActivity(shareIntent);
     }
 
     public void showNoticeDialog() {
