@@ -1,11 +1,15 @@
 package com.apuliacreativehub.eculturetool.ui.component;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.ui.paths.PathsAdapter;
+import com.apuliacreativehub.eculturetool.ui.paths.PathsFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ConfirmationDialog extends DialogFragment {

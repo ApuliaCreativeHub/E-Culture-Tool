@@ -1,31 +1,31 @@
 package com.apuliacreativehub.eculturetool.ui.paths;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
-import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
-import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
-import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 
 import java.util.ArrayList;
 
-public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> implements ConfirmationDialog.ConfirmationDialogListener {
+public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> {
+    private final static int SHARE_PATH = R.id.sharePath;
+    private final static int DOWNLOAD_PATH = R.id.downloadPath;
+    private final static int DELETE_PATH = R.id.deletePath;
     private final Context context;
+    private final FragmentManager fragmentManager;
     private final ArrayList<Path> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -59,8 +59,9 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         }
     }
 
-    public PathsAdapter(Context context, ArrayList<Path> dataSet) {
+    public PathsAdapter(Context context, FragmentManager fragmentManager, ArrayList<Path> dataSet) {
         this.context = context;
+        this.fragmentManager = fragmentManager;
         this.dataSet = dataSet;
     }
 
@@ -73,24 +74,28 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.getTextPathName().setText(this.dataSet.get(position).getPathName());
-        viewHolder.getTextPlaceNameAndAddress().setText(this.dataSet.get(position).getPlaceName() + " - " + this.dataSet.get(position).getPlaceAddress());
-        viewHolder.getBtnOptions().setOnClickListener(view -> showMenu(view, R.menu.context_menu_path));
+        String placeNameAndAddress = this.dataSet.get(position).getPlaceName() + " - " + this.dataSet.get(position).getPlaceAddress();
+        viewHolder.getTextPlaceNameAndAddress().setText(placeNameAndAddress);
+        viewHolder.getBtnOptions().setOnClickListener(view -> showMenu(view, R.menu.context_menu_path, position));
     }
 
-    private void showMenu(View view, int menu) {
+    private void showMenu(View view, int menu, int position) {
         PopupMenu popupMenu = new PopupMenu(context, view);
         popupMenu.inflate(menu);
 
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             switch(menuItem.getItemId()) {
-                case R.id.sharePath:
-                    // TODO: Share Path API
+                case SHARE_PATH:
+                    // TODO: Parse JSON Path Here
+                    sharePath("JSON Parse");
                     break;
-                case R.id.downloadPath:
+                case DOWNLOAD_PATH:
                     // TODO: Download Path API
                     break;
-                case R.id.deletePath:
-                    showNoticeDialog();
+                case DELETE_PATH:
+                    Bundle result = new Bundle();
+                    result.putInt("pathId", this.dataSet.get(position).getPathId());
+                    fragmentManager.setFragmentResult("pathKey", result);
                     break;
             }
             return true;
@@ -99,20 +104,13 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         popupMenu.show();
     }
 
-    public void showNoticeDialog() {
-        DialogFragment dialog = new ConfirmationDialog(context.getString(R.string.warning_dialog_title), context.getString(R.string.warning_delete_path), "DELETE_PATH");
-        dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "NoticeDialogFragment");
-    }
-
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-        Log.i("Response", "AOPOSITIVE");
-        // TODO: Delete Path API
-    }
-
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-        Log.i("Response", "NEGATIVE");
+    private void sharePath(String text) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        context.startActivity(shareIntent);
     }
 
     @Override
