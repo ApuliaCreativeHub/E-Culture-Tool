@@ -12,7 +12,7 @@ public class Place {
     @PrimaryKey
     private int id;
 
-    @ColumnInfo(name="uriImg")
+    @ColumnInfo(name = "uri_img")
     private String uriImg;
 
     @ColumnInfo(name="name")

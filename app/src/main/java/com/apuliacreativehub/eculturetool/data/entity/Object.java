@@ -3,17 +3,14 @@ package com.apuliacreativehub.eculturetool.data.entity;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
-
-import com.google.gson.annotations.SerializedName;
 
 @Entity
 public class Object {
     @PrimaryKey
     private int id;
 
-    @ColumnInfo(name="uriImg")
+    @ColumnInfo(name = "uri_img")
     private String uriImg;
 
     @ColumnInfo(name="name")
