@@ -19,4 +19,8 @@ public class NodeArtifact extends Object {
         this.weight = weight;
     }
 
+    public String toString() {
+        return getName() + " - " + getWeight();
+    }
+
 }

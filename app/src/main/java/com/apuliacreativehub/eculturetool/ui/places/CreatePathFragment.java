@@ -23,8 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.common.graph.ElementOrder;
-import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -56,29 +54,18 @@ public class CreatePathFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        graphArtifactDataset = GraphBuilder.directed()
-                .allowsSelfLoops(false)
-                .nodeOrder(ElementOrder.sorted(new Comparator<NodeArtifact>() {
-
-                    @Override
-                    public int compare(NodeArtifact o1, NodeArtifact o2) {
-                        if(o1.getWeight() - o2.getWeight() > 0) return 1;
-                        if(o1.getWeight() - o2.getWeight() < 0) return -1;
-                        return 0;
-                    }
-                }))
-                .incidentEdgeOrder(ElementOrder.stable())
-                .build();
-
+        graphArtifactDataset = GuavaHelper.createInstance();
 
         //TODO: FETCH ARTIFACT OF PLACE
         NodeArtifact testArtifact = new NodeArtifact(100, "AAA", "Opera d'arte antica",  "img1", 1);
         NodeArtifact testArtifact2 = new NodeArtifact(101, "BBB", "Opera d'arte antica 2", "img1",2);
         NodeArtifact testArtifact3 = new NodeArtifact(102, "CCC", "Opera d'arte antica 3", "img1",3);
+        NodeArtifact testArtifact4 = new NodeArtifact(103, "DDD", "Opera d'arte antica 4", "img1",3);
         mArtifactDataset = new ArrayList<>();
         mArtifactDataset.add(testArtifact);
         mArtifactDataset.add(testArtifact2);
         mArtifactDataset.add(testArtifact3);
+        mArtifactDataset.add(testArtifact4);
 
     }
 
