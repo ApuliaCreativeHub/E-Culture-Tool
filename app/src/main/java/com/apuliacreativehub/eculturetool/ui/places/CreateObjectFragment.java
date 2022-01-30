@@ -37,12 +37,13 @@ import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.Utils;
 
 @SuppressWarnings("deprecation")
 public class CreateObjectFragment extends Fragment {
     private View view;
-    private Bundle bundleZoneNameId;
-    private ArrayAdapter<String> listZones;
+    private final Bundle bundleZoneNameId;
+    private final ArrayAdapter<String> listZones;
     private ImageView imgObject;
     private EditText txtName;
     private AutoCompleteTextView txtRoom;
@@ -52,7 +53,7 @@ public class CreateObjectFragment extends Fragment {
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
         if (isGranted) {
             takeImgFromGallery();
-        }else {
+        } else {
             takeStandardImg();
         }
     });
@@ -240,7 +241,7 @@ public class CreateObjectFragment extends Fragment {
 
     private void takeStandardImg(){
         imgObject.setImageResource(R.drawable.object);
-        createObjectViewModel.setImage(Uri.parse(String.valueOf(R.drawable.object)));
+        createObjectViewModel.setImage(Uri.parse(Utils.DRAWABLE_URI_BASE_PATH + "object"));
     }
 
     private void showRationaleDialog(String title) {
