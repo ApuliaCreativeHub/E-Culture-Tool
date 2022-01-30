@@ -154,6 +154,8 @@
     <string name="download">Download</string>
     <string name="path_error">You have to insert at least one object</string>
     <string name="show_path_screen_title">Show Path</string>
+    <string name="path_download_success">Path downloaded</string>
+    <string name="path_download_error">Error during download</string>
     <item name="artifact_tag_id" type="id"></item>
     <plurals name="list_paths_results">
         <item quantity="one">Result: 1</item>
