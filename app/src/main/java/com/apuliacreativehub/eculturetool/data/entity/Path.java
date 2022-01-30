@@ -2,26 +2,26 @@ package com.apuliacreativehub.eculturetool.data.entity;
 
 public class Path {
 
-    private int placeId;
+    private int pathId;
     private String pathName;
     private String placeName;
     private String placeAddress;
     private String placeImage;
 
-    public Path(int placeId, String pathName, String placeName, String placeAddress, String placeImage) {
-        this.placeId = placeId;
+    public Path(int pathId, String pathName, String placeName, String placeAddress, String placeImage) {
+        this.pathId = pathId;
         this.pathName = pathName;
         this.placeName = placeName;
         this.placeAddress = placeAddress;
         this.placeImage = placeImage;
     }
 
-    public int getPlaceId() {
-        return placeId;
+    public int getPathId() {
+        return pathId;
     }
 
-    public void setPlaceId(int placeId) {
-        this.placeId = placeId;
+    public void setPathId(int pathId) {
+        this.pathId = pathId;
     }
 
     public String getPathName() {
@@ -31,7 +31,6 @@ public class Path {
     public void setPathName(String pathName) {
         this.pathName = pathName;
     }
-
 
     public String getPlaceName() {
         return placeName;
