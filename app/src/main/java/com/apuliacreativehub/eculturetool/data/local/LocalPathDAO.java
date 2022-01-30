@@ -29,4 +29,7 @@ public interface LocalPathDAO {
 
     @Delete
     void deletePath(Path path);
+
+    @Query("SELECT * FROM path WHERE id=:pathId")
+    Path getPathById(int pathId);
 }
