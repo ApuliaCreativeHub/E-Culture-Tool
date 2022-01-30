@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
+import com.apuliacreativehub.eculturetool.data.entity.Place;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.ViewHolder> {
 
-    private final ArrayList<Path> dataSet;
+    private final List<Path> dataSet;
+    private final Place place;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textPathName;
@@ -44,8 +46,9 @@ public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.Vi
         }
     }
 
-    public PlacePathsAdapter(ArrayList<Path> dataSet) {
+    public PlacePathsAdapter(List<Path> dataSet, Place place) {
         this.dataSet = dataSet;
+        this.place = place;
     }
 
     @Override @NonNull
@@ -56,8 +59,8 @@ public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        viewHolder.getTextPathName().setText(this.dataSet.get(position).getPathName());
-        viewHolder.getTextPlaceNameAndAddress().setText(this.dataSet.get(position).getPlaceName() + " - " + this.dataSet.get(position).getPlaceAddress());
+        viewHolder.getTextPathName().setText(dataSet.get(position).getName());
+        viewHolder.getTextPlaceNameAndAddress().setText(place.getName() + " - " + place.getAddress());
         //TODO: add all value to personalize single component
     }
 
