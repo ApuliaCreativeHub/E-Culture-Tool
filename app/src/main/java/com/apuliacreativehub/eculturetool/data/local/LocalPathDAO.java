@@ -7,12 +7,14 @@ import androidx.room.Update;
 
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 
+import java.util.List;
+
 public interface LocalPathDAO {
     @Insert
     void insertPath(Path path);
 
     @Query("SELECT * FROM path WHERE user_id=:userId")
-    void getAllPathsByUserId(int userId);
+    List<Path> getAllPathsByUserId(int userId);
 
     @Query("SELECT * FROM path " +
             "JOIN isPresentIn ON path.id=isPresentIn.pathId " +
@@ -20,7 +22,7 @@ public interface LocalPathDAO {
             "JOIN zone ON object.zone_id=zone.id " +
             "JOIN place ON zone.place_id=place.id " +
             "WHERE place.id=:placeId")
-    void getAllPathsByPlaceId(int placeId);
+    List<Path> getAllPathsByPlaceId(int placeId);
 
     @Update
     void updatePath(Path path);
