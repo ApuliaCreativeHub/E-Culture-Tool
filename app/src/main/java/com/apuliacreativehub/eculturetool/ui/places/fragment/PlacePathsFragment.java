@@ -1,6 +1,7 @@
 package com.apuliacreativehub.eculturetool.ui.places.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,44 +13,67 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
+import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.PlacePathsAdapter;
+import com.apuliacreativehub.eculturetool.ui.places.viewmodel.PlacePathsViewModel;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PlacePathsFragment extends Fragment {
     private View view;
     private RecyclerView mRecyclerView;
     private ConstraintLayout containerNoResult;
+    private PlacePathsViewModel placePathsViewModel;
+
+    public Observer<RepositoryNotification<List<Path>>> getPlacePathsObserver = new Observer<RepositoryNotification<List<Path>>>() {
+        @Override
+        public void onChanged(RepositoryNotification<List<Path>> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage() == null) {
+                    placePathsViewModel.setPaths(notification.getData());
+                    PlacePathsAdapter mAdapter = new PlacePathsAdapter(notification.getData(), placePathsViewModel.getPlace());
+                    mRecyclerView.setAdapter(mAdapter);
+
+                    TextView txtResults = view.findViewById(R.id.txtResults);
+                    int item = mAdapter.getItemCount();
+                    txtResults.setText(requireContext().getResources().getQuantityString(R.plurals.list_paths_results, item, item));
+                    if (item > 0) showResult();
+                    else showNoResult();
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_ZONES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_ZONES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_place_paths, container, false);
         containerNoResult = view.findViewById(R.id.noResultsLayout);
 
+        placePathsViewModel = new ViewModelProvider(this).get(PlacePathsViewModel.class);
+
         mRecyclerView = view.findViewById(R.id.listPlacePaths);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // TODO: Read Curator Paths API
-        ArrayList<Path> mDataset = new ArrayList<>();
-        mDataset.add(new Path(1, "Percorso 1", "Museo 1", "Indirizzo 1", null));
-        mDataset.add(new Path(2, "Percorso 2", "Museo 2", "Indirizzo 2", null));
-        mDataset.add(new Path(3, "Percorso 3", "Museo 3", "Indirizzo 3", null));
-
-        PlacePathsAdapter mAdapter = new PlacePathsAdapter(mDataset);
-        mRecyclerView.setAdapter(mAdapter);
-
-        TextView txtResults = view.findViewById(R.id.txtResults);
-        int item = mAdapter.getItemCount();
-        txtResults.setText(requireContext().getResources().getQuantityString(R.plurals.list_paths_results, item, item));
-        if(item > 0) showResult();
-        else showNoResult();
 
         return view;
     }
@@ -63,6 +87,8 @@ public class PlacePathsFragment extends Fragment {
 
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
+
+        placePathsViewModel.getPlacePathsFromDatabase().observe(getViewLifecycleOwner(), getPlacePathsObserver);
     }
 
     @Override
