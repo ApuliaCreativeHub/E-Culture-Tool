@@ -2,6 +2,7 @@ package com.apuliacreativehub.eculturetool.ui.paths;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,18 +14,21 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
+import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtil;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class PathsFragment extends Fragment {
+public class PathsFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
     private static final int FILTER_PATHS = R.id.filterPaths;
     private static final int SEARCH_PATHS = R.id.searchPaths;
 
@@ -36,6 +40,7 @@ public class PathsFragment extends Fragment {
     private Toolbar toolbar;
     private ModalBottomSheetPaths modalBottomSheet;
     private TextView txtResults;
+    private int pathId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,7 +61,7 @@ public class PathsFragment extends Fragment {
         mDataset = new ArrayList<>();
         mDataset.addAll(paths);
 
-        mAdapter = new PathsAdapter(requireContext(), mDataset);
+        mAdapter = new PathsAdapter(requireContext(), getParentFragmentManager(), mDataset);
         mRecyclerView.setAdapter(mAdapter);
 
         txtResults = view.findViewById(R.id.txtResults);
@@ -103,6 +108,30 @@ public class PathsFragment extends Fragment {
                 return true;
             }
         });
+
+        getParentFragmentManager().setFragmentResultListener("pathKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                pathId = bundle.getInt("pathId");
+                showNoticeDialog();
+            }
+        });
+    }
+
+    public void showNoticeDialog() {
+        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_path), "DELETE_PATH");
+        dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Log.i("Response", "AOPOSITIVE");
+        // TODO: Delete Path API
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Log.i("Response", "NEGATIVE");
     }
 
     @SuppressLint("NotifyDataSetChanged")
