@@ -93,8 +93,7 @@ public class ZoneRepository {
             @Override
             public void run() {
                 for (Zone zone : zones) {
-                    Zone z = localZoneDAO.getZoneById(zone.getId());
-                    if (z == null) {
+                    if (localZoneDAO.getZoneById(zone.getId()) == null) {
                         localZoneDAO.insertZone(zone);
                     } else localZoneDAO.updateZone(zone);
                 }
