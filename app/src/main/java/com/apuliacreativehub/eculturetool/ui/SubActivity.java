@@ -6,12 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
-import com.apuliacreativehub.eculturetool.ui.places.PlacePathsFragment;
-import com.apuliacreativehub.eculturetool.ui.places.ShowPlacesFragment;
-import com.apuliacreativehub.eculturetool.ui.user.EditProfileFragment;
-import com.apuliacreativehub.eculturetool.ui.user.LoginFragment;
-import com.apuliacreativehub.eculturetool.ui.user.RegisterFragment;
-import com.apuliacreativehub.eculturetool.ui.user.RegisterInformationFragment;
+import com.apuliacreativehub.eculturetool.ui.places.fragment.PlacePathsFragment;
+import com.apuliacreativehub.eculturetool.ui.places.fragment.ShowPlacesFragment;
+import com.apuliacreativehub.eculturetool.ui.user.fragment.EditProfileFragment;
+import com.apuliacreativehub.eculturetool.ui.user.fragment.LoginFragment;
+import com.apuliacreativehub.eculturetool.ui.user.fragment.RegisterFragment;
+import com.apuliacreativehub.eculturetool.ui.user.fragment.RegisterInformationFragment;
 
 public class SubActivity extends AppCompatActivity {
     public static final String SHOW_FRAGMENT = "SHOW_FRAGMENT";

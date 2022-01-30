@@ -1,9 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.paths;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtil;
+import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtils;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -41,7 +38,7 @@ public class ModalBottomSheetPaths extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        bottomSheetBehavior = ModalBottomSheetUtil.getBehavior(view);
+        bottomSheetBehavior = ModalBottomSheetUtils.getBehavior(view);
     }
 
     @Override
