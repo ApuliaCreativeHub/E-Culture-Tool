@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
+import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
@@ -34,6 +35,7 @@ public class PlacePathsFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ConstraintLayout containerNoResult;
     private PlacePathsViewModel placePathsViewModel;
+    private final Place place;
 
     public Observer<RepositoryNotification<List<Path>>> getPlacePathsObserver = new Observer<RepositoryNotification<List<Path>>>() {
         @Override
@@ -64,12 +66,17 @@ public class PlacePathsFragment extends Fragment {
         }
     };
 
+    public PlacePathsFragment(Place place) {
+        this.place = place;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_place_paths, container, false);
         containerNoResult = view.findViewById(R.id.noResultsLayout);
 
         placePathsViewModel = new ViewModelProvider(this).get(PlacePathsViewModel.class);
+        placePathsViewModel.setPlace(place);
 
         mRecyclerView = view.findViewById(R.id.listPlacePaths);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
