@@ -122,7 +122,7 @@ public class PathRepository {
                 RepositoryNotification<Path> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(response.body());
-                    // Add zone to local database too
+                    // Add path to local database too
                     saveRemotePathsToLocal(Collections.singletonList(response.body()));
                 } else {
                     if (response.errorBody() != null) {
@@ -140,11 +140,11 @@ public class PathRepository {
         return addResult;
     }
 
-    public MutableLiveData<RepositoryNotification<Path>> editZone(Path path) throws NoInternetConnectionException {
+    public MutableLiveData<RepositoryNotification<Path>> editPath(Path path) throws NoInternetConnectionException {
         MutableLiveData<RepositoryNotification<Path>> editResult;
         if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
             Log.d("SHOULDFETCH", "remote");
-            editResult = editZoneOnRemoteDatabase(path);
+            editResult = editPathOnRemoteDatabase(path);
         } else {
             throw new NoInternetConnectionException();
         }
@@ -152,7 +152,7 @@ public class PathRepository {
         return editResult;
     }
 
-    private MutableLiveData<RepositoryNotification<Path>> editZoneOnRemoteDatabase(Path path) {
+    private MutableLiveData<RepositoryNotification<Path>> editPathOnRemoteDatabase(Path path) {
         MutableLiveData<RepositoryNotification<Path>> editResult = new MutableLiveData<>();
         Call<Void> call = remotePathDAO.editPath(path);
         executor.execute(() -> {
@@ -162,7 +162,7 @@ public class PathRepository {
                 RepositoryNotification<Path> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(path);
-                    // Edit zone on local database too
+                    // Edit path on local database too
                     saveRemotePathsToLocal(Collections.singletonList(path));
                 } else {
                     if (response.errorBody() != null) {
@@ -180,11 +180,11 @@ public class PathRepository {
         return editResult;
     }
 
-    public MutableLiveData<RepositoryNotification<Path>> deleteZone(Path path) throws NoInternetConnectionException {
+    public MutableLiveData<RepositoryNotification<Path>> deletePath(Path path) throws NoInternetConnectionException {
         MutableLiveData<RepositoryNotification<Path>> deleteResult;
         if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
             Log.d("SHOULDFETCH", "remote");
-            deleteResult = deleteZoneFromRemoteDatabase(path);
+            deleteResult = deletePathFromRemoteDatabase(path);
         } else {
             throw new NoInternetConnectionException();
         }
@@ -192,7 +192,7 @@ public class PathRepository {
         return deleteResult;
     }
 
-    private MutableLiveData<RepositoryNotification<Path>> deleteZoneFromRemoteDatabase(Path path) {
+    private MutableLiveData<RepositoryNotification<Path>> deletePathFromRemoteDatabase(Path path) {
         MutableLiveData<RepositoryNotification<Path>> deleteResult = new MutableLiveData<>();
         Call<Void> call = remotePathDAO.deletePath(path);
         executor.execute(new Runnable() {
@@ -203,7 +203,7 @@ public class PathRepository {
                     Response<Void> response = call.execute();
                     if (response.isSuccessful()) {
                         repositoryNotification.setData(path);
-                        // Delete zone from local database too
+                        // Delete path from local database too
                         localPathDAO.deletePath(path);
                     } else {
                         if (response.errorBody() != null) {
