@@ -156,11 +156,10 @@
     <string name="show_path_screen_title">Show Path</string>
     <string name="path_download_success">Path downloaded</string>
     <string name="path_download_error">Error during download</string>
+    <string name="edit_path_screen_title">Edit Path</string>
     <item name="artifact_tag_id" type="id"></item>
     <plurals name="list_paths_results">
         <item quantity="one">Result: 1</item>
         <item quantity="other">Results: %d</item>
     </plurals>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -83,10 +83,10 @@ public class EditPathFragment extends Fragment {
         setSelectElement();
         setDynamicCircleArtifactRecycleView();
         setDynamicArtifactRecycleView();
-        Toolbar toolbar = view.findViewById(R.id.createPathToolbar);
-        toolbar.setTitle(R.string.create_place_path);
+        Toolbar toolbar = view.findViewById(R.id.editPathToolbar);
+        toolbar.setTitle(R.string.edit_path_screen_title);
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
-        toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+        toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
     }
 
     @Override
