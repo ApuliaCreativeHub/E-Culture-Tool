@@ -119,6 +119,10 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
         if(node[position].getId() == 101)  holder.getCircle().setImageResource(R.mipmap.outline_add_photo_alternate_black_20);
         if(node[position].getId() == 102)  holder.getCircle().setImageResource(R.mipmap.outline_search_black_18);
         if(node[position].getId() == 103)  holder.getCircle().setImageResource(R.mipmap.outline_travel_explore_black_18);
+        if(node[position].getId() == 104)  holder.getCircle().setImageResource(R.mipmap.outline_person_black_18);
+        if(node[position].getId() == 105)  holder.getCircle().setImageResource(R.mipmap.outline_check_black_18);
+        if(node[position].getId() == 106)  holder.getCircle().setImageResource(R.mipmap.outline_filter_list_black_18);
+        if(node[position].getId() == 107)  holder.getCircle().setImageResource(R.mipmap.outline_add_black_36);
         setOnDragListener(holder.getCircle());
         setOnDropListener(holder.getRightDropContainer());
         setOnDropListener(holder.getLeftDropContainer());
