@@ -102,7 +102,7 @@ public class PlacePathsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Button btnCreateNewPath = view.findViewById(R.id.btnCreateNewPath);
-        btnCreateNewPath.setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new CreatePathFragment()));
+        btnCreateNewPath.setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new CreatePathFragment(place)));
     }
 
     private void showResult() {

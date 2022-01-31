@@ -1,6 +1,7 @@
 package com.apuliacreativehub.eculturetool.ui.places.adapter;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
-import com.apuliacreativehub.eculturetool.ui.places.NodeArtifact;
+import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.common.collect.Iterables;
 import com.google.common.graph.MutableGraph;
 import com.google.common.graph.Traverser;
@@ -27,11 +30,11 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
 
     private final int layout;
     private final Context context;
-    private final ArrayList<NodeArtifact> dataSet;
-    private final MutableGraph<NodeArtifact> circleDataset;
-    private final ListCircleObjectsAdapter listCircleObjectsAdapter;
+    private final ArrayList<NodeObject> dataSet;
+    private final MutableGraph<NodeObject> circleDataset;
+    private ListCircleObjectsAdapter listCircleObjectsAdapter;
 
-    private NodeArtifact utilNodeTemp;
+    private NodeObject utilNodeTemp;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final View view;
@@ -39,11 +42,13 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
         private final TextView txtTitle;
         private final Button btnDescription;
         private final ImageView checkView;
+        private final ImageView imgObject;
 
         public ViewHolder(View view, Context context) {
             super(view);
             this.view = view;
             isChecked = false;
+            imgObject = view.findViewById(R.id.imgObject);
             txtTitle = view.findViewById(R.id.txtTitleArtifact);
             checkView = view.findViewById(R.id.checkBoxOnPath);
             btnDescription = view.findViewById(R.id.btnDescription);
@@ -56,6 +61,8 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
         public View getView() {
             return view;
         }
+
+        public ImageView getImgObject(){return imgObject;}
 
         public ImageView getCheckBox() {
             return checkView;
@@ -75,12 +82,11 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
         }
     }
 
-    public ListObjectsCreateAdapter(int layout, ArrayList<NodeArtifact> dataSet, MutableGraph<NodeArtifact> graphArtifactDataset, ListCircleObjectsAdapter listCircleObjectsAdapter, Context mContext) {
+    public ListObjectsCreateAdapter(int layout, ArrayList<NodeObject> dataSet, MutableGraph<NodeObject> graphArtifactDataset, Context mContext) {
         this.layout = layout;
         this.dataSet = dataSet;
         this.context = mContext;
         this.circleDataset = graphArtifactDataset;
-        this.listCircleObjectsAdapter = listCircleObjectsAdapter;
     }
 
     @Override @NonNull
@@ -101,8 +107,13 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
             }
             listCircleObjectsAdapter.notifyDataSetChanged();
         });
-        //TODO: add all value to personalize single component
-        // TODO: Show object description in the second message of dialog
+        viewHolder.getTitle().setText(dataSet.get(position).getName());
+        Glide.with(context)
+                .load("https://hiddenfile.ml/ecultureapi/" + this.dataSet.get(position)
+                        //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
+                        .getNormalSizeImg())
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .into(viewHolder.getImgObject());
         viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), dataSet.get(position).getDescription(), "OBJECT_DESCRIPTION").show(((AppCompatActivity)context).getSupportFragmentManager(), Dialog.TAG));
     }
 
@@ -111,7 +122,7 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
      * if utilNodeTemp is not null means that there is almost one node -> We have to link the new node to the last node.
      * @param newNode
      */
-    private void increaseGraph(NodeArtifact newNode) {
+    private void increaseGraph(NodeObject newNode) {
         if(utilNodeTemp != null) {
             newNode.setWeight(utilNodeTemp.getWeight()*2);
             circleDataset.putEdge(utilNodeTemp, newNode);
@@ -129,10 +140,10 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
      * If the node to be removed is the last -> utilNodeTempo become null (reset all the process)
      * @param nodeToRemove
      */
-    private void decreaseGraph(NodeArtifact nodeToRemove) {
-        Set<NodeArtifact> adjacentNode = circleDataset.adjacentNodes(nodeToRemove);
-        Iterator<NodeArtifact> iteratorNode = adjacentNode.iterator();
-        NodeArtifact leftNode, rightNode;
+    private void decreaseGraph(NodeObject nodeToRemove) {
+        Set<NodeObject> adjacentNode = circleDataset.adjacentNodes(nodeToRemove);
+        Iterator<NodeObject> iteratorNode = adjacentNode.iterator();
+        NodeObject leftNode, rightNode;
         circleDataset.removeNode(nodeToRemove);
 
         if(adjacentNode.size() == 2) {
@@ -156,4 +167,16 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
         return dataSet.size();
     }
 
+    public NodeObject getLastNode(){
+        return utilNodeTemp;
+    }
+
+    public ListCircleObjectsAdapter getListCircleObjectsAdapter(){
+        return this.listCircleObjectsAdapter;
+    }
+
+    public void setListCircleObjectsAdapter(ListCircleObjectsAdapter listCircleObjectsAdapter, NodeObject lastNode){
+        this.listCircleObjectsAdapter = listCircleObjectsAdapter;
+        this.utilNodeTemp = lastNode;
+    }
 }
