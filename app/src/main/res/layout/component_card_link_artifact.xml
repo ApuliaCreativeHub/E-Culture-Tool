@@ -33,11 +33,12 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/imgObject"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
+                android:layout_gravity="center"
                 android:contentDescription="text blabla"
                 android:scaleType="centerCrop"
-                android:layout_gravity="center"
                 app:srcCompat="@mipmap/outline_image_black_48" />
 
             <LinearLayout
