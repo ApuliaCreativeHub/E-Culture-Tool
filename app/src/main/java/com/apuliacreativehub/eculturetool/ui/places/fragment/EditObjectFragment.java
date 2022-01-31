@@ -158,8 +158,8 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
         txtName.setText(object.getName());
         txtDescription.setText(object.getDescription());
         Glide.with(requireContext()).asBitmap()
-                //.load("https://hiddenfile.ml/ecultureapi/" + object.getNormalSizeImg())
-                .load("http://10.0.2.2:8080/" + object.getNormalSizeImg())
+                .load("https://hiddenfile.ml/ecultureapi/" + object.getNormalSizeImg())
+                //.load("http://10.0.2.2:8080/" + object.getNormalSizeImg())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(imgObject);
 
