@@ -1,5 +1,6 @@
 package com.apuliacreativehub.eculturetool.data.local;
 
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -9,6 +10,7 @@ import com.apuliacreativehub.eculturetool.data.entity.Path;
 
 import java.util.List;
 
+@Dao
 public interface LocalPathDAO {
     @Insert
     void insertPath(Path path);
@@ -17,8 +19,8 @@ public interface LocalPathDAO {
     List<Path> getAllPathsByUserId(int userId);
 
     @Query("SELECT * FROM path " +
-            "JOIN isPresentIn ON path.id=isPresentIn.pathId " +
-            "JOIN object ON isPresentIn.objectId=object.id " +
+            "JOIN isPresentIn ON path.id=isPresentIn.path_id " +
+            "JOIN object ON isPresentIn.object_id=object.id " +
             "JOIN zone ON object.zone_id=zone.id " +
             "JOIN place ON zone.place_id=place.id " +
             "WHERE place.id=:placeId")
