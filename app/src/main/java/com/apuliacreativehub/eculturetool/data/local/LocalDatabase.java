@@ -19,5 +19,7 @@ public abstract class LocalDatabase extends RoomDatabase {
 
     public abstract LocalPathDAO pathDAO();
 
+    public abstract LocalIsPresentInDAO isPresentInDAO();
+
     // Add other DAOs abstract methods here
 }

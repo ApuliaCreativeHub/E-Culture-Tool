@@ -10,14 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.data.entity.Path;
+import com.apuliacreativehub.eculturetool.data.entity.PathWithObjects;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 
 import java.util.List;
 
 public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.ViewHolder> {
 
-    private final List<Path> dataSet;
+    private final List<PathWithObjects> dataSet;
     private final Place place;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -46,7 +46,7 @@ public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.Vi
         }
     }
 
-    public PlacePathsAdapter(List<Path> dataSet, Place place) {
+    public PlacePathsAdapter(List<PathWithObjects> dataSet, Place place) {
         this.dataSet = dataSet;
         this.place = place;
     }
@@ -59,7 +59,7 @@ public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        viewHolder.getTextPathName().setText(dataSet.get(position).getName());
+        viewHolder.getTextPathName().setText(dataSet.get(position).path.getName());
         viewHolder.getTextPlaceNameAndAddress().setText(place.getName() + " - " + place.getAddress());
         //TODO: add all value to personalize single component
     }

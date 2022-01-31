@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Path {
     @PrimaryKey
+    @ColumnInfo(name = "path_id")
     private int id;
 
     @ColumnInfo(name = "name")

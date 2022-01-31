@@ -15,7 +15,7 @@ public interface LocalObjectDAO {
     @Query("SELECT * FROM object WHERE zone_id = :zoneId")
     List<Object> getAllObjectsByZoneId(int zoneId);
 
-    @Query("SELECT * FROM object WHERE id = :objectId")
+    @Query("SELECT * FROM object WHERE object_id = :objectId")
     Object getObjectById(int objectId);
 
     @Insert

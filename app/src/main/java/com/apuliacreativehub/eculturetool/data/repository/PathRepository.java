@@ -5,10 +5,13 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.apuliacreativehub.eculturetool.data.entity.IsPresentIn;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.PathWithObjects;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
+import com.apuliacreativehub.eculturetool.data.local.LocalIsPresentInDAO;
 import com.apuliacreativehub.eculturetool.data.local.LocalPathDAO;
 import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDAO;
 import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDatabase;
@@ -24,12 +27,14 @@ import retrofit2.Response;
 public class PathRepository {
     private final RemotePathDAO remotePathDAO;
     private final LocalPathDAO localPathDAO;
+    private final LocalIsPresentInDAO localIsPresentInDAO;
     private final ConnectivityManager connectivityManager;
     private final Executor executor;
 
     public PathRepository(Executor executor, LocalDatabase localDatabase, ConnectivityManager connectivityManager) {
         remotePathDAO = RemotePathDatabase.provideRemotePathDAO();
         localPathDAO = localDatabase.pathDAO();
+        localIsPresentInDAO = localDatabase.isPresentInDAO();
         this.connectivityManager = connectivityManager;
         this.executor = executor;
     }
@@ -94,8 +99,13 @@ public class PathRepository {
             public void run() {
                 for (PathWithObjects path : paths) {
                     if (localPathDAO.getPathById(path.path.getId()) == null) {
-                        localPathDAO.insertPath(path);
-                    } else localPathDAO.updatePath(path);
+                        localPathDAO.insertPath(path.path);
+                        int i = 1;
+                        for (Object object : path.objects) {
+                            localIsPresentInDAO.insertRelation(new IsPresentIn(object.getId(), path.path.getId(), i));
+                            i++;
+                        }
+                    } else localPathDAO.updatePath(path.path);
                 }
             }
         });

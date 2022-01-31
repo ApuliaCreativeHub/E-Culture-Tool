@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Object {
     @PrimaryKey
+    @ColumnInfo(name = "object_id")
     private int id;
 
     @ColumnInfo(name = "uri_img")

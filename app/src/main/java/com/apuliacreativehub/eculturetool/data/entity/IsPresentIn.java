@@ -11,4 +11,10 @@ public class IsPresentIn {
     public int pathId;
     @ColumnInfo(name = "order")
     public int order;
+
+    public IsPresentIn(int objectId, int pathId, int order) {
+        this.objectId = objectId;
+        this.pathId = pathId;
+        this.order = order;
+    }
 }

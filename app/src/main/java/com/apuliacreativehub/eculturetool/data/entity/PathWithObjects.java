@@ -15,5 +15,5 @@ public class PathWithObjects {
             entityColumn = "object_id",
             associateBy = @Junction(IsPresentIn.class)
     )
-    public List<java.lang.Object> objects;
+    public List<Object> objects;
 }

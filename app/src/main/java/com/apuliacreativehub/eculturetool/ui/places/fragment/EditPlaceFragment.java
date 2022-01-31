@@ -79,12 +79,12 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
         }
     };
 
-    final Observer<RepositoryNotification<Void>> editPlaceObserver = notification -> {
+    final Observer<RepositoryNotification<Place>> editPlaceObserver = notification -> {
         ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
         if (notification.getException() == null) {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", String.valueOf(notification.getData()));
-            if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
+            if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
                 Log.i("addPlace", "OK");
                 requireActivity().getSupportFragmentManager().popBackStackImmediate();
             } else {

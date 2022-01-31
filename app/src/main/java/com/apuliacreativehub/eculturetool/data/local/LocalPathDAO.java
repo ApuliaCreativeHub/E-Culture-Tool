@@ -15,7 +15,7 @@ import java.util.List;
 @Dao
 public interface LocalPathDAO {
     @Insert
-    void insertPath(PathWithObjects path);
+    void insertPath(Path path);
 
     @Transaction
     @Query("SELECT * FROM path WHERE user_id=:userId")
@@ -23,19 +23,19 @@ public interface LocalPathDAO {
 
     @Transaction
     @Query("SELECT * FROM path " +
-            "JOIN isPresentIn ON path.id=isPresentIn.path_id " +
-            "JOIN object ON isPresentIn.object_id=object.id " +
+            "JOIN isPresentIn ON path.path_id=isPresentIn.path_id " +
+            "JOIN object ON isPresentIn.object_id=object.object_id " +
             "JOIN zone ON object.zone_id=zone.id " +
             "JOIN place ON zone.place_id=place.id " +
             "WHERE place.id=:placeId")
     List<PathWithObjects> getAllPathsByPlaceId(int placeId);
 
     @Update
-    void updatePath(PathWithObjects path);
+    void updatePath(Path path);
 
     @Delete
     void deletePath(Path path);
 
-    @Query("SELECT * FROM path WHERE id=:pathId")
+    @Query("SELECT * FROM path WHERE path_id=:pathId")
     Path getPathById(int pathId);
 }
