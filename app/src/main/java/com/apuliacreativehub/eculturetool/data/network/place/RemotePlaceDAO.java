@@ -35,16 +35,16 @@ public interface RemotePlaceDAO {
 
     @Multipart
     @POST("place/update")
-    Call<Void> EditPlace(@Part("id") RequestBody id,
-                        @Part("name") RequestBody name,
-                        @Part("address") RequestBody address,
-                        @Part("description") RequestBody description,
-                        @Part() MultipartBody.Part file);
+    Call<Place> EditPlace(@Part("id") RequestBody id,
+                          @Part("name") RequestBody name,
+                          @Part("address") RequestBody address,
+                          @Part("description") RequestBody description,
+                          @Part() MultipartBody.Part file);
 
     @Multipart
     @POST("place/update")
-    Call<Void> EditPlaceNoImg(@Part("id") RequestBody id,
-                              @Part("name") RequestBody name,
-                              @Part("address") RequestBody address,
-                              @Part("description") RequestBody description);
+    Call<Place> EditPlaceNoImg(@Part("id") RequestBody id,
+                               @Part("name") RequestBody name,
+                               @Part("address") RequestBody address,
+                               @Part("description") RequestBody description);
 }

@@ -110,15 +110,15 @@ public class PlaceRepository {
         return deleteResult;
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> editPlace(Context context, Place place){
-        MutableLiveData<RepositoryNotification<Void>> editResult = new MutableLiveData<>();
+    public MutableLiveData<RepositoryNotification<Place>> editPlace(Context context, Place place) {
+        MutableLiveData<RepositoryNotification<Place>> editResult = new MutableLiveData<>();
         try {
-            Call<Void> call;
+            Call<Place> call;
             RequestBody id = RequestBody.create(String.valueOf(place.getId()), MediaType.parse("text/plain"));
             RequestBody name = RequestBody.create(place.getName(), MediaType.parse("text/plain"));
             RequestBody address = RequestBody.create(place.getAddress(), MediaType.parse("text/plain"));
             RequestBody description = RequestBody.create(place.getDescription(), MediaType.parse("text/plain"));
-            if(place.getUriImg() != null){
+            if (place.getUriImg() != null) {
                 InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse(place.getUriImg()));
                 RequestBody imgBody = RequestBody.create(ByteString.read(imgStream, imgStream.available()), MediaType.parse("image/*"));
                 MultipartBody.Part imgPart = MultipartBody.Part.createFormData("img", "img.png", imgBody);
@@ -128,9 +128,9 @@ public class PlaceRepository {
             }
             executor.execute(() -> {
                 try {
-                    Response<Void> response = call.execute();
+                    Response<Place> response = call.execute();
                     Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<Place> repositoryNotification = new RepositoryNotification<>();
                     if (response.isSuccessful()) {
                         repositoryNotification.setData(response.body());
                     } else {
@@ -140,14 +140,14 @@ public class PlaceRepository {
                     }
                     editResult.postValue(repositoryNotification);
                 } catch (IOException ioe) {
-                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<Place> repositoryNotification = new RepositoryNotification<>();
                     repositoryNotification.setException(ioe);
                     editResult.postValue(repositoryNotification);
                     Log.e("RETROFITERROR", ioe.getMessage());
                 }
             });
         } catch (IOException ioe) {
-            RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+            RepositoryNotification<Place> repositoryNotification = new RepositoryNotification<>();
             repositoryNotification.setException(ioe);
             editResult.postValue(repositoryNotification);
             Log.e("RETROFITERROR", ioe.getMessage());
