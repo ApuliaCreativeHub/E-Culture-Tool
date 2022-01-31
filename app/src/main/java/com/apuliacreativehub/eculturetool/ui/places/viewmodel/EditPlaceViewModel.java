@@ -20,15 +20,15 @@ public class EditPlaceViewModel extends AbstractPlaceViewModel {
         return repository.deletePlace(place);
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> editPlace() {
+    public MutableLiveData<RepositoryNotification<Place>> editPlace() {
         Place place;
-        if(image != null){
+        if (image != null) {
             if (image.getScheme().equals(Utils.SCHEME_ANDROID_RESOURCE)) {
                 place = new Place(id, name, address, description, image.toString());
             } else {
                 place = new Place(id, name, address, description, "file://" + Utils.getRealPathFromURI(getApplication().getApplicationContext(), image));
             }
-        }else{
+        } else {
             place = new Place(id, name, address, description, null);
         }
         return repository.editPlace(getApplication().getApplicationContext(), place);
