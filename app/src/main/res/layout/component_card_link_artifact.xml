@@ -24,6 +24,7 @@
             android:layout_height="20dp"
             android:scaleType="centerCrop"
             android:visibility="invisible"
+            android:contentDescription="@string/object_image"
             app:srcCompat="@mipmap/outline_check_circle_outline_black_48" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,20 +36,20 @@
             <ImageView
                 android:layout_width="140dp"
                 android:layout_height="140dp"
-                android:contentDescription="text blabla"
+                android:contentDescription="@string/object_image"
                 android:scaleType="centerCrop"
                 android:layout_gravity="center"
                 app:srcCompat="@mipmap/outline_image_black_48" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="40dp"
                 android:gravity="center">
                 <TextView
                     android:id="@+id/txtTitleArtifact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Vaso di terra"
+                    android:text="@string/name"
                     android:textAlignment="center" />
             </LinearLayout>
 

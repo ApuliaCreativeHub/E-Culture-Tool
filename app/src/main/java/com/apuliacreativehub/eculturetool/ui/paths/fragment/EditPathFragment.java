@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.ui.places.fragment;
+package com.apuliacreativehub.eculturetool.ui.paths.fragment;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -35,7 +35,7 @@ import com.google.gson.JsonElement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CreatePathFragment extends Fragment {
+public class EditPathFragment extends Fragment {
     private static final int NUMBER_COLUMN = 2;
     private static final int MIN_LENGTH_NAME = 2;
     private static final int MAX_LENGTH_NAME = 25;
@@ -69,12 +69,11 @@ public class CreatePathFragment extends Fragment {
         mArtifactDataset.add(testArtifact2);
         mArtifactDataset.add(testArtifact3);
         mArtifactDataset.add(testArtifact4);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_create_path, container, false);
+        view = inflater.inflate(R.layout.fragment_edit_path, container, false);
         return view;
     }
 
@@ -84,10 +83,10 @@ public class CreatePathFragment extends Fragment {
         setSelectElement();
         setDynamicCircleArtifactRecycleView();
         setDynamicArtifactRecycleView();
-        Toolbar toolbar = view.findViewById(R.id.createPathToolbar);
-        toolbar.setTitle(R.string.create_place_path);
+        Toolbar toolbar = view.findViewById(R.id.editPathToolbar);
+        toolbar.setTitle(R.string.edit_path_screen_title);
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
-        toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+        toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
     }
 
     @Override

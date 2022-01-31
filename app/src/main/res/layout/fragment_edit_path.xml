@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.places.fragment.ManagePlaceFragment">
+    tools:context=".ui.places.fragment.CreatePathFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,19 +14,43 @@
         android:orientation="vertical"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/managePlaceToolbar"
-        app:layout_constraintVertical_bias="1.0"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editPathToolbar"
+        app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <EditText
+                android:id="@+id/txtPathName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:autofillHints="@string/name"
+                android:hint="@string/path_name_here"
+                android:inputType="textPersonName" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerCircleArtifact"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ellipsize="end"
@@ -38,33 +62,20 @@
                     android:id="@+id/selectRoomAutoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:labelFor="@id/selectRoomAutoComplete"
-                    android:popupElevation="16dp"
-                    tools:ignore="TextContrastCheck" />
-
+                    android:inputType="text"
+                    android:popupElevation="16dp" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/btnRoomOptions"
-                style="@style/Widget.Material3.Button.IconButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@mipmap/outline_more_vert_black_48"
-                app:iconGravity="textEnd"
-                tools:ignore="SpeakableTextPresentCheck" />
-
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerContainerObject"
+            android:id="@+id/recyclerContainerCreateObject"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </LinearLayout>
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/managePlaceToolbar"
+        android:id="@+id/editPathToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -75,14 +86,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnCreateObject"
+        android:id="@+id/btnCreatePath"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="@string/create_new_artifact"
+        android:contentDescription="@string/create_path"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@mipmap/outline_add_black_24" />
+        app:srcCompat="@mipmap/outline_check_black_48" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -57,7 +57,8 @@ public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.getTextPathName().setText(this.dataSet.get(position).getPathName());
-        viewHolder.getTextPlaceNameAndAddress().setText(this.dataSet.get(position).getPlaceName() + " - " + this.dataSet.get(position).getPlaceAddress());
+        String placeNameAndAddress = this.dataSet.get(position).getPlaceName() + " - " + this.dataSet.get(position).getPlaceAddress();
+        viewHolder.getTextPlaceNameAndAddress().setText(placeNameAndAddress);
         //TODO: add all value to personalize single component
     }
 
