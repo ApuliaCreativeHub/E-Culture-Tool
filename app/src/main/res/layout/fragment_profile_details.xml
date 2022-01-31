@@ -5,7 +5,7 @@
     android:id="@+id/lytProfileDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.user.ProfileDetailsFragment">
+    tools:context=".ui.user.fragment.ProfileDetailsFragment">
 
     <ImageView
         android:id="@+id/imgMuseum"

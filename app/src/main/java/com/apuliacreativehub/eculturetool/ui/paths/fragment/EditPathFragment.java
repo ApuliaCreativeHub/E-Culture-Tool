@@ -92,7 +92,7 @@ public class EditPathFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        confirmFab = view.findViewById(R.id.btnCreatePath);
+        confirmFab = view.findViewById(R.id.btnEditPath);
 
         confirmFab.setOnClickListener(new View.OnClickListener() {
             @Override
