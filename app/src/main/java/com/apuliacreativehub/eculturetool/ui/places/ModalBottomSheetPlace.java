@@ -3,6 +3,7 @@ package com.apuliacreativehub.eculturetool.ui.places;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.io.Serializable;
 
 
 public class ModalBottomSheetPlace extends BottomSheetDialogFragment {
@@ -76,7 +79,9 @@ public class ModalBottomSheetPlace extends BottomSheetDialogFragment {
         super.onStart();
         Button sectionPathLink = view.findViewById(R.id.sectionPathLink);
         sectionPathLink.setOnClickListener(
-                view -> startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.PLACE_PATHS_FRAGMENT))
+                view -> startActivity(new Intent(this.getActivity(), SubActivity.class)
+                        .putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.PLACE_PATHS_FRAGMENT)
+                        .putExtra("place", place))
         );
     }
 }
