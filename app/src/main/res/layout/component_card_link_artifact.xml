@@ -6,6 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardArtifactPath"
         android:layout_width="170dp"
@@ -18,13 +19,16 @@
         app:cardElevation="2dp"
         style="@style/Widget.Material3.CardView.Elevated"
         tools:ignore="MissingConstraints">
+
         <ImageView
             android:id="@+id/checkBoxOnPath"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:scaleType="centerCrop"
             android:visibility="invisible"
+            android:contentDescription="@string/object_image"
             app:srcCompat="@mipmap/outline_check_circle_outline_black_48" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -36,21 +40,23 @@
                 android:id="@+id/imgObject"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
-                android:layout_gravity="center"
-                android:contentDescription="text blabla"
+                android:contentDescription="@string/object_image"
                 android:scaleType="centerCrop"
+                android:layout_gravity="center"
                 app:srcCompat="@mipmap/outline_image_black_48" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="40dp"
                 android:gravity="center">
+
                 <TextView
                     android:id="@+id/txtTitleArtifact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Vaso di terra"
+                    android:text="@string/name"
                     android:textAlignment="center" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -58,14 +64,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="end">
+
                 <Button
                     android:id="@+id/btnDescription"
+                    style="@style/Widget.Material3.Button.IconButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    style="@style/Widget.Material3.Button.IconButton"
                     app:icon="@mipmap/outline_info_black_36"
-                    />
+                    tools:ignore="SpeakableTextPresentCheck" />
+
             </LinearLayout>
+
         </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

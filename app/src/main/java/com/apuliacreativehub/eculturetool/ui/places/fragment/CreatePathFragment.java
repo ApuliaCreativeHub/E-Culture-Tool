@@ -1,5 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.places.fragment;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -29,18 +30,17 @@ import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
+import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.GuavaHelper;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
+import com.apuliacreativehub.eculturetool.ui.places.NodeArtifact;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListCircleObjectsAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListObjectsCreateAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CreatePathViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.common.graph.MutableGraph;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CreatePathFragment extends Fragment {
@@ -52,6 +52,10 @@ public class CreatePathFragment extends Fragment {
     private View view;
     private ArrayAdapter<String> arrayOptionsAdapter;
     private AutoCompleteTextView autoCompleteTextView;
+
+    private CreatePathViewModel createPathViewModel;
+    private ListCircleObjectsAdapter circleObjectsAdapter;
+    private HashMap<String, ListObjectsCreateAdapter> objectsAdapters;
 
     private FloatingActionButton confirmFab;
     private RecyclerView recyclerObjectsGridView;
@@ -124,28 +128,29 @@ public class CreatePathFragment extends Fragment {
         this.place = place;
     }
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createPathViewModel = new CreatePathViewModel(requireContext());
+        circleObjectsAdapter = new ListCircleObjectsAdapter(createPathViewModel.getGraphDataset());
+        objectsAdapters = new HashMap<>();
+        for(Zone zone: createPathViewModel.getListZone())
+            objectsAdapters.put(zone.getName(), new ListObjectsCreateAdapter(R.layout.component_card_link_artifact, createPathViewModel, circleObjectsAdapter, zone.getName()));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_create_path, container, false);
-        createPathViewModel = new ViewModelProvider(this).get(CreatePathViewModel.class);
-        //TODO: REMOVE STUB
-        place.setId(82);
-        createPathViewModel.setPlace(place);
-        arrayOptionsAdapter = new ArrayAdapter<>(requireContext(), R.layout.component_item_select_room);
-        graphArtifactDataset = GuavaHelper.createInstance();
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setSelectElement();
         setDynamicCircleArtifactRecycleView();
+        setDynamicArtifactRecycleView();
+        setSelectElement();
         Toolbar toolbar = view.findViewById(R.id.createPathToolbar);
         toolbar.setTitle(R.string.create_place_path);
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
@@ -156,7 +161,6 @@ public class CreatePathFragment extends Fragment {
     public void onStart() {
         super.onStart();
         confirmFab = view.findViewById(R.id.btnCreatePath);
-
         confirmFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,11 +186,17 @@ public class CreatePathFragment extends Fragment {
     private void setSelectElement() {
         createPathViewModel.getZonesFromDatabase().observe(getViewLifecycleOwner(), getZonesObserver);
         autoCompleteTextView = view.findViewById(R.id.selectRoomAutoComplete);
-        autoCompleteTextView.setAdapter(arrayOptionsAdapter);
+        autoCompleteTextView.setAdapter(new ArrayAdapter(getContext(), R.layout.component_item_select_room, createPathViewModel.getListStringZone().toArray()));
         autoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 return false;
+            }
+        });
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                recyclerArtifactsGridView.setAdapter(objectsAdapters.get(createPathViewModel.getListZone().get(position).getName()));
             }
         });
     }

@@ -8,6 +8,9 @@
     <item android:id="@+id/downloadPath"
         android:title="@string/download" />
 
+    <item android:id="@+id/editPath"
+        android:title="@string/edit" />
+
     <item android:id="@+id/deletePath"
         android:title="@string/delete" />
 

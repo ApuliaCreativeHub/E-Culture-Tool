@@ -240,7 +240,6 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
 
-
         Toolbar toolbar = view.findViewById(R.id.managePlaceToolbar);
         toolbar.setTitle(R.string.manage_place_screen_title);
         toolbar.inflateMenu(R.menu.top_menu_manage_place);

@@ -1,8 +1,14 @@
 package com.apuliacreativehub.eculturetool.ui.paths.adapter;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,20 +16,41 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.ui.LandscapeActivity;
+import com.apuliacreativehub.eculturetool.ui.SubActivity;
+import com.apuliacreativehub.eculturetool.ui.component.QRCodeHelper;
+import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
+import com.apuliacreativehub.eculturetool.ui.paths.fragment.ShowPathFragment;
+import com.apuliacreativehub.eculturetool.ui.places.fragment.CreatePathFragment;
+import com.apuliacreativehub.eculturetool.ui.places.fragment.ManagePlaceFragment;
+import com.google.android.material.card.MaterialCardView;
+import com.google.zxing.WriterException;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> {
     private final static int SHARE_PATH = R.id.sharePath;
     private final static int DOWNLOAD_PATH = R.id.downloadPath;
+    private final static int EDIT_PATH = R.id.editPath;
     private final static int DELETE_PATH = R.id.deletePath;
     private final Context context;
     private final FragmentManager fragmentManager;
@@ -31,6 +58,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
     private final Place place;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final MaterialCardView cardPath;
         private final ImageView imagePath;
         private final TextView textPathName;
         private final TextView textPlaceNameAndAddress;
@@ -38,12 +66,17 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
 
         public ViewHolder(View view) {
             super(view);
+            cardPath = view.findViewById(R.id.cardPath);
             imagePath = view.findViewById(R.id.listComponentPathImage);
             textPathName = view.findViewById(R.id.listComponentPathName);
             textPlaceNameAndAddress = view.findViewById(R.id.listComponentPathPlace);
             btnOptions = view.findViewById(R.id.btnPathOptions);
         }
-        
+
+        public MaterialCardView getCardPath() {
+            return cardPath;
+        }
+
         public ImageView getImagePath() {
             return imagePath;
         }
@@ -80,6 +113,9 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         String placeNameAndAddress = place.getName() + " - " + place.getAddress();
         viewHolder.getTextPlaceNameAndAddress().setText(placeNameAndAddress);
         viewHolder.getBtnOptions().setOnClickListener(view -> showMenu(view, R.menu.context_menu_path, position));
+        viewHolder.getCardPath().setOnClickListener(
+                view -> context.startActivity(new Intent(((AppCompatActivity) context), LandscapeActivity.class).putExtra(LandscapeActivity.SHOW_FRAGMENT, LandscapeActivity.SHOW_PATH_FRAGMENT)
+        ));
     }
 
     private void showMenu(View view, int menu, int position) {
@@ -93,7 +129,12 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
                     sharePath("JSON Parse");
                     break;
                 case DOWNLOAD_PATH:
-                    // TODO: Download Path API
+                    // TODO: Parse JSON Path Here
+                    downloadPath("JSON Parse");
+                    break;
+                case EDIT_PATH:
+                    // TODO: Read Path API
+                    context.startActivity(new Intent(((AppCompatActivity) context), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PATH_FRAGMENT));
                     break;
                 case DELETE_PATH:
                     Bundle result = new Bundle();
@@ -114,6 +155,46 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         sendIntent.setType("text/plain");
         Intent shareIntent = Intent.createChooser(sendIntent, null);
         context.startActivity(shareIntent);
+    }
+
+    private void downloadPath(String text) {
+        ActivityCompat.requestPermissions((AppCompatActivity) context, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+        FileOutputStream fileOutputStream = null;
+        File file = getDisc();
+
+        if(!file.exists() && !file.mkdirs()) {
+            file.mkdirs();
+        }
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyymmsshhmmss");
+        String date = simpleDateFormat.format(new Date());
+        String name = "PATH" + date + ".txt";
+        String file_name = file.getAbsolutePath() + "/" + name;
+        File new_file = new File(file_name);
+
+        try {
+            PrintStream printStream = new PrintStream(new_file);
+            printStream.print(text);
+            printStream.flush();
+            printStream.close();
+            Toast.makeText(context.getApplicationContext(), context.getString(R.string.path_download_success), Toast.LENGTH_SHORT).show();
+        } catch(IOException exception) {
+            Toast.makeText(context.getApplicationContext(), context.getString(R.string.path_download_error), Toast.LENGTH_SHORT).show();
+        }
+
+        refreshDocument(new_file);
+    }
+
+    private void refreshDocument(File file) {
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        intent.setData(Uri.fromFile(file));
+        context.getApplicationContext().sendBroadcast(intent);
+    }
+
+    private File getDisc() {
+        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        return new File(file, "Download");
     }
 
     @Override

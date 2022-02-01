@@ -33,7 +33,6 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
         private final LinearLayout dropRightContainer;
         private final ImageView arrowIcon;
 
-
         public ViewHolder(View view) {
             super(view);
             this.view = view;

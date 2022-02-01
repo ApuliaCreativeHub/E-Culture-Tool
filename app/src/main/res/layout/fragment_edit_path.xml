@@ -16,7 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createPathToolbar"
+        app:layout_constraintTop_toBottomOf="@+id/editPathToolbar"
         app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
@@ -33,7 +33,8 @@
                 android:layout_weight="1"
                 android:autofillHints="@string/name"
                 android:hint="@string/path_name_here"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                tools:ignore="TextContrastCheck" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,8 +65,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:popupElevation="16dp" />
-
+                    android:popupElevation="16dp"
+                    tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -78,7 +79,7 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/createPathToolbar"
+        android:id="@+id/editPathToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -89,7 +90,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnCreatePath"
+        android:id="@+id/btnEditPath"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
