@@ -55,7 +55,7 @@ public class PathRepository {
 
     private MutableLiveData<RepositoryNotification<List<Path>>> getAllCuratorPlacePathsFromRemoteDatabase(Place place) {
         MutableLiveData<RepositoryNotification<List<Path>>> getResult = new MutableLiveData<>();
-        Call<List<Path>> call = remotePathDAO.getPlacePaths(place.getId());
+        Call<List<Path>> call = remotePathDAO.getCuratorPlacePaths(place.getId());
         executor.execute(() -> {
             try {
                 Response<List<Path>> response = call.execute();
