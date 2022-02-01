@@ -33,7 +33,7 @@ public class CreatePathViewModel extends AndroidViewModel {
     private String currentlySelectedZoneName = "";
     private final HashMap<String, List<NodeObject>> tempObjectsDataset = new HashMap<>();
     private MutableGraph<NodeObject> graphDataset;
-    private MutableLiveData<RepositoryNotification<HashMap<String, List<NodeObject>>>> objectsDataset = new MutableLiveData<>();
+    private MutableLiveData<RepositoryNotification<HashMap<String, List<NodeObject>>>> objectsDataset;
 
     public CreatePathViewModel(Application application) {
         super(application);
@@ -163,7 +163,10 @@ public class CreatePathViewModel extends AndroidViewModel {
     };
 
     public MutableLiveData<RepositoryNotification<HashMap<String, List<NodeObject>>>> getObjectsDataset() {
-        populateObjectsDataset();
+        if(objectsDataset == null) {
+            objectsDataset = new MutableLiveData<>();
+            populateObjectsDataset();
+        }
         return objectsDataset;
     }
 
