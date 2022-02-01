@@ -17,6 +17,7 @@ import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification
 import com.apuliacreativehub.eculturetool.data.repository.ZoneRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
+import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class CreatePathViewModel extends AndroidViewModel {
     private String currentlySelectedZoneName = "";
     private final HashMap<String, List<NodeObject>> tempObjectsDataset = new HashMap<>();
     private MutableGraph<NodeObject> graphDataset;
-    private MutableLiveData<RepositoryNotification<HashMap<String, List<NodeObject>>>> objectsDataset;
+    private MutableLiveData<RepositoryNotification<HashMap<String, List<NodeObject>>>> objectsDataset = new MutableLiveData<>();
 
     public CreatePathViewModel(Application application) {
         super(application);
@@ -40,6 +41,7 @@ public class CreatePathViewModel extends AndroidViewModel {
         zoneNames = new ArrayList<>();
         zoneRepository = new ZoneRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
         objectRepository = new ObjectRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
+        graphDataset = GraphBuilder.directed().build();
     }
 
     public Place getPlace() {
@@ -64,6 +66,10 @@ public class CreatePathViewModel extends AndroidViewModel {
 
     public void setZones(List<Zone> zones) {
         this.zones = zones;
+
+        for(Zone zone : zones){
+            zoneNames.add(zone.getName());
+        }
     }
 
     public List<String> getZoneNames() {
@@ -106,18 +112,15 @@ public class CreatePathViewModel extends AndroidViewModel {
         }
     }
 
-    public MutableLiveData<RepositoryNotification<Object>> getObjectById(int id) throws NoInternetConnectionException {
-        return objectRepository.getObjectById(id);
-    }
-
     public Observer<RepositoryNotification<ArrayList<Zone>>> getZonesObserver = new Observer<RepositoryNotification<ArrayList<Zone>>>() {
         @Override
         public void onChanged(RepositoryNotification<ArrayList<Zone>> notification) {
             if (notification.getException() == null) {
                 if (notification.getErrorMessage() == null) {
-                    zones = notification.getData();
+                    zoneNames.clear();
+                    setZones(notification.getData());
                     for (Zone zone : notification.getData()) {
-                        objectRepository.getObjects(zone).observe(getApplication(), getObjectsObserver);
+                        objectRepository.getObjects(zone).observeForever(getObjectsObserver);
                     }
                 } else {
                     RepositoryNotification<HashMap<String, List<NodeObject>>> err = new RepositoryNotification<>();
@@ -138,8 +141,10 @@ public class CreatePathViewModel extends AndroidViewModel {
         public void onChanged(RepositoryNotification<ArrayList<Object>> notification) {
             if (notification.getException() == null) {
                 if (notification.getErrorMessage() == null) {
-                    Zone zone = getZoneById(notification.getData().get(0).getZoneId());
-                    tempObjectsDataset.put(zone.getName(), NodeObject.getNodeObjectAll(notification.getData()));
+                    if(notification.getData().size() != 0){
+                        Zone zone = getZoneById(notification.getData().get(0).getZoneId());
+                        tempObjectsDataset.put(zone.getName(), NodeObject.getNodeObjectAll(notification.getData()));
+                    }
                     i++;
                     if (i == zones.size()) {
                         setObjectsDatasetForNotification();
@@ -158,6 +163,7 @@ public class CreatePathViewModel extends AndroidViewModel {
     };
 
     public MutableLiveData<RepositoryNotification<HashMap<String, List<NodeObject>>>> getObjectsDataset() {
+        populateObjectsDataset();
         return objectsDataset;
     }
 
@@ -181,7 +187,7 @@ public class CreatePathViewModel extends AndroidViewModel {
 
     public void populateObjectsDataset() {
         if (place != null) {
-            zoneRepository.getAllPlaceZones(place).observe(getApplication(), getZonesObserver);
+            zoneRepository.getAllPlaceZones(place).observeForever(getZonesObserver);
         }
     }
 }
