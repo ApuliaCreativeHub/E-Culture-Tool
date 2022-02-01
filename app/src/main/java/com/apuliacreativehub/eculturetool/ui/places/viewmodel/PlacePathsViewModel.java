@@ -31,7 +31,7 @@ public class PlacePathsViewModel extends AndroidViewModel {
 
     public MutableLiveData<RepositoryNotification<List<Path>>> getPlacePathsFromDatabase() {
         if (place != null) {
-            return pathRepository.getAllPlacePaths(place);
+            return pathRepository.getAllCuratorPlacePaths(place);
         } else {
             return new MutableLiveData<>();
         }

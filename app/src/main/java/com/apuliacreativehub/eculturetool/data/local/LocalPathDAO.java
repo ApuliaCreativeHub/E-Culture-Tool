@@ -27,6 +27,15 @@ public interface LocalPathDAO {
             "GROUP BY path.path_id")
     List<Path> getAllPathsByPlaceId(int placeId);
 
+    @Query("SELECT path.* FROM path " +
+            "JOIN isPresentIn ON path.path_id=isPresentIn.path_id " +
+            "JOIN object ON isPresentIn.object_id=object.object_id " +
+            "JOIN zone ON object.zone_id=zone.id " +
+            "JOIN place ON zone.place_id=place.id " +
+            "WHERE path.user_id=place.user_id AND place.id=:placeId " +
+            "GROUP BY path.path_id")
+    List<Path> getAllCuratorPathsByPlaceId(int placeId);
+
     @Update
     void updatePath(Path path);
 

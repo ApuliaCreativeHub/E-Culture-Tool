@@ -20,6 +20,9 @@ public interface RemotePathDAO {
     @GET("path/getPlacePaths")
     Call<List<Path>> getPlacePaths(@Query("placeId") int placeId);
 
+    @GET("path/getCuratorPlacePaths")
+    Call<List<Path>> getCuratorPlacePaths(@Query("placeId") int placeId);
+
     @POST("path/update")
     Call<Path> editPath(@Body Path path);
 
