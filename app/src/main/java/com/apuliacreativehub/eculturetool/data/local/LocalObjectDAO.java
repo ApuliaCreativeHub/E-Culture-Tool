@@ -18,6 +18,11 @@ public interface LocalObjectDAO {
     @Query("SELECT * FROM object WHERE object_id = :objectId")
     Object getObjectById(int objectId);
 
+    @Query("SELECT o.* FROM object o " +
+            "JOIN IsPresentIn ipi ON o.object_id=ipi.object_id " +
+            "WHERE ipi.path_id=:pathId")
+    List<Object> getObjectsByPathId(int pathId);
+
     @Insert
     void insertObject(Object object);
 

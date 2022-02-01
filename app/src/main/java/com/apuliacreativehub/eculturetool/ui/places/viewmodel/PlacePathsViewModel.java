@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.apuliacreativehub.eculturetool.data.entity.PathWithObjects;
+import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.PathRepository;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
@@ -20,7 +20,7 @@ import java.util.List;
 public class PlacePathsViewModel extends AndroidViewModel {
     private final PathRepository pathRepository;
     private Place place;
-    private List<PathWithObjects> paths;
+    private List<Path> paths;
 
     public PlacePathsViewModel(@NonNull Application application) {
         super(application);
@@ -29,7 +29,7 @@ public class PlacePathsViewModel extends AndroidViewModel {
         pathRepository = new PathRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
     }
 
-    public MutableLiveData<RepositoryNotification<List<PathWithObjects>>> getPlacePathsFromDatabase() {
+    public MutableLiveData<RepositoryNotification<List<Path>>> getPlacePathsFromDatabase() {
         if (place != null) {
             return pathRepository.getAllPlacePaths(place);
         } else {
@@ -37,11 +37,11 @@ public class PlacePathsViewModel extends AndroidViewModel {
         }
     }
 
-    public List<PathWithObjects> getPaths() {
+    public List<Path> getPaths() {
         return paths;
     }
 
-    public void setPaths(List<PathWithObjects> paths) {
+    public void setPaths(List<Path> paths) {
         this.paths = paths;
     }
 

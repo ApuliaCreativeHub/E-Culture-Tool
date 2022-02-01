@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
-import com.apuliacreativehub.eculturetool.data.entity.PathWithObjects;
+import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
@@ -37,9 +37,9 @@ public class PlacePathsFragment extends Fragment {
     private PlacePathsViewModel placePathsViewModel;
     private final Place place;
 
-    public Observer<RepositoryNotification<List<PathWithObjects>>> getPlacePathsObserver = new Observer<RepositoryNotification<List<PathWithObjects>>>() {
+    public Observer<RepositoryNotification<List<Path>>> getPlacePathsObserver = new Observer<RepositoryNotification<List<Path>>>() {
         @Override
-        public void onChanged(RepositoryNotification<List<PathWithObjects>> notification) {
+        public void onChanged(RepositoryNotification<List<Path>> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());

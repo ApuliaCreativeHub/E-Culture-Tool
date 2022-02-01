@@ -8,16 +8,15 @@ import androidx.lifecycle.MutableLiveData;
 import com.apuliacreativehub.eculturetool.data.entity.IsPresentIn;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
-import com.apuliacreativehub.eculturetool.data.entity.PathWithObjects;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
 import com.apuliacreativehub.eculturetool.data.local.LocalIsPresentInDAO;
+import com.apuliacreativehub.eculturetool.data.local.LocalObjectDAO;
 import com.apuliacreativehub.eculturetool.data.local.LocalPathDAO;
 import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDAO;
 import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDatabase;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -27,6 +26,7 @@ import retrofit2.Response;
 public class PathRepository {
     private final RemotePathDAO remotePathDAO;
     private final LocalPathDAO localPathDAO;
+    private final LocalObjectDAO localObjectDAO;
     private final LocalIsPresentInDAO localIsPresentInDAO;
     private final ConnectivityManager connectivityManager;
     private final Executor executor;
@@ -35,12 +35,13 @@ public class PathRepository {
         remotePathDAO = RemotePathDatabase.provideRemotePathDAO();
         localPathDAO = localDatabase.pathDAO();
         localIsPresentInDAO = localDatabase.isPresentInDAO();
+        localObjectDAO = localDatabase.objectDAO();
         this.connectivityManager = connectivityManager;
         this.executor = executor;
     }
 
-    public MutableLiveData<RepositoryNotification<List<PathWithObjects>>> getAllPlacePaths(Place place) {
-        MutableLiveData<RepositoryNotification<List<PathWithObjects>>> getResult;
+    public MutableLiveData<RepositoryNotification<List<Path>>> getAllPlacePaths(Place place) {
+        MutableLiveData<RepositoryNotification<List<Path>>> getResult;
         if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
             Log.d("SHOULDFETCH", "remote");
             getResult = getAllPlacePathsFromRemoteDatabase(place);
@@ -52,14 +53,14 @@ public class PathRepository {
         return getResult;
     }
 
-    private MutableLiveData<RepositoryNotification<List<PathWithObjects>>> getAllPlacePathsFromRemoteDatabase(Place place) {
-        MutableLiveData<RepositoryNotification<List<PathWithObjects>>> getResult = new MutableLiveData<>();
-        Call<List<PathWithObjects>> call = remotePathDAO.getPlacePaths(place.getId());
+    private MutableLiveData<RepositoryNotification<List<Path>>> getAllPlacePathsFromRemoteDatabase(Place place) {
+        MutableLiveData<RepositoryNotification<List<Path>>> getResult = new MutableLiveData<>();
+        Call<List<Path>> call = remotePathDAO.getPlacePaths(place.getId());
         executor.execute(() -> {
             try {
-                Response<List<PathWithObjects>> response = call.execute();
+                Response<List<Path>> response = call.execute();
                 Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                RepositoryNotification<List<PathWithObjects>> repositoryNotification = new RepositoryNotification<>();
+                RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(response.body());
                     saveRemotePathsToLocal(repositoryNotification.getData());
@@ -70,7 +71,7 @@ public class PathRepository {
                 }
                 getResult.postValue(repositoryNotification);
             } catch (IOException ioe) {
-                RepositoryNotification<List<PathWithObjects>> repositoryNotification = new RepositoryNotification<>();
+                RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
                 repositoryNotification.setException(ioe);
                 getResult.postValue(repositoryNotification);
                 Log.e("RETROFITERROR", ioe.getMessage());
@@ -79,13 +80,17 @@ public class PathRepository {
         return getResult;
     }
 
-    private MutableLiveData<RepositoryNotification<List<PathWithObjects>>> getAllPlacePathsFromLocalDatabase(Place place) {
-        MutableLiveData<RepositoryNotification<List<PathWithObjects>>> getResult = new MutableLiveData<>();
+    private MutableLiveData<RepositoryNotification<List<Path>>> getAllPlacePathsFromLocalDatabase(Place place) {
+        MutableLiveData<RepositoryNotification<List<Path>>> getResult = new MutableLiveData<>();
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                RepositoryNotification<List<PathWithObjects>> repositoryNotification = new RepositoryNotification<>();
-                repositoryNotification.setData(localPathDAO.getAllPathsByPlaceId(place.getId()));
+                RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
+                List<Path> paths = localPathDAO.getAllPathsByPlaceId(place.getId());
+                for (int i = 0; i < paths.size(); i++) {
+                    paths.get(i).setObjects(localObjectDAO.getObjectsByPathId(paths.get(i).getId()));
+                }
+                repositoryNotification.setData(paths);
                 getResult.postValue(repositoryNotification);
             }
         });
@@ -93,26 +98,26 @@ public class PathRepository {
         return getResult;
     }
 
-    private void saveRemotePathsToLocal(List<PathWithObjects> paths) {
+    private void saveRemotePathsToLocal(List<Path> paths) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                for (PathWithObjects path : paths) {
-                    if (localPathDAO.getPathById(path.path.getId()) == null) {
-                        localPathDAO.insertPath(path.path);
+                for (Path path : paths) {
+                    if (localPathDAO.getPathById(path.getId()) == null) {
+                        localPathDAO.insertPath(path);
                         int i = 1;
-                        for (Object object : path.objects) {
-                            localIsPresentInDAO.insertRelation(new IsPresentIn(object.getId(), path.path.getId(), i));
+                        for (Object object : path.getObjects()) {
+                            localIsPresentInDAO.insertRelation(new IsPresentIn(object.getId(), path.getId(), i));
                             i++;
                         }
-                    } else localPathDAO.updatePath(path.path);
+                    } else localPathDAO.updatePath(path);
                 }
             }
         });
     }
 
-    public MutableLiveData<RepositoryNotification<PathWithObjects>> addPath(PathWithObjects path) throws NoInternetConnectionException {
-        MutableLiveData<RepositoryNotification<PathWithObjects>> addResult;
+    public MutableLiveData<RepositoryNotification<Path>> addPath(Path path) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Path>> addResult;
         if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
             Log.d("SHOULDFETCH", "remote");
             addResult = addPathToRemoteDatabase(path);
@@ -123,18 +128,18 @@ public class PathRepository {
         return addResult;
     }
 
-    private MutableLiveData<RepositoryNotification<PathWithObjects>> addPathToRemoteDatabase(PathWithObjects path) {
-        MutableLiveData<RepositoryNotification<PathWithObjects>> addResult = new MutableLiveData<>();
-        Call<PathWithObjects> call = remotePathDAO.addPath(path);
+    private MutableLiveData<RepositoryNotification<Path>> addPathToRemoteDatabase(Path path) {
+        MutableLiveData<RepositoryNotification<Path>> addResult = new MutableLiveData<>();
+        Call<Path> call = remotePathDAO.addPath(path);
         executor.execute(() -> {
             try {
-                Response<PathWithObjects> response = call.execute();
+                Response<Path> response = call.execute();
                 Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                RepositoryNotification<PathWithObjects> repositoryNotification = new RepositoryNotification<>();
+                RepositoryNotification<Path> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(response.body());
                     // Add path to local database too
-                    saveRemotePathsToLocal(Collections.singletonList(response.body()));
+                    //saveRemotePathsToLocal(Collections.singletonList(response.body()));
                 } else {
                     if (response.errorBody() != null) {
                         repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -142,7 +147,7 @@ public class PathRepository {
                 }
                 addResult.postValue(repositoryNotification);
             } catch (IOException ioe) {
-                RepositoryNotification<PathWithObjects> repositoryNotification = new RepositoryNotification<>();
+                RepositoryNotification<Path> repositoryNotification = new RepositoryNotification<>();
                 repositoryNotification.setException(ioe);
                 addResult.postValue(repositoryNotification);
                 Log.e("RETROFITERROR", ioe.getMessage());
@@ -151,8 +156,8 @@ public class PathRepository {
         return addResult;
     }
 
-    public MutableLiveData<RepositoryNotification<PathWithObjects>> editPath(PathWithObjects path) throws NoInternetConnectionException {
-        MutableLiveData<RepositoryNotification<PathWithObjects>> editResult;
+    public MutableLiveData<RepositoryNotification<Path>> editPath(Path path) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Path>> editResult;
         if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
             Log.d("SHOULDFETCH", "remote");
             editResult = editPathOnRemoteDatabase(path);
@@ -163,18 +168,18 @@ public class PathRepository {
         return editResult;
     }
 
-    private MutableLiveData<RepositoryNotification<PathWithObjects>> editPathOnRemoteDatabase(PathWithObjects path) {
-        MutableLiveData<RepositoryNotification<PathWithObjects>> editResult = new MutableLiveData<>();
-        Call<PathWithObjects> call = remotePathDAO.editPath(path);
+    private MutableLiveData<RepositoryNotification<Path>> editPathOnRemoteDatabase(Path path) {
+        MutableLiveData<RepositoryNotification<Path>> editResult = new MutableLiveData<>();
+        Call<Path> call = remotePathDAO.editPath(path);
         executor.execute(() -> {
             try {
-                Response<PathWithObjects> response = call.execute();
+                Response<Path> response = call.execute();
                 Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                RepositoryNotification<PathWithObjects> repositoryNotification = new RepositoryNotification<>();
+                RepositoryNotification<Path> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(path);
                     // Edit path on local database too
-                    saveRemotePathsToLocal(Collections.singletonList(path));
+                    //saveRemotePathsToLocal(Collections.singletonList(path));
                 } else {
                     if (response.errorBody() != null) {
                         repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -182,7 +187,7 @@ public class PathRepository {
                 }
                 editResult.postValue(repositoryNotification);
             } catch (IOException ioe) {
-                RepositoryNotification<PathWithObjects> repositoryNotification = new RepositoryNotification<>();
+                RepositoryNotification<Path> repositoryNotification = new RepositoryNotification<>();
                 repositoryNotification.setException(ioe);
                 editResult.postValue(repositoryNotification);
                 Log.e("RETROFITERROR", ioe.getMessage());
