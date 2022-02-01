@@ -171,7 +171,10 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
 
     @Override
     public int getItemCount() {
-        return this.dataSet.nodes().size();
+        if(dataSet != null)
+            return this.dataSet.nodes().size();
+        else
+            return 0;
     }
 
 }

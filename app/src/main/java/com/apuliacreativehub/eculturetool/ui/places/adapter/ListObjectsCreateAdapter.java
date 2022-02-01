@@ -41,7 +41,7 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
         this.createPathViewModel = createPathViewModel;
         this.listCircleObjectsAdapter = listCircleObjectsAdapter;
         this.zoneName = createPathViewModel.getCurrentlySelectedZoneName();
-        dataSet = createPathViewModel.getObjectsDataset().getValue().get(createPathViewModel.getCurrentlySelectedZoneName());
+        dataSet = createPathViewModel.getObjectsDataset().getValue().getData().get(createPathViewModel.getCurrentlySelectedZoneName());
         this.context = context;
     }
 
@@ -53,7 +53,7 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
         private final ImageView checkView;
         private final ImageView imgObject;
 
-        public ViewHolder(View view, Context context) {
+        public ViewHolder(View view) {
             super(view);
             this.view = view;
             isChecked = false;
@@ -99,7 +99,7 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
     @Override @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(layout, viewGroup, false);
-        return new ViewHolder(view, context);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -182,7 +182,10 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
 
     @Override
     public int getItemCount() {
-        return dataSet.size();
+        if(dataSet != null)
+            return this.dataSet.size();
+        else
+            return 0;
     }
 
 }

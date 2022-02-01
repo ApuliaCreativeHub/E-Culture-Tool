@@ -25,8 +25,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListCircleObjectsAdapter;
@@ -64,24 +66,18 @@ public class CreatePathFragment extends Fragment {
     private ListCircleObjectsAdapter listCircleObjectsAdapter;
     private MutableGraph<NodeObject> graphArtifactDataset;
     private ArrayList<NodeObject> mArtifactDataset;
-    final Observer<HashMap<String, List<NodeObject>>> readyDatasetObserver = new Observer<HashMap<String, List<NodeObject>>>() {
+
+    final Observer<RepositoryNotification<HashMap<String, List<NodeObject>>>> readyDatasetObserver = new Observer<RepositoryNotification<HashMap<String, List<NodeObject>>>>() {
         @Override
-        public void onChanged(HashMap<String, List<NodeObject>> notification) {
+        public void onChanged(RepositoryNotification<HashMap<String, List<NodeObject>>> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
                 if (notification.getErrorMessage() == null) {
-                    createPathViewModel.setZones(notification.getData());
-                    createPathViewModel.getZoneNames().clear();
-                    arrayOptionsAdapter.clear();
-                    for (Zone zone : notification.getData()) {
-
-                        //createPathViewModel.getZoneNames().add(zone.getName());
-                    }
-                    arrayOptionsAdapter.addAll(createPathViewModel.getZoneNames());
-                    autoCompleteTextView.setAdapter(arrayOptionsAdapter);
-                    arrayOptionsAdapter.notifyDataSetChanged();
+                    setSelectElement();
+                    setDynamicArtifactRecycleView();
+                    setDynamicCircleArtifactRecycleView();
                 } else {
                     Log.d("Dialog", "show dialog here");
                     new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_ZONES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
@@ -102,11 +98,7 @@ public class CreatePathFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createPathViewModel = new ViewModelProvider(this).get(CreatePathViewModel.class);
-        circleObjectsAdapter = new ListCircleObjectsAdapter(createPathViewModel.getGraphDataset(), requireContext());
-        objectsAdapters = new HashMap<>();
-        for (Zone zone : createPathViewModel.getZones())
-            objectsAdapters.put(zone.getName(), new ListObjectsCreateAdapter(requireContext(), R.layout.component_card_link_artifact, createPathViewModel, circleObjectsAdapter));
+
     }
 
     @Override
@@ -118,9 +110,10 @@ public class CreatePathFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setDynamicCircleArtifactRecycleView();
-        setDynamicArtifactRecycleView();
-        setSelectElement();
+        createPathViewModel = new ViewModelProvider(this).get(CreatePathViewModel.class);
+        createPathViewModel.setPlace(place);
+        objectsAdapters = new HashMap<>();
+
         Toolbar toolbar = view.findViewById(R.id.createPathToolbar);
         toolbar.setTitle(R.string.create_place_path);
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
@@ -140,26 +133,11 @@ public class CreatePathFragment extends Fragment {
                 handleCreatePath();
             }
         });
-
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (autoCompleteTextView.getInputType() != EditorInfo.TYPE_NULL)
-                    autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
-
-                if (autoCompleteTextView.getError() != null)
-                    autoCompleteTextView.setError(null);
-
-                createPathViewModel.setCurrentlySelectedZoneName((String) ((TextView) view.findViewById(R.id.zoneName)).getText());
-                createPathViewModel.getObjectByZone().observe(getViewLifecycleOwner(), getObjectObserver);
-            }
-        });
     }
 
     private void setSelectElement() {
-        createPathViewModel.getZonesFromDatabase().observe(getViewLifecycleOwner(), getZonesObserver);
         autoCompleteTextView = view.findViewById(R.id.selectRoomAutoComplete);
-        autoCompleteTextView.setAdapter(new ArrayAdapter(getContext(), R.layout.component_item_select_room, createPathViewModel.getZones().toArray()));
+        autoCompleteTextView.setAdapter(new ArrayAdapter<>(getContext(), R.layout.component_item_select_room, createPathViewModel.getZoneNames()));
         autoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -172,13 +150,28 @@ public class CreatePathFragment extends Fragment {
                 recyclerObjectsGridView.setAdapter(objectsAdapters.get(createPathViewModel.getZones().get(position).getName()));
             }
         });
+
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (autoCompleteTextView.getInputType() != EditorInfo.TYPE_NULL)
+                    autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
+
+                if (autoCompleteTextView.getError() != null)
+                    autoCompleteTextView.setError(null);
+
+                createPathViewModel.setCurrentlySelectedZoneName((String) ((TextView) view.findViewById(R.id.zoneName)).getText());
+                Log.i("CurrentZone", createPathViewModel.getCurrentlySelectedZoneName());
+                setDynamicArtifactRecycleView();
+            }
+        });
     }
 
     private void setDynamicArtifactRecycleView() {
         recyclerObjectsGridView = view.findViewById(R.id.recyclerContainerCreateObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerObjectsGridView.setLayoutManager(gridLayoutManager);
-        listObjectsCreateAdapter = new ListObjectsCreateAdapter(requireContext(), R.layout.component_card_link_artifact, createPathViewModel, circleObjectsAdapter);
+        listObjectsCreateAdapter = new ListObjectsCreateAdapter(requireContext(), R.layout.component_card_link_artifact, createPathViewModel, listCircleObjectsAdapter);
         recyclerObjectsGridView.setAdapter(listObjectsCreateAdapter);
     }
 
@@ -187,7 +180,7 @@ public class CreatePathFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerObjectsCircleLinearView.setLayoutManager(linearLayoutManager);
-        listCircleObjectsAdapter = new ListCircleObjectsAdapter(graphArtifactDataset, getContext());
+        listCircleObjectsAdapter = new ListCircleObjectsAdapter(createPathViewModel.getGraphDataset(), getContext());
         recyclerObjectsCircleLinearView.setAdapter(listCircleObjectsAdapter);
     }
 
@@ -198,7 +191,7 @@ public class CreatePathFragment extends Fragment {
 
 
         if(checkPathName(pathName)) {
-            NodeObject[] rawResultsGraph = graphArtifactDataset.nodes().toArray(new NodeObject[0]);
+            NodeObject[] rawResultsGraph = createPathViewModel.getGraphDataset().nodes().toArray(new NodeObject[0]);
 
             if(rawResultsGraph.length > 0) {
                 //HASHMAP VALUES: ORDER INTO THE GRAPH - ID OF THE OBJECT
