@@ -11,18 +11,18 @@ import java.util.Comparator;
 
 public class GuavaHelper {
 
-    public static Comparator<NodeObject> getNodeArtifactWeightedComparator() {
-       return (o1, o2) -> {
-           if(o1.getWeight() - o2.getWeight() > 0) return 1;
-           if(o1.getWeight() - o2.getWeight() < 0) return -1;
-           return 0;
-       };
+    public static Comparator<NodeObject> getNodeObjectWeightedComparator() {
+        return (o1, o2) -> {
+            if (o1.getWeight() - o2.getWeight() > 0) return 1;
+            if (o1.getWeight() - o2.getWeight() < 0) return -1;
+            return 0;
+        };
     }
 
     public static MutableGraph<NodeObject> createInstance() {
         return GraphBuilder.directed()
                 .allowsSelfLoops(false)
-                .nodeOrder(ElementOrder.sorted(GuavaHelper.getNodeArtifactWeightedComparator()))
+                .nodeOrder(ElementOrder.sorted(GuavaHelper.getNodeObjectWeightedComparator()))
                 .incidentEdgeOrder(ElementOrder.stable())
                 .build();
     }

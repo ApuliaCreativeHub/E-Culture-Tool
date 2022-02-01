@@ -1,5 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.places.fragment;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -208,7 +209,6 @@ public class CreatePathFragment extends Fragment {
         recyclerObjectsCircleLinearView.setAdapter(listCircleObjectsAdapter);
     }
 
-
     private void handleCreatePath() {
         EditText txtPathName = view.findViewById(R.id.txtPathName);
         String pathName = txtPathName.getText().toString();
@@ -229,6 +229,8 @@ public class CreatePathFragment extends Fragment {
 
                 //TO GET FROM JSON TO HASHMAP: (WE NEED AN ARRAY OF ARTIFACT NOT OBJECT LIKE THIS, IS ONLY AN EXAMPLE)
                 //HashMap<Integer, Integer> result = gson.fromJson(newJson, HashMap.class);
+
+                requireActivity().finish();
             } else {
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.path_error), "PATH_ERROR").show(getChildFragmentManager(), Dialog.TAG);
             }
