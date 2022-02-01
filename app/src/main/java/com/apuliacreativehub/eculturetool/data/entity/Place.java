@@ -34,6 +34,10 @@ public class Place implements Parcelable {
     @ColumnInfo(name = "long")
     private String lon;
 
+    @SerializedName("userId")
+    @ColumnInfo(name = "user_id")
+    private int userId;
+
     private String normalSizeImg;
     private String thumbnail;
 
@@ -121,6 +125,14 @@ public class Place implements Parcelable {
 
     public void setUriImg(String uriImg) {
         this.uriImg = uriImg;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getNormalSizeImg() {
