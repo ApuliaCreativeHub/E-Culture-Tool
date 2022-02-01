@@ -1,7 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.places.adapter;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,38 +16,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
+import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CreatePathViewModel;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.common.collect.Iterables;
-import com.google.common.graph.MutableGraph;
 import com.google.common.graph.Traverser;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCreateAdapter.ViewHolder> {
 
-    private CreatePathViewModel createPathViewModel;
+    private final CreatePathViewModel createPathViewModel;
     private final int layout;
     private final ListCircleObjectsAdapter listCircleObjectsAdapter;
     private final String zoneName;
-    private final ArrayList<NodeObject> dataSet;
+    private final List<NodeObject> dataSet;
     private final Context context;
-    private final ArrayList<NodeObject> dataSet;
-    private final MutableGraph<NodeObject> circleDataset;
-    private ListCircleObjectsAdapter listCircleObjectsAdapter;
-
     private NodeObject utilNodeTemp;
-    public ListObjectsCreateAdapter(int layout, CreatePathViewModel createPathViewModel, ListCircleObjectsAdapter listCircleObjectsAdapter, String zoneName) {
-       this.layout = layout;
-       this.createPathViewModel = createPathViewModel;
-       this.listCircleObjectsAdapter = listCircleObjectsAdapter;
-       this.zoneName = zoneName;
-       dataSet = createPathViewModel.getObjectsDataset().get(zoneName);
-       this.context = createPathViewModel.getContext();
-    }
 
+    public ListObjectsCreateAdapter(Context context, int layout, CreatePathViewModel createPathViewModel, ListCircleObjectsAdapter listCircleObjectsAdapter) {
+        this.layout = layout;
+        this.createPathViewModel = createPathViewModel;
+        this.listCircleObjectsAdapter = listCircleObjectsAdapter;
+        this.zoneName = createPathViewModel.getCurrentlySelectedZoneName();
+        dataSet = createPathViewModel.getObjectsDataset().getValue().get(createPathViewModel.getCurrentlySelectedZoneName());
+        this.context = context;
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final View view;
@@ -101,18 +96,10 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
         }
     }
 
-    public ListObjectsCreateAdapter(int layout, ArrayList<NodeArtifact> dataSet, MutableGraph<NodeArtifact> graphArtifactDataset, ListCircleObjectsAdapter listCircleObjectsAdapter, Context mContext) {
-        this.layout = layout;
-        this.dataSet = dataSet;
-        this.context = mContext;
-        this.circleDataset = graphArtifactDataset;
-        this.listCircleObjectsAdapter = listCircleObjectsAdapter;
-    }
-
     @Override @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(layout, viewGroup, false);
-        return new ViewHolder(view, createPathViewModel.getContext());
+        return new ViewHolder(view, context);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.apuliacreativehub.eculturetool.ui.paths.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -17,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,17 +24,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
-import com.apuliacreativehub.eculturetool.ui.component.GuavaHelper;
-import com.apuliacreativehub.eculturetool.ui.places.NodeArtifact;
+import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListCircleObjectsAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListObjectsCreateAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CreatePathViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.common.graph.MutableGraph;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EditPathFragment extends Fragment {
@@ -59,11 +56,11 @@ public class EditPathFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createPathViewModel = new CreatePathViewModel(requireContext());
-        circleObjectsAdapter = new ListCircleObjectsAdapter(createPathViewModel.getGraphDataset());
+        createPathViewModel = new ViewModelProvider(this).get(CreatePathViewModel.class);
+        circleObjectsAdapter = new ListCircleObjectsAdapter(createPathViewModel.getGraphDataset(), requireContext());
         objectsAdapters = new HashMap<>();
-        for(Zone zone: createPathViewModel.getListZone())
-            objectsAdapters.put(zone.getName(), new ListObjectsCreateAdapter(R.layout.component_card_link_artifact, createPathViewModel, circleObjectsAdapter, zone.getName()));
+        for (Zone zone : createPathViewModel.getZones())
+            objectsAdapters.put(zone.getName(), new ListObjectsCreateAdapter(requireContext(), R.layout.component_card_link_artifact, createPathViewModel, circleObjectsAdapter));
     }
 
     @Override
@@ -98,7 +95,7 @@ public class EditPathFragment extends Fragment {
 
     private void setSelectElement() {
         autoCompleteTextView = view.findViewById(R.id.selectRoomAutoComplete);
-        autoCompleteTextView.setAdapter(new ArrayAdapter(getContext(), R.layout.component_item_select_room, createPathViewModel.getListStringZone().toArray()));
+        autoCompleteTextView.setAdapter(new ArrayAdapter<>(getContext(), R.layout.component_item_select_room, createPathViewModel.getZoneNames()));
         autoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -108,7 +105,7 @@ public class EditPathFragment extends Fragment {
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                recyclerArtifactsGridView.setAdapter(objectsAdapters.get(createPathViewModel.getListZone().get(position).getName()));
+                recyclerArtifactsGridView.setAdapter(objectsAdapters.get(createPathViewModel.getZones().get(position).getName()));
             }
         });
     }
@@ -133,7 +130,7 @@ public class EditPathFragment extends Fragment {
 
 
         if(checkPathName(pathName)) {
-            NodeArtifact[] rawResultsGraph = createPathViewModel.getGraphDataset().nodes().toArray(new NodeArtifact[0]);
+            NodeObject[] rawResultsGraph = createPathViewModel.getGraphDataset().nodes().toArray(new NodeObject[0]);
 
             if(rawResultsGraph.length > 0) {
                 //HASHMAP VALUES: ORDER INTO THE GRAPH - ID OF THE OBJECT

@@ -1,6 +1,5 @@
 package com.apuliacreativehub.eculturetool.ui.places.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -26,22 +25,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
-import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
-import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
-import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
-import com.apuliacreativehub.eculturetool.ui.component.GuavaHelper;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
-import com.apuliacreativehub.eculturetool.ui.places.NodeArtifact;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListCircleObjectsAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListObjectsCreateAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CreatePathViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.common.graph.MutableGraph;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CreatePathFragment extends Fragment {
     private static final int NUMBER_COLUMN = 2;
@@ -66,10 +64,9 @@ public class CreatePathFragment extends Fragment {
     private ListCircleObjectsAdapter listCircleObjectsAdapter;
     private MutableGraph<NodeObject> graphArtifactDataset;
     private ArrayList<NodeObject> mArtifactDataset;
-    private CreatePathViewModel createPathViewModel;
-    final Observer<RepositoryNotification<ArrayList<Zone>>> getZonesObserver = new Observer<RepositoryNotification<ArrayList<Zone>>>() {
+    final Observer<HashMap<String, List<NodeObject>>> readyDatasetObserver = new Observer<HashMap<String, List<NodeObject>>>() {
         @Override
-        public void onChanged(RepositoryNotification<ArrayList<Zone>> notification) {
+        public void onChanged(HashMap<String, List<NodeObject>> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
@@ -79,7 +76,8 @@ public class CreatePathFragment extends Fragment {
                     createPathViewModel.getZoneNames().clear();
                     arrayOptionsAdapter.clear();
                     for (Zone zone : notification.getData()) {
-                        createPathViewModel.getZoneNames().add(zone.getName());
+
+                        //createPathViewModel.getZoneNames().add(zone.getName());
                     }
                     arrayOptionsAdapter.addAll(createPathViewModel.getZoneNames());
                     autoCompleteTextView.setAdapter(arrayOptionsAdapter);
@@ -96,34 +94,6 @@ public class CreatePathFragment extends Fragment {
         }
     };
 
-    final Observer<RepositoryNotification<ArrayList<Object>>> getObjectObserver = new Observer<RepositoryNotification<ArrayList<Object>>>() {
-        @Override
-        public void onChanged(RepositoryNotification<ArrayList<Object>> notification) {
-            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
-            if (notification.getException() == null) {
-                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
-                Log.d("CALLBACK", String.valueOf(notification.getData()));
-                if (notification.getErrorMessage() == null) {
-                    mArtifactDataset = NodeObject.getNodeObjectAll(notification.getData());
-                    NodeObject lastNode = null;
-                    if(listObjectsCreateAdapter != null){
-                        lastNode = listObjectsCreateAdapter.getLastNode();
-                        listCircleObjectsAdapter = listObjectsCreateAdapter.getListCircleObjectsAdapter();
-                    }
-                    setDynamicArtifactRecycleView();
-                    listObjectsCreateAdapter.setListCircleObjectsAdapter(listCircleObjectsAdapter, lastNode);
-                } else {
-                    Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_OBJECTS_ERROR").show(getChildFragmentManager(), Dialog.TAG);
-                }
-            } else {
-                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
-                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_OBJECTS_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
-            }
-        }
-    };
-
     public CreatePathFragment(Place place){
         this.place = place;
     }
@@ -132,11 +102,11 @@ public class CreatePathFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createPathViewModel = new CreatePathViewModel(requireContext());
-        circleObjectsAdapter = new ListCircleObjectsAdapter(createPathViewModel.getGraphDataset());
+        createPathViewModel = new ViewModelProvider(this).get(CreatePathViewModel.class);
+        circleObjectsAdapter = new ListCircleObjectsAdapter(createPathViewModel.getGraphDataset(), requireContext());
         objectsAdapters = new HashMap<>();
-        for(Zone zone: createPathViewModel.getListZone())
-            objectsAdapters.put(zone.getName(), new ListObjectsCreateAdapter(R.layout.component_card_link_artifact, createPathViewModel, circleObjectsAdapter, zone.getName()));
+        for (Zone zone : createPathViewModel.getZones())
+            objectsAdapters.put(zone.getName(), new ListObjectsCreateAdapter(requireContext(), R.layout.component_card_link_artifact, createPathViewModel, circleObjectsAdapter));
     }
 
     @Override
@@ -160,6 +130,9 @@ public class CreatePathFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        createPathViewModel.getObjectsDataset().observe(this, readyDatasetObserver);
+
         confirmFab = view.findViewById(R.id.btnCreatePath);
         confirmFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,7 +159,7 @@ public class CreatePathFragment extends Fragment {
     private void setSelectElement() {
         createPathViewModel.getZonesFromDatabase().observe(getViewLifecycleOwner(), getZonesObserver);
         autoCompleteTextView = view.findViewById(R.id.selectRoomAutoComplete);
-        autoCompleteTextView.setAdapter(new ArrayAdapter(getContext(), R.layout.component_item_select_room, createPathViewModel.getListStringZone().toArray()));
+        autoCompleteTextView.setAdapter(new ArrayAdapter(getContext(), R.layout.component_item_select_room, createPathViewModel.getZones().toArray()));
         autoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -196,7 +169,7 @@ public class CreatePathFragment extends Fragment {
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                recyclerArtifactsGridView.setAdapter(objectsAdapters.get(createPathViewModel.getListZone().get(position).getName()));
+                recyclerObjectsGridView.setAdapter(objectsAdapters.get(createPathViewModel.getZones().get(position).getName()));
             }
         });
     }
@@ -205,7 +178,7 @@ public class CreatePathFragment extends Fragment {
         recyclerObjectsGridView = view.findViewById(R.id.recyclerContainerCreateObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerObjectsGridView.setLayoutManager(gridLayoutManager);
-        listObjectsCreateAdapter = new ListObjectsCreateAdapter(R.layout.component_card_link_artifact, mArtifactDataset, graphArtifactDataset, getContext());
+        listObjectsCreateAdapter = new ListObjectsCreateAdapter(requireContext(), R.layout.component_card_link_artifact, createPathViewModel, circleObjectsAdapter);
         recyclerObjectsGridView.setAdapter(listObjectsCreateAdapter);
     }
 
