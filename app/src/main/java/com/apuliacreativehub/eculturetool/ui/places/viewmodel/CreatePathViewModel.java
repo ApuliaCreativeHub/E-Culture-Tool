@@ -3,10 +3,10 @@ package com.apuliacreativehub.eculturetool.ui.places.viewmodel;
 import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.os.Bundle;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
@@ -16,17 +16,23 @@ import com.apuliacreativehub.eculturetool.data.repository.ObjectRepository;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.data.repository.ZoneRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
+import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
+import com.google.common.graph.MutableGraph;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CreatePathViewModel extends AndroidViewModel {
     private final ZoneRepository zoneRepository;
     private final ObjectRepository objectRepository;
     private List<Zone> zones;
-    private List<String> zoneNames;
+    private final List<String> zoneNames;
     private Place place;
     private String currentlySelectedZoneName = "";
+    private final HashMap<String, List<NodeObject>> tempObjectsDataset = new HashMap<>();
+    private MutableGraph<NodeObject> graphDataset;
+    private MutableLiveData<RepositoryNotification<HashMap<String, List<NodeObject>>>> objectsDataset;
 
     public CreatePathViewModel(Application application) {
         super(application);
@@ -100,7 +106,82 @@ public class CreatePathViewModel extends AndroidViewModel {
         }
     }
 
-    public MutableLiveData<RepositoryNotification<Object>> getObjectById(int id) throws NoInternetConnectionException{
+    public MutableLiveData<RepositoryNotification<Object>> getObjectById(int id) throws NoInternetConnectionException {
         return objectRepository.getObjectById(id);
+    }
+
+    public Observer<RepositoryNotification<ArrayList<Zone>>> getZonesObserver = new Observer<RepositoryNotification<ArrayList<Zone>>>() {
+        @Override
+        public void onChanged(RepositoryNotification<ArrayList<Zone>> notification) {
+            if (notification.getException() == null) {
+                if (notification.getErrorMessage() == null) {
+                    zones = notification.getData();
+                    for (Zone zone : notification.getData()) {
+                        objectRepository.getObjects(zone).observe(getApplication(), getObjectsObserver);
+                    }
+                } else {
+                    RepositoryNotification<HashMap<String, List<NodeObject>>> err = new RepositoryNotification<>();
+                    err.setErrorMessage(notification.getErrorMessage());
+                    objectsDataset.postValue(err);
+                }
+            } else {
+                RepositoryNotification<HashMap<String, List<NodeObject>>> err = new RepositoryNotification<>();
+                err.setException(notification.getException());
+                objectsDataset.postValue(err);
+            }
+        }
+    };
+    private NodeObject utilNodeTemp;
+    private int i = 0;
+    public Observer<RepositoryNotification<ArrayList<Object>>> getObjectsObserver = new Observer<RepositoryNotification<ArrayList<Object>>>() {
+        @Override
+        public void onChanged(RepositoryNotification<ArrayList<Object>> notification) {
+            if (notification.getException() == null) {
+                if (notification.getErrorMessage() == null) {
+                    Zone zone = getZoneById(notification.getData().get(0).getZoneId());
+                    tempObjectsDataset.put(zone.getName(), NodeObject.getNodeObjectAll(notification.getData()));
+                    i++;
+                    if (i == zones.size()) {
+                        setObjectsDatasetForNotification();
+                    }
+                } else {
+                    RepositoryNotification<HashMap<String, List<NodeObject>>> err = new RepositoryNotification<>();
+                    err.setErrorMessage(notification.getErrorMessage());
+                    objectsDataset.postValue(err);
+                }
+            } else {
+                RepositoryNotification<HashMap<String, List<NodeObject>>> err = new RepositoryNotification<>();
+                err.setException(notification.getException());
+                objectsDataset.postValue(err);
+            }
+        }
+    };
+
+    public MutableLiveData<RepositoryNotification<HashMap<String, List<NodeObject>>>> getObjectsDataset() {
+        return objectsDataset;
+    }
+
+    public NodeObject getUtilNodeTemp() {
+        return utilNodeTemp;
+    }
+
+    public void setUtilNodeTemp(NodeObject utilNodeTemp) {
+        this.utilNodeTemp = utilNodeTemp;
+    }
+
+    public MutableGraph<NodeObject> getGraphDataset() {
+        return graphDataset;
+    }
+
+    private void setObjectsDatasetForNotification() {
+        RepositoryNotification<HashMap<String, List<NodeObject>>> notification = new RepositoryNotification<>();
+        notification.setData(tempObjectsDataset);
+        objectsDataset.postValue(notification);
+    }
+
+    public void populateObjectsDataset() {
+        if (place != null) {
+            zoneRepository.getAllPlaceZones(place).observe(getApplication(), getZonesObserver);
+        }
     }
 }

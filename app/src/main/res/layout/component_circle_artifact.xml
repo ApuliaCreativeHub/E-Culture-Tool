@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="80dp"
     android:layout_height="50dp"
-    android:layout_marginRight="4dp"
+    android:layout_marginEnd="4dp"
     android:orientation="horizontal">
 
     <!-- DO NOT REMOVE THIS TAG -->
@@ -16,11 +16,13 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="horizontal">
+
         <ImageView
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:src="@mipmap/outline_linear_scale_black_20"
-            />
+            android:contentDescription="@string/place_image" />
+
     </LinearLayout>
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -38,13 +40,15 @@
         android:tag="RIGHT"
         android:layout_width="15dp"
         android:layout_height="match_parent"
-        android:gravity="center"
-        >
+        android:gravity="center">
+
         <ImageView
             android:id="@+id/arrowLinkIcon"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:src="@mipmap/outline_linear_scale_black_20"
-            />
+            android:contentDescription="@string/arrow" />
+
     </LinearLayout>
+
 </LinearLayout>

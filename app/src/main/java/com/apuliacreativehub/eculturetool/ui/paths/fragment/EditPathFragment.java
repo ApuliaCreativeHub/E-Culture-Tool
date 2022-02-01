@@ -16,22 +16,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
-import com.apuliacreativehub.eculturetool.ui.component.GuavaHelper;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListCircleObjectsAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListObjectsCreateAdapter;
+import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CreatePathViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.common.graph.MutableGraph;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EditPathFragment extends Fragment {
@@ -40,34 +40,27 @@ public class EditPathFragment extends Fragment {
     private static final int MAX_LENGTH_NAME = 25;
 
     private View view;
-    private ArrayAdapter arrayOptionsAdapter;
     private AutoCompleteTextView autoCompleteTextView;
+
+    private CreatePathViewModel createPathViewModel;
+    private ListCircleObjectsAdapter circleObjectsAdapter;
+    private HashMap<String, ListObjectsCreateAdapter> objectsAdapters;
 
     private FloatingActionButton confirmFab;
     private RecyclerView recyclerArtifactsGridView;
     private RecyclerView recyclerArtifactsCircleLinearView;
     private GridLayoutManager gridLayoutManager;
     private LinearLayoutManager linearLayoutManager;
-    private ListObjectsCreateAdapter listArtifactsCreateAdapter;
-    private ListCircleObjectsAdapter listCircleObjectsAdapter;
-    private MutableGraph<NodeObject> graphArtifactDataset;
-    private ArrayList<NodeObject> mArtifactDataset;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        graphArtifactDataset = GuavaHelper.createInstance();
-
-        //TODO: FETCH ARTIFACT OF PLACE
-        NodeObject testArtifact = new NodeObject(100, "AAA", "Opera d'arte antica", "img1", 1);
-        NodeObject testArtifact2 = new NodeObject(101, "BBB", "Opera d'arte antica 2", "img1", 2);
-        NodeObject testArtifact3 = new NodeObject(102, "CCC", "Opera d'arte antica 3", "img1", 3);
-        NodeObject testArtifact4 = new NodeObject(103, "DDD", "Opera d'arte antica 4", "img1", 3);
-        mArtifactDataset = new ArrayList<>();
-        mArtifactDataset.add(testArtifact);
-        mArtifactDataset.add(testArtifact2);
-        mArtifactDataset.add(testArtifact3);
-        mArtifactDataset.add(testArtifact4);
+        createPathViewModel = new ViewModelProvider(this).get(CreatePathViewModel.class);
+        circleObjectsAdapter = new ListCircleObjectsAdapter(createPathViewModel.getGraphDataset(), requireContext());
+        objectsAdapters = new HashMap<>();
+        for (Zone zone : createPathViewModel.getZones())
+            objectsAdapters.put(zone.getName(), new ListObjectsCreateAdapter(requireContext(), R.layout.component_card_link_artifact, createPathViewModel, circleObjectsAdapter));
     }
 
     @Override
@@ -79,11 +72,11 @@ public class EditPathFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setSelectElement();
         setDynamicCircleArtifactRecycleView();
         setDynamicArtifactRecycleView();
+        setSelectElement();
         Toolbar toolbar = view.findViewById(R.id.editPathToolbar);
-        toolbar.setTitle(R.string.edit_path_screen_title);
+        toolbar.setTitle(R.string.edit_place_screen_title);
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
     }
@@ -91,8 +84,7 @@ public class EditPathFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        confirmFab = view.findViewById(R.id.btnCreatePath);
-
+        confirmFab = view.findViewById(R.id.btnEditPath);
         confirmFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,20 +94,18 @@ public class EditPathFragment extends Fragment {
     }
 
     private void setSelectElement() {
-        //TODO: Fetch room
-        arrayOptionsAdapter = new ArrayAdapter(getContext(), R.layout.component_item_select_room, new String[]{"Stanza A", "Stanza B", " Stanza C"});
         autoCompleteTextView = view.findViewById(R.id.selectRoomAutoComplete);
-        autoCompleteTextView.setAdapter(arrayOptionsAdapter);
+        autoCompleteTextView.setAdapter(new ArrayAdapter<>(getContext(), R.layout.component_item_select_room, createPathViewModel.getZoneNames()));
         autoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 return false;
             }
         });
-
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                recyclerArtifactsGridView.setAdapter(objectsAdapters.get(createPathViewModel.getZones().get(position).getName()));
             }
         });
     }
@@ -124,8 +114,6 @@ public class EditPathFragment extends Fragment {
         recyclerArtifactsGridView = view.findViewById(R.id.recyclerContainerCreateObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerArtifactsGridView.setLayoutManager(gridLayoutManager);
-        listArtifactsCreateAdapter = new ListObjectsCreateAdapter(R.layout.component_card_link_artifact, mArtifactDataset, graphArtifactDataset, getContext());
-        recyclerArtifactsGridView.setAdapter(listArtifactsCreateAdapter);
     }
 
     private void setDynamicCircleArtifactRecycleView() {
@@ -133,8 +121,7 @@ public class EditPathFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerArtifactsCircleLinearView.setLayoutManager(linearLayoutManager);
-        listCircleObjectsAdapter = new ListCircleObjectsAdapter(graphArtifactDataset, getContext());
-        recyclerArtifactsCircleLinearView.setAdapter(listCircleObjectsAdapter);
+        recyclerArtifactsCircleLinearView.setAdapter(circleObjectsAdapter);
     }
 
     private void handleCreatePath() {
@@ -143,7 +130,7 @@ public class EditPathFragment extends Fragment {
 
 
         if(checkPathName(pathName)) {
-            NodeObject[] rawResultsGraph = graphArtifactDataset.nodes().toArray(new NodeObject[0]);
+            NodeObject[] rawResultsGraph = createPathViewModel.getGraphDataset().nodes().toArray(new NodeObject[0]);
 
             if(rawResultsGraph.length > 0) {
                 //HASHMAP VALUES: ORDER INTO THE GRAPH - ID OF THE OBJECT
