@@ -40,14 +40,13 @@ public class PathRepository {
         this.executor = executor;
     }
 
-    public MutableLiveData<RepositoryNotification<List<Path>>> getAllCuratorPlacePaths(Place place) {
+    public MutableLiveData<RepositoryNotification<List<Path>>> getAllCuratorPlacePaths(Place place) throws NoInternetConnectionException {
         MutableLiveData<RepositoryNotification<List<Path>>> getResult;
         if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
             Log.d("SHOULDFETCH", "remote");
             getResult = getAllCuratorPlacePathsFromRemoteDatabase(place);
         } else {
-            Log.d("SHOULDFETCH", "local");
-            getResult = getAllCuratorPlacePathsFromLocalDatabase(place);
+            throw new NoInternetConnectionException();
         }
 
         return getResult;
@@ -77,24 +76,6 @@ public class PathRepository {
                 Log.e("RETROFITERROR", ioe.getMessage());
             }
         });
-        return getResult;
-    }
-
-    private MutableLiveData<RepositoryNotification<List<Path>>> getAllCuratorPlacePathsFromLocalDatabase(Place place) {
-        MutableLiveData<RepositoryNotification<List<Path>>> getResult = new MutableLiveData<>();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
-                List<Path> paths = localPathDAO.getAllCuratorPathsByPlaceId(place.getId());
-                for (int i = 0; i < paths.size(); i++) {
-                    paths.get(i).setObjects(localObjectDAO.getObjectsByPathId(paths.get(i).getId()));
-                }
-                repositoryNotification.setData(paths);
-                getResult.postValue(repositoryNotification);
-            }
-        });
-
         return getResult;
     }
 

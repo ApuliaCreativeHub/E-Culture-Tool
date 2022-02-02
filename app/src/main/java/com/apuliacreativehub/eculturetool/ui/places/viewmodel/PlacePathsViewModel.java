@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.PathRepository;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
@@ -29,7 +30,7 @@ public class PlacePathsViewModel extends AndroidViewModel {
         pathRepository = new PathRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
     }
 
-    public MutableLiveData<RepositoryNotification<List<Path>>> getPlacePathsFromDatabase() {
+    public MutableLiveData<RepositoryNotification<List<Path>>> getPlacePathsFromDatabase() throws NoInternetConnectionException {
         if (place != null) {
             return pathRepository.getAllCuratorPlacePaths(place);
         } else {

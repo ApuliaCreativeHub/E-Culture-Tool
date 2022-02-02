@@ -22,6 +22,7 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
@@ -95,7 +96,11 @@ public class PlacePathsFragment extends Fragment {
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
 
-        placePathsViewModel.getPlacePathsFromDatabase().observe(getViewLifecycleOwner(), getPlacePathsObserver);
+        try {
+            placePathsViewModel.getPlacePathsFromDatabase().observe(getViewLifecycleOwner(), getPlacePathsObserver);
+        } catch (NoInternetConnectionException e) {
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+        }
     }
 
     @Override
