@@ -25,7 +25,6 @@ public class Dialog extends DialogFragment {
     public android.app.Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         return new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(title)
-                // TODO: Set message as resource string
                 .setMessage(message)
                 .setPositiveButton(getString(R.string.ok), (dialog, which) -> {
                 })
