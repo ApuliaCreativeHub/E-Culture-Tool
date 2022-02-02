@@ -2,6 +2,7 @@ package com.apuliacreativehub.eculturetool.ui.places;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
 import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtils;
+import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -33,6 +35,7 @@ public class ModalBottomSheetPlace extends BottomSheetDialogFragment {
     private TextView txtDescription;
     private TextView txtAddress;
     private ImageView imgPlace;
+    private Button sectionPathLink;
     private View view;
     private final Place place;
     private final Context context;
@@ -61,6 +64,7 @@ public class ModalBottomSheetPlace extends BottomSheetDialogFragment {
         txtAddress = view.findViewById(R.id.txtAddress);
         txtDescription = view.findViewById(R.id.txtDescription);
         imgPlace = view.findViewById(R.id.imgPlace);
+        sectionPathLink = view.findViewById(R.id.sectionPathLink);
 
         txtName.setText(place.getName());
         txtAddress.setText(place.getAddress());
@@ -77,11 +81,15 @@ public class ModalBottomSheetPlace extends BottomSheetDialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Button sectionPathLink = view.findViewById(R.id.sectionPathLink);
-        sectionPathLink.setOnClickListener(
-                view -> startActivity(new Intent(this.getActivity(), SubActivity.class)
-                        .putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.PLACE_PATHS_FRAGMENT)
-                        .putExtra("place", place))
-        );
+
+        if(Utils.checkConnection((ConnectivityManager) requireActivity().getApplication().getSystemService(Context.CONNECTIVITY_SERVICE))){
+            sectionPathLink.setOnClickListener(
+                    view -> startActivity(new Intent(this.getActivity(), SubActivity.class)
+                            .putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.PLACE_PATHS_FRAGMENT)
+                            .putExtra("place", place))
+            );
+        }else {
+            sectionPathLink.setText(R.string.no_internet_connection);
+        }
     }
 }
