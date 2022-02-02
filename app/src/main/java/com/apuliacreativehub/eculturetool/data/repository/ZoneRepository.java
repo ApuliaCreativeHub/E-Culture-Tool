@@ -162,7 +162,7 @@ public class ZoneRepository {
                 Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
                 RepositoryNotification<Zone> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
-                    repositoryNotification.setData(repositoryNotification.getData());
+                    repositoryNotification.setData(response.body());
                     // Edit zone on local database too
                     saveRemoteZonesToLocal(Collections.singletonList(repositoryNotification.getData()));
                 } else {
