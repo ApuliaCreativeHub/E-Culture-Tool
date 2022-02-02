@@ -27,6 +27,11 @@ public class Path {
         this.name = name;
     }
 
+    @Ignore
+    public Path(String name) {
+        this.name = name;
+    }
+
     public int getId() {
         return id;
     }

@@ -3,30 +3,40 @@ package com.apuliacreativehub.eculturetool.ui.places.viewmodel;
 import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.apuliacreativehub.eculturetool.data.entity.Object;
+import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.ObjectRepository;
+import com.apuliacreativehub.eculturetool.data.repository.PathRepository;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.data.repository.ZoneRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
+import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
 import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CreatePathViewModel extends AndroidViewModel {
+    private String pathName;
+    private Map<Integer, Integer> orderedObjets;
     private final ZoneRepository zoneRepository;
     private final ObjectRepository objectRepository;
+    private final PathRepository pathRepository;
     private List<Zone> zones;
     private final List<String> zoneNames;
     private Place place;
@@ -41,6 +51,7 @@ public class CreatePathViewModel extends AndroidViewModel {
         zoneNames = new ArrayList<>();
         zoneRepository = new ZoneRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
         objectRepository = new ObjectRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
+        pathRepository = new PathRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
         graphDataset = GraphBuilder.directed().build();
     }
 
@@ -192,5 +203,32 @@ public class CreatePathViewModel extends AndroidViewModel {
         if (place != null) {
             zoneRepository.getAllPlaceZones(place).observeForever(getZonesObserver);
         }
+    }
+
+    public MutableLiveData<RepositoryNotification<Path>> addPath() throws NoInternetConnectionException {
+        Path path = new Path(pathName);
+        List<Object> objects = new ArrayList<>();
+        for(int i = 0; i < orderedObjets.size(); i++){
+            int objectId = orderedObjets.get(i);
+            objects.add(new Object(objectId));
+        }
+        path.setObjects(objects);
+        return pathRepository.addPath(path);
+    }
+
+    public String getPathName() {
+        return pathName;
+    }
+
+    public void setPathName(String pathName) {
+        this.pathName = pathName;
+    }
+
+    public Map<Integer, Integer> getOrderedObjets() {
+        return orderedObjets;
+    }
+
+    public void setOrderedObjets(Map<Integer, Integer> orderedObjets) {
+        this.orderedObjets = orderedObjets;
     }
 }

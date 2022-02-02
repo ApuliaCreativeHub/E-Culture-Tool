@@ -26,8 +26,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
+import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
@@ -42,6 +44,7 @@ import com.google.gson.JsonElement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CreatePathFragment extends Fragment {
     private static final int NUMBER_COLUMN = 2;
@@ -50,11 +53,9 @@ public class CreatePathFragment extends Fragment {
     private final Place place;
 
     private View view;
-    private ArrayAdapter<String> arrayOptionsAdapter;
     private AutoCompleteTextView autoCompleteTextView;
 
     private CreatePathViewModel createPathViewModel;
-    private ListCircleObjectsAdapter circleObjectsAdapter;
     private HashMap<String, ListObjectsCreateAdapter> objectsAdapters;
 
     private FloatingActionButton confirmFab;
@@ -64,8 +65,6 @@ public class CreatePathFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private ListObjectsCreateAdapter listObjectsCreateAdapter;
     private ListCircleObjectsAdapter listCircleObjectsAdapter;
-    private MutableGraph<NodeObject> graphArtifactDataset;
-    private ArrayList<NodeObject> mArtifactDataset;
 
     final Observer<RepositoryNotification<HashMap<String, List<NodeObject>>>> readyDatasetObserver = new Observer<RepositoryNotification<HashMap<String, List<NodeObject>>>>() {
         @Override
@@ -87,6 +86,27 @@ public class CreatePathFragment extends Fragment {
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_ZONES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
             }
+        }
+    };
+
+    final Observer<RepositoryNotification<Path>> addPathObserver = notification -> {
+        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        if (notification.getException() == null) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(notification.getData()));
+            if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
+                Log.i("addPlace", "OK");
+                requireActivity().getSupportFragmentManager().popBackStackImmediate();
+            } else {
+                Log.i("addPlace", "Not OK");
+                Log.d("Dialog", "show dialog here");
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        } else {
+            Log.i("addPlace", "Not OK exception");
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
         }
     };
 
@@ -189,8 +209,12 @@ public class CreatePathFragment extends Fragment {
         EditText txtPathName = view.findViewById(R.id.txtPathName);
         String pathName = txtPathName.getText().toString();
 
+        if(createPathViewModel.getPathName() != null){
+            pathName = createPathViewModel.getPathName();
+        }
 
         if(checkPathName(pathName)) {
+            createPathViewModel.setPathName(pathName);
             NodeObject[] rawResultsGraph = createPathViewModel.getGraphDataset().nodes().toArray(new NodeObject[0]);
 
             if(rawResultsGraph.length > 0) {
@@ -199,12 +223,14 @@ public class CreatePathFragment extends Fragment {
                 for (int i = 0; i < rawResultsGraph.length; i++) {
                     graphIdPath.put(i, rawResultsGraph[i].getId());
                 }
-                Gson gson = new Gson();
-                JsonElement resultJson = gson.toJsonTree(graphIdPath, HashMap.class);
-                Log.i("JSON?", resultJson.toString());
-
                 //TO GET FROM JSON TO HASHMAP: (WE NEED AN ARRAY OF ARTIFACT NOT OBJECT LIKE THIS, IS ONLY AN EXAMPLE)
-                //HashMap<Integer, Integer> result = gson.fromJson(newJson, HashMap.class);
+                createPathViewModel.setOrderedObjets(graphIdPath);
+                try {
+                    createPathViewModel.addPath().observe(this, addPathObserver);
+                } catch (NoInternetConnectionException e) {
+                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                }
+
             } else {
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.path_error), "PATH_ERROR").show(getChildFragmentManager(), Dialog.TAG);
             }
