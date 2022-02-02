@@ -200,10 +200,6 @@ public class CreatePathFragment extends Fragment {
         EditText txtPathName = view.findViewById(R.id.txtPathName);
         String pathName = txtPathName.getText().toString();
 
-        if(createPathViewModel.getPathName() != null){
-            pathName = createPathViewModel.getPathName();
-        }
-
         if(checkPathName(pathName)) {
             createPathViewModel.setPathName(pathName);
             NodeObject[] rawResultsGraph = createPathViewModel.getGraphDataset().nodes().toArray(new NodeObject[0]);
@@ -215,7 +211,7 @@ public class CreatePathFragment extends Fragment {
                     graphIdPath.put(i, rawResultsGraph[i].getId());
                 }
                 //TO GET FROM JSON TO HASHMAP: (WE NEED AN ARRAY OF ARTIFACT NOT OBJECT LIKE THIS, IS ONLY AN EXAMPLE)
-                createPathViewModel.setOrderedObjets(graphIdPath);
+                createPathViewModel.setOrderedObjects(graphIdPath);
                 try {
                     createPathViewModel.addPath().observe(this, addPathObserver);
                 } catch (NoInternetConnectionException e) {
