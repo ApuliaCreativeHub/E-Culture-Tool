@@ -49,7 +49,6 @@ public class CreatePathFragment extends Fragment {
     private AutoCompleteTextView autoCompleteTextView;
 
     private CreatePathViewModel createPathViewModel;
-    private HashMap<String, ListObjectsCreateAdapter> objectsAdapters;
 
     private RecyclerView recyclerObjectsGridView;
     private RecyclerView recyclerObjectsCircleLinearView;
@@ -112,7 +111,6 @@ public class CreatePathFragment extends Fragment {
         super.onCreate(savedInstanceState);
         createPathViewModel = new ViewModelProvider(this).get(CreatePathViewModel.class);
         createPathViewModel.setPlace(place);
-        objectsAdapters = new HashMap<>();
     }
 
     @Override
@@ -153,12 +151,6 @@ public class CreatePathFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 return false;
-            }
-        });
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                recyclerObjectsGridView.setAdapter(objectsAdapters.get(createPathViewModel.getZones().get(position).getName()));
             }
         });
 
