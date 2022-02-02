@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
+import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtils;
 import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.bumptech.glide.Glide;
@@ -82,14 +83,16 @@ public class ModalBottomSheetPlace extends BottomSheetDialogFragment {
     public void onStart() {
         super.onStart();
 
-        if(Utils.checkConnection((ConnectivityManager) requireActivity().getApplication().getSystemService(Context.CONNECTIVITY_SERVICE))){
-            sectionPathLink.setOnClickListener(
-                    view -> startActivity(new Intent(this.getActivity(), SubActivity.class)
-                            .putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.PLACE_PATHS_FRAGMENT)
-                            .putExtra("place", place))
-            );
-        }else {
-            sectionPathLink.setText(R.string.no_internet_connection);
-        }
+        sectionPathLink.setOnClickListener(view -> {
+            if (Utils.checkConnection((ConnectivityManager) requireActivity().getApplication().getSystemService(Context.CONNECTIVITY_SERVICE))) {
+                startActivity(new Intent(this.getActivity(), SubActivity.class)
+                        .putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.PLACE_PATHS_FRAGMENT)
+                        .putExtra("place", place));
+            }else{
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        });
+
+
     }
 }
