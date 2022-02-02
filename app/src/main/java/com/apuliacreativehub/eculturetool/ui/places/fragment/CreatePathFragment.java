@@ -25,10 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
-import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
-import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
@@ -37,14 +35,9 @@ import com.apuliacreativehub.eculturetool.ui.places.adapter.ListCircleObjectsAda
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListObjectsCreateAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CreatePathViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.common.graph.MutableGraph;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CreatePathFragment extends Fragment {
     private static final int NUMBER_COLUMN = 2;
@@ -58,7 +51,6 @@ public class CreatePathFragment extends Fragment {
     private CreatePathViewModel createPathViewModel;
     private HashMap<String, ListObjectsCreateAdapter> objectsAdapters;
 
-    private FloatingActionButton confirmFab;
     private RecyclerView recyclerObjectsGridView;
     private RecyclerView recyclerObjectsCircleLinearView;
     private GridLayoutManager gridLayoutManager;
@@ -118,7 +110,9 @@ public class CreatePathFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        createPathViewModel = new ViewModelProvider(this).get(CreatePathViewModel.class);
+        createPathViewModel.setPlace(place);
+        objectsAdapters = new HashMap<>();
     }
 
     @Override
@@ -130,9 +124,6 @@ public class CreatePathFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        createPathViewModel = new ViewModelProvider(this).get(CreatePathViewModel.class);
-        createPathViewModel.setPlace(place);
-        objectsAdapters = new HashMap<>();
 
         Toolbar toolbar = view.findViewById(R.id.createPathToolbar);
         toolbar.setTitle(R.string.create_place_path);
@@ -146,7 +137,7 @@ public class CreatePathFragment extends Fragment {
 
         createPathViewModel.getObjectsDataset().observe(this, readyDatasetObserver);
 
-        confirmFab = view.findViewById(R.id.btnCreatePath);
+        FloatingActionButton confirmFab = view.findViewById(R.id.btnCreatePath);
         confirmFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
