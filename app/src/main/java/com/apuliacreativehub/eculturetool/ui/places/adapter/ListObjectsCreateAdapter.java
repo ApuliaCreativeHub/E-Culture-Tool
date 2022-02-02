@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
-import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CreatePathViewModel;
+import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CEPathViewModel;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.common.collect.Iterables;
@@ -28,7 +28,7 @@ import java.util.Set;
 
 public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCreateAdapter.ViewHolder> {
 
-    private final CreatePathViewModel createPathViewModel;
+    private final CEPathViewModel cePathViewModel;
     private final int layout;
     private final ListCircleObjectsAdapter listCircleObjectsAdapter;
     private final String zoneName;
@@ -36,12 +36,12 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
     private final Context context;
     private NodeObject utilNodeTemp;
 
-    public ListObjectsCreateAdapter(Context context, int layout, CreatePathViewModel createPathViewModel, ListCircleObjectsAdapter listCircleObjectsAdapter) {
+    public ListObjectsCreateAdapter(Context context, int layout, CEPathViewModel cePathViewModel, ListCircleObjectsAdapter listCircleObjectsAdapter) {
         this.layout = layout;
-        this.createPathViewModel = createPathViewModel;
+        this.cePathViewModel = cePathViewModel;
         this.listCircleObjectsAdapter = listCircleObjectsAdapter;
-        this.zoneName = createPathViewModel.getCurrentlySelectedZoneName();
-        dataSet = createPathViewModel.getObjectsDataset().getValue().getData().get(createPathViewModel.getCurrentlySelectedZoneName());
+        this.zoneName = cePathViewModel.getCurrentlySelectedZoneName();
+        dataSet = cePathViewModel.getObjectsDataset().getValue().getData().get(cePathViewModel.getCurrentlySelectedZoneName());
         this.context = context;
     }
 
@@ -140,15 +140,14 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
      * @param newNode
      */
     private void increaseGraph(NodeObject newNode) {
-        if(createPathViewModel.getUtilNodeTemp() != null) {
-            newNode.setWeight(createPathViewModel.getUtilNodeTemp().getWeight()*2);
-            createPathViewModel.getGraphDataset().putEdge(createPathViewModel.getUtilNodeTemp(), newNode);
-        }
-        else {
+        if (cePathViewModel.getUtilNodeTemp() != null) {
+            newNode.setWeight(cePathViewModel.getUtilNodeTemp().getWeight() * 2);
+            cePathViewModel.getGraphDataset().putEdge(cePathViewModel.getUtilNodeTemp(), newNode);
+        } else {
             newNode.setWeight(1.0);
-            createPathViewModel.getGraphDataset().addNode(newNode);
+            cePathViewModel.getGraphDataset().addNode(newNode);
         }
-        createPathViewModel.setUtilNodeTemp(newNode);
+        cePathViewModel.setUtilNodeTemp(newNode);
     }
 
     /**
@@ -158,25 +157,25 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
      * @param nodeToRemove
      */
     private void decreaseGraph(NodeObject nodeToRemove) {
-        Set<NodeObject> adjacentNode = createPathViewModel.getGraphDataset().adjacentNodes(nodeToRemove);
+        Set<NodeObject> adjacentNode = cePathViewModel.getGraphDataset().adjacentNodes(nodeToRemove);
         Iterator<NodeObject> iteratorNode = adjacentNode.iterator();
         NodeObject leftNode, rightNode;
-        createPathViewModel.getGraphDataset().removeNode(nodeToRemove);
+        cePathViewModel.getGraphDataset().removeNode(nodeToRemove);
 
-        if(adjacentNode.size() == 2) {
+        if (adjacentNode.size() == 2) {
             leftNode = iteratorNode.next();
             rightNode = iteratorNode.next();
-            createPathViewModel.getGraphDataset().putEdge(leftNode, rightNode);
-            if(nodeToRemove.equals(createPathViewModel.getUtilNodeTemp())) {
-                createPathViewModel.setUtilNodeTemp(rightNode);
+            cePathViewModel.getGraphDataset().putEdge(leftNode, rightNode);
+            if (nodeToRemove.equals(cePathViewModel.getUtilNodeTemp())) {
+                cePathViewModel.setUtilNodeTemp(rightNode);
             }
         }
-        if(adjacentNode.size() > 0 && nodeToRemove.equals(createPathViewModel.getUtilNodeTemp())) {
-            createPathViewModel.setUtilNodeTemp(iteratorNode.next());
-        } else if(adjacentNode.size() > 0){
-            createPathViewModel.setUtilNodeTemp(Iterables.getLast(Traverser.forTree(createPathViewModel.getGraphDataset()).breadthFirst(createPathViewModel.getUtilNodeTemp())));
+        if (adjacentNode.size() > 0 && nodeToRemove.equals(cePathViewModel.getUtilNodeTemp())) {
+            cePathViewModel.setUtilNodeTemp(iteratorNode.next());
+        } else if (adjacentNode.size() > 0) {
+            cePathViewModel.setUtilNodeTemp(Iterables.getLast(Traverser.forTree(cePathViewModel.getGraphDataset()).breadthFirst(cePathViewModel.getUtilNodeTemp())));
         } else {
-            createPathViewModel.setUtilNodeTemp(null);
+            cePathViewModel.setUtilNodeTemp(null);
         }
     }
 
