@@ -57,13 +57,13 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
 
         // TODO: Read Paths API
         paths = new ArrayList<>();
-        //paths.add(new Path(1, "Percorso 1", "Museo 1", "Indirizzo 1", null));
-        //paths.add(new Path(2, "Percorso 2", "Museo 2", "Indirizzo 1", null));
-        //paths.add(new Path(3, "Percorso 3", "Museo 3", "Indirizzo 3", null));
+        paths.add(new Path("Path3"));
+        paths.add(new Path("Path2"));
+        paths.add(new Path("Path1"));
         mDataset = new ArrayList<>();
         mDataset.addAll(paths);
 
-        //mAdapter = new PathsAdapter(requireContext(), getParentFragmentManager(), mDataset);
+        mAdapter = new PathsAdapter(requireContext(), getParentFragmentManager(), mDataset);
         mRecyclerView.setAdapter(mAdapter);
 
         txtResults = view.findViewById(R.id.txtResults);

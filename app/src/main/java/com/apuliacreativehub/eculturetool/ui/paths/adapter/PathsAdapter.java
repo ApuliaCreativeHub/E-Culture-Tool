@@ -44,7 +44,6 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
     private final Context context;
     private final FragmentManager fragmentManager;
     private final ArrayList<Path> dataSet;
-    private final Place place;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView cardPath;
@@ -83,11 +82,10 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         }
     }
 
-    public PathsAdapter(Context context, FragmentManager fragmentManager, ArrayList<Path> dataSet, Place place) {
+    public PathsAdapter(Context context, FragmentManager fragmentManager, ArrayList<Path> dataSet) {
         this.context = context;
         this.fragmentManager = fragmentManager;
         this.dataSet = dataSet;
-        this.place = place;
     }
 
     @Override @NonNull
@@ -99,7 +97,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.getTextPathName().setText(this.dataSet.get(position).getName());
-        String placeNameAndAddress = place.getName() + " - " + place.getAddress();
+        String placeNameAndAddress = "Place STUB" + " - " + "Place STUB";
         viewHolder.getTextPlaceNameAndAddress().setText(placeNameAndAddress);
         viewHolder.getBtnOptions().setOnClickListener(view -> showMenu(view, R.menu.context_menu_path, position));
         viewHolder.getCardPath().setOnClickListener(
