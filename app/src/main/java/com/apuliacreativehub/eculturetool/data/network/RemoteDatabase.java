@@ -2,7 +2,7 @@ package com.apuliacreativehub.eculturetool.data.network;
 
 import androidx.annotation.NonNull;
 
-import com.apuliacreativehub.eculturetool.data.TokenManager;
+import com.apuliacreativehub.eculturetool.data.UserPreferencesManager;
 
 import java.io.IOException;
 
@@ -18,7 +18,7 @@ public abstract class RemoteDatabase {
         @Override
         public Response intercept(Interceptor.Chain chain) throws IOException {
             Request newRequest = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer " + TokenManager.getToken())
+                    .addHeader("Authorization", "Bearer " + UserPreferencesManager.getToken())
                     .build();
             return chain.proceed(newRequest);
         }
