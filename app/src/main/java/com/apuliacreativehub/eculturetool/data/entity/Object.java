@@ -14,7 +14,7 @@ public class Object {
     @ColumnInfo(name = "uri_img")
     private String uriImg;
 
-    @ColumnInfo(name="name")
+    @ColumnInfo(name = "name")
     private String name;
 
     @ColumnInfo(name = "description")
@@ -24,6 +24,9 @@ public class Object {
     private int zoneId;
 
     private String normalSizeImg;
+
+    @Ignore
+    private Zone zone;
 
     public Object() {
     }
@@ -105,5 +108,13 @@ public class Object {
 
     public void setZoneId(int zoneId) {
         this.zoneId = zoneId;
+    }
+
+    public Zone getZone() {
+        return zone;
+    }
+
+    public void setZone(Zone zone) {
+        this.zone = zone;
     }
 }

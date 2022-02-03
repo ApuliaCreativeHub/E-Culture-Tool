@@ -336,11 +336,15 @@ public class PathRepository {
                         localPathDAO.insertPath(path);
                         int i = 1;
                         for (Object object : path.getObjects()) {
+                            Zone zone;
+                            if (object.getZone() == null) zone = new Zone(object.getZoneId());
+                            else zone = object.getZone();
+                            if (path.getPlace() != null)
+                                zone.setPlaceId(path.getPlace().getId());
                             if (localZoneDAO.getZoneById(object.getZoneId()) == null) {
-                                Zone zone = new Zone(object.getZoneId());
-                                if (path.getPlace() != null)
-                                    zone.setPlaceId(path.getPlace().getId());
                                 localZoneDAO.insertZone(zone);
+                            } else {
+                                localZoneDAO.updateZone(zone);
                             }
                             if (localObjectDAO.getObjectById(object.getId()) == null) {
                                 localObjectDAO.insertObject(object);
