@@ -119,7 +119,7 @@ public class CreatePathFragment extends Fragment implements ConfirmationDialog.C
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_create_path, container, false);
+        view = inflater.inflate(R.layout.fragment_build_path, container, false);
         return view;
     }
 
@@ -127,7 +127,7 @@ public class CreatePathFragment extends Fragment implements ConfirmationDialog.C
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Toolbar toolbar = view.findViewById(R.id.createPathToolbar);
+        Toolbar toolbar = view.findViewById(R.id.buildPathToolbar);
         toolbar.setTitle(R.string.create_place_path);
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v -> new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_discard_path_changes), "DISCARD_PATH_CHANGES").show(getChildFragmentManager(), Dialog.TAG));
@@ -139,7 +139,7 @@ public class CreatePathFragment extends Fragment implements ConfirmationDialog.C
 
         createPathViewModel.getObjectsDataset().observe(this, readyDatasetObserver);
 
-        FloatingActionButton confirmFab = view.findViewById(R.id.btnCreatePath);
+        FloatingActionButton confirmFab = view.findViewById(R.id.btnSavePath);
         confirmFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,7 +177,7 @@ public class CreatePathFragment extends Fragment implements ConfirmationDialog.C
     }
 
     private void setDynamicArtifactRecycleView() {
-        recyclerObjectsGridView = view.findViewById(R.id.recyclerContainerCreateObject);
+        recyclerObjectsGridView = view.findViewById(R.id.recyclerContainerBuildObject);
         gridLayoutManager = new GridLayoutManager(getContext(), NUMBER_COLUMN);
         recyclerObjectsGridView.setLayoutManager(gridLayoutManager);
         listObjectsCreateAdapter = new ListObjectsCreateAdapter(requireContext(), R.layout.component_card_link_artifact, createPathViewModel, listCircleObjectsAdapter);
