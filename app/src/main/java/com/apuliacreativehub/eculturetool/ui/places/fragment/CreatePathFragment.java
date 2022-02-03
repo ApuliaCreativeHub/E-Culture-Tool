@@ -18,14 +18,12 @@ import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionEx
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
-import com.apuliacreativehub.eculturetool.ui.places.adapter.ListObjectsCreateAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CreatePathViewModel;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class CreatePathFragment extends CEPathFragment {
-    private HashMap<String, ListObjectsCreateAdapter> objectsAdapter;
     final Observer<RepositoryNotification<HashMap<String, List<NodeObject>>>> readyDatasetObserver = new Observer<RepositoryNotification<HashMap<String, List<NodeObject>>>>() {
         @Override
         public void onChanged(RepositoryNotification<HashMap<String, List<NodeObject>>> notification) {
@@ -76,8 +74,6 @@ public class CreatePathFragment extends CEPathFragment {
         AdapterView.OnItemClickListener adapterViewOnItemClickListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                recyclerObjectsGridView.setAdapter(objectsAdapter.get(cePathViewModel.getZones().get(position).getName()));
-
                 if (autoCompleteTextView.getInputType() != EditorInfo.TYPE_NULL)
                     autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
 
@@ -101,7 +97,6 @@ public class CreatePathFragment extends CEPathFragment {
     protected void initializeViewModel() {
         cePathViewModel = new ViewModelProvider(this).get(CreatePathViewModel.class);
         cePathViewModel.setPlace(place);
-        objectsAdapter = new HashMap<>();
     }
 
     @Override
