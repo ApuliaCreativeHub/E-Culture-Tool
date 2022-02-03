@@ -14,8 +14,8 @@ public interface RemotePathDAO {
     @POST("path/add")
     Call<Path> addPath(@Body Path path);
 
-    @GET("path/getYourPaths")
-    Call<List<Path>> getYourPaths(@Query("userId") int userId);
+    @GET("path/getUserPaths")
+    Call<List<Path>> getYourPaths();
 
     @GET("path/getPlacePaths")
     Call<List<Path>> getPlacePaths(@Query("placeId") int placeId);

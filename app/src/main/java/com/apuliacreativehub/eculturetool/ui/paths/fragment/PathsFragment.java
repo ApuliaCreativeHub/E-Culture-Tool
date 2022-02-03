@@ -17,17 +17,27 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
+import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
+import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtils;
 import com.apuliacreativehub.eculturetool.ui.paths.ModalBottomSheetPaths;
 import com.apuliacreativehub.eculturetool.ui.paths.adapter.PathsAdapter;
+import com.apuliacreativehub.eculturetool.ui.paths.viewmodel.PathViewModel;
+import com.apuliacreativehub.eculturetool.ui.places.adapter.CardPlaceAdapter;
+import com.apuliacreativehub.eculturetool.ui.places.viewmodel.ShowPlacesViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class PathsFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
@@ -37,12 +47,37 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
     private RecyclerView mRecyclerView;
     private ConstraintLayout containerNoResult;
     private PathsAdapter mAdapter;
-    private ArrayList<Path> mDataset;
-    private ArrayList<Path> paths;
+    private List<Path> mDataset;
+    private List<Path> paths;
     private Toolbar toolbar;
     private ModalBottomSheetPaths modalBottomSheet;
     private TextView txtResults;
+    private PathViewModel pathViewModel;
+
     private int pathId;
+    final Observer<RepositoryNotification<List<Path>>> getYourPlacesObserver = notification -> {
+        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        if (notification.getException() == null) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(notification.getData()));
+            if (notification.getErrorMessage() == null) {
+                paths = notification.getData();
+                mDataset = new ArrayList<>();
+                mDataset.addAll(paths);
+
+                mAdapter = new PathsAdapter(requireContext(), getParentFragmentManager(), mDataset);
+                mRecyclerView.setAdapter(mAdapter);
+                show();
+            } else {
+                Log.d("Dialog", "show dialog here");
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_PLACES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        } else {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_PLACES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,24 +85,14 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
 
         modalBottomSheet = new ModalBottomSheetPaths();
         containerNoResult = view.findViewById(R.id.noResultsLayoutPaths);
+        txtResults = view.findViewById(R.id.txtResults);
 
         mRecyclerView = view.findViewById(R.id.userListPaths);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // TODO: Read Paths API
-        paths = new ArrayList<>();
-        paths.add(new Path("Path3"));
-        paths.add(new Path("Path2"));
-        paths.add(new Path("Path1"));
-        mDataset = new ArrayList<>();
-        mDataset.addAll(paths);
-
-        mAdapter = new PathsAdapter(requireContext(), getParentFragmentManager(), mDataset);
-        mRecyclerView.setAdapter(mAdapter);
-
-        txtResults = view.findViewById(R.id.txtResults);
-        show();
+        pathViewModel = new ViewModelProvider(this).get(PathViewModel.class);
+        pathViewModel.getYourPaths().observe(getViewLifecycleOwner(), getYourPlacesObserver);
 
         return view;
     }

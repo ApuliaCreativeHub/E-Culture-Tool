@@ -15,8 +15,8 @@ public interface LocalPathDAO {
     @Insert
     void insertPath(Path path);
 
-    @Query("SELECT * FROM path WHERE user_id=:userId")
-    List<Path> getAllPathsByUserId(int userId);
+    @Query("SELECT * FROM path")
+    List<Path> getAllYourPaths();
 
     @Query("SELECT path.* FROM path " +
             "JOIN isPresentIn ON path.path_id=isPresentIn.path_id " +
@@ -27,12 +27,14 @@ public interface LocalPathDAO {
             "GROUP BY path.path_id")
     List<Path> getAllPathsByPlaceId(int placeId);
 
+    @Query("SELECT * FROM path WHERE path_id=:pathId")
+    Path getPathById(int pathId);
+
     @Update
     void updatePath(Path path);
 
     @Delete
     void deletePath(Path path);
 
-    @Query("SELECT * FROM path WHERE path_id=:pathId")
-    Path getPathById(int pathId);
+
 }

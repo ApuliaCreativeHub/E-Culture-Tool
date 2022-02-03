@@ -17,6 +17,8 @@ import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDAO;
 import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDatabase;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -62,7 +64,7 @@ public class PathRepository {
                 RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(response.body());
-                    saveRemotePathsToLocal(repositoryNotification.getData());
+                    //saveRemotePathsToLocal(repositoryNotification.getData());
                 } else {
                     if (response.errorBody() != null) {
                         repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -102,7 +104,7 @@ public class PathRepository {
                 RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(response.body());
-                    saveRemotePathsToLocal(repositoryNotification.getData());
+                    //saveRemotePathsToLocal(repositoryNotification.getData());
                 } else {
                     if (response.errorBody() != null) {
                         repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -178,7 +180,7 @@ public class PathRepository {
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(response.body());
                     // Add path to local database too
-                    //saveRemotePathsToLocal(Collections.singletonList(response.body()));
+                    saveRemotePathsToLocal(Collections.singletonList(response.body()));
                 } else {
                     if (response.errorBody() != null) {
                         repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -218,7 +220,7 @@ public class PathRepository {
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(path);
                     // Edit path on local database too
-                    //saveRemotePathsToLocal(Collections.singletonList(path));
+                    saveRemotePathsToLocal(Collections.singletonList(path));
                 } else {
                     if (response.errorBody() != null) {
                         repositoryNotification.setErrorMessage(response.errorBody().string());
@@ -274,5 +276,63 @@ public class PathRepository {
             }
         });
         return deleteResult;
+    }
+
+    public MutableLiveData<RepositoryNotification<List<Path>>> getYourPaths(){
+        MutableLiveData<RepositoryNotification<List<Path>>> getResult;
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            getResult = getYourPathsFromRemoteDatabase();
+        } else {
+            Log.d("SHOULDFETCH", "local");
+            getResult = getYourPathsFromLocalDatabase();
+        }
+
+        return getResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<List<Path>>> getYourPathsFromLocalDatabase() {
+        MutableLiveData<RepositoryNotification<List<Path>>> getResult = new MutableLiveData<>();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
+                List<Path> paths = localPathDAO.getAllYourPaths();
+                for (int i = 0; i < paths.size(); i++) {
+                    paths.get(i).setObjects(localObjectDAO.getObjectsByPathId(paths.get(i).getId()));
+                }
+                repositoryNotification.setData(paths);
+                getResult.postValue(repositoryNotification);
+            }
+        });
+
+        return getResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<List<Path>>> getYourPathsFromRemoteDatabase() {
+        MutableLiveData<RepositoryNotification<List<Path>>> getResult = new MutableLiveData<>();
+        Call<List<Path>> call = remotePathDAO.getYourPaths();
+        executor.execute(() -> {
+            try {
+                Response<List<Path>> response = call.execute();
+                Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
+                if (response.isSuccessful()) {
+                    repositoryNotification.setData(response.body());
+                    saveRemotePathsToLocal(repositoryNotification.getData());
+                } else {
+                    if (response.errorBody() != null) {
+                        repositoryNotification.setErrorMessage(response.errorBody().string());
+                    }
+                }
+                getResult.postValue(repositoryNotification);
+            } catch (IOException ioe) {
+                RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
+                repositoryNotification.setException(ioe);
+                getResult.postValue(repositoryNotification);
+                Log.e("RETROFITERROR", ioe.getMessage());
+            }
+        });
+        return getResult;
     }
 }
