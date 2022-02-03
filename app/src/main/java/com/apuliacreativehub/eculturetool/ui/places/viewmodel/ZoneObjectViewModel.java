@@ -16,8 +16,7 @@ import com.apuliacreativehub.eculturetool.di.ECultureTool;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: Rename class
-public class SomethingViewModel extends AndroidViewModel {
+public class ZoneObjectViewModel extends AndroidViewModel {
     protected final ZoneRepository zoneRepository;
     protected final ObjectRepository objectRepository;
     private final List<String> zoneNames;
@@ -26,7 +25,7 @@ public class SomethingViewModel extends AndroidViewModel {
     private String currentlySelectedZoneName = "";
 
 
-    public SomethingViewModel(@NonNull Application application) {
+    public ZoneObjectViewModel(@NonNull Application application) {
         super(application);
         ECultureTool app = getApplication();
         zoneNames = new ArrayList<>();

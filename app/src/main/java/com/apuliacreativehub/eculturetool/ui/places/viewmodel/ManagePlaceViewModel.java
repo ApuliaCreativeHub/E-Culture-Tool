@@ -12,7 +12,7 @@ import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification
 
 import java.util.ArrayList;
 
-public class ManagePlaceViewModel extends SomethingViewModel {
+public class ManagePlaceViewModel extends ZoneObjectViewModel {
     public ManagePlaceViewModel(Application application) {
         super(application);
     }

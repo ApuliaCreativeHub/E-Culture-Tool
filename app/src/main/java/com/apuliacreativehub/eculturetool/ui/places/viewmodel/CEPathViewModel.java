@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CEPathViewModel extends SomethingViewModel {
+public class CEPathViewModel extends ZoneObjectViewModel {
     protected final PathRepository pathRepository;
     private final MutableGraph<NodeObject> graphDataset;
     private String pathName;
