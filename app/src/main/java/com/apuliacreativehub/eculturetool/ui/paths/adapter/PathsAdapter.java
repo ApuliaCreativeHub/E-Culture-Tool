@@ -27,6 +27,7 @@ import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.ui.LandscapeActivity;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
 import com.google.android.material.card.MaterialCardView;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -113,12 +114,10 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             switch(menuItem.getItemId()) {
                 case SHARE_PATH:
-                    // TODO: Parse JSON Path Here
-                    sharePath("JSON Parse");
+                    sharePath(new Gson().toJson(this.dataSet.get(position)));
                     break;
                 case DOWNLOAD_PATH:
-                    // TODO: Parse JSON Path Here
-                    downloadPath("JSON Parse");
+                    downloadPath(new Gson().toJson(this.dataSet.get(position)));
                     break;
                 case EDIT_PATH:
                     // TODO: Read Path API
