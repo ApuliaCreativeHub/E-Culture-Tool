@@ -32,7 +32,7 @@ import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtils;
 import com.apuliacreativehub.eculturetool.ui.paths.ModalBottomSheetPaths;
 import com.apuliacreativehub.eculturetool.ui.paths.adapter.PathsAdapter;
-import com.apuliacreativehub.eculturetool.ui.paths.viewmodel.PathViewModel;
+import com.apuliacreativehub.eculturetool.ui.paths.viewmodel.PathsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
     private Toolbar toolbar;
     private ModalBottomSheetPaths modalBottomSheet;
     private TextView txtResults;
-    private PathViewModel pathViewModel;
+    private PathsViewModel pathsViewModel;
 
     private final Observer<RepositoryNotification<Path>> deleteObserver = new Observer<RepositoryNotification<Path>>() {
         @Override
@@ -60,8 +60,8 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
                 if (notification.getErrorMessage() == null) {
                     mDataset.clear();
-                    pathViewModel.removePathFromList(notification.getData().getId());
-                    mDataset.addAll(pathViewModel.getPaths());
+                    pathsViewModel.removePathFromList(notification.getData().getId());
+                    mDataset.addAll(pathsViewModel.getPaths());
                     mAdapter.notifyDataSetChanged();
                     show();
                 } else {
@@ -82,9 +82,9 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", String.valueOf(notification.getData()));
             if (notification.getErrorMessage() == null) {
-                pathViewModel.setPaths(notification.getData());
+                pathsViewModel.setPaths(notification.getData());
                 mDataset = new ArrayList<>();
-                mDataset.addAll(pathViewModel.getPaths());
+                mDataset.addAll(pathsViewModel.getPaths());
 
                 mAdapter = new PathsAdapter(requireContext(), getParentFragmentManager(), mDataset);
                 mRecyclerView.setAdapter(mAdapter);
@@ -112,9 +112,9 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        pathViewModel = new ViewModelProvider(this).get(PathViewModel.class);
-        if(pathViewModel.getPaths() == null) {
-            pathViewModel.getYourPaths().observe(getViewLifecycleOwner(), getYourPlacesObserver);
+        pathsViewModel = new ViewModelProvider(this).get(PathsViewModel.class);
+        if (pathsViewModel.getPaths() == null) {
+            pathsViewModel.getYourPaths().observe(getViewLifecycleOwner(), getYourPlacesObserver);
         }
 
         return view;
@@ -132,15 +132,15 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
             public boolean onQueryTextSubmit(String query) {
                 mDataset.clear();
 
-                for(Path path : pathViewModel.getPaths()) {
-                    if((modalBottomSheet.getFilterPathName() && path.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
+                for (Path path : pathsViewModel.getPaths()) {
+                    if ((modalBottomSheet.getFilterPathName() && path.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
                             || (modalBottomSheet.getFilterPlaceName() && path.getPlace().getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
                             || (modalBottomSheet.getFilterPlaceAddress() && path.getPlace().getAddress().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))))
-                            mDataset.add(path);
+                        mDataset.add(path);
 
-                    if(modalBottomSheet.getFilterObjectInPath()) {
-                        for(int i = 0; i < path.getObjects().size(); i++){
-                            if(path.getObjects().get(i).getName().toLowerCase(Locale.ROOT).contains((query.toLowerCase(Locale.ROOT)))){
+                    if (modalBottomSheet.getFilterObjectInPath()) {
+                        for (int i = 0; i < path.getObjects().size(); i++) {
+                            if (path.getObjects().get(i).getName().toLowerCase(Locale.ROOT).contains((query.toLowerCase(Locale.ROOT)))) {
                                 mDataset.add(path);
                             }
                         }
@@ -165,7 +165,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
         getParentFragmentManager().setFragmentResultListener("pathKey", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
-                pathViewModel.setPathIdToRemove(bundle.getInt("pathId"));
+                pathsViewModel.setPathIdToRemove(bundle.getInt("pathId"));
                 showNoticeDialog();
             }
         });
@@ -180,7 +180,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i("Response", "AOPOSITIVE");
         try {
-            pathViewModel.deletePath().observe(this, deleteObserver);
+            pathsViewModel.deletePath().observe(this, deleteObserver);
         } catch (NoInternetConnectionException e) {
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
         }
@@ -207,7 +207,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
                     break;
                 case SEARCH_PATHS:
                     mDataset.clear();
-                    mDataset.addAll(pathViewModel.getPaths());
+                    mDataset.addAll(pathsViewModel.getPaths());
                     mAdapter.notifyDataSetChanged();
                     show();
                     break;
