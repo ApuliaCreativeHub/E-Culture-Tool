@@ -108,9 +108,6 @@ public class PlacePathsFragment extends Fragment {
         super.onStart();
         Button btnCreateNewPath = view.findViewById(R.id.btnCreateNewPath);
         btnCreateNewPath.setOnClickListener(view -> {
-            // TODO: Remove fake place
-            Place place = new Place();
-            place.setId(82);
             TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new CreatePathFragment(place));
         });
     }
