@@ -20,7 +20,6 @@ import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDAO;
 import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDatabase;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -145,29 +144,6 @@ public class PathRepository {
         });
 
         return getResult;
-    }
-
-    private void saveRemotePathsToLocal(List<Path> paths) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (Path path : paths) {
-                    if (localPathDAO.getPathById(path.getId()) == null) {
-                        localPathDAO.insertPath(path);
-                        int i = 1;
-                        for (Object object : path.getObjects()) {
-                            if(localObjectDAO.getObjectById(object.getId()) == null){
-                                localObjectDAO.insertObject(object);
-                            }else {
-                                localObjectDAO.updateObject(object);
-                            }
-                            localIsPresentInDAO.insertRelation(new IsPresentIn(object.getId(), path.getId(), i));
-                            i++;
-                        }
-                    } else localPathDAO.updatePath(path);
-                }
-            }
-        });
     }
 
     public MutableLiveData<RepositoryNotification<Path>> addPath(Path path) throws NoInternetConnectionException {
@@ -351,11 +327,40 @@ public class PathRepository {
         return getResult;
     }
 
+    private void saveRemotePathsToLocal(List<Path> paths) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (Path path : paths) {
+                    if (localPathDAO.getPathById(path.getId()) == null) {
+                        localPathDAO.insertPath(path);
+                        int i = 1;
+                        for (Object object : path.getObjects()) {
+                            if (localZoneDAO.getZoneById(object.getZoneId()) == null) {
+                                Zone zone = new Zone(object.getZoneId());
+                                if (path.getPlace() != null)
+                                    zone.setPlaceId(path.getPlace().getId());
+                                localZoneDAO.insertZone(zone);
+                            }
+                            if (localObjectDAO.getObjectById(object.getId()) == null) {
+                                localObjectDAO.insertObject(object);
+                            } else {
+                                localObjectDAO.updateObject(object);
+                            }
+                            localIsPresentInDAO.insertRelation(new IsPresentIn(object.getId(), path.getId(), i));
+                            i++;
+                        }
+                    } else localPathDAO.updatePath(path);
+                }
+            }
+        });
+    }
+
     private void saveRemotePlaceToLocal(List<Path> paths) {
-        for(Path path : paths){
-            if(localPlaceDAO.getPlaceById(path.getPlace().getId()) == null){
+        for (Path path : paths) {
+            if (localPlaceDAO.getPlaceById(path.getPlace().getId()) == null) {
                 localPlaceDAO.insertPlace(path.getPlace());
-            }else {
+            } else {
                 localPlaceDAO.updatePlace(path.getPlace());
             }
         }
