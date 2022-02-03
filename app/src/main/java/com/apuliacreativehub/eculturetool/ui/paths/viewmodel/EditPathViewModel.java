@@ -43,8 +43,7 @@ public class EditPathViewModel extends CEPathViewModel {
     }
 
     public NodeObject getNodeObjectFromObjectsDatasetById(int objectId) {
-        // TODO: Find object in objectsDataset by id
-        return new NodeObject(new Object());
+        return findObjectByIdInObjectsDataset(objectId);
     }
 
     public MutableLiveData<RepositoryNotification<Path>> editPath() throws NoInternetConnectionException {

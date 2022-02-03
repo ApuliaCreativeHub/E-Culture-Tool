@@ -9,7 +9,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.apuliacreativehub.eculturetool.data.entity.Object;
+import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.PathRepository;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
@@ -152,5 +154,25 @@ public class CEPathViewModel extends ZoneObjectViewModel {
         setUtilNodeTemp(newNode);
     }
 
+    public NodeObject findObjectByIdInObjectsDataset(int objectId) {
+        for (List<NodeObject> zoneNodeObjects : objectsDataset.getValue().getData().values()) {
+            for (NodeObject nodeObject : zoneNodeObjects) {
+                if (nodeObject.getId() == objectId) {
+                    return nodeObject;
+                }
+            }
+        }
+        return null;
+    }
 
+    public MutableLiveData<RepositoryNotification<Path>> addPath() throws NoInternetConnectionException {
+        Path path = new Path(getPathName());
+        List<Object> objects = new ArrayList<>();
+        for (int i = 0; i < getOrderedObjects().size(); i++) {
+            int objectId = getOrderedObjects().get(i);
+            objects.add(new Object(objectId));
+        }
+        path.setObjects(objects);
+        return pathRepository.addPath(path);
+    }
 }

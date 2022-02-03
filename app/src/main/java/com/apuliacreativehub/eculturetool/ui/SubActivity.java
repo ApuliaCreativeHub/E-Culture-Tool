@@ -50,6 +50,7 @@ public class SubActivity extends AppCompatActivity {
                     TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new EditProfileFragment());
                     break;
                 case EDIT_PATH_FRAGMENT:
+                    // TODO: Enable the following transaction passing Place and Path object in a parcelable
                     //TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new EditPathFragment());
                     break;
             }

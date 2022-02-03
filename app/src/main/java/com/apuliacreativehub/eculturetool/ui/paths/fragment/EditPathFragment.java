@@ -43,7 +43,7 @@ public class EditPathFragment extends Fragment {
     private static final int NUMBER_COLUMN = 2;
     private static final int MIN_LENGTH_NAME = 2;
     private static final int MAX_LENGTH_NAME = 25;
-    final Observer<RepositoryNotification<Path>> editPathObserver = new Observer<RepositoryNotification<Path>>() {
+    final Observer<RepositoryNotification<Path>> savePathObserver = new Observer<RepositoryNotification<Path>>() {
         @Override
         public void onChanged(RepositoryNotification<Path> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
@@ -110,7 +110,7 @@ public class EditPathFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_create_path, container, false);
+        view = inflater.inflate(R.layout.fragment_edit_path, container, false);
         return view;
     }
 
@@ -130,7 +130,7 @@ public class EditPathFragment extends Fragment {
 
         editPathViewModel.getObjectsDataset().observe(this, readyDatasetObserver);
 
-        FloatingActionButton confirmFab = view.findViewById(R.id.btnCreatePath);
+        FloatingActionButton confirmFab = view.findViewById(R.id.btnEditPath);
         confirmFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,13 +199,19 @@ public class EditPathFragment extends Fragment {
                 }
                 //TO GET FROM JSON TO HASHMAP: (WE NEED AN ARRAY OF ARTIFACT NOT OBJECT LIKE THIS, IS ONLY AN EXAMPLE)
                 editPathViewModel.setOrderedObjects(graphIdPath);
-                // TODO: Check whether user is the path place curator to edit path, else add as a new path
-                try {
-                    editPathViewModel.editPath().observe(this, editPathObserver);
-                } catch (NoInternetConnectionException e) {
-                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                if (editPathViewModel.getPath().getId() == editPathViewModel.getPlace().getId()) {
+                    try {
+                        editPathViewModel.editPath().observe(this, savePathObserver);
+                    } catch (NoInternetConnectionException e) {
+                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    }
+                } else {
+                    try {
+                        editPathViewModel.addPath().observe(this, savePathObserver);
+                    } catch (NoInternetConnectionException e) {
+                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    }
                 }
-
             } else {
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.path_error), "PATH_ERROR").show(getChildFragmentManager(), Dialog.TAG);
             }

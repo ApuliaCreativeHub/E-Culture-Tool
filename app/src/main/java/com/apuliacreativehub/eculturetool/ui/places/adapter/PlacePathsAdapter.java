@@ -1,5 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.places.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,11 +8,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
+import com.apuliacreativehub.eculturetool.ui.paths.fragment.EditPathFragment;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
@@ -20,6 +24,13 @@ public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.Vi
 
     private final List<Path> dataSet;
     private final Place place;
+    private final Context context;
+
+    public PlacePathsAdapter(Context context, List<Path> dataSet, Place place) {
+        this.context = context;
+        this.dataSet = dataSet;
+        this.place = place;
+    }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
@@ -28,14 +39,9 @@ public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.Vi
         viewHolder.getPathCard().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Go to edit/make from path screen
+                TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new EditPathFragment(place, dataSet.get(viewHolder.getBindingAdapterPosition())));
             }
         });
-    }
-
-    public PlacePathsAdapter(List<Path> dataSet, Place place) {
-        this.dataSet = dataSet;
-        this.place = place;
     }
 
     @Override

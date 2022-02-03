@@ -47,7 +47,7 @@ public class PlacePathsFragment extends Fragment {
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
                 if (notification.getErrorMessage() == null) {
                     placePathsViewModel.setPaths(notification.getData());
-                    PlacePathsAdapter mAdapter = new PlacePathsAdapter(notification.getData(), placePathsViewModel.getPlace());
+                    PlacePathsAdapter mAdapter = new PlacePathsAdapter(requireContext(), notification.getData(), placePathsViewModel.getPlace());
                     mRecyclerView.setAdapter(mAdapter);
 
                     TextView txtResults = view.findViewById(R.id.txtResults);
