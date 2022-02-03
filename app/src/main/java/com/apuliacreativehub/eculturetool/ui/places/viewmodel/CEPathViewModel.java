@@ -30,18 +30,6 @@ public class CEPathViewModel extends SomethingViewModel {
     private final HashMap<String, List<NodeObject>> tempObjectsDataset = new HashMap<>();
     private NodeObject utilNodeTemp;
     private MutableLiveData<RepositoryNotification<HashMap<String, List<NodeObject>>>> objectsDataset;
-
-    public CEPathViewModel(@NonNull Application application) {
-        super(application);
-        ECultureTool app = (ECultureTool) application;
-        pathRepository = new PathRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
-        graphDataset = GraphBuilder.directed().build();
-    }
-
-    public MutableGraph<NodeObject> getGraphDataset() {
-        return graphDataset;
-    }
-
     public Observer<RepositoryNotification<ArrayList<Zone>>> getZonesObserver = new Observer<RepositoryNotification<ArrayList<Zone>>>() {
         @Override
         public void onChanged(RepositoryNotification<ArrayList<Zone>> notification) {
@@ -64,24 +52,8 @@ public class CEPathViewModel extends SomethingViewModel {
             }
         }
     };
+
     private int i = 0;
-
-    public Map<Integer, Integer> getOrderedObjects() {
-        return orderedObjects;
-    }
-
-    public void setOrderedObjects(Map<Integer, Integer> orderedObjects) {
-        this.orderedObjects = orderedObjects;
-    }
-
-    public String getPathName() {
-        return pathName;
-    }
-
-    public void setPathName(String pathName) {
-        this.pathName = pathName;
-    }
-
     public Observer<RepositoryNotification<ArrayList<Object>>> getObjectsObserver = new Observer<RepositoryNotification<ArrayList<Object>>>() {
         @Override
         public void onChanged(RepositoryNotification<ArrayList<Object>> notification) {
@@ -108,6 +80,53 @@ public class CEPathViewModel extends SomethingViewModel {
         }
     };
 
+    public CEPathViewModel(@NonNull Application application) {
+        super(application);
+        ECultureTool app = (ECultureTool) application;
+        pathRepository = new PathRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
+        graphDataset = GraphBuilder.directed().build();
+    }
+
+    public MutableLiveData<RepositoryNotification<HashMap<String, List<NodeObject>>>> getObjectsDataset() {
+        if (objectsDataset == null) {
+            objectsDataset = new MutableLiveData<>();
+            populateObjectsDataset();
+        }
+        return objectsDataset;
+    }
+
+    private void setObjectsDatasetForNotification() {
+        RepositoryNotification<HashMap<String, List<NodeObject>>> notification = new RepositoryNotification<>();
+        notification.setData(tempObjectsDataset);
+        objectsDataset.postValue(notification);
+    }
+
+    public void populateObjectsDataset() {
+        if (super.getPlace() != null) {
+            zoneRepository.getAllPlaceZones(super.getPlace()).observeForever(getZonesObserver);
+        }
+    }
+
+    public MutableGraph<NodeObject> getGraphDataset() {
+        return graphDataset;
+    }
+
+    public Map<Integer, Integer> getOrderedObjects() {
+        return orderedObjects;
+    }
+
+    public void setOrderedObjects(Map<Integer, Integer> orderedObjects) {
+        this.orderedObjects = orderedObjects;
+    }
+
+    public String getPathName() {
+        return pathName;
+    }
+
+    public void setPathName(String pathName) {
+        this.pathName = pathName;
+    }
+
     public NodeObject getUtilNodeTemp() {
         return utilNodeTemp;
     }
@@ -133,23 +152,5 @@ public class CEPathViewModel extends SomethingViewModel {
         setUtilNodeTemp(newNode);
     }
 
-    public MutableLiveData<RepositoryNotification<HashMap<String, List<NodeObject>>>> getObjectsDataset() {
-        if (objectsDataset == null) {
-            objectsDataset = new MutableLiveData<>();
-            populateObjectsDataset();
-        }
-        return objectsDataset;
-    }
 
-    private void setObjectsDatasetForNotification() {
-        RepositoryNotification<HashMap<String, List<NodeObject>>> notification = new RepositoryNotification<>();
-        notification.setData(tempObjectsDataset);
-        objectsDataset.postValue(notification);
-    }
-
-    public void populateObjectsDataset() {
-        if (super.getPlace() != null) {
-            zoneRepository.getAllPlaceZones(super.getPlace()).observeForever(getZonesObserver);
-        }
-    }
 }
