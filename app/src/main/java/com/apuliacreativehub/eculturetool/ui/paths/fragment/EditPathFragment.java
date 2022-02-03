@@ -112,7 +112,7 @@ public class EditPathFragment extends Fragment implements ConfirmationDialog.Con
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_edit_path, container, false);
+        view = inflater.inflate(R.layout.fragment_create_path, container, false);
         return view;
     }
 
@@ -120,12 +120,16 @@ public class EditPathFragment extends Fragment implements ConfirmationDialog.Con
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Toolbar toolbar = view.findViewById(R.id.editPathToolbar);
-        toolbar.setTitle(R.string.edit_path_screen_title);
+        Toolbar toolbar = view.findViewById(R.id.createPathToolbar);
+        setToolbarTitle(toolbar);
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v ->
                 new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_discard_path_changes), "DISCARD_PATH_CHANGES").show(getChildFragmentManager(), Dialog.TAG)
         );
+    }
+
+    private void setToolbarTitle(Toolbar toolbar) {
+        toolbar.setTitle(R.string.edit_path_screen_title);
     }
 
     @Override
@@ -134,7 +138,7 @@ public class EditPathFragment extends Fragment implements ConfirmationDialog.Con
 
         editPathViewModel.getObjectsDataset().observe(this, readyDatasetObserver);
 
-        FloatingActionButton confirmFab = view.findViewById(R.id.btnEditPath);
+        FloatingActionButton confirmFab = view.findViewById(R.id.btnCreatePath);
         confirmFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
