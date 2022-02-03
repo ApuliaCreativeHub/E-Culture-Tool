@@ -35,6 +35,7 @@ import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> {
     private final static int SHARE_PATH = R.id.sharePath;
@@ -43,7 +44,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
     private final static int DELETE_PATH = R.id.deletePath;
     private final Context context;
     private final FragmentManager fragmentManager;
-    private final ArrayList<Path> dataSet;
+    private final List<Path> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView cardPath;
@@ -82,7 +83,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         }
     }
 
-    public PathsAdapter(Context context, FragmentManager fragmentManager, ArrayList<Path> dataSet) {
+    public PathsAdapter(Context context, FragmentManager fragmentManager, List<Path> dataSet) {
         this.context = context;
         this.fragmentManager = fragmentManager;
         this.dataSet = dataSet;

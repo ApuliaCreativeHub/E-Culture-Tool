@@ -56,6 +56,7 @@ public class CreatePathFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private ListObjectsCreateAdapter listObjectsCreateAdapter;
     private ListCircleObjectsAdapter listCircleObjectsAdapter;
+    private HashMap<String, ListObjectsCreateAdapter> objectsAdapter;
 
     final Observer<RepositoryNotification<HashMap<String, List<NodeObject>>>> readyDatasetObserver = new Observer<RepositoryNotification<HashMap<String, List<NodeObject>>>>() {
         @Override
@@ -111,6 +112,7 @@ public class CreatePathFragment extends Fragment {
         super.onCreate(savedInstanceState);
         createPathViewModel = new ViewModelProvider(this).get(CreatePathViewModel.class);
         createPathViewModel.setPlace(place);
+        objectsAdapter = new HashMap<>();
     }
 
     @Override
@@ -157,6 +159,8 @@ public class CreatePathFragment extends Fragment {
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                recyclerObjectsGridView.setAdapter(objectsAdapter.get(createPathViewModel.getZones().get(position).getName()));
+
                 if (autoCompleteTextView.getInputType() != EditorInfo.TYPE_NULL)
                     autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
 

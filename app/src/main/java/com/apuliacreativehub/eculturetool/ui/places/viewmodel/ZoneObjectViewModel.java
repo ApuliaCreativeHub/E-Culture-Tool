@@ -47,6 +47,10 @@ public class ZoneObjectViewModel extends AndroidViewModel {
 
     public void setZones(List<Zone> zones) {
         this.zones = zones;
+
+        for(Zone zone : zones){
+            zoneNames.add(zone.getName());
+        }
     }
 
     public void addZone(Zone zone) {
