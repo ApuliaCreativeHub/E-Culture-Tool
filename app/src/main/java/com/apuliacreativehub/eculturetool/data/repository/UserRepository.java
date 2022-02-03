@@ -6,8 +6,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.apuliacreativehub.eculturetool.data.entity.user.User;
 import com.apuliacreativehub.eculturetool.data.entity.user.UserWithToken;
+import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
 import com.apuliacreativehub.eculturetool.data.network.user.RemoteUserDAO;
 import com.apuliacreativehub.eculturetool.data.network.user.UserRemoteDatabase;
+import com.apuliacreativehub.eculturetool.di.ECultureTool;
 
 import java.io.IOException;
 import java.util.concurrent.Executor;
@@ -18,10 +20,15 @@ import retrofit2.Response;
 public class UserRepository{
     private final RemoteUserDAO remoteUserDAO;
     private final Executor executor;
+    private LocalDatabase localDatabase;
 
     public UserRepository(Executor executor) {
         remoteUserDAO = UserRemoteDatabase.provideRemoteUserDAO();
         this.executor = executor;
+    }
+
+    public void setLocalDatabase(LocalDatabase localDatabase){
+        this.localDatabase = localDatabase;
     }
 
     public MutableLiveData<RepositoryNotification<Void>> registerUser(User user) {
@@ -107,7 +114,7 @@ public class UserRepository{
         executor.execute(() -> {
             try {
                 Response<Void> response = call.execute();
-                // TODO: remove everything from local database
+                localDatabase.clearAllTables();
                 Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
             } catch (IOException ioe) {
                 Log.e("RETROFITERROR", ioe.getMessage());
