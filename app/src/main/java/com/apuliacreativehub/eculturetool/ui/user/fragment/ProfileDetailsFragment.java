@@ -3,6 +3,7 @@ package com.apuliacreativehub.eculturetool.ui.user.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,8 @@ import androidx.navigation.Navigation;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
+import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.apuliacreativehub.eculturetool.ui.user.viewmodel.LogoutViewModel;
 
 public class ProfileDetailsFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
@@ -74,10 +77,22 @@ public class ProfileDetailsFragment extends Fragment implements ConfirmationDial
         super.onStart();
 
         Button btnEdit = view.findViewById(R.id.btnEdit);
-        btnEdit.setOnClickListener(view -> startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PROFILE_FRAGMENT)));
-
         Button btnLogout = view.findViewById(R.id.btnLogout);
-        btnLogout.setOnClickListener(logout -> showNoticeDialog());
+
+        btnEdit.setOnClickListener(view -> {
+            if (Utils.checkConnection((ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE))) {
+                startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PROFILE_FRAGMENT));
+            } else {
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        });
+        btnLogout.setOnClickListener(logout -> {
+            if (Utils.checkConnection((ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE))) {
+                showNoticeDialog();
+            } else {
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        });
     }
 
     public void showNoticeDialog() {
