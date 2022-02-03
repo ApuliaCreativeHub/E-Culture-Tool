@@ -15,8 +15,8 @@ import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionEx
 import com.apuliacreativehub.eculturetool.data.repository.PathRepository;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
+import com.apuliacreativehub.eculturetool.ui.component.GuavaHelper;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
-import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
 
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class CEPathViewModel extends ZoneObjectViewModel {
         super(application);
         ECultureTool app = (ECultureTool) application;
         pathRepository = new PathRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
-        graphDataset = GraphBuilder.directed().build();
+        graphDataset = GuavaHelper.createInstance();
     }
 
     public MutableLiveData<RepositoryNotification<HashMap<String, List<NodeObject>>>> getObjectsDataset() {
