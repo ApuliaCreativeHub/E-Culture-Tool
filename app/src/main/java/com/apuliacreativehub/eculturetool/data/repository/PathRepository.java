@@ -9,10 +9,13 @@ import com.apuliacreativehub.eculturetool.data.entity.IsPresentIn;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
 import com.apuliacreativehub.eculturetool.data.local.LocalIsPresentInDAO;
 import com.apuliacreativehub.eculturetool.data.local.LocalObjectDAO;
 import com.apuliacreativehub.eculturetool.data.local.LocalPathDAO;
+import com.apuliacreativehub.eculturetool.data.local.LocalPlaceDAO;
+import com.apuliacreativehub.eculturetool.data.local.LocalZoneDAO;
 import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDAO;
 import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDatabase;
 
@@ -29,6 +32,8 @@ public class PathRepository {
     private final RemotePathDAO remotePathDAO;
     private final LocalPathDAO localPathDAO;
     private final LocalObjectDAO localObjectDAO;
+    private final LocalPlaceDAO localPlaceDAO;
+    private final LocalZoneDAO localZoneDAO;
     private final LocalIsPresentInDAO localIsPresentInDAO;
     private final ConnectivityManager connectivityManager;
     private final Executor executor;
@@ -38,6 +43,8 @@ public class PathRepository {
         localPathDAO = localDatabase.pathDAO();
         localIsPresentInDAO = localDatabase.isPresentInDAO();
         localObjectDAO = localDatabase.objectDAO();
+        localPlaceDAO = localDatabase.placeDAO();
+        localZoneDAO = localDatabase.zoneDAO();
         this.connectivityManager = connectivityManager;
         this.executor = executor;
     }
@@ -81,6 +88,7 @@ public class PathRepository {
         return getResult;
     }
 
+    //TODO: Remove this dead method
     public MutableLiveData<RepositoryNotification<List<Path>>> getAllPlacePaths(Place place) {
         MutableLiveData<RepositoryNotification<List<Path>>> getResult;
         if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
@@ -148,6 +156,11 @@ public class PathRepository {
                         localPathDAO.insertPath(path);
                         int i = 1;
                         for (Object object : path.getObjects()) {
+                            if(localObjectDAO.getObjectById(object.getId()) == null){
+                                localObjectDAO.insertObject(object);
+                            }else {
+                                localObjectDAO.updateObject(object);
+                            }
                             localIsPresentInDAO.insertRelation(new IsPresentIn(object.getId(), path.getId(), i));
                             i++;
                         }
@@ -299,6 +312,7 @@ public class PathRepository {
                 RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
                 List<Path> paths = localPathDAO.getAllYourPaths();
                 for (int i = 0; i < paths.size(); i++) {
+                    paths.get(i).setPlace(localPlaceDAO.getPlaceByPathId(paths.get(i).getId()));
                     paths.get(i).setObjects(localObjectDAO.getObjectsByPathId(paths.get(i).getId()));
                 }
                 repositoryNotification.setData(paths);
@@ -319,6 +333,7 @@ public class PathRepository {
                 RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
                     repositoryNotification.setData(response.body());
+                    saveRemotePlaceToLocal(repositoryNotification.getData());
                     saveRemotePathsToLocal(repositoryNotification.getData());
                 } else {
                     if (response.errorBody() != null) {
@@ -334,5 +349,15 @@ public class PathRepository {
             }
         });
         return getResult;
+    }
+
+    private void saveRemotePlaceToLocal(List<Path> paths) {
+        for(Path path : paths){
+            if(localPlaceDAO.getPlaceById(path.getPlace().getId()) == null){
+                localPlaceDAO.insertPlace(path.getPlace());
+            }else {
+                localPlaceDAO.updatePlace(path.getPlace());
+            }
+        }
     }
 }

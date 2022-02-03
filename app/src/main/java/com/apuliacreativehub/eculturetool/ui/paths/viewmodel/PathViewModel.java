@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.apuliacreativehub.eculturetool.data.entity.Path;
+import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.PathRepository;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
@@ -21,11 +22,21 @@ import java.util.List;
 
 public class PathViewModel extends AndroidViewModel {
     private PathRepository pathRepository;
+    private List<Path> paths;
+    private List<Place> places;
 
     public PathViewModel(@NonNull Application application) {
         super(application);
         ECultureTool app = (ECultureTool) application;
         pathRepository = new PathRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
+    }
+
+    public List<Path> getPaths() {
+        return paths;
+    }
+
+    public void setPaths(List<Path> paths) {
+        this.paths = paths;
     }
 
     public MutableLiveData<RepositoryNotification<List<Path>>> getYourPaths(){

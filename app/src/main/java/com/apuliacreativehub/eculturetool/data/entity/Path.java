@@ -22,6 +22,9 @@ public class Path {
     @Ignore
     private List<Object> objects;
 
+    @Ignore
+    private Place place;
+
     public Path(int id, String name) {
         this.id = id;
         this.name = name;
@@ -62,5 +65,13 @@ public class Path {
 
     public void setObjects(List<Object> objects) {
         this.objects = objects;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
     }
 }

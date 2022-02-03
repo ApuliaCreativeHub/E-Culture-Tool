@@ -48,22 +48,21 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
     private ConstraintLayout containerNoResult;
     private PathsAdapter mAdapter;
     private List<Path> mDataset;
-    private List<Path> paths;
     private Toolbar toolbar;
     private ModalBottomSheetPaths modalBottomSheet;
     private TextView txtResults;
     private PathViewModel pathViewModel;
-
     private int pathId;
+
     final Observer<RepositoryNotification<List<Path>>> getYourPlacesObserver = notification -> {
         ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
         if (notification.getException() == null) {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", String.valueOf(notification.getData()));
             if (notification.getErrorMessage() == null) {
-                paths = notification.getData();
+                pathViewModel.setPaths(notification.getData());
                 mDataset = new ArrayList<>();
-                mDataset.addAll(paths);
+                mDataset.addAll(pathViewModel.getPaths());
 
                 mAdapter = new PathsAdapter(requireContext(), getParentFragmentManager(), mDataset);
                 mRecyclerView.setAdapter(mAdapter);
@@ -92,7 +91,9 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         pathViewModel = new ViewModelProvider(this).get(PathViewModel.class);
-        pathViewModel.getYourPaths().observe(getViewLifecycleOwner(), getYourPlacesObserver);
+        if(pathViewModel.getPaths() == null) {
+            pathViewModel.getYourPaths().observe(getViewLifecycleOwner(), getYourPlacesObserver);
+        }
 
         return view;
     }
@@ -109,17 +110,19 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
             public boolean onQueryTextSubmit(String query) {
                 mDataset.clear();
 
-                /*for(Path path : paths) {
+                for(Path path : pathViewModel.getPaths()) {
                     if((modalBottomSheet.getFilterPathName() && path.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
-                            || (modalBottomSheet.getFilterPlaceName() && path.getPlaceName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
-                            || (modalBottomSheet.getFilterPlaceAddress() && path.getPlaceAddress().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))))
-                        mDataset.add(path);
-                }*/
+                            || (modalBottomSheet.getFilterPlaceName() && path.getPlace().getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
+                            || (modalBottomSheet.getFilterPlaceAddress() && path.getPlace().getAddress().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))))
+                        if(modalBottomSheet.getFilterObjectInPath()) {
+                            for(Object object : path.getObjects()){
 
-                if(modalBottomSheet.getFilterObjectInPath()) {
-                    // TODO: Perform BackEnd research if we want or delete this fragment of code and
-                    //       CheckBox in component_modal_bottom_sheet_paths.xml
+                            }
+                        }
+                        mDataset.add(path);
                 }
+
+
 
                 mAdapter.notifyDataSetChanged();
                 show();
@@ -176,7 +179,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
                     break;
                 case SEARCH_PATHS:
                     mDataset.clear();
-                    mDataset.addAll(paths);
+                    mDataset.addAll(pathViewModel.getPaths());
                     mAdapter.notifyDataSetChanged();
                     show();
                     break;

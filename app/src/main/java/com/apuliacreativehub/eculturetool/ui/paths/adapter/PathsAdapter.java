@@ -98,7 +98,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.getTextPathName().setText(this.dataSet.get(position).getName());
-        String placeNameAndAddress = "Place STUB" + " - " + "Place STUB";
+        String placeNameAndAddress = this.dataSet.get(position).getPlace().getName() + " - " + this.dataSet.get(position).getPlace().getAddress();
         viewHolder.getTextPlaceNameAndAddress().setText(placeNameAndAddress);
         viewHolder.getBtnOptions().setOnClickListener(view -> showMenu(view, R.menu.context_menu_path, position));
         viewHolder.getCardPath().setOnClickListener(
