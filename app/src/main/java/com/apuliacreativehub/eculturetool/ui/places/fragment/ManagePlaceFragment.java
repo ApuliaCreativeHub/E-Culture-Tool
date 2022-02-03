@@ -1,6 +1,8 @@
 package com.apuliacreativehub.eculturetool.ui.places.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,10 +33,12 @@ import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
+import com.apuliacreativehub.eculturetool.ui.SubActivity;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.QRCodeHelper;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
+import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListObjectsManageAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.ManagePlaceViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -244,24 +248,28 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         toolbar.setTitle(R.string.manage_place_screen_title);
         toolbar.inflateMenu(R.menu.top_menu_manage_place);
         toolbar.setOnMenuItemClickListener(item -> {
-            switch(item.getItemId()) {
-                case R.id.editPlaceInformation:
-                    TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new EditPlaceFragment(place));
-                    break;
-                case R.id.editArtifactByQrCode:
-                    // Initialize intent integrator
-                    IntentIntegrator intentIntegrator = IntentIntegrator.forSupportFragment(ManagePlaceFragment.this);
-                    // Set prompt text
-                    intentIntegrator.setPrompt(getString(R.string.scan_qrcode_prompt));
-                    // Set beep
-                    intentIntegrator.setBeepEnabled(true);
-                    // Locked orientation
-                    intentIntegrator.setOrientationLocked(true);
-                    // Set capture activity
-                    intentIntegrator.setCaptureActivity(QRCodeHelper.class);
-                    // Initialize scan
-                    intentIntegrator.initiateScan();
-                    break;
+            if (Utils.checkConnection((ConnectivityManager) requireActivity().getApplication().getSystemService(Context.CONNECTIVITY_SERVICE))) {
+                switch(item.getItemId()) {
+                    case R.id.editPlaceInformation:
+                        TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new EditPlaceFragment(place));
+                        break;
+                    case R.id.editArtifactByQrCode:
+                        // Initialize intent integrator
+                        IntentIntegrator intentIntegrator = IntentIntegrator.forSupportFragment(ManagePlaceFragment.this);
+                        // Set prompt text
+                        intentIntegrator.setPrompt(getString(R.string.scan_qrcode_prompt));
+                        // Set beep
+                        intentIntegrator.setBeepEnabled(true);
+                        // Locked orientation
+                        intentIntegrator.setOrientationLocked(true);
+                        // Set capture activity
+                        intentIntegrator.setCaptureActivity(QRCodeHelper.class);
+                        // Initialize scan
+                        intentIntegrator.initiateScan();
+                        break;
+                }
+            }else{
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
             }
             return true;
         });
@@ -364,10 +372,15 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         btnRoomOptions.setOnClickListener(view -> showMenu(view, R.menu.context_menu_room));
 
         FloatingActionButton btnCreateObject = view.findViewById(R.id.btnCreateObject);
-        btnCreateObject.setOnClickListener(view ->
-                TransactionHelper.transactionWithAddToBackStack(requireActivity(),
-                        R.id.fragment_container_layout,
-                        new CreateObjectFragment(managePlaceViewModel.getZonesBundle(), arrayOptionsAdapter))
+        btnCreateObject.setOnClickListener(view -> {
+                    if (Utils.checkConnection((ConnectivityManager) requireActivity().getApplication().getSystemService(Context.CONNECTIVITY_SERVICE))) {
+                        TransactionHelper.transactionWithAddToBackStack(requireActivity(),
+                                R.id.fragment_container_layout,
+                                new CreateObjectFragment(managePlaceViewModel.getZonesBundle(), arrayOptionsAdapter));
+                    } else {
+                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    }
+                }
         );
     }
 

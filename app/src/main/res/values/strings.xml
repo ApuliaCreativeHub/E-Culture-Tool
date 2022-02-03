@@ -159,6 +159,7 @@
     <string name="edit_path_screen_title">Edit Path</string>
     <string name="arrow">arrow</string>
     <string name="no_internet_connection">No internet connection</string>
+    <string name="edit_not_allowed">Can\'t edit</string>
     <item name="artifact_tag_id" type="id"></item>
     <plurals name="list_paths_results">
         <item quantity="one">Result: 1</item>
