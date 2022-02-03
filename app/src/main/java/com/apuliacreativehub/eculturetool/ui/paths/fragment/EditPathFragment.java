@@ -123,9 +123,9 @@ public class EditPathFragment extends Fragment implements ConfirmationDialog.Con
         Toolbar toolbar = view.findViewById(R.id.editPathToolbar);
         toolbar.setTitle(R.string.edit_path_screen_title);
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
-        toolbar.setNavigationOnClickListener(v -> {
-            new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_discard_path_changes), "DISCARD_PATH_CHANGES").show(getChildFragmentManager(), Dialog.TAG);
-        });
+        toolbar.setNavigationOnClickListener(v ->
+                new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_discard_path_changes), "DISCARD_PATH_CHANGES").show(getChildFragmentManager(), Dialog.TAG)
+        );
     }
 
     @Override
