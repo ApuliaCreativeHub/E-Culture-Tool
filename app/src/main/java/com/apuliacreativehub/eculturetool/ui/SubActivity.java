@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
+import com.apuliacreativehub.eculturetool.ui.paths.fragment.EditPathFragment;
 import com.apuliacreativehub.eculturetool.ui.places.fragment.PlacePathsFragment;
 import com.apuliacreativehub.eculturetool.ui.places.fragment.ShowPlacesFragment;
 import com.apuliacreativehub.eculturetool.ui.user.fragment.EditProfileFragment;
@@ -50,8 +51,7 @@ public class SubActivity extends AppCompatActivity {
                     TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new EditProfileFragment());
                     break;
                 case EDIT_PATH_FRAGMENT:
-                    // TODO: Enable the following transaction passing Place and Path object in a parcelable
-                    //TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new EditPathFragment());
+                    TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new EditPathFragment(extras.getParcelable("place"), extras.getParcelable("path")));
                     break;
             }
         }

@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
-import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.ui.LandscapeActivity;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
 import com.google.android.material.card.MaterialCardView;
@@ -34,7 +33,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -120,8 +118,10 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
                     downloadPath(new Gson().toJson(this.dataSet.get(position)));
                     break;
                 case EDIT_PATH:
-                    // TODO: Read Path API
-                    context.startActivity(new Intent(context, SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PATH_FRAGMENT));
+                    context.startActivity(
+                            new Intent(context, SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PATH_FRAGMENT)
+                                    .putExtra("place", dataSet.get(position).getPlace())
+                                    .putExtra("path", dataSet.get(position)));
                     break;
                 case DELETE_PATH:
                     Bundle result = new Bundle();
