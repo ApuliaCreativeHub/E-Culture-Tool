@@ -163,6 +163,7 @@ public class Place implements Parcelable {
         description = parcel.readString();
         lat = parcel.readString();
         lon = parcel.readString();
+        userId = parcel.readInt();
         uriImg = parcel.readString();
         normalSizeImg = parcel.readString();
         thumbnail = parcel.readString();
@@ -176,6 +177,7 @@ public class Place implements Parcelable {
         parcel.writeString(description);
         parcel.writeString(lat);
         parcel.writeString(lon);
+        parcel.writeInt(userId);
         parcel.writeString(uriImg);
         parcel.writeString(normalSizeImg);
         parcel.writeString(thumbnail);

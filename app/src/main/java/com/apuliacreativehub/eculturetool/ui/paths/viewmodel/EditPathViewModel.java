@@ -47,7 +47,7 @@ public class EditPathViewModel extends CEPathViewModel {
     }
 
     public MutableLiveData<RepositoryNotification<Path>> editPath() throws NoInternetConnectionException {
-        Path path = new Path(super.getPathName());
+        path.setName(getPathName());
         List<Object> objects = new ArrayList<>();
         for (int i = 0; i < super.getOrderedObjects().size(); i++) {
             int objectId = super.getOrderedObjects().get(i);

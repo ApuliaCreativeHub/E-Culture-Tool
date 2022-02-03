@@ -199,7 +199,7 @@ public class EditPathFragment extends Fragment {
                 }
                 //TO GET FROM JSON TO HASHMAP: (WE NEED AN ARRAY OF ARTIFACT NOT OBJECT LIKE THIS, IS ONLY AN EXAMPLE)
                 editPathViewModel.setOrderedObjects(graphIdPath);
-                if (editPathViewModel.getPath().getId() == editPathViewModel.getPlace().getId()) {
+                if (editPathViewModel.getPath().getUserId() == editPathViewModel.getPlace().getUserId()) {
                     try {
                         editPathViewModel.editPath().observe(this, savePathObserver);
                     } catch (NoInternetConnectionException e) {
