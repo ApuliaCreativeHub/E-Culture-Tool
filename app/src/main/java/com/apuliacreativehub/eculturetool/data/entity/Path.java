@@ -1,5 +1,8 @@
 package com.apuliacreativehub.eculturetool.data.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -8,7 +11,7 @@ import androidx.room.PrimaryKey;
 import java.util.List;
 
 @Entity
-public class Path {
+public class Path implements Parcelable {
     @PrimaryKey
     @ColumnInfo(name = "path_id")
     private int id;
@@ -38,6 +41,39 @@ public class Path {
     @Ignore
     public Path(String name) {
         this.name = name;
+    }
+
+    public static final Creator<Path> CREATOR = new Creator<Path>() {
+        @Override
+        public Path createFromParcel(Parcel in) {
+            return new Path(in);
+        }
+
+        @Override
+        public Path[] newArray(int size) {
+            return new Path[size];
+        }
+    };
+
+    protected Path(Parcel parcel) {
+        id = parcel.readInt();
+        name = parcel.readString();
+        userId = parcel.readInt();
+        place = parcel.readParcelable(Place.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeInt(userId);
+        parcel.writeArray(objects.toArray());
+        parcel.writeParcelable(place, 0);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public int getId() {
