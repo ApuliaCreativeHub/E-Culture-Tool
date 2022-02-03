@@ -31,6 +31,11 @@ public class Path {
     }
 
     @Ignore
+    public Path(int id) {
+        this.id = id;
+    }
+
+    @Ignore
     public Path(String name) {
         this.name = name;
     }

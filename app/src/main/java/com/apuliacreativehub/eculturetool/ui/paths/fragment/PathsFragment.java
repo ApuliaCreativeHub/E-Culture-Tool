@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
-import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
@@ -33,8 +33,6 @@ import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtils;
 import com.apuliacreativehub.eculturetool.ui.paths.ModalBottomSheetPaths;
 import com.apuliacreativehub.eculturetool.ui.paths.adapter.PathsAdapter;
 import com.apuliacreativehub.eculturetool.ui.paths.viewmodel.PathViewModel;
-import com.apuliacreativehub.eculturetool.ui.places.adapter.CardPlaceAdapter;
-import com.apuliacreativehub.eculturetool.ui.places.viewmodel.ShowPlacesViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +50,31 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
     private ModalBottomSheetPaths modalBottomSheet;
     private TextView txtResults;
     private PathViewModel pathViewModel;
-    private int pathId;
+
+    private final Observer<RepositoryNotification<Path>> deleteObserver = new Observer<RepositoryNotification<Path>>() {
+        @Override
+        public void onChanged(RepositoryNotification<Path> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage() == null) {
+                    mDataset.clear();
+                    pathViewModel.removePathFromList(notification.getData().getId());
+                    mDataset.addAll(pathViewModel.getPaths());
+                    mAdapter.notifyDataSetChanged();
+                    show();
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETE_PLACE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "DELETE_PLACE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            }
+        }
+    };
 
     final Observer<RepositoryNotification<List<Path>>> getYourPlacesObserver = notification -> {
         ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
@@ -143,7 +165,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
         getParentFragmentManager().setFragmentResultListener("pathKey", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
-                pathId = bundle.getInt("pathId");
+                pathViewModel.setPathIdToRemove(bundle.getInt("pathId"));
                 showNoticeDialog();
             }
         });
@@ -157,7 +179,12 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i("Response", "AOPOSITIVE");
-        // TODO: Delete Path API
+        try {
+            pathViewModel.deletePath().observe(this, deleteObserver);
+        } catch (NoInternetConnectionException e) {
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+        }
+
     }
 
     @Override
