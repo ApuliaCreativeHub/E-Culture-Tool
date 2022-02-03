@@ -66,7 +66,7 @@ public class EditPathFragment extends CEPathFragment {
         }
     };
 
-
+    // TODO: Add parameter to determine whether the screen has been reached from PlacePaths or Paths in order to change the toolbar up action behaviour accordingly
     public EditPathFragment(Place place, Path path) {
         super(place);
         setReadyDatasetObserver(readyDatasetObserver);
