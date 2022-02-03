@@ -1,6 +1,7 @@
 package com.apuliacreativehub.eculturetool.ui.places.adapter;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
+import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.apuliacreativehub.eculturetool.ui.places.fragment.EditObjectFragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -42,7 +44,7 @@ public class ListObjectsManageAdapter extends RecyclerView.Adapter<ListObjectsMa
         private ImageView imgObject;
         private TextView txtName;
 
-        public ViewHolder(View view, Context context) {
+        public ViewHolder(View view) {
             super(view);
             this.view = view;
 
@@ -93,7 +95,7 @@ public class ListObjectsManageAdapter extends RecyclerView.Adapter<ListObjectsMa
     @Override @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.component_card_artifact, viewGroup, false);
-        return new ViewHolder(view, context);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -107,7 +109,14 @@ public class ListObjectsManageAdapter extends RecyclerView.Adapter<ListObjectsMa
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(viewHolder.getImgObject());
         viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), this.dataSet.get(position).getDescription(), "OBJECT_DESCRIPTION").show(((AppCompatActivity)context).getSupportFragmentManager(), Dialog.TAG));
-        viewHolder.getBtnEditObject().setOnClickListener(v -> TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new EditObjectFragment(this.dataSet.get(position), bundleZoneNameId, listZones, inizialSelectedZone)));
+        if (!Utils.checkConnection((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE))) {
+            viewHolder.getBtnEditObject().setText(R.string.edit_not_allowed);
+        }
+        viewHolder.getBtnEditObject().setOnClickListener(v ->{
+            if (Utils.checkConnection((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE))) {
+                TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new EditObjectFragment(this.dataSet.get(position), bundleZoneNameId, listZones, inizialSelectedZone));
+            }
+        });
     }
 
     @Override
