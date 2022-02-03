@@ -114,15 +114,16 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
                     if((modalBottomSheet.getFilterPathName() && path.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
                             || (modalBottomSheet.getFilterPlaceName() && path.getPlace().getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
                             || (modalBottomSheet.getFilterPlaceAddress() && path.getPlace().getAddress().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))))
-                        if(modalBottomSheet.getFilterObjectInPath()) {
-                            for(Object object : path.getObjects()){
+                            mDataset.add(path);
 
+                    if(modalBottomSheet.getFilterObjectInPath()) {
+                        for(int i = 0; i < path.getObjects().size(); i++){
+                            if(path.getObjects().get(i).getName().toLowerCase(Locale.ROOT).contains((query.toLowerCase(Locale.ROOT)))){
+                                mDataset.add(path);
                             }
                         }
-                        mDataset.add(path);
+                    }
                 }
-
-
 
                 mAdapter.notifyDataSetChanged();
                 show();
