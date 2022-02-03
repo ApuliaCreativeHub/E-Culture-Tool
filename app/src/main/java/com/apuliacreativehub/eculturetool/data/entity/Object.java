@@ -1,12 +1,15 @@
 package com.apuliacreativehub.eculturetool.data.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Object {
+public class Object implements Parcelable {
     @PrimaryKey
     @ColumnInfo(name = "object_id")
     private int id;
@@ -60,6 +63,27 @@ public class Object {
         this.name = name;
         this.description = description;
         this.zoneId = zoneId;
+    }
+
+    public static final Creator<Object> CREATOR = new Creator<Object>() {
+        @Override
+        public Object createFromParcel(Parcel in) {
+            return new Object(in);
+        }
+
+        @Override
+        public Object[] newArray(int size) {
+            return new Object[size];
+        }
+    };
+
+    protected Object(Parcel in) {
+        id = in.readInt();
+        uriImg = in.readString();
+        name = in.readString();
+        description = in.readString();
+        zoneId = in.readInt();
+        normalSizeImg = in.readString();
     }
 
     public int getId() {
@@ -116,5 +140,20 @@ public class Object {
 
     public void setZone(Zone zone) {
         this.zone = zone;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(uriImg);
+        parcel.writeString(name);
+        parcel.writeString(description);
+        parcel.writeInt(zoneId);
+        parcel.writeString(normalSizeImg);
     }
 }
