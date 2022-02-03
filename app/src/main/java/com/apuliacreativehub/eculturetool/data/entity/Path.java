@@ -59,6 +59,7 @@ public class Path implements Parcelable {
         id = parcel.readInt();
         name = parcel.readString();
         userId = parcel.readInt();
+        objects = parcel.createTypedArrayList(Object.CREATOR);
         place = parcel.readParcelable(Place.class.getClassLoader());
     }
 
@@ -67,7 +68,7 @@ public class Path implements Parcelable {
         parcel.writeInt(id);
         parcel.writeString(name);
         parcel.writeInt(userId);
-        parcel.writeArray(objects.toArray());
+        parcel.writeTypedArray(objects.toArray(new Object[0]), 0);
         parcel.writeParcelable(place, 0);
     }
 
