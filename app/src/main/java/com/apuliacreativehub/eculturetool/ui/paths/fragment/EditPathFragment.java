@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,6 +30,7 @@ import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
+import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.paths.viewmodel.EditPathViewModel;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
@@ -39,17 +41,28 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.HashMap;
 import java.util.List;
 
-public class EditPathFragment extends Fragment {
+public class EditPathFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
     private static final int NUMBER_COLUMN = 2;
     private static final int MIN_LENGTH_NAME = 2;
     private static final int MAX_LENGTH_NAME = 25;
+
+    private final Place place;
+    private final Path path;
+    private View view;
+    private AutoCompleteTextView autoCompleteTextView;
+    private EditPathViewModel editPathViewModel;
+    private RecyclerView recyclerObjectsGridView;
+    private GridLayoutManager gridLayoutManager;
+    private LinearLayoutManager linearLayoutManager;
+    private RecyclerView recyclerObjectsCircleLinearView;
+    private ListObjectsCreateAdapter listObjectsCreateAdapter;
+    private ListCircleObjectsAdapter listCircleObjectsAdapter;
     final Observer<RepositoryNotification<Path>> savePathObserver = new Observer<RepositoryNotification<Path>>() {
         @Override
         public void onChanged(RepositoryNotification<Path> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
             if (notification.getException() == null) {
                 if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
-                    // TODO: Show dialog to inform that path has been saved
                     requireActivity().getSupportFragmentManager().popBackStackImmediate();
                 } else {
                     new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PATH_ERROR").show(getChildFragmentManager(), Dialog.TAG);
@@ -59,18 +72,7 @@ public class EditPathFragment extends Fragment {
             }
         }
     };
-    private final Place place;
 
-    private View view;
-    private AutoCompleteTextView autoCompleteTextView;
-    private final Path path;
-    private EditPathViewModel editPathViewModel;
-    private RecyclerView recyclerObjectsGridView;
-    private GridLayoutManager gridLayoutManager;
-    private LinearLayoutManager linearLayoutManager;
-    private RecyclerView recyclerObjectsCircleLinearView;
-    private ListObjectsCreateAdapter listObjectsCreateAdapter;
-    private ListCircleObjectsAdapter listCircleObjectsAdapter;
     final Observer<RepositoryNotification<HashMap<String, List<NodeObject>>>> readyDatasetObserver = new Observer<RepositoryNotification<HashMap<String, List<NodeObject>>>>() {
         @Override
         public void onChanged(RepositoryNotification<HashMap<String, List<NodeObject>>> notification) {
@@ -121,7 +123,9 @@ public class EditPathFragment extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.editPathToolbar);
         toolbar.setTitle(R.string.edit_path_screen_title);
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
-        toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+        toolbar.setNavigationOnClickListener(v -> {
+            new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_discard_path_changes), "DISCARD_PATH_CHANGES").show(getChildFragmentManager(), Dialog.TAG);
+        });
     }
 
     @Override
@@ -224,4 +228,13 @@ public class EditPathFragment extends Fragment {
         return name.length() >= MIN_LENGTH_NAME && name.length() <= MAX_LENGTH_NAME;
     }
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        requireActivity().getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
+    }
 }
