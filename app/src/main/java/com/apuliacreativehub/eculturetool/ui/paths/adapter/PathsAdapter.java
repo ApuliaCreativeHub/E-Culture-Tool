@@ -115,6 +115,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             switch(menuItem.getItemId()) {
                 case SHARE_PATH:
+                    // TODO: Convert in human readable text
                     sharePath(new Gson().toJson(this.dataSet.get(position)));
                     break;
                 case DOWNLOAD_PATH:
