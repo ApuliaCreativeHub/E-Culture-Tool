@@ -128,7 +128,6 @@ public class PathRepository {
         return getResult;
     }
 
-    // TODO: Call this also if the user is not logged in
     private MutableLiveData<RepositoryNotification<List<Path>>> getYourPathsFromLocalDatabase() {
         MutableLiveData<RepositoryNotification<List<Path>>> getResult = new MutableLiveData<>();
         executor.execute(new Runnable() {

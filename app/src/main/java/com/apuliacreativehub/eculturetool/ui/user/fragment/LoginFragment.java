@@ -58,6 +58,7 @@ public class LoginFragment extends Fragment {
                             notification.getData().getUser().getEmail(),
                             notification.getData().getUser().isACurator());
                     editor.apply();
+                    // TODO: Send local paths to remote database
                     getActivity().setResult(Activity.RESULT_OK);
                     getActivity().finish();
                 }
