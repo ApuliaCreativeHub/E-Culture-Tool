@@ -111,6 +111,7 @@ public class CreatePathFragment extends CEPathFragment {
             view.findViewById(R.id.buildPathProgressBar).setVisibility(View.VISIBLE);
             cePathViewModel.addPath().observe(this, addPathObserver);
         } catch (NoInternetConnectionException e) {
+            view.findViewById(R.id.buildPathProgressBar).setVisibility(View.GONE);
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
         }
     }

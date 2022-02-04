@@ -104,6 +104,7 @@ public class PlacePathsFragment extends Fragment {
             view.findViewById(R.id.placePathsProgressBar).setVisibility(View.VISIBLE);
             placePathsViewModel.getPlacePathsFromDatabase().observe(getViewLifecycleOwner(), getPlacePathsObserver);
         } catch (NoInternetConnectionException e) {
+            view.findViewById(R.id.placePathsProgressBar).setVisibility(View.GONE);
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
         }
     }

@@ -201,6 +201,7 @@ public class CreatePlaceFragment extends Fragment {
                         view.findViewById(R.id.createPlaceProgressBar).setVisibility(View.VISIBLE);
                         createPlaceViewModel.addPlace().observe(this, addPlaceObserver);
                     } catch (NoInternetConnectionException e) {
+                        view.findViewById(R.id.createPlaceProgressBar).setVisibility(View.GONE);
                         new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                     }
                 } else {

@@ -248,6 +248,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
                     view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.VISIBLE);
                     editPlaceViewModel.editPlace().observe(this, editPlaceObserver);
                 } catch (NoInternetConnectionException e) {
+                    view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.GONE);
                     new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
 
@@ -272,6 +273,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
             view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.VISIBLE);
             editPlaceViewModel.deletePlace().observe(this, deletePlaceObserver);
         } catch (NoInternetConnectionException e) {
+            view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.GONE);
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
         }
     }

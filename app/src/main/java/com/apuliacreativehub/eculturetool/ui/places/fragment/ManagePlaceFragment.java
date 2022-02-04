@@ -307,6 +307,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                 view.findViewById(R.id.objectsProgressBar).setVisibility(View.VISIBLE);
                 managePlaceViewModel.getObjectById(Integer.parseInt(intentResult.getContents())).observe(this, getObjectFromQR);
             } catch (NoInternetConnectionException e) {
+                view.findViewById(R.id.objectsProgressBar).setVisibility(View.GONE);
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
 
@@ -365,6 +366,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                         view.findViewById(R.id.zoneProgressBar).setVisibility(View.VISIBLE);
                         managePlaceViewModel.addZoneToDatabase(name).observe(this, addZoneObserver);
                     } catch (NoInternetConnectionException e) {
+                        view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
                         new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                     }
                 } else {
@@ -372,6 +374,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                         view.findViewById(R.id.zoneProgressBar).setVisibility(View.VISIBLE);
                         managePlaceViewModel.editZoneOnDatabase(name).observe(this, updateZoneObserver);
                     } catch (NoInternetConnectionException e) {
+                        view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
                         new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                     }
                 }
@@ -449,6 +452,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                 view.findViewById(R.id.zoneProgressBar).setVisibility(View.VISIBLE);
                 managePlaceViewModel.deleteZoneFromDatabase(managePlaceViewModel.getCurrentlySelectedZoneName()).observe(this, deleteZoneObserver);
             } catch (NoInternetConnectionException e) {
+                view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
