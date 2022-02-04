@@ -47,7 +47,7 @@ public abstract class CEPathFragment extends Fragment implements ConfirmationDia
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
             if (notification.getException() == null) {
                 if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
-                    requireActivity().getSupportFragmentManager().popBackStackImmediate();
+                    onSaveSuccessful();
                 } else {
                     new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PATH_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }
@@ -187,12 +187,12 @@ public abstract class CEPathFragment extends Fragment implements ConfirmationDia
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-        requireActivity().getSupportFragmentManager().popBackStack();
-    }
+    public abstract void onDialogPositiveClick(DialogFragment dialog);
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
 
     }
+
+    protected abstract void onSaveSuccessful();
 }

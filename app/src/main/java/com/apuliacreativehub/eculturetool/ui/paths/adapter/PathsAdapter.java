@@ -25,6 +25,7 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.ui.LandscapeActivity;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
+import com.apuliacreativehub.eculturetool.ui.paths.fragment.EditPathFragment;
 import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
 
@@ -121,7 +122,9 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
                     context.startActivity(
                             new Intent(context, SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PATH_FRAGMENT)
                                     .putExtra("place", dataSet.get(position).getPlace())
-                                    .putExtra("path", dataSet.get(position)));
+                                    .putExtra("path", dataSet.get(position))
+                                    .putExtra("fromScreen", EditPathFragment.FROM_PATHS)
+                    );
                     break;
                 case DELETE_PATH:
                     Bundle result = new Bundle();

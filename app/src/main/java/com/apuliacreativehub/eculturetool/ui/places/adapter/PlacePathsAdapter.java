@@ -39,7 +39,7 @@ public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.Vi
         viewHolder.getPathCard().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new EditPathFragment(place, dataSet.get(viewHolder.getBindingAdapterPosition())));
+                TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new EditPathFragment(place, dataSet.get(viewHolder.getBindingAdapterPosition()), EditPathFragment.FROM_PLACE_PATHS));
             }
         });
     }

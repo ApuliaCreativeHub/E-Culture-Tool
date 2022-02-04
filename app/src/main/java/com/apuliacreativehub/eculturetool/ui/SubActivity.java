@@ -51,7 +51,7 @@ public class SubActivity extends AppCompatActivity {
                     TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new EditProfileFragment());
                     break;
                 case EDIT_PATH_FRAGMENT:
-                    TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new EditPathFragment(extras.getParcelable("place"), extras.getParcelable("path")));
+                    TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new EditPathFragment(extras.getParcelable("place"), extras.getParcelable("path"), extras.getInt("fromScreen")));
                     break;
             }
         }

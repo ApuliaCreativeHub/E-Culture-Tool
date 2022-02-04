@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -26,8 +27,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class EditPathFragment extends CEPathFragment {
-    private final Path path;
+    public final static int FROM_PLACE_PATHS = 0;
+    public final static int FROM_PATHS = 1;
 
+    private final Path path;
+    private final int fromScreen;
 
     final Observer<RepositoryNotification<HashMap<String, List<NodeObject>>>> readyDatasetObserver = new Observer<RepositoryNotification<HashMap<String, List<NodeObject>>>>() {
         @Override
@@ -67,12 +71,12 @@ public class EditPathFragment extends CEPathFragment {
         }
     };
 
-    // TODO: Add parameter to determine whether the screen has been reached from PlacePaths or Paths in order to change the toolbar up action behaviour accordingly
-    public EditPathFragment(Place place, Path path) {
+    public EditPathFragment(Place place, Path path, int fromScreen) {
         super(place);
         setReadyDatasetObserver(readyDatasetObserver);
         setAdapterViewOnItemClickListener(adapterViewOnItemClickListener);
         this.path = path;
+        this.fromScreen = fromScreen;
     }
 
     protected void initializeViewModel() {
@@ -101,5 +105,15 @@ public class EditPathFragment extends CEPathFragment {
         }
     }
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        onSaveSuccessful();
+    }
 
+    @Override
+    protected void onSaveSuccessful() {
+        if (fromScreen == FROM_PLACE_PATHS)
+            requireActivity().getSupportFragmentManager().popBackStack();
+        else requireActivity().finish();
+    }
 }

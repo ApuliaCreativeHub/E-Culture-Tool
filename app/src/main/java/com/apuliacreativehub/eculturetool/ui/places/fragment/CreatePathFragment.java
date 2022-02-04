@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -90,7 +91,7 @@ public class CreatePathFragment extends CEPathFragment {
 
     @Override
     protected void setToolbarTitle(Toolbar toolbar) {
-        toolbar.setTitle(R.string.create_place_path);
+        toolbar.setTitle(R.string.create_path_screen_title);
     }
 
     @Override
@@ -106,5 +107,15 @@ public class CreatePathFragment extends CEPathFragment {
         } catch (NoInternetConnectionException e) {
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
         }
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        requireActivity().getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    protected void onSaveSuccessful() {
+        requireActivity().getSupportFragmentManager().popBackStack();
     }
 }
