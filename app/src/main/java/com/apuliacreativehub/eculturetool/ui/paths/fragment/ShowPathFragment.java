@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
@@ -20,9 +21,10 @@ import com.apuliacreativehub.eculturetool.ui.paths.adapter.PathAdapter;
 import com.apuliacreativehub.eculturetool.ui.paths.viewmodel.ShowPathViewModel;
 
 public class ShowPathFragment extends Fragment {
+    private final int NUMBER_COLUMNS = 2;
+
     private View view;
     private RecyclerView recyclerArtifactsGridView;
-    private GridLayoutManager gridLayoutManager;
     private PathAdapter pathAdapter;
     private ShowPathViewModel showPathViewModel;
     private Path path;
@@ -46,11 +48,6 @@ public class ShowPathFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         showPathViewModel.setOrientation(this.getResources().getConfiguration().orientation);
-        if (showPathViewModel.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
-            showPathViewModel.setNumberColumn(2);
-        } else {
-            showPathViewModel.setNumberColumn(1);
-        }
 
         return inflater.inflate(R.layout.fragment_show_path, container, false);
     }
@@ -70,14 +67,16 @@ public class ShowPathFragment extends Fragment {
 
     private void setDynamicArtifactRecycleView() {
         recyclerArtifactsGridView = view.findViewById(R.id.recyclerViewPath);
-        gridLayoutManager = new GridLayoutManager(getContext(), showPathViewModel.getNumberColumn());
-        if (showPathViewModel.getNumberColumn() == Configuration.ORIENTATION_PORTRAIT) {
-            gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        LinearLayoutManager layoutManager;
+        if (showPathViewModel.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+            layoutManager = new GridLayoutManager(requireContext(), NUMBER_COLUMNS);
+            layoutManager.setOrientation(RecyclerView.VERTICAL);
         } else {
-            gridLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+            layoutManager = new LinearLayoutManager(requireContext());
+            layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         }
-        recyclerArtifactsGridView.setLayoutManager(gridLayoutManager);
-        pathAdapter = new PathAdapter(getContext(), showPathViewModel.getmDataset());
+        recyclerArtifactsGridView.setLayoutManager(layoutManager);
+        pathAdapter = new PathAdapter(requireContext(), showPathViewModel.getmDataset());
         recyclerArtifactsGridView.setAdapter(pathAdapter);
     }
 

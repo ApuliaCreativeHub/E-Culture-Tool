@@ -10,7 +10,6 @@ import java.util.List;
 
 public class ShowPathViewModel extends ViewModel {
     private List<Object> mDataset;
-    private int numberColumn;
     private int orientation;
     private Path path;
 
@@ -26,14 +25,6 @@ public class ShowPathViewModel extends ViewModel {
 
     public void setmDataset(ArrayList<Object> mDataset) {
         this.mDataset = mDataset;
-    }
-
-    public int getNumberColumn() {
-        return numberColumn;
-    }
-
-    public void setNumberColumn(int numberColumn) {
-        this.numberColumn = numberColumn;
     }
 
     public int getOrientation() {
