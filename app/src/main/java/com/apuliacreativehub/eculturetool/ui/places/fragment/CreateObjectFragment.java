@@ -194,7 +194,7 @@ public class CreateObjectFragment extends Fragment {
             }
 
             if (!createObjectViewModel.isRoomSelected(createObjectViewModel.getZone())) {
-                txtRoom.setError(getResources().getString(R.string.room_not_selected));
+                txtRoom.setError(getResources().getString(R.string.zone_not_selected));
                 errors = true;
             } else {
                 txtRoom.setError(null);

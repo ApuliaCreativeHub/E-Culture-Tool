@@ -379,7 +379,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     }
                 }
             } else {
-                autoCompleteTextView.setError(getString(R.string.invalid_room));
+                autoCompleteTextView.setError(getString(R.string.invalid_zone));
             }
 
             autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
@@ -437,7 +437,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     }
 
     public void showNoticeDialog() {
-        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_room), DialogTags.DELETE_ZONES_WARNING);
+        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_zone), DialogTags.DELETE_ZONES_WARNING);
         dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
     }
 

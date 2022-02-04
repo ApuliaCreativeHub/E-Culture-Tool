@@ -256,7 +256,7 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
             }
 
             if (!editObjectViewModel.isRoomSelected(editObjectViewModel.getZone())) {
-                txtRoom.setError(getResources().getString(R.string.room_not_selected));
+                txtRoom.setError(getResources().getString(R.string.zone_not_selected));
                 errors = true;
             } else {
                 txtRoom.setError(null);

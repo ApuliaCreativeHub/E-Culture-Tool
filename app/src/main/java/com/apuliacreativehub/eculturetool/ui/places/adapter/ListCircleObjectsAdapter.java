@@ -80,8 +80,8 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
         view.setOnLongClickListener(v ->  {
             View parent = (View) v.getParent();
 
-            ClipData.Item itemId = new ClipData.Item(parent.getTag(R.id.artifact_tag_id).toString());
-            ClipData dragData = new ClipData("node_artifact", new String[] { ClipDescription.MIMETYPE_TEXT_PLAIN }, itemId);
+            ClipData.Item itemId = new ClipData.Item(parent.getTag(R.id.object_tag_id).toString());
+            ClipData dragData = new ClipData("node_artifact", new String[]{ClipDescription.MIMETYPE_TEXT_PLAIN}, itemId);
 
             View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);
             v.startDragAndDrop(dragData, myShadow, null,0);
@@ -98,7 +98,7 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
                 String moveOrientationAction = V.getTag().toString();
                 View parent = (View) V.getParent();
                 NodeObject rebornDragArtifact = GuavaHelper.getNodeById(dataSet, Integer.valueOf(e.getClipData().getItemAt(0).getText().toString()));
-                NodeObject rebornDropArtifact = GuavaHelper.getNodeById(dataSet, (Integer) parent.getTag(R.id.artifact_tag_id));
+                NodeObject rebornDropArtifact = GuavaHelper.getNodeById(dataSet, (Integer) parent.getTag(R.id.object_tag_id));
                 if(rebornDragArtifact.equals(rebornDropArtifact)) return  true;
                 setupGraphAfterInteraction(rebornDragArtifact, rebornDropArtifact, moveOrientationAction);
                 notifyDataSetChanged();
@@ -118,7 +118,7 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
         NodeObject[] node = dataSet.nodes().toArray(new NodeObject[0]);
 
         View view = holder.getView();
-        view.setTag(R.id.artifact_tag_id, node[position].getId());
+        view.setTag(R.id.object_tag_id, node[position].getId());
         Glide.with(context)
                 .load("https://hiddenfile.ml/ecultureapi/" + node[position]
                         //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
