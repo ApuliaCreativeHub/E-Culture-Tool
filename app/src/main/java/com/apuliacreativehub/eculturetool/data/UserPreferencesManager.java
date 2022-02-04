@@ -8,7 +8,7 @@ import com.apuliacreativehub.eculturetool.data.entity.user.User;
 
 public class UserPreferencesManager {
     private static String token = "";
-    private static User user;
+    private static User user = new User("");
 
     public static String getToken() {
         return token;
@@ -22,15 +22,16 @@ public class UserPreferencesManager {
         return user;
     }
 
-    public static void setUserInfo(String name, String surname, String email, boolean isACurator) {
-        user = new User(name, surname, email, "", isACurator);
+    public static void setUserInfo(int id, String name, String surname, String email, boolean isACurator) {
+        user = new User(id, name, surname, email, "", isACurator);
     }
 
     public static void setUserInfoFromSharedPreferences(Context context) {
         if (context != null) {
             SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
             token = sharedPref.getString("token", "");
-            user = new User(sharedPref.getString("name", ""),
+            user = new User(sharedPref.getInt("id", 0),
+                    sharedPref.getString("name", ""),
                     sharedPref.getString("surname", ""),
                     sharedPref.getString("email", ""),
                     "",
@@ -45,7 +46,7 @@ public class UserPreferencesManager {
             editor.clear();
             editor.apply();
             token = "";
-            user = null;
+            user = new User("");
         }
     }
 }

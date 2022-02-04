@@ -49,11 +49,14 @@ public class LoginFragment extends Fragment {
                     editor.putString("token", notification.getData().getToken().getToken());
                     UserPreferencesManager.setToken(notification.getData().getToken().getToken());
                     editor.putBoolean("isLogged", true);
+                    editor.putInt("id", notification.getData().getUser().getId());
                     editor.putString("name", notification.getData().getUser().getName());
                     editor.putString("surname", notification.getData().getUser().getSurname());
                     editor.putString("email", notification.getData().getUser().getEmail());
                     editor.putBoolean("isACurator", notification.getData().getUser().isACurator());
-                    UserPreferencesManager.setUserInfo(notification.getData().getUser().getName(),
+                    UserPreferencesManager.setUserInfo(
+                            notification.getData().getUser().getId(),
+                            notification.getData().getUser().getName(),
                             notification.getData().getUser().getSurname(),
                             notification.getData().getUser().getEmail(),
                             notification.getData().getUser().isACurator());
