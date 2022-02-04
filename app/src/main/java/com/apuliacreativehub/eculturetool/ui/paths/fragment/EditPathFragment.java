@@ -46,13 +46,16 @@ public class EditPathFragment extends CEPathFragment {
                     setDynamicArtifactRecycleView();
                     ((EditPathViewModel) cePathViewModel).setGraphDatasetFromOrderedObjects();
                     setDynamicCircleArtifactRecycleView();
+                    view.findViewById(R.id.buildPathProgressBar).setVisibility(View.GONE);
                 } else {
                     Log.d("Dialog", "show dialog here");
+                    view.findViewById(R.id.buildPathProgressBar).setVisibility(View.GONE);
                     new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_ZONES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                view.findViewById(R.id.buildPathProgressBar).setVisibility(View.GONE);
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.GET_ZONES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
@@ -93,12 +96,14 @@ public class EditPathFragment extends CEPathFragment {
     protected void persistPath() {
         if (((EditPathViewModel) cePathViewModel).getPath().getUserId() == UserPreferencesManager.getUser().getId()) {
             try {
+                view.findViewById(R.id.buildPathProgressBar).setVisibility(View.VISIBLE);
                 ((EditPathViewModel) cePathViewModel).editPath().observe(this, savePathObserver);
             } catch (NoInternetConnectionException e) {
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             try {
+                view.findViewById(R.id.buildPathProgressBar).setVisibility(View.VISIBLE);
                 cePathViewModel.addPath().observe(this, savePathObserver);
             } catch (NoInternetConnectionException e) {
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
