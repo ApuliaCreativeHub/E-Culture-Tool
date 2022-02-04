@@ -1,11 +1,21 @@
 package com.apuliacreativehub.eculturetool.data.entity.user;
 
 public class User {
+    private int id;
     private String name;
     private String surname;
     private String email;
     private String password;
     private boolean isACurator;
+
+    public User(int id, String name, String surname, String email, String password, boolean isACurator) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        this.isACurator = isACurator;
+    }
 
     public User(String name, String surname, String email, String password, boolean isACurator) {
         this.name = name;
@@ -22,6 +32,10 @@ public class User {
 
     public User(String email) {
         this.email = email;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -42,6 +56,10 @@ public class User {
 
     public boolean isACurator() {
         return isACurator;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setName(String name) {
