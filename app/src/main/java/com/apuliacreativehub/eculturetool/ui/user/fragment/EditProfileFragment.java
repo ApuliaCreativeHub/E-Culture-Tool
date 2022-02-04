@@ -45,6 +45,7 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
         @Override
         public void onChanged(RepositoryNotification<User> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            view.findViewById(R.id.editProfileProgressBar).setVisibility(View.GONE);
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
@@ -75,6 +76,7 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
         @Override
         public void onChanged(RepositoryNotification<Void> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            view.findViewById(R.id.editProfileProgressBar).setVisibility(View.GONE);
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
@@ -277,6 +279,7 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
             }
 
             if(!errors) {
+                view.findViewById(R.id.editProfileProgressBar).setVisibility(View.VISIBLE);
                 editProfileViewModel.editDetails().observe(this, updateObserver);
             }
         });
@@ -315,6 +318,7 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i("Response", "AOPOSITIVE");
+        view.findViewById(R.id.editProfileProgressBar).setVisibility(View.VISIBLE);
         editProfileViewModel.deleteUser().observe(this, deleteObserver);
     }
 
