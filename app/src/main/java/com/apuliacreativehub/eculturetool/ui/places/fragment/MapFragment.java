@@ -71,11 +71,11 @@ import java.util.Objects;
 public class MapFragment extends Fragment {
     private MapView map;
     private MapFragmentViewModel mapFragmentViewModel;
-    View v;
+    View view;
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
         if (isGranted) {
             centerMapAccordingToLocation();
-        }else {
+        } else {
             centerMapAccordingToLocale();
         }
     });
@@ -90,16 +90,19 @@ public class MapFragment extends Fragment {
                 map.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS, style -> {
                     for (Point point : mapFragmentViewModel.getPoints())
                         addAnnotationToMap(point);
+                    view.findViewById(R.id.mapProgressBar).setVisibility(View.GONE);
                 });
                 addOnClickMapboxListener(Arrays.asList(mapFragmentViewModel.getPoints()), MapboxHelper.DEFAULT_TOLERANCE);
                 requestLocationPermission();
             } else {
                 Log.d("Dialog", "show dialog here");
+                view.findViewById(R.id.mapProgressBar).setVisibility(View.GONE);
                 new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_PLACES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            view.findViewById(R.id.mapProgressBar).setVisibility(View.GONE);
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.GET_PLACES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
         }
     };
@@ -110,17 +113,18 @@ public class MapFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_map, null);
+        view = inflater.inflate(R.layout.fragment_map, null);
 
-        map = v.findViewById(R.id.mapview);
+        map = view.findViewById(R.id.mapview);
 
         mapFragmentViewModel = new ViewModelProvider(this).get(MapFragmentViewModel.class);
-        return v;
+        return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        view.findViewById(R.id.mapProgressBar).setVisibility(View.VISIBLE);
         mapFragmentViewModel.getAllPlaces().observe(getViewLifecycleOwner(), getPlacesObserver);
     }
 
