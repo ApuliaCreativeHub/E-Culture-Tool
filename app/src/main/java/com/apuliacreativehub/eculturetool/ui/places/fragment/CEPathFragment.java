@@ -46,6 +46,7 @@ public abstract class CEPathFragment extends Fragment implements ConfirmationDia
         @Override
         public void onChanged(RepositoryNotification<Path> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            view.findViewById(R.id.buildPathProgressBar).setVisibility(View.GONE);
             if (notification.getException() == null) {
                 if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
                     onSaveSuccessful();
@@ -108,6 +109,7 @@ public abstract class CEPathFragment extends Fragment implements ConfirmationDia
     public void onStart() {
         super.onStart();
 
+        view.findViewById(R.id.buildPathProgressBar).setVisibility(View.VISIBLE);
         cePathViewModel.getObjectsDataset().observe(this, readyDatasetObserver);
 
         FloatingActionButton confirmFab = view.findViewById(R.id.btnSavePath);

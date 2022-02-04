@@ -37,13 +37,16 @@ public class CreatePathFragment extends CEPathFragment {
                     setSelectElement();
                     setDynamicArtifactRecycleView();
                     setDynamicCircleArtifactRecycleView();
+                    view.findViewById(R.id.buildPathProgressBar).setVisibility(View.GONE);
                 } else {
                     Log.d("Dialog", "show dialog here");
+                    view.findViewById(R.id.buildPathProgressBar).setVisibility(View.GONE);
                     new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_ZONES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                view.findViewById(R.id.buildPathProgressBar).setVisibility(View.GONE);
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.GET_ZONES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
@@ -51,6 +54,7 @@ public class CreatePathFragment extends CEPathFragment {
 
     final Observer<RepositoryNotification<Path>> addPathObserver = notification -> {
         ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        view.findViewById(R.id.buildPathProgressBar).setVisibility(View.GONE);
         if (notification.getException() == null) {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", String.valueOf(notification.getData()));
@@ -104,6 +108,7 @@ public class CreatePathFragment extends CEPathFragment {
     @Override
     protected void persistPath() {
         try {
+            view.findViewById(R.id.buildPathProgressBar).setVisibility(View.VISIBLE);
             cePathViewModel.addPath().observe(this, addPathObserver);
         } catch (NoInternetConnectionException e) {
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
