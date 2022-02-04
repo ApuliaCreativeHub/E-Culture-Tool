@@ -35,4 +35,7 @@ public interface VisitorPathDAO {
 
     @Delete
     void deletePath(VisitorPath path);
+
+    @Query("SELECT COUNT(path_id) FROM visitorpath")
+    int countPaths();
 }

@@ -36,5 +36,6 @@ public interface LocalPathDAO {
     @Delete
     void deletePath(Path path);
 
-
+    @Query("DELETE FROM path")
+    void clearTable();
 }

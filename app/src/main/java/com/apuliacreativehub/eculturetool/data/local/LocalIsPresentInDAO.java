@@ -14,4 +14,7 @@ public interface LocalIsPresentInDAO {
     @Query("DELETE FROM IsPresentIn " +
             "WHERE IsPresentIn.path_id=:pathId")
     void deleteRelationsByPathId(int pathId);
+
+    @Query("DELETE FROM ispresentin")
+    void clearTable();
 }

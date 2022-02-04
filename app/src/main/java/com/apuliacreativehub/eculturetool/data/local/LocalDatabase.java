@@ -27,5 +27,10 @@ public abstract class LocalDatabase extends RoomDatabase {
 
     public abstract VisitorIsPresentInDAO visitorIsPresentInDAO();
 
+    public void clearTables() {
+        pathDAO().clearTable();
+        isPresentInDAO().clearTable();
+    }
+
     // Add other DAOs abstract methods here
 }
