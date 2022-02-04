@@ -140,6 +140,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
             public boolean onQueryTextSubmit(String query) {
                 mDataset.clear();
 
+                view.findViewById(R.id.pathsProgressBar).setVisibility(View.VISIBLE);
                 for (Path path : pathsViewModel.getPaths()) {
                     if ((modalBottomSheet.getFilterPathName() && path.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
                             || (modalBottomSheet.getFilterPlaceName() && path.getPlace().getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
@@ -156,6 +157,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
                 }
 
                 mAdapter.notifyDataSetChanged();
+                view.findViewById(R.id.pathsProgressBar).setVisibility(View.GONE);
                 show();
 
                 if(!searchView.isIconified())
