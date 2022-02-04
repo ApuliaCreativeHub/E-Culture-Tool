@@ -28,6 +28,7 @@ import com.apuliacreativehub.eculturetool.data.UserPreferencesManager;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.apuliacreativehub.eculturetool.ui.user.viewmodel.LogoutViewModel;
 
@@ -84,20 +85,20 @@ public class ProfileDetailsFragment extends Fragment implements ConfirmationDial
             if (Utils.checkConnection((ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE))) {
                 startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PROFILE_FRAGMENT));
             } else {
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         });
         btnLogout.setOnClickListener(logout -> {
             if (Utils.checkConnection((ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE))) {
                 showNoticeDialog();
             } else {
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         });
     }
 
     public void showNoticeDialog() {
-        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_exit_account), "LOGOUT_ACCOUNT");
+        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_exit_account), DialogTags.LOGOUT_PROFILE_WARNING);
         dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
     }
 

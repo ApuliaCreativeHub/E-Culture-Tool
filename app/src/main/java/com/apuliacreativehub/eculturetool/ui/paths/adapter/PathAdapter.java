@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.badge.BadgeUtils;
 
@@ -76,8 +77,8 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.getTxtName().setText(this.dataSet.get(position).getName());
-        viewHolder.setBadgeCounter(position+1);
-        viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), this.dataSet.get(position).getDescription(), "OBJECT_DESCRIPTION").show(((AppCompatActivity)context).getSupportFragmentManager(), Dialog.TAG));
+        viewHolder.setBadgeCounter(position + 1);
+        viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), this.dataSet.get(position).getDescription(), DialogTags.OBJECT_DESCRIPTION).show(((AppCompatActivity) context).getSupportFragmentManager(), Dialog.TAG));
     }
 
     @Override

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.apuliacreativehub.eculturetool.ui.places.fragment.EditObjectFragment;
@@ -108,7 +109,7 @@ public class ListObjectsManageAdapter extends RecyclerView.Adapter<ListObjectsMa
                         .getNormalSizeImg())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(viewHolder.getImgObject());
-        viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), this.dataSet.get(position).getDescription(), "OBJECT_DESCRIPTION").show(((AppCompatActivity)context).getSupportFragmentManager(), Dialog.TAG));
+        viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), this.dataSet.get(position).getDescription(), DialogTags.OBJECT_DESCRIPTION).show(((AppCompatActivity) context).getSupportFragmentManager(), Dialog.TAG));
         if (!Utils.checkConnection((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE))) {
             viewHolder.getBtnEditObject().setText(R.string.edit_not_allowed);
         }

@@ -44,6 +44,7 @@ import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionEx
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.component.QRCodeHelper;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.EditObjectViewModel;
 import com.bumptech.glide.Glide;
@@ -90,13 +91,13 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
             } else {
                 Log.i("addPlace", "Not OK");
                 Log.d("Dialog", "show dialog here");
-                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.UPDATE_PROFILE_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.i("addPlace", "Not OK exception");
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.UPDATE_PROFILE_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
         }
     };
 
@@ -111,13 +112,13 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
             } else {
                 Log.i("addPlace", "Not OK");
                 Log.d("Dialog", "show dialog here");
-                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.UPDATE_PROFILE_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.i("addPlace", "Not OK exception");
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.UPDATE_PROFILE_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
         }
     };
 
@@ -270,7 +271,7 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
                     try {
                         editObjectViewModel.editObject().observe(this, editObjectObserver);
                     } catch (NoInternetConnectionException e) {
-                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                     }
             }
         });
@@ -336,7 +337,7 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
     }
 
     public void showNoticeDialog() {
-        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_object), "DELETE_OBJECT");
+        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_object), DialogTags.DELETE_OBJECTS_WARNING);
         dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
     }
 
@@ -346,7 +347,7 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
         try {
             editObjectViewModel.deleteObject().observe(this, deleteObserver);
         } catch (NoInternetConnectionException e) {
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
         }
     }
 

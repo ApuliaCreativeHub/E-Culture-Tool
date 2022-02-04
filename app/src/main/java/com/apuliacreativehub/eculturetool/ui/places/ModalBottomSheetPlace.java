@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +18,13 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtils;
 import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import java.io.Serializable;
 
 
 public class ModalBottomSheetPlace extends BottomSheetDialogFragment {
@@ -89,7 +87,7 @@ public class ModalBottomSheetPlace extends BottomSheetDialogFragment {
                         .putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.PLACE_PATHS_FRAGMENT)
                         .putExtra("place", place));
             }else{
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         });
 

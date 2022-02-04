@@ -30,6 +30,7 @@ import com.apuliacreativehub.eculturetool.data.entity.user.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.user.viewmodel.LoginViewModel;
 
 public class LoginFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
@@ -65,7 +66,7 @@ public class LoginFragment extends Fragment implements ConfirmationDialog.Confir
                             notification.getData().getUser().isACurator());
                     editor.apply();
                     if (shouldShowSendPathDialog) {
-                        ConfirmationDialog sendPathsDialog = new ConfirmationDialog(getString(R.string.save_to_account_dialog_title), getString(R.string.warning_save_visitor_paths_to_account), "SAVE_VISITOR_PATHS");
+                        ConfirmationDialog sendPathsDialog = new ConfirmationDialog(getString(R.string.save_to_account_dialog_title), getString(R.string.warning_save_visitor_paths_to_account), DialogTags.SAVE_VISITOR_PATHS_WARNING);
                         sendPathsDialog.setCustomPositiveButtonLabel(R.string.confirm_save_visitor_paths_to_account);
                         sendPathsDialog.setCustomNegativeButtonLabel(R.string.cancel_save_visitor_paths_to_account);
                         sendPathsDialog.show(getChildFragmentManager(), Dialog.TAG);
@@ -75,12 +76,12 @@ public class LoginFragment extends Fragment implements ConfirmationDialog.Confir
                 }
             } else {
                 Log.d("Dialog", "show dialog here");
-                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "LOGIN_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.LOGIN_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "LOGIN_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.LOGIN_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
         }
     };
 

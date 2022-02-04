@@ -29,6 +29,7 @@ import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionEx
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.component.ModalBottomSheetUtils;
 import com.apuliacreativehub.eculturetool.ui.paths.ModalBottomSheetPaths;
 import com.apuliacreativehub.eculturetool.ui.paths.adapter.PathsAdapter;
@@ -51,31 +52,6 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
     private TextView txtResults;
     private PathsViewModel pathsViewModel;
 
-    private final Observer<RepositoryNotification<Path>> deleteObserver = new Observer<RepositoryNotification<Path>>() {
-        @Override
-        public void onChanged(RepositoryNotification<Path> notification) {
-            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
-            if (notification.getException() == null) {
-                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
-                Log.d("CALLBACK", String.valueOf(notification.getData()));
-                if (notification.getErrorMessage() == null) {
-                    mDataset.clear();
-                    pathsViewModel.removePathFromList(notification.getData().getId());
-                    mDataset.addAll(pathsViewModel.getPaths());
-                    mAdapter.notifyDataSetChanged();
-                    show();
-                } else {
-                    Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETE_PLACE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
-                }
-            } else {
-                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
-                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "DELETE_PLACE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
-            }
-        }
-    };
-
     final Observer<RepositoryNotification<List<Path>>> getYourPlacesObserver = notification -> {
         ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
         if (notification.getException() == null) {
@@ -91,12 +67,36 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
                 show();
             } else {
                 Log.d("Dialog", "show dialog here");
-                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_PLACES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_PLACES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_PLACES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.GET_PLACES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
+        }
+    };
+    private final Observer<RepositoryNotification<Path>> deleteObserver = new Observer<RepositoryNotification<Path>>() {
+        @Override
+        public void onChanged(RepositoryNotification<Path> notification) {
+            ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            if (notification.getException() == null) {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", String.valueOf(notification.getData()));
+                if (notification.getErrorMessage() == null) {
+                    mDataset.clear();
+                    pathsViewModel.removePathFromList(notification.getData().getId());
+                    mDataset.addAll(pathsViewModel.getPaths());
+                    mAdapter.notifyDataSetChanged();
+                    show();
+                } else {
+                    Log.d("Dialog", "show dialog here");
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.DELETE_PLACES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
+                }
+            } else {
+                Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+                Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.DELETE_PLACES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
+            }
         }
     };
 
@@ -172,7 +172,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
     }
 
     public void showNoticeDialog() {
-        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_path), "DELETE_PATH");
+        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_path), DialogTags.DELETE_PATHS_WARNING);
         dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
     }
 
@@ -182,7 +182,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
         try {
             pathsViewModel.deletePath().observe(this, deleteObserver);
         } catch (NoInternetConnectionException e) {
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
         }
 
     }

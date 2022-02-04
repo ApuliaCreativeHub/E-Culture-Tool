@@ -18,6 +18,7 @@ import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CreatePathViewModel;
 
@@ -38,12 +39,12 @@ public class CreatePathFragment extends CEPathFragment {
                     setDynamicCircleArtifactRecycleView();
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_ZONES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_ZONES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_ZONES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.GET_ZONES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
@@ -59,13 +60,13 @@ public class CreatePathFragment extends CEPathFragment {
             } else {
                 Log.i("addPlace", "Not OK");
                 Log.d("Dialog", "show dialog here");
-                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.UPDATE_PROFILE_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.i("addPlace", "Not OK exception");
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.UPDATE_PROFILE_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
         }
     };
 
@@ -105,7 +106,7 @@ public class CreatePathFragment extends CEPathFragment {
         try {
             cePathViewModel.addPath().observe(this, addPathObserver);
         } catch (NoInternetConnectionException e) {
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
         }
     }
 

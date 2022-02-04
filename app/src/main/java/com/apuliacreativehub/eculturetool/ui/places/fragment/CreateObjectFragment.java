@@ -37,6 +37,7 @@ import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CreateObjectViewModel;
 
@@ -70,13 +71,13 @@ public class CreateObjectFragment extends Fragment {
             } else {
                 Log.i("addObject", "Not OK");
                 Log.d("Dialog", "show dialog here");
-                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "ADD_OBJECT_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.ADD_OBJECTS_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.i("addObject", "Not OK (exception)");
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "ADD_OBJECT_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.ADD_OBJECT_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
         }
     };
 
@@ -209,7 +210,7 @@ public class CreateObjectFragment extends Fragment {
                 if(createObjectViewModel.isImageUploaded(createObjectViewModel.getImage())) {
                     createObjectViewModel.addObject().observe(this, addObjectObserver);
                 } else {
-                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_object_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_object_image), DialogTags.PLACE_IMAGE_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             }
         });

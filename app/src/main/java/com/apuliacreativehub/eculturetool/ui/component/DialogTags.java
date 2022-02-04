@@ -1,0 +1,44 @@
+package com.apuliacreativehub.eculturetool.ui.component;
+
+public class DialogTags {
+    public static final String OBJECT_DESCRIPTION = "OBJECT_DESCRIPTION";
+    public static final String GET_ZONES_ERROR = "GET_ZONES_ERROR";
+    public static final String GET_ZONES_EXCEPTION = "GET_ZONES_EXCEPTION";
+    public static final String ADD_ZONES_ERROR = "ADD_ZONES_ERROR";
+    public static final String ADD_ZONES_EXCEPTION = "ADD_ZONES_EXCEPTION";
+    public static final String UPDATE_ZONES_ERROR = "UPDATE_ZONES_ERROR";
+    public static final String UPDATE_ZONES_EXCEPTION = "UPDATE_ZONES_EXCEPTION";
+    public static final String DELETE_ZONES_ERROR = "DELETE_ZONES_ERROR";
+    public static final String DELETE_ZONES_EXCEPTION = "DELETE_ZONES_EXCEPTION";
+    public static final String DELETE_ZONES_WARNING = "DELETE_ZONES_WARNING";
+    public static final String GET_PLACES_ERROR = "GET_PLACES_ERROR";
+    public static final String GET_PLACES_EXCEPTION = "GET_PLACES_EXCEPTION";
+    public static final String DELETE_PLACES_ERROR = "DELETE_PLACES_ERROR";
+    public static final String DELETE_PLACES_EXCEPTION = "DELETE_PLACES_EXCEPTION";
+    public static final String DELETE_PLACES_WARNING = "DELETE_PLACES_WARNING";
+    public static final String UPDATE_PATHS_ERROR = "UPDATE_PATHS_ERROR";
+    public static final String UPDATE_PATHS_EXCEPTION = "UPDATE_PATHS_EXCEPTION";
+    public static final String DELETE_PATHS_WARNING = "DELETE_PATHS_WARNING";
+    public static final String ADD_OBJECTS_ERROR = "ADD_OBJECTS_ERROR";
+    public static final String GET_OBJECTS_ERROR = "GET_OBJECTS_ERROR";
+    public static final String GET_OBJECTS_EXCEPTION = "GET_OBJECTS_EXCEPTION";
+    public static final String ADD_OBJECT_EXCEPTION = "ADD_OBJECT_EXCEPTION";
+    public static final String DELETE_OBJECTS_WARNING = "DELETE_OBJECTS_WARNING";
+    public static final String UPDATE_PROFILE_ERROR = "UPDATE_PROFILE_ERROR";
+    public static final String UPDATE_PROFILE_EXCEPTION = "UPDATE_PROFILE_EXCEPTION";
+    public static final String DELETE_PROFILE_ERROR = "DELETE_PROFILE_ERROR";
+    public static final String DELETE_PROFILE_EXCEPTION = "DELETE_PROFILE_EXCEPTION";
+    public static final String NO_INTERNET_CONNECTION_ERROR = "NO_INTERNET_CONNECTION_ERROR";
+    public static final String HANDLE_PATH_ERROR = "HANDLE_PATH_ERROR";
+    public static final String PLACE_IMAGE_ERROR = "PLACE_IMAGE_ERROR";
+    public static final String LOGIN_ERROR = "LOGIN_ERROR";
+    public static final String LOGIN_EXCEPTION = "LOGIN_EXCEPTION";
+    public static final String REGISTRATION_ERROR = "REGISTRATION_ERROR";
+    public static final String REGISTRATION_EXCEPTION = "REGISTRATION_EXCEPTION";
+    public static final String CHANGE_PASSWORD_ERROR = "CHANGE_PASSWORD_ERROR";
+    public static final String CHANGE_PASSWORD_EXCEPTION = "CHANGE_PASSWORD_EXCEPTION";
+    public static final String DISCARD_PATH_CHANGES = "DISCARD_PATH_CHANGES";
+    public static final String DELETE_PROFILE_WARNING = "DELETE_PROFILE_WARNING";
+    public static final String LOGOUT_PROFILE_WARNING = "LOGOUT_PROFILE_WARNING";
+    public static final String SAVE_VISITOR_PATHS_WARNING = "SAVE_VISITOR_PATHS_WARNING";
+}

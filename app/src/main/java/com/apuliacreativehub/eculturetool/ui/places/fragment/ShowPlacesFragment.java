@@ -20,6 +20,7 @@ import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.CardPlaceAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.ShowPlacesViewModel;
@@ -50,12 +51,12 @@ public class ShowPlacesFragment extends Fragment {
                 mRecyclerView.setAdapter(mAdapter);
             } else {
                 Log.d("Dialog", "show dialog here");
-                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_PLACES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_PLACES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_PLACES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.GET_PLACES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
         }
     };
 

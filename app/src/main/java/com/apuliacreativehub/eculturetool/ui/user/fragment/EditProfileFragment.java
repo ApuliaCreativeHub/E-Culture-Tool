@@ -28,6 +28,7 @@ import com.apuliacreativehub.eculturetool.data.entity.user.User;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.user.viewmodel.EditProfileViewModel;
 
 import java.util.Objects;
@@ -40,14 +41,14 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
     private EditText Email;
     private TextView btnChangePassword;
     private Context context;
-    final Observer<RepositoryNotification<User>> updatingObserver = new Observer<RepositoryNotification<User>>() {
+    final Observer<RepositoryNotification<User>> updateObserver = new Observer<RepositoryNotification<User>>() {
         @Override
         public void onChanged(RepositoryNotification<User> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
-                if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
+                if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
                     SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.remove("name");
@@ -60,24 +61,24 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
                     requireActivity().finish();
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.UPDATE_PROFILE_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.UPDATE_PROFILE_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
 
-    final Observer<RepositoryNotification<Void>> deletingObserver = new Observer<RepositoryNotification<Void>>() {
+    final Observer<RepositoryNotification<Void>> deleteObserver = new Observer<RepositoryNotification<Void>>() {
         @Override
         public void onChanged(RepositoryNotification<Void> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
-                if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
+                if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
                     SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.clear();
@@ -85,12 +86,12 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
                     Navigation.findNavController(requireActivity(), R.id.navHostContainer).popBackStack(R.id.placesFragment, false);
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETING_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.DELETE_PROFILE_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "DELETING_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.DELETE_PROFILE_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
@@ -276,7 +277,7 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
             }
 
             if(!errors) {
-                editProfileViewModel.editDetails().observe(this, updatingObserver);
+                editProfileViewModel.editDetails().observe(this, updateObserver);
             }
         });
 
@@ -307,14 +308,14 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
     }
 
     public void showNoticeDialog() {
-        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_account), "DELETE_ACCOUNT");
+        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_account), DialogTags.DELETE_PROFILE_WARNING);
         dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
     }
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i("Response", "AOPOSITIVE");
-        editProfileViewModel.deleteUser().observe(this, deletingObserver);
+        editProfileViewModel.deleteUser().observe(this, deleteObserver);
     }
 
     @Override

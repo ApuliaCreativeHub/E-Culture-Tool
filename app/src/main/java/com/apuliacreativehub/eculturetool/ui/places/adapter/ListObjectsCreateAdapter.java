@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CEPathViewModel;
 import com.bumptech.glide.Glide;
@@ -131,7 +132,7 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
                         .getNormalSizeImg())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(viewHolder.getImgObject());
-        viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), dataSet.get(position).getDescription(), "OBJECT_DESCRIPTION").show(((AppCompatActivity)context).getSupportFragmentManager(), Dialog.TAG));
+        viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), dataSet.get(position).getDescription(), DialogTags.OBJECT_DESCRIPTION).show(((AppCompatActivity) context).getSupportFragmentManager(), Dialog.TAG));
     }
 
     /**

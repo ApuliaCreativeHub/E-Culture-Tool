@@ -28,6 +28,7 @@ import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListCircleObjectsAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListObjectsCreateAdapter;
@@ -49,10 +50,10 @@ public abstract class CEPathFragment extends Fragment implements ConfirmationDia
                 if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
                     onSaveSuccessful();
                 } else {
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PATH_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.UPDATE_PATHS_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PATH_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.UPDATE_PATHS_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
@@ -97,7 +98,7 @@ public abstract class CEPathFragment extends Fragment implements ConfirmationDia
         setToolbarTitle(toolbar);
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v ->
-                new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_discard_path_changes), "DISCARD_PATH_CHANGES").show(getChildFragmentManager(), Dialog.TAG)
+                new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_discard_path_changes), DialogTags.DISCARD_PATH_CHANGES).show(getChildFragmentManager(), Dialog.TAG)
         );
     }
 
@@ -173,7 +174,7 @@ public abstract class CEPathFragment extends Fragment implements ConfirmationDia
                 cePathViewModel.setOrderedObjects(graphIdPath);
                 persistPath();
             } else {
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.path_error), "PATH_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.path_error), DialogTags.HANDLE_PATH_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             txtPathName.setError(getString(R.string.invalid_path));
