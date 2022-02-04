@@ -167,7 +167,7 @@ public class LoginFragment extends Fragment implements ConfirmationDialog.Confir
         btnSignUp.setOnClickListener(view -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new RegisterFragment()).commit());
 
         Button btnLogin = view.findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(view -> {
+        btnLogin.setOnClickListener(v -> {
             view.findViewById(R.id.loginProgressBar).setVisibility(View.VISIBLE);
             loginViewModel.setUuid(UuidManager.getUuid(getActivity(), getString(R.string.login_shared_preferences)));
             loginViewModel.loginUser().observe(this, loginObserver);
