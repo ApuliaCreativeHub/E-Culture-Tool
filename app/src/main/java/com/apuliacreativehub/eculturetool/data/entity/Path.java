@@ -43,6 +43,21 @@ public class Path implements Parcelable {
         this.name = name;
     }
 
+    /**
+     * Used to build a Path object from a VisitorPath one.
+     * Field id will correspond to visitorPathId.
+     *
+     * @param visitorPath VisitorPath to convert
+     **/
+    @Ignore
+    public Path(VisitorPath visitorPath) {
+        this.id = visitorPath.getVisitorPathId();
+        this.name = visitorPath.getName();
+        this.userId = visitorPath.getUserId();
+        this.objects = visitorPath.getObjects();
+        this.place = visitorPath.getPlace();
+    }
+
     public static final Creator<Path> CREATOR = new Creator<Path>() {
         @Override
         public Path createFromParcel(Parcel in) {
