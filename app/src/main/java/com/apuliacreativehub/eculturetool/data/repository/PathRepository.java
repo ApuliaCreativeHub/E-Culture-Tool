@@ -10,6 +10,8 @@ import com.apuliacreativehub.eculturetool.data.entity.IsPresentIn;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.entity.VisitorIsPresentIn;
+import com.apuliacreativehub.eculturetool.data.entity.VisitorPath;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
 import com.apuliacreativehub.eculturetool.data.local.LocalIsPresentInDAO;
@@ -17,10 +19,13 @@ import com.apuliacreativehub.eculturetool.data.local.LocalObjectDAO;
 import com.apuliacreativehub.eculturetool.data.local.LocalPathDAO;
 import com.apuliacreativehub.eculturetool.data.local.LocalPlaceDAO;
 import com.apuliacreativehub.eculturetool.data.local.LocalZoneDAO;
+import com.apuliacreativehub.eculturetool.data.local.VisitorIsPresentInDAO;
+import com.apuliacreativehub.eculturetool.data.local.VisitorPathDAO;
 import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDAO;
 import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDatabase;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -34,6 +39,8 @@ public class PathRepository {
     private final LocalObjectDAO localObjectDAO;
     private final LocalPlaceDAO localPlaceDAO;
     private final LocalZoneDAO localZoneDAO;
+    private final VisitorPathDAO visitorPathDAO;
+    private final VisitorIsPresentInDAO visitorIsPresentInDAO;
     private final LocalIsPresentInDAO localIsPresentInDAO;
     private final ConnectivityManager connectivityManager;
     private final Executor executor;
@@ -45,6 +52,8 @@ public class PathRepository {
         localObjectDAO = localDatabase.objectDAO();
         localPlaceDAO = localDatabase.placeDAO();
         localZoneDAO = localDatabase.zoneDAO();
+        visitorPathDAO = localDatabase.visitorPathDAO();
+        visitorIsPresentInDAO = localDatabase.visitorIsPresentInDAO();
         this.connectivityManager = connectivityManager;
         this.executor = executor;
     }
@@ -90,12 +99,35 @@ public class PathRepository {
 
     public MutableLiveData<RepositoryNotification<List<Path>>> getYourPaths() {
         MutableLiveData<RepositoryNotification<List<Path>>> getResult;
-        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE || !UserPreferencesManager.getToken().equals("")) {
+        if (UserPreferencesManager.getToken().equals("")) {
+            getResult = getVisitorPathsToLocalDatabase();
+        } else if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
             getResult = getYourPathsFromLocalDatabase();
         } else {
             Log.d("SHOULDFETCH", "remote");
             getResult = getYourPathsFromRemoteDatabase();
         }
+
+        return getResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<List<Path>>> getVisitorPathsToLocalDatabase() {
+        MutableLiveData<RepositoryNotification<List<Path>>> getResult = new MutableLiveData<>();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
+                List<VisitorPath> paths = visitorPathDAO.getAllYourPaths();
+                List<Path> convertedPaths = new ArrayList<>();
+                for (int i = 0; i < paths.size(); i++) {
+                    paths.get(i).setPlace(localPlaceDAO.getPlaceByVisitorPathId(paths.get(i).getVisitorPathId()));
+                    paths.get(i).setObjects(localObjectDAO.getObjectsByVisitorPathId(paths.get(i).getVisitorPathId()));
+                    convertedPaths.add(new Path(paths.get(i)));
+                }
+                repositoryNotification.setData(convertedPaths);
+                getResult.postValue(repositoryNotification);
+            }
+        });
 
         return getResult;
     }
@@ -150,7 +182,7 @@ public class PathRepository {
     public MutableLiveData<RepositoryNotification<Path>> addPath(Path path) throws NoInternetConnectionException {
         MutableLiveData<RepositoryNotification<Path>> addResult;
         if (UserPreferencesManager.getToken().equals("")) {
-            addResult = addPathToLocalDatabase(path);
+            addResult = addVisitorPathToLocalDatabase(path);
         } else if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
             Log.d("SHOULDFETCH", "remote");
             addResult = addPathToRemoteDatabase(path);
@@ -189,13 +221,14 @@ public class PathRepository {
         return addResult;
     }
 
-    private MutableLiveData<RepositoryNotification<Path>> addPathToLocalDatabase(Path path) {
+    private MutableLiveData<RepositoryNotification<Path>> addVisitorPathToLocalDatabase(Path path) {
         MutableLiveData<RepositoryNotification<Path>> addResult = new MutableLiveData<>();
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 RepositoryNotification<Path> repositoryNotification = new RepositoryNotification<>();
-                localPathDAO.insertPath(path);
+                saveRemotePlaceToLocal(Collections.singletonList(path));
+                saveVisitorPath(Collections.singletonList(path));
                 repositoryNotification.setData(path);
                 addResult.postValue(repositoryNotification);
             }
@@ -203,14 +236,71 @@ public class PathRepository {
         return addResult;
     }
 
+    private void saveVisitorPath(List<Path> paths) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (Path path : paths) {
+                    VisitorPath visitorPath = new VisitorPath(path);
+                    long id;
+                    VisitorPath vp = visitorPathDAO.getPathById(visitorPath.getVisitorPathId());
+                    if (visitorPathDAO.getPathById(visitorPath.getVisitorPathId()) == null)
+                        id = visitorPathDAO.insertPath(visitorPath);
+                    else {
+                        visitorPathDAO.updatePath(visitorPath);
+                        visitorIsPresentInDAO.deleteRelationsByPathId(visitorPath.getVisitorPathId());
+                        id = visitorPath.getVisitorPathId();
+                    }
+                    int i = 1;
+                    for (Object object : visitorPath.getObjects()) {
+                        Zone zone;
+                        if (object.getZone() == null) zone = new Zone(object.getZoneId());
+                        else zone = object.getZone();
+                        if (path.getPlace() != null)
+                            zone.setPlaceId(path.getPlace().getId());
+                        if (localZoneDAO.getZoneById(object.getZoneId()) == null) {
+                            localZoneDAO.insertZone(zone);
+                        } else {
+                            localZoneDAO.updateZone(zone);
+                        }
+                        if (localObjectDAO.getObjectById(object.getId()) == null) {
+                            localObjectDAO.insertObject(object);
+                        } else {
+                            localObjectDAO.updateObject(object);
+                        }
+                        visitorIsPresentInDAO.insertRelation(new VisitorIsPresentIn(object.getId(), (int) id, i));
+                        i++;
+                    }
+                }
+            }
+        });
+    }
+
     public MutableLiveData<RepositoryNotification<Path>> editPath(Path path) throws NoInternetConnectionException {
         MutableLiveData<RepositoryNotification<Path>> editResult;
-        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+        if (UserPreferencesManager.getToken().equals("")) {
+            editResult = editVisitorPathOnLocalDatabase(path);
+        } else if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
             Log.d("SHOULDFETCH", "remote");
             editResult = editPathOnRemoteDatabase(path);
         } else {
             throw new NoInternetConnectionException();
         }
+
+        return editResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Path>> editVisitorPathOnLocalDatabase(Path path) {
+        MutableLiveData<RepositoryNotification<Path>> editResult = new MutableLiveData<>();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                RepositoryNotification<Path> repositoryNotification = new RepositoryNotification<>();
+                saveVisitorPath(Collections.singletonList(path));
+                repositoryNotification.setData(path);
+                editResult.postValue(repositoryNotification);
+            }
+        });
 
         return editResult;
     }
@@ -245,12 +335,31 @@ public class PathRepository {
 
     public MutableLiveData<RepositoryNotification<Path>> deletePath(Path path) throws NoInternetConnectionException {
         MutableLiveData<RepositoryNotification<Path>> deleteResult;
-        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+        if (UserPreferencesManager.getToken().equals("")) {
+            deleteResult = deleteVisitorPathOnLocalDatabase(path);
+        } else if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
             Log.d("SHOULDFETCH", "remote");
             deleteResult = deletePathFromRemoteDatabase(path);
         } else {
             throw new NoInternetConnectionException();
         }
+
+        return deleteResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Path>> deleteVisitorPathOnLocalDatabase(Path path) {
+        MutableLiveData<RepositoryNotification<Path>> deleteResult = new MutableLiveData<>();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                VisitorPath visitorPath = new VisitorPath(path);
+                visitorIsPresentInDAO.deleteRelationsByPathId(visitorPath.getVisitorPathId());
+                visitorPathDAO.deletePath(visitorPath);
+                RepositoryNotification<Path> repositoryNotification = new RepositoryNotification<>();
+                repositoryNotification.setData(path);
+                deleteResult.postValue(repositoryNotification);
+            }
+        });
 
         return deleteResult;
     }
@@ -267,6 +376,7 @@ public class PathRepository {
                     if (response.isSuccessful()) {
                         repositoryNotification.setData(path);
                         // Delete path from local database too
+                        localIsPresentInDAO.deleteRelationsByPathId(path.getId());
                         localPathDAO.deletePath(path);
                     } else {
                         if (response.errorBody() != null) {
@@ -289,29 +399,29 @@ public class PathRepository {
             @Override
             public void run() {
                 for (Path path : paths) {
-                    if (localPathDAO.getPathById(path.getId()) == null) {
+                    if (localPathDAO.getPathById(path.getId()) == null)
                         localPathDAO.insertPath(path);
-                        int i = 1;
-                        for (Object object : path.getObjects()) {
-                            Zone zone;
-                            if (object.getZone() == null) zone = new Zone(object.getZoneId());
-                            else zone = object.getZone();
-                            if (path.getPlace() != null)
-                                zone.setPlaceId(path.getPlace().getId());
-                            if (localZoneDAO.getZoneById(object.getZoneId()) == null) {
-                                localZoneDAO.insertZone(zone);
-                            } else {
-                                localZoneDAO.updateZone(zone);
-                            }
-                            if (localObjectDAO.getObjectById(object.getId()) == null) {
-                                localObjectDAO.insertObject(object);
-                            } else {
-                                localObjectDAO.updateObject(object);
-                            }
-                            localIsPresentInDAO.insertRelation(new IsPresentIn(object.getId(), path.getId(), i));
-                            i++;
+                    else localPathDAO.updatePath(path);
+                    int i = 1;
+                    for (Object object : path.getObjects()) {
+                        Zone zone;
+                        if (object.getZone() == null) zone = new Zone(object.getZoneId());
+                        else zone = object.getZone();
+                        if (path.getPlace() != null)
+                            zone.setPlaceId(path.getPlace().getId());
+                        if (localZoneDAO.getZoneById(object.getZoneId()) == null) {
+                            localZoneDAO.insertZone(zone);
+                        } else {
+                            localZoneDAO.updateZone(zone);
                         }
-                    } else localPathDAO.updatePath(path);
+                        if (localObjectDAO.getObjectById(object.getId()) == null) {
+                            localObjectDAO.insertObject(object);
+                        } else {
+                            localObjectDAO.updateObject(object);
+                        }
+                        localIsPresentInDAO.insertRelation(new IsPresentIn(object.getId(), path.getId(), i));
+                        i++;
+                    }
                 }
             }
         });

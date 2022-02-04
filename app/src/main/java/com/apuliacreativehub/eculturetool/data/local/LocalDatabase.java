@@ -7,9 +7,11 @@ import com.apuliacreativehub.eculturetool.data.entity.IsPresentIn;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.entity.VisitorIsPresentIn;
+import com.apuliacreativehub.eculturetool.data.entity.VisitorPath;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 
-@Database(entities = {Place.class, Zone.class, Object.class, IsPresentIn.class, Path.class}, version = 1, exportSchema = false)
+@Database(entities = {Place.class, Zone.class, Object.class, IsPresentIn.class, Path.class, VisitorIsPresentIn.class, VisitorPath.class}, version = 1, exportSchema = false)
 public abstract class LocalDatabase extends RoomDatabase {
     public abstract LocalPlaceDAO placeDAO();
 
@@ -20,6 +22,10 @@ public abstract class LocalDatabase extends RoomDatabase {
     public abstract LocalPathDAO pathDAO();
 
     public abstract LocalIsPresentInDAO isPresentInDAO();
+
+    public abstract VisitorPathDAO visitorPathDAO();
+
+    public abstract VisitorIsPresentInDAO visitorIsPresentInDAO();
 
     // Add other DAOs abstract methods here
 }

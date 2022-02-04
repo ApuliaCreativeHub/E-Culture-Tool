@@ -35,4 +35,13 @@ public interface LocalPlaceDAO {
             "WHERE p.path_id= :pathId " +
             "GROUP BY p.path_id")
     Place getPlaceByPathId(int pathId);
+
+    @Query("SELECT pl.* FROM place pl " +
+            "JOIN zone z ON z.place_id = pl.id " +
+            "JOIN object o ON o.zone_id = z.id " +
+            "JOIN visitorispresentin vipi ON vipi.object_id = o.object_id " +
+            "JOIN visitorpath vp ON vp.path_id = vipi.path_id " +
+            "WHERE vp.path_id= :visitorPathId " +
+            "GROUP BY vp.path_id")
+    Place getPlaceByVisitorPathId(int visitorPathId);
 }

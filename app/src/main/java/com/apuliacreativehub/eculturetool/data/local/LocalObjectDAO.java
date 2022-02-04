@@ -23,6 +23,11 @@ public interface LocalObjectDAO {
             "WHERE ipi.path_id=:pathId")
     List<Object> getObjectsByPathId(int pathId);
 
+    @Query("SELECT o.* FROM object o " +
+            "JOIN visitorispresentin vipi ON o.object_id=vipi.object_id " +
+            "WHERE vipi.path_id=:visitorPathId")
+    List<Object> getObjectsByVisitorPathId(int visitorPathId);
+
     @Insert
     void insertObject(Object object);
 
