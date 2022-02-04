@@ -27,7 +27,6 @@ import okio.ByteString;
 import retrofit2.Call;
 import retrofit2.Response;
 
-// TODO: Refactoring methods as the ZoneRepository ones
 public class PlaceRepository {
     private final RemotePlaceDAO remotePlaceDAO;
     private final LocalPlaceDAO localPlaceDAO;
@@ -41,7 +40,19 @@ public class PlaceRepository {
         this.executor = executor;
     }
 
-    public MutableLiveData<RepositoryNotification<Place>> addPlace(Context context, Place place) {
+    public MutableLiveData<RepositoryNotification<Place>> addPlace(Context context, Place place) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Place>> addResult;
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            addResult = addPlaceToRemoteDatabase(context, place);
+        } else {
+            throw new NoInternetConnectionException();
+        }
+
+        return addResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Place>> addPlaceToRemoteDatabase(Context context, Place place) {
         MutableLiveData<RepositoryNotification<Place>> addResult = new MutableLiveData<>();
         try {
             InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse(place.getUriImg()));
@@ -82,7 +93,19 @@ public class PlaceRepository {
         return addResult;
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> deletePlace(Place place) {
+    public MutableLiveData<RepositoryNotification<Void>> deletePlace(Place place) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Void>> deleteResult = new MutableLiveData<>();
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            deleteResult = deletePlaceFromRemoteDatabase(place);
+        } else {
+            throw new NoInternetConnectionException();
+        }
+
+        return deleteResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Void>> deletePlaceFromRemoteDatabase(Place place) {
         MutableLiveData<RepositoryNotification<Void>> deleteResult = new MutableLiveData<>();
         Call<Void> call = remotePlaceDAO.DeletePlace(place);
         executor.execute(new Runnable() {
@@ -110,7 +133,19 @@ public class PlaceRepository {
         return deleteResult;
     }
 
-    public MutableLiveData<RepositoryNotification<Place>> editPlace(Context context, Place place) {
+    public MutableLiveData<RepositoryNotification<Place>> editPlace(Context context, Place place) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Place>> editResult = new MutableLiveData<>();
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            editResult = editPlaceOnRemoteDatabase(context, place);
+        } else {
+            throw new NoInternetConnectionException();
+        }
+
+        return editResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Place>> editPlaceOnRemoteDatabase(Context context, Place place) {
         MutableLiveData<RepositoryNotification<Place>> editResult = new MutableLiveData<>();
         try {
             Call<Place> call;

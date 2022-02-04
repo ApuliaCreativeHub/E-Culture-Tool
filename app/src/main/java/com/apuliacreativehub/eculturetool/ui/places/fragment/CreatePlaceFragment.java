@@ -32,6 +32,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.Utils;
@@ -159,7 +160,11 @@ public class CreatePlaceFragment extends Fragment {
 
             if(!errors) {
                 if(createPlaceViewModel.isImageUploaded(createPlaceViewModel.getImage())) {
-                    createPlaceViewModel.addPlace().observe(this, addPlaceObserver);
+                    try {
+                        createPlaceViewModel.addPlace().observe(this, addPlaceObserver);
+                    } catch (NoInternetConnectionException e) {
+                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    }
                 } else {
                     new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_place_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
                 }

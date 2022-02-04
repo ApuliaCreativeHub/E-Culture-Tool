@@ -33,6 +33,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
@@ -242,7 +243,12 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
             }
 
             if(!errors) {
-                editPlaceViewModel.editPlace().observe(this, editPlaceObserver);
+                try {
+                    editPlaceViewModel.editPlace().observe(this, editPlaceObserver);
+                } catch (NoInternetConnectionException e) {
+                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                }
+
             }
         });
 
@@ -260,7 +266,11 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i("Response", "AOPOSITIVE");
-        editPlaceViewModel.deletePlace().observe(this, deletePlaceObserver);
+        try {
+            editPlaceViewModel.deletePlace().observe(this, deletePlaceObserver);
+        } catch (NoInternetConnectionException e) {
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+        }
     }
 
     @Override

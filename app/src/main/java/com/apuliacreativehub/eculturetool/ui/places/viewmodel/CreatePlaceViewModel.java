@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Utils;
 
@@ -15,7 +16,7 @@ public class CreatePlaceViewModel extends AbstractPlaceViewModel {
         super(application);
     }
 
-    public MutableLiveData<RepositoryNotification<Place>> addPlace() {
+    public MutableLiveData<RepositoryNotification<Place>> addPlace() throws NoInternetConnectionException {
         Place place;
         if (image.getScheme().equals(Utils.SCHEME_ANDROID_RESOURCE)) {
             place = new Place(name, address, description, image.toString());
