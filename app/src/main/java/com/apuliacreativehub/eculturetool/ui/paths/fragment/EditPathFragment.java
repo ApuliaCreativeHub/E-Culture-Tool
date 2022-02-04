@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
+import com.apuliacreativehub.eculturetool.data.UserPreferencesManager;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
@@ -85,7 +86,7 @@ public class EditPathFragment extends CEPathFragment {
     }
 
     protected void persistPath() {
-        if (((EditPathViewModel) cePathViewModel).getPath().getUserId() == cePathViewModel.getPlace().getUserId()) {
+        if (((EditPathViewModel) cePathViewModel).getPath().getUserId() == UserPreferencesManager.getUser().getId()) {
             try {
                 ((EditPathViewModel) cePathViewModel).editPath().observe(this, savePathObserver);
             } catch (NoInternetConnectionException e) {
