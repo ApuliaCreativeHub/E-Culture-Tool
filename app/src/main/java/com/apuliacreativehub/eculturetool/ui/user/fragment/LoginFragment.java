@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -27,12 +28,14 @@ import com.apuliacreativehub.eculturetool.data.UserPreferencesManager;
 import com.apuliacreativehub.eculturetool.data.UuidManager;
 import com.apuliacreativehub.eculturetool.data.entity.user.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
+import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.user.viewmodel.LoginViewModel;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
     private View view;
     private LoginViewModel loginViewModel;
+    private boolean shouldShowSendPathDialog = false;
     private EditText txtEmail;
     private EditText txtPassword;
     final Observer<RepositoryNotification<UserWithToken>> loginObserver = notification -> {
@@ -61,9 +64,14 @@ public class LoginFragment extends Fragment {
                             notification.getData().getUser().getEmail(),
                             notification.getData().getUser().isACurator());
                     editor.apply();
-                    // TODO: Send local paths to remote database
-                    getActivity().setResult(Activity.RESULT_OK);
-                    getActivity().finish();
+                    if (shouldShowSendPathDialog) {
+                        ConfirmationDialog sendPathsDialog = new ConfirmationDialog(getString(R.string.save_to_account_dialog_title), getString(R.string.warning_save_visitor_paths_to_account), "SAVE_VISITOR_PATHS");
+                        sendPathsDialog.setCustomPositiveButtonLabel(R.string.confirm_save_visitor_paths_to_account);
+                        sendPathsDialog.setCustomNegativeButtonLabel(R.string.cancel_save_visitor_paths_to_account);
+                        sendPathsDialog.show(getChildFragmentManager(), Dialog.TAG);
+                    } else {
+                        finishActivity();
+                    }
                 }
             } else {
                 Log.d("Dialog", "show dialog here");
@@ -73,6 +81,13 @@ public class LoginFragment extends Fragment {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "LOGIN_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+        }
+    };
+
+    final Observer<Integer> countVisitorPathsObserver = new Observer<Integer>() {
+        @Override
+        public void onChanged(Integer numPaths) {
+            if (numPaths > 0) shouldShowSendPathDialog = true;
         }
     };
 
@@ -93,6 +108,7 @@ public class LoginFragment extends Fragment {
         toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        loginViewModel.checkForVisitorPaths().observe(getViewLifecycleOwner(), countVisitorPathsObserver);
 
         txtEmail = view.findViewById(R.id.txtEmail);
         txtPassword = view.findViewById(R.id.txtPassword);
@@ -155,4 +171,20 @@ public class LoginFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        loginViewModel.importVisitorPathsToAccount();
+        finishActivity();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Log.d("SAVE_VISITOR_PATHS", "Visitor paths saving aborted by the user");
+        finishActivity();
+    }
+
+    private void finishActivity() {
+        requireActivity().setResult(Activity.RESULT_OK);
+        requireActivity().finish();
+    }
 }

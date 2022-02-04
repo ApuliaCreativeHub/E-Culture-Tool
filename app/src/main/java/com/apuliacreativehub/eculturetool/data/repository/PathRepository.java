@@ -100,36 +100,41 @@ public class PathRepository {
     public MutableLiveData<RepositoryNotification<List<Path>>> getYourPaths() {
         MutableLiveData<RepositoryNotification<List<Path>>> getResult;
         if (UserPreferencesManager.getToken().equals("")) {
-            getResult = getVisitorPathsToLocalDatabase();
+            getResult = getVisitorPathsFromLocalDatabase();
         } else if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
-            getResult = getYourPathsFromLocalDatabase();
+            getResult = getYourPathsFromRemoteDatabase();
         } else {
             Log.d("SHOULDFETCH", "remote");
-            getResult = getYourPathsFromRemoteDatabase();
+            getResult = getYourPathsFromLocalDatabase();
         }
 
         return getResult;
     }
 
-    private MutableLiveData<RepositoryNotification<List<Path>>> getVisitorPathsToLocalDatabase() {
+    private MutableLiveData<RepositoryNotification<List<Path>>> getVisitorPathsFromLocalDatabase() {
         MutableLiveData<RepositoryNotification<List<Path>>> getResult = new MutableLiveData<>();
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 RepositoryNotification<List<Path>> repositoryNotification = new RepositoryNotification<>();
-                List<VisitorPath> paths = visitorPathDAO.getAllYourPaths();
-                List<Path> convertedPaths = new ArrayList<>();
-                for (int i = 0; i < paths.size(); i++) {
-                    paths.get(i).setPlace(localPlaceDAO.getPlaceByVisitorPathId(paths.get(i).getVisitorPathId()));
-                    paths.get(i).setObjects(localObjectDAO.getObjectsByVisitorPathId(paths.get(i).getVisitorPathId()));
-                    convertedPaths.add(new Path(paths.get(i)));
-                }
-                repositoryNotification.setData(convertedPaths);
+                repositoryNotification.setData(getVisitorPathsWithObjects());
                 getResult.postValue(repositoryNotification);
             }
         });
 
         return getResult;
+    }
+
+    private List<Path> getVisitorPathsWithObjects() {
+        List<VisitorPath> paths = visitorPathDAO.getAllYourPaths();
+        List<Path> convertedPaths = new ArrayList<>();
+        for (int i = 0; i < paths.size(); i++) {
+            paths.get(i).setPlace(localPlaceDAO.getPlaceByVisitorPathId(paths.get(i).getVisitorPathId()));
+            paths.get(i).setObjects(localObjectDAO.getObjectsByVisitorPathId(paths.get(i).getVisitorPathId()));
+            convertedPaths.add(new Path(paths.get(i)));
+        }
+
+        return convertedPaths;
     }
 
     private MutableLiveData<RepositoryNotification<List<Path>>> getYourPathsFromRemoteDatabase() {
@@ -402,6 +407,7 @@ public class PathRepository {
                     if (localPathDAO.getPathById(path.getId()) == null)
                         localPathDAO.insertPath(path);
                     else localPathDAO.updatePath(path);
+                    localIsPresentInDAO.deleteRelationsByPathId(path.getId());
                     int i = 1;
                     for (Object object : path.getObjects()) {
                         Zone zone;
@@ -435,5 +441,48 @@ public class PathRepository {
                 localPlaceDAO.updatePlace(path.getPlace());
             }
         }
+    }
+
+    public MutableLiveData<Integer> countVisitorPaths() {
+        MutableLiveData<Integer> isDataPresent = new MutableLiveData<>();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                isDataPresent.postValue(visitorPathDAO.countPaths());
+            }
+        });
+
+        return isDataPresent;
+    }
+
+    public void saveVisitorPathsToRemoteDatabase() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Path> paths = getVisitorPathsWithObjects();
+                for (Path path : paths) {
+                    VisitorPath visitorPath = new VisitorPath(path);
+                    Call<Path> call = remotePathDAO.addPath(path);
+                    executor.execute(() -> {
+                        try {
+                            Response<Path> response = call.execute();
+                            Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
+                            if (response.isSuccessful()) {
+                                // Add path to local database too
+                                saveRemotePathsToLocal(Collections.singletonList(response.body()));
+                                visitorIsPresentInDAO.deleteRelationsByPathId(visitorPath.getVisitorPathId());
+                                visitorPathDAO.deletePath(visitorPath);
+                            } else {
+                                if (response.errorBody() != null) {
+                                    Log.e("RETROFITERROR", response.errorBody().string());
+                                }
+                            }
+                        } catch (IOException ioe) {
+                            Log.e("RETROFITERROR", ioe.getMessage());
+                        }
+                    });
+                }
+            }
+        });
     }
 }

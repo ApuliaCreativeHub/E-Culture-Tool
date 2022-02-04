@@ -70,6 +70,8 @@
     <string name="do_not_change_anymore">Don\'t Change Password</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="confirm_save_visitor_paths_to_account">Sure</string>
+    <string name="cancel_save_visitor_paths_to_account">Don\'t save</string>
     <string name="title_activity_manage_places">ManagePlacesActivity</string>
     <string name="recover">Recover Password</string>
     <string name="create_new_place">Place Information</string>
@@ -109,6 +111,8 @@
     <string name="warning_delete_object">Are you sure you want to delete this object?</string>
     <string name="warning_delete_path">Are you sure you want to delete your path?</string>
     <string name="warning_discard_path_changes">Are you sure to discard all changes?</string>
+    <string name="save_to_account_dialog_title">Import to your account</string>
+    <string name="warning_save_visitor_paths_to_account">By importing paths to your account, you will be able to access them everywhere.\nIf you don\'t import them now, they will not be visible until you logout.\nDo you want to import your paths on your account?</string>
     <string name="paths_section">Go to paths section</string>
     <string name="not_found_text">Sorry, not found</string>
     <string name="not_found_text_explanation">The results requested are not found, can be deleted or never be added</string>
