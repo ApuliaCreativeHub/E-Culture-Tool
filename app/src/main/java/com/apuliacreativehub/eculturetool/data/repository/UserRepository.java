@@ -9,7 +9,6 @@ import com.apuliacreativehub.eculturetool.data.entity.user.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
 import com.apuliacreativehub.eculturetool.data.network.user.RemoteUserDAO;
 import com.apuliacreativehub.eculturetool.data.network.user.UserRemoteDatabase;
-import com.apuliacreativehub.eculturetool.di.ECultureTool;
 
 import java.io.IOException;
 import java.util.concurrent.Executor;
@@ -114,7 +113,7 @@ public class UserRepository{
         executor.execute(() -> {
             try {
                 Response<Void> response = call.execute();
-                localDatabase.clearAllTables();
+                localDatabase.clearTables();
                 Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
             } catch (IOException ioe) {
                 Log.e("RETROFITERROR", ioe.getMessage());
