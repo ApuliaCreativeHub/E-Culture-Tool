@@ -1,8 +1,8 @@
 package com.apuliacreativehub.eculturetool.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
@@ -21,7 +21,7 @@ public class LandscapeActivity extends AppCompatActivity {
         if (extras != null) {
             switch (extras.getString(SHOW_FRAGMENT)) {
                 case SHOW_PATH_FRAGMENT:
-                    TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new ShowPathFragment());
+                    TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new ShowPathFragment(extras.getParcelable("path")));
                     break;
             }
         }

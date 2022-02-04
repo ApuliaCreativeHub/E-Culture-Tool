@@ -19,11 +19,11 @@ import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.badge.BadgeUtils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     private final Context context;
-    private final ArrayList<Object> dataSet;
+    private final List<Object> dataSet;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imgObject;
@@ -62,7 +62,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
         }
     }
 
-    public PathAdapter(Context context, ArrayList<Object> dataSet) {
+    public PathAdapter(Context context, List<Object> dataSet) {
         this.context = context;
         this.dataSet = dataSet;
     }

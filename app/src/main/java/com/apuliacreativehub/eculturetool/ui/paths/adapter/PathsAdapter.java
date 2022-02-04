@@ -102,7 +102,9 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         viewHolder.getTextPlaceNameAndAddress().setText(placeNameAndAddress);
         viewHolder.getBtnOptions().setOnClickListener(view -> showMenu(view, R.menu.context_menu_path, position));
         viewHolder.getCardPath().setOnClickListener(
-                view -> context.startActivity(new Intent(context, LandscapeActivity.class).putExtra(LandscapeActivity.SHOW_FRAGMENT, LandscapeActivity.SHOW_PATH_FRAGMENT)
+                view -> context.startActivity(new Intent(context, LandscapeActivity.class)
+                        .putExtra(LandscapeActivity.SHOW_FRAGMENT, LandscapeActivity.SHOW_PATH_FRAGMENT)
+                        .putExtra("path", dataSet.get(position))
                 ));
     }
 
