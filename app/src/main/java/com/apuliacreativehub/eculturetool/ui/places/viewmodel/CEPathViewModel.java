@@ -172,6 +172,7 @@ public class CEPathViewModel extends ZoneObjectViewModel {
             int objectId = getOrderedObjects().get(i);
             objects.add(new Object(objectId));
         }
+        path.setPlace(getPlace());
         path.setObjects(objects);
         return pathRepository.addPath(path);
     }
