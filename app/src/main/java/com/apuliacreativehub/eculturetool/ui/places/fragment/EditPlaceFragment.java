@@ -54,6 +54,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
     private final Place place;
     final Observer<RepositoryNotification<Place>> editPlaceObserver = notification -> {
         ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.GONE);
         if (notification.getException() == null) {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", String.valueOf(notification.getData()));
@@ -83,6 +84,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
         @Override
         public void onChanged(RepositoryNotification<Void> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.GONE);
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
@@ -243,6 +245,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
 
             if(!errors) {
                 try {
+                    view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.VISIBLE);
                     editPlaceViewModel.editPlace().observe(this, editPlaceObserver);
                 } catch (NoInternetConnectionException e) {
                     new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
@@ -266,6 +269,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i("Response", "AOPOSITIVE");
         try {
+            view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.VISIBLE);
             editPlaceViewModel.deletePlace().observe(this, deletePlaceObserver);
         } catch (NoInternetConnectionException e) {
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
