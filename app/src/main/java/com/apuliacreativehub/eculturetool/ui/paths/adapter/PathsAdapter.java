@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.ui.LandscapeActivity;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
@@ -115,8 +116,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             switch(menuItem.getItemId()) {
                 case SHARE_PATH:
-                    // TODO: Convert in human readable text
-                    sharePath(new Gson().toJson(this.dataSet.get(position)));
+                    sharePath(buildTextMessage(this.dataSet.get(position)));
                     break;
                 case DOWNLOAD_PATH:
                     downloadPath(new Gson().toJson(this.dataSet.get(position)));
@@ -139,6 +139,20 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         });
 
         popupMenu.show();
+    }
+
+    private String buildTextMessage(Path path) {
+        StringBuilder objectsList = new StringBuilder();
+        int i = 1;
+        for (Object object : path.getObjects()) {
+            objectsList.append(context.getString(R.string.objects_list_text_message, i, object.getName(), object.getDescription(), object.getZone().getName()));
+            i++;
+        }
+        return context.getString(R.string.path_text_message,
+                path.getPlace().getName(),
+                context.getString(R.string.maps_coordinates_link, path.getPlace().getLat(), path.getPlace().getLon()),
+                path.getName(),
+                objectsList);
     }
 
     private void sharePath(String text) {
