@@ -51,6 +51,7 @@ public class PlacePathsFragment extends Fragment {
                     PlacePathsAdapter mAdapter = new PlacePathsAdapter(requireContext(), notification.getData(), placePathsViewModel.getPlace());
                     mRecyclerView.setAdapter(mAdapter);
 
+                    view.findViewById(R.id.placePathsProgressBar).setVisibility(View.GONE);
                     TextView txtResults = view.findViewById(R.id.txtResults);
                     int item = mAdapter.getItemCount();
                     txtResults.setText(requireContext().getResources().getQuantityString(R.plurals.list_paths_results, item, item));
@@ -58,11 +59,13 @@ public class PlacePathsFragment extends Fragment {
                     else showNoResult();
                 } else {
                     Log.d("Dialog", "show dialog here");
+                    view.findViewById(R.id.placePathsProgressBar).setVisibility(View.GONE);
                     new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_ZONES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                view.findViewById(R.id.placePathsProgressBar).setVisibility(View.GONE);
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.GET_ZONES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
@@ -98,6 +101,7 @@ public class PlacePathsFragment extends Fragment {
         toolbar.setNavigationOnClickListener(v -> requireActivity().finish());
 
         try {
+            view.findViewById(R.id.placePathsProgressBar).setVisibility(View.VISIBLE);
             placePathsViewModel.getPlacePathsFromDatabase().observe(getViewLifecycleOwner(), getPlacePathsObserver);
         } catch (NoInternetConnectionException e) {
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
