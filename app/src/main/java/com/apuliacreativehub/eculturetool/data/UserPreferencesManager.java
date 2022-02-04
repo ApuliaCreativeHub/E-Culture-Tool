@@ -37,4 +37,15 @@ public class UserPreferencesManager {
                     sharedPref.getBoolean("isACurator", false));
         }
     }
+
+    public static void clearUserInfoFromSharedPreferences(Context context) {
+        if (context != null) {
+            SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.clear();
+            editor.apply();
+            token = "";
+            user = null;
+        }
+    }
 }
