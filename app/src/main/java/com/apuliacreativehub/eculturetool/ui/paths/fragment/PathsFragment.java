@@ -51,6 +51,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
     private ModalBottomSheetPaths modalBottomSheet;
     private TextView txtResults;
     private PathsViewModel pathsViewModel;
+    private View view;
 
     final Observer<RepositoryNotification<List<Path>>> getYourPlacesObserver = notification -> {
         ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
@@ -65,13 +66,16 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
                 mAdapter = new PathsAdapter(requireContext(), getParentFragmentManager(), mDataset);
                 mRecyclerView.setAdapter(mAdapter);
                 show();
+                view.findViewById(R.id.pathsProgressBar).setVisibility(View.GONE);
             } else {
                 Log.d("Dialog", "show dialog here");
+                view.findViewById(R.id.pathsProgressBar).setVisibility(View.GONE);
                 new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_PLACES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            view.findViewById(R.id.pathsProgressBar).setVisibility(View.GONE);
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.GET_PLACES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
         }
     };
@@ -88,13 +92,16 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
                     mDataset.addAll(pathsViewModel.getPaths());
                     mAdapter.notifyDataSetChanged();
                     show();
+                    view.findViewById(R.id.pathsProgressBar).setVisibility(View.GONE);
                 } else {
                     Log.d("Dialog", "show dialog here");
+                    view.findViewById(R.id.pathsProgressBar).setVisibility(View.GONE);
                     new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.DELETE_PLACES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+                view.findViewById(R.id.pathsProgressBar).setVisibility(View.GONE);
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.DELETE_PLACES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
@@ -102,7 +109,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_paths, container, false);
+        view = inflater.inflate(R.layout.fragment_paths, container, false);
 
         modalBottomSheet = new ModalBottomSheetPaths();
         containerNoResult = view.findViewById(R.id.noResultsLayoutPaths);
@@ -114,6 +121,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
 
         pathsViewModel = new ViewModelProvider(this).get(PathsViewModel.class);
         if (pathsViewModel.getPaths() == null) {
+            view.findViewById(R.id.pathsProgressBar).setVisibility(View.VISIBLE);
             pathsViewModel.getYourPaths().observe(getViewLifecycleOwner(), getYourPlacesObserver);
         }
 
@@ -180,8 +188,10 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i("Response", "AOPOSITIVE");
         try {
+            view.findViewById(R.id.pathsProgressBar).setVisibility(View.VISIBLE);
             pathsViewModel.deletePath().observe(this, deleteObserver);
         } catch (NoInternetConnectionException e) {
+            view.findViewById(R.id.pathsProgressBar).setVisibility(View.GONE);
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
         }
 
