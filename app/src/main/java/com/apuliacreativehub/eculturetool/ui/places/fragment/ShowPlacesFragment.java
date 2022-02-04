@@ -49,13 +49,16 @@ public class ShowPlacesFragment extends Fragment {
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mAdapter = new CardPlaceAdapter(getActivity(), mDataset);
                 mRecyclerView.setAdapter(mAdapter);
+                view.findViewById(R.id.showPlacesProgressBar).setVisibility(View.GONE);
             } else {
                 Log.d("Dialog", "show dialog here");
+                view.findViewById(R.id.showPlacesProgressBar).setVisibility(View.GONE);
                 new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_PLACES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            view.findViewById(R.id.showPlacesProgressBar).setVisibility(View.GONE);
             new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.GET_PLACES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
         }
     };
@@ -89,6 +92,7 @@ public class ShowPlacesFragment extends Fragment {
         super.onStart();
 
         FloatingActionButton btnCreatePlace = view.findViewById(R.id.btnCreatePlace);
+        view.findViewById(R.id.showPlacesProgressBar).setVisibility(View.VISIBLE);
         btnCreatePlace.setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new CreatePlaceFragment()));
     }
 
