@@ -41,6 +41,7 @@ public class LoginFragment extends Fragment implements ConfirmationDialog.Confir
     private EditText txtPassword;
     final Observer<RepositoryNotification<UserWithToken>> loginObserver = notification -> {
         ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        view.findViewById(R.id.loginProgressBar).setVisibility(View.GONE);
         if (notification.getException() == null) {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", String.valueOf(notification.getData()));
@@ -167,6 +168,7 @@ public class LoginFragment extends Fragment implements ConfirmationDialog.Confir
 
         Button btnLogin = view.findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(view -> {
+            view.findViewById(R.id.loginProgressBar).setVisibility(View.VISIBLE);
             loginViewModel.setUuid(UuidManager.getUuid(getActivity(), getString(R.string.login_shared_preferences)));
             loginViewModel.loginUser().observe(this, loginObserver);
         });
