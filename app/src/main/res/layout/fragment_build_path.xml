@@ -55,12 +55,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ellipsize="end"
-                android:hint="@string/rooms"
+                android:hint="@string/zones"
                 android:maxLines="1"
                 android:textAppearance="?attr/textAppearanceSubtitle1">
 
                 <AutoCompleteTextView
-                    android:id="@+id/selectRoomAutoComplete"
+                    android:id="@+id/selectZonesAutoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"

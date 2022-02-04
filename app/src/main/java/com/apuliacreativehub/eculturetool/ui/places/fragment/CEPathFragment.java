@@ -126,7 +126,7 @@ public abstract class CEPathFragment extends Fragment implements ConfirmationDia
     }
 
     protected void setSelectElement() {
-        autoCompleteTextView = view.findViewById(R.id.selectRoomAutoComplete);
+        autoCompleteTextView = view.findViewById(R.id.selectZonesAutoComplete);
         autoCompleteTextView.setAdapter(new ArrayAdapter<>(getContext(), R.layout.component_item_select_room, cePathViewModel.getZoneNames()));
         autoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
