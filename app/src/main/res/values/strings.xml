@@ -1,21 +1,17 @@
 <resources>
-    <string name="app_name">E-Culture Tool</string>
+    <string name="app_name" translatable="false">E-Culture Tool</string>
     <string name="welcome_login_button">Login</string>
     <string name="welcome_sign_up_button">Sign up</string>
     <string name="welcome_log_as_guest_text_view">Continue as Guest…</string>
     <string name="nav_paths">Paths</string>
     <string name="nav_places">Places</string>
-    <string name="nav_user">User</string>
+    <string name="nav_user">Profile</string>
     <string name="search">Search</string>
     <string name="filter">Filter</string>>
     <string name="filter_description">Select a filter</string>
     <string name="list_paths_no_results">No results found</string>
     <string name="list_paths_no_results_description">No paths has been found</string>
-    <string name="list_paths_last_used">Last used:</string>
-    <string name="list_paths_filter_names">Search by name:</string>
-    <string name="list_paths_filter_place">Search by place:</string>
-    <string name="list_paths_filter_date">Search by date used:</string>
-    <string name="apply_filter">APPLY FILTER</string>
+    <string name="apply_filter">APPLY FILTERS</string>
     <string name="museum">Museum</string>
     <string name="welcome">Welcome</string>
     <string name="new_account">Create a new account</string>
@@ -38,18 +34,18 @@
     <string name="surname">Surname</string>
     <string name="curator">Are you a curator?</string>
     <string name="why_sign_up">Why should I Sign Up?</string>
-    <string name="invalid_name">Please enter a name between 3 and 15 characters with the first letter capitalized and without spaces</string>
-    <string name="invalid_surname">Please enter a surname between 3 and 15 characters with the first letter capitalized and with at most one space</string>
+    <string name="invalid_name">Please enter a name between 3 and 15 characters long, with the first letter capitalized and without spaces</string>
+    <string name="invalid_surname">Please enter a surname between 3 and 15 characters long,  with the first letter capitalized and with at most one space</string>
     <string name="invalid_email">Please enter a valid email</string>
-    <string name="invalid_password">Please enter a password between 8 and 20 characters, without spaces, includes at least 1 digit, upper/lower case letter and special character</string>
-    <string name="invalid_confirm_password">Please be careful because the passwords don\'t match</string>
-    <string name="recover_password">Recover Password? Sign In</string>
+    <string name="invalid_password">Please enter a password between 8 and 20 characters, without spaces, including at least 1 digit, upper and lower case letter and special character</string>
+    <string name="invalid_confirm_password">Please be careful,  the passwords don\'t match</string>
+    <string name="recover_password">Password recovered? Sign In</string>
     <string name="send">Send New Password</string>
     <string name="error_dialog_title">An error occurred</string>
-    <string name="unexpected_exception_dialog">Something went wrong with your application.</string>
+    <string name="unexpected_exception_dialog">Something went wrong</string>
     <string name="ok">OK</string>
     <string name="information_paths">By registering we will save all your paths so that you can retrieve them from any device.</string>
-    <string name="information_curator">In addition, if you are a curator of one or more places you can manage them by entering, in addition to all the information, even the paths visible to all users.</string>
+    <string name="information_curator">Moreover, if you are a curator of one or more places you can manage them by entering, in addition to all the information, even the paths visible to all users.</string>
     <string name="information">Information</string>
     <string name="details">Details</string>
     <string name="old_password">Old Password</string>
@@ -62,7 +58,6 @@
     <string name="email_subject_label">Email:</string>
     <string name="new_password_subject_label">New Password</string>
     <string name="confirm_password_subject_label">Confirm Password</string>
-    <string name="close_dropbox">close dropbox</string>
     <string name="sign_up_now">Sign Up Now</string>
     <string name="delete_your_account">Delete Your Account</string>
     <string name="manage_your_places">Manage Your Places</string>
@@ -72,7 +67,7 @@
     <string name="cancel">Cancel</string>
     <string name="confirm_save_visitor_paths_to_account">Sure</string>
     <string name="cancel_save_visitor_paths_to_account">Don\'t save</string>
-    <string name="title_activity_manage_places">ManagePlacesActivity</string>
+    <string name="title_activity_manage_places" translatable="false">ManagePlacesActivity</string>
     <string name="recover">Recover Password</string>
     <string name="create_new_place">Place Information</string>
     <string name="paths_screen_title">Paths</string>
@@ -115,13 +110,13 @@
     <string name="warning_save_visitor_paths_to_account">By importing paths to your account, you will be able to access them everywhere.\nIf you don\'t import them now, they will not be visible until you logout.\nDo you want to import your paths on your account?</string>
     <string name="paths_section">Go to paths section</string>
     <string name="not_found_text">Sorry, not found</string>
-    <string name="not_found_text_explanation">The results requested are not found, can be deleted or never be added</string>
+    <string name="not_found_text_explanation">The required results were not found. They may have been eliminated or never existed</string>
     <string name="edit_place_screen_title">Edit Place</string>
     <string name="place_details">Place Details</string>
     <string name="change_place_information">Change Place Information</string>
     <string name="delete_your_place">Delete Your Place</string>
-    <string name="scan_qrcode">Scan QrCode</string>
-    <string name="create_new_artifact">Create new artifact</string>
+    <string name="scan_qrcode">Scan QR Code</string>
+    <string name="create_new_artifact">Create new object</string>
     <string name="zones">Zones</string>
     <string name="add">Add</string>
     <string name="edit">Edit</string>
@@ -133,12 +128,12 @@
     <string name="book">Book</string>
     <string name="path_name">Path name</string>
     <string name="date_change">Date of last modification</string>
-    <string name="_0">0</string>
+    <string name="_0" translatable="false">0</string>
     <string name="apply_filters">Apply Filters</string>
     <string name="search_by_path_name">Search by path name</string>
     <string name="search_by_place_name">Search by place name</string>
     <string name="search_by_address_place">Search by place address</string>
-    <string name="search_for_objects_in_the_path">Search for objects in the path</string>
+    <string name="search_for_objects_in_the_path">Search for objects name in the path</string>
     <string name="select_filters">Select Filters</string>
     <string name="place_name_and_address">Place name and place address</string>
     <string name="create_object_title_screen">Create Object</string>
@@ -148,9 +143,9 @@
     <string name="change_object_information">Change Object Information</string>
     <string name="delete_your_object">Delete This Object</string>
     <string name="edit_object_screen_title">Edit Object</string>
-    <string name="scan_qrcode_prompt">For flash use volume up key</string>
+    <string name="scan_qrcode_prompt">For flash use volume UP key</string>
     <string name="scan_qrcode_error">You did not scan anything</string>
-    <string name="qrcode_download_success">QRCode downloaded</string>
+    <string name="qrcode_download_success">QR Code downloaded</string>
     <string name="qrcode_download_error">Error during download</string>
     <string name="save_path">Save path</string>
     <string name="path_name_here">Path name here</string>
@@ -162,7 +157,7 @@
     <string name="path_download_success">Path downloaded</string>
     <string name="path_download_error">Error during download</string>
     <string name="edit_path_screen_title">Edit Path</string>
-    <string name="arrow">arrow</string>
+    <string name="arrow" translatable="false">arrow</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="edit_not_allowed">Can\'t edit</string>
     <item name="object_tag_id" type="id"></item>
@@ -171,6 +166,6 @@
         <item quantity="other">Results: %d</item>
     </plurals>
     <string name="path_text_message">Hey, I recently got my eye on %1$s, which is here: %2$s.\nTake a look at my path, %3$s:\n%4$s\nThis path was created with ECultureTool, download the app from your store now!</string>
-    <string name="maps_coordinates_link">https://www.google.com/maps/place/%1$s,%2$s</string>
+    <string name="maps_coordinates_link" translatable="false">https://www.google.com/maps/place/%1$s,%2$s</string>
     <string name="objects_list_text_message">%1$d. %2$s, %3$s, located in %4$s\n</string>
 </resources>
