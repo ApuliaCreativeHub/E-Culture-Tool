@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -83,16 +84,24 @@ public class EditPathFragment extends CEPathFragment {
         this.fromScreen = fromScreen;
     }
 
+    @Override
     protected void initializeViewModel() {
         cePathViewModel = new ViewModelProvider(this).get(EditPathViewModel.class);
         cePathViewModel.setPlace(place);
         ((EditPathViewModel) cePathViewModel).setPath(path);
     }
 
+    @Override
     protected void setToolbarTitle(Toolbar toolbar) {
         toolbar.setTitle(R.string.edit_path_screen_title);
     }
 
+    @Override
+    protected void setPathName() {
+        ((EditText) view.findViewById(R.id.txtPathName)).setText(path.getName());
+    }
+
+    @Override
     protected void persistPath() {
         if (((EditPathViewModel) cePathViewModel).getPath().getUserId() == UserPreferencesManager.getUser().getId()) {
             try {

@@ -97,6 +97,7 @@ public abstract class CEPathFragment extends Fragment implements ConfirmationDia
 
         Toolbar toolbar = view.findViewById(R.id.buildPathToolbar);
         setToolbarTitle(toolbar);
+        setPathName();
         toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
         toolbar.setNavigationOnClickListener(v ->
                 new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_discard_path_changes), DialogTags.DISCARD_PATH_CHANGES).show(getChildFragmentManager(), Dialog.TAG)
@@ -104,6 +105,8 @@ public abstract class CEPathFragment extends Fragment implements ConfirmationDia
     }
 
     protected abstract void setToolbarTitle(Toolbar toolbar);
+
+    protected abstract void setPathName();
 
     @Override
     public void onStart() {

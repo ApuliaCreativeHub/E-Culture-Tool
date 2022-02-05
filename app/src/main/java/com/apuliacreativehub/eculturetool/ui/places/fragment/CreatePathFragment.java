@@ -100,6 +100,10 @@ public class CreatePathFragment extends CEPathFragment {
     }
 
     @Override
+    protected void setPathName() {
+    }
+
+    @Override
     protected void initializeViewModel() {
         cePathViewModel = new ViewModelProvider(this).get(CreatePathViewModel.class);
         cePathViewModel.setPlace(place);
