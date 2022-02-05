@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">E-Culture Tool</string>
     <string name="welcome_login_button">Login</string>
     <string name="welcome_sign_up_button">Registrati</string>
     <string name="welcome_log_as_guest_text_view">Continua come Visitatore...</string>
@@ -176,4 +175,5 @@
     <string name="e53">Email sbagliata o si è verificato un errore durante il recupero della password</string>
     <string name="e54">Elaborazione dell\'immagine fallita. Prova con un\'immagine differente</string>
     <string name="e55">Non è stato trovato alcun luogo per questo utente</string>
+    <string name="object_qr_code_download">Scarica il QR Code di questo oggetto</string>
 </resources>

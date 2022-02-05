@@ -168,4 +168,5 @@
     <string name="path_text_message">Hey, I recently got my eye on %1$s, which is here: %2$s.\nTake a look at my path, %3$s:\n%4$s\nThis path was created with ECultureTool, download the app from your store now!</string>
     <string name="maps_coordinates_link" translatable="false">https://www.google.com/maps/place/%1$s,%2$s</string>
     <string name="objects_list_text_message">%1$d. %2$s, %3$s, located in %4$s\n</string>
+    <string name="object_qr_code_download">Download the QR Code of this object</string>
 </resources>
