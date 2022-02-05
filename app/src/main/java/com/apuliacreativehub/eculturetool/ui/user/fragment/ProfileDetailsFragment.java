@@ -35,6 +35,7 @@ import com.apuliacreativehub.eculturetool.ui.user.viewmodel.LogoutViewModel;
 public class ProfileDetailsFragment extends Fragment implements ConfirmationDialog.ConfirmationDialogListener {
     private View view;
     private LogoutViewModel logoutViewModel;
+    private AppCompatActivity activity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,22 +62,22 @@ public class ProfileDetailsFragment extends Fragment implements ConfirmationDial
 
         Toolbar toolbar=view.findViewById(R.id.profileToolbar);
         toolbar.setTitle(R.string.user_screen_title);
-        AppCompatActivity activity=(AppCompatActivity) requireActivity();
+        activity = (AppCompatActivity) requireActivity();
         activity.setSupportActionBar(toolbar);
         ActionBar actionBar = activity.getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(false);
 
         logoutViewModel = new ViewModelProvider(this).get(LogoutViewModel.class);
-
-        SharedPreferences sharedPref = activity.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
-        ((TextView)view.findViewById(R.id.txtName)).setText(sharedPref.getString("name", null));
-        ((TextView)view.findViewById(R.id.txtSurname)).setText(sharedPref.getString("surname", null));
-        ((TextView)view.findViewById(R.id.txtEmail)).setText(sharedPref.getString("email", null));
     }
 
     public void onStart() {
         super.onStart();
+
+        SharedPreferences sharedPref = activity.getSharedPreferences(getString(R.string.login_shared_preferences), Context.MODE_PRIVATE);
+        ((TextView) view.findViewById(R.id.txtName)).setText(sharedPref.getString("name", null));
+        ((TextView) view.findViewById(R.id.txtSurname)).setText(sharedPref.getString("surname", null));
+        ((TextView) view.findViewById(R.id.txtEmail)).setText(sharedPref.getString("email", null));
 
         Button btnEdit = view.findViewById(R.id.btnEdit);
         Button btnLogout = view.findViewById(R.id.btnLogout);
