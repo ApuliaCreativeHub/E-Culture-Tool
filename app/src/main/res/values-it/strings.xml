@@ -90,11 +90,11 @@
     <string name="invalid_place_description">Per favore, inserisci una descrizione lunga tra i 10 e i 100 caratteri</string>
     <string name="pick_place_image">Per favore, scegli un\'immagine del tuo luogo dalla galleria</string>
     <string name="pick_object_image">Per favore, scegli un\'immagine del tuo oggetto dalla galleria</string>
-    <string name="show_place_default_paths">Percorsi del luogo</string>
+    <string name="show_place_default_paths">Percorsi del Luogo</string>
     <string name="create_path_screen_title">Crea percorso</string>
     <string name="btn_add_path">Crea un nuovo percorso</string>
     <string name="show_my_paths">Percorsi</string>
-    <string name="manage_place_screen_title">Gestisci luogo</string>
+    <string name="manage_place_screen_title">Gestisci Luogo</string>
     <string name="edit_place_information">Modifica le informazioni del luogo</string>
     <string name="warning_dialog_title">Attenzione</string>
     <string name="warning_delete_account">Sei sicuro di voler eliminare il tuo account?</string>
@@ -110,7 +110,7 @@
     <string name="not_found_text">Spiacenti, non trovato</string>
     <string name="not_found_text_explanation">I risultati richiesti non sono stati trovati. Potrebbero essere stati eliminati o mai esistiti</string>
     <string name="edit_place_screen_title">Modifica luogo</string>
-    <string name="place_details">Dettagli luogo</string>
+    <string name="place_details">Dettagli Luogo</string>
     <string name="change_place_information">Modifica le informazioni del luogo</string>
     <string name="delete_your_place">Elimina il luogo</string>
     <string name="scan_qrcode">Scansiona QR code</string>
@@ -133,8 +133,8 @@
     <string name="search_for_objects_in_the_path">Cerca per nome degli oggetti nel percorso</string>
     <string name="select_filters">Seleziona Filtri</string>
     <string name="place_name_and_address">Nome e indirizzo del luogo</string>
-    <string name="create_object_title_screen">Crea oggetto</string>
-    <string name="object_information">Informazioni sull\'oggetto</string>
+    <string name="create_object_title_screen">Crea Oggetto</string>
+    <string name="object_information">Informazioni Oggetto</string>
     <string name="zone_not_selected">Seleziona una zona</string>
     <string name="object_details">Dettagli oggetti</string>
     <string name="change_object_information">Modifica le informazioni dell\'oggetto</string>
@@ -150,10 +150,10 @@
     <string name="share">Condividi</string>
     <string name="download">Scarica</string>
     <string name="path_error">Devi inserire almeno un oggetto</string>
-    <string name="show_path_screen_title">Mostra percorso</string>
+    <string name="show_path_screen_title">Mostra Percorso</string>
     <string name="path_download_success">Percorso scaricato</string>
     <string name="path_download_error">Errore durante il download</string>
-    <string name="edit_path_screen_title">Modifica percorso</string>
+    <string name="edit_path_screen_title">Modifica Percorso</string>
     <string name="no_internet_connection">Nessuna connessione ad Internet</string>
     <string name="edit_not_allowed">Impossibile modificare</string>
     <plurals name="list_paths_results">
