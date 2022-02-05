@@ -93,8 +93,7 @@ public class ZoneRepository {
             @Override
             public void run() {
                 for (Zone zone : zones) {
-                    Zone z = localZoneDAO.getZoneById(zone.getId());
-                    if (z == null) {
+                    if (localZoneDAO.getZoneById(zone.getId()) == null) {
                         localZoneDAO.insertZone(zone);
                     } else localZoneDAO.updateZone(zone);
                 }
@@ -156,16 +155,16 @@ public class ZoneRepository {
 
     private MutableLiveData<RepositoryNotification<Zone>> editZoneOnRemoteDatabase(Zone zone) {
         MutableLiveData<RepositoryNotification<Zone>> editResult = new MutableLiveData<>();
-        Call<Void> call = remoteZoneDAO.EditZone(zone);
+        Call<Zone> call = remoteZoneDAO.EditZone(zone);
         executor.execute(() -> {
             try {
-                Response<Void> response = call.execute();
+                Response<Zone> response = call.execute();
                 Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
                 RepositoryNotification<Zone> repositoryNotification = new RepositoryNotification<>();
                 if (response.isSuccessful()) {
-                    repositoryNotification.setData(zone);
+                    repositoryNotification.setData(response.body());
                     // Edit zone on local database too
-                    saveRemoteZonesToLocal(Collections.singletonList(zone));
+                    saveRemoteZonesToLocal(Collections.singletonList(repositoryNotification.getData()));
                 } else {
                     if (response.errorBody() != null) {
                         repositoryNotification.setErrorMessage(response.errorBody().string());

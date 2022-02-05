@@ -1,59 +1,134 @@
 package com.apuliacreativehub.eculturetool.data.entity;
 
-public class Path {
+import android.os.Parcel;
+import android.os.Parcelable;
 
-    private int pathId;
-    private String pathName;
-    private String placeName;
-    private String placeAddress;
-    private String placeImage;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
-    public Path(int pathId, String pathName, String placeName, String placeAddress, String placeImage) {
-        this.pathId = pathId;
-        this.pathName = pathName;
-        this.placeName = placeName;
-        this.placeAddress = placeAddress;
-        this.placeImage = placeImage;
+import java.util.List;
+
+@Entity
+public class Path implements Parcelable {
+    @PrimaryKey
+    @ColumnInfo(name = "path_id")
+    private int id;
+
+    @ColumnInfo(name = "name")
+    private String name;
+
+    @ColumnInfo(name = "user_id")
+    private int userId;
+
+    @Ignore
+    private List<Object> objects;
+
+    @Ignore
+    private Place place;
+
+    public Path(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public int getPathId() {
-        return pathId;
+    @Ignore
+    public Path(int id) {
+        this.id = id;
     }
 
-    public void setPathId(int pathId) {
-        this.pathId = pathId;
+    @Ignore
+    public Path(String name) {
+        this.name = name;
     }
 
-    public String getPathName() {
-        return pathName;
+    /**
+     * Used to build a Path object from a VisitorPath one.
+     * Field id will correspond to visitorPathId.
+     *
+     * @param visitorPath VisitorPath to convert
+     **/
+    @Ignore
+    public Path(VisitorPath visitorPath) {
+        this.id = visitorPath.getVisitorPathId();
+        this.name = visitorPath.getName();
+        this.userId = visitorPath.getUserId();
+        this.objects = visitorPath.getObjects();
+        this.place = visitorPath.getPlace();
     }
 
-    public void setPathName(String pathName) {
-        this.pathName = pathName;
+    public static final Creator<Path> CREATOR = new Creator<Path>() {
+        @Override
+        public Path createFromParcel(Parcel in) {
+            return new Path(in);
+        }
+
+        @Override
+        public Path[] newArray(int size) {
+            return new Path[size];
+        }
+    };
+
+    protected Path(Parcel parcel) {
+        id = parcel.readInt();
+        name = parcel.readString();
+        userId = parcel.readInt();
+        objects = parcel.createTypedArrayList(Object.CREATOR);
+        place = parcel.readParcelable(Place.class.getClassLoader());
     }
 
-    public String getPlaceName() {
-        return placeName;
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeInt(userId);
+        parcel.writeTypedArray(objects.toArray(new Object[0]), 0);
+        parcel.writeParcelable(place, 0);
     }
 
-    public void setPlaceName(String placeName) {
-        this.placeName = placeName;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public String getPlaceAddress() {
-        return placeAddress;
+    public int getId() {
+        return id;
     }
 
-    public void setPlaceAddress(String placeAddress) {
-        this.placeAddress = placeAddress;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getPlaceImage() {
-        return placeImage;
+    public String getName() {
+        return name;
     }
 
-    public void setPlaceImage(String placeImage) {
-        this.placeImage = placeImage;
+    public void setName(String name) {
+        this.name = name;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public List<Object> getObjects() {
+        return objects;
+    }
+
+    public void setObjects(List<Object> objects) {
+        this.objects = objects;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
+    }
 }

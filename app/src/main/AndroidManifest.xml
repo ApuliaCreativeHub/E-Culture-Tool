@@ -15,9 +15,9 @@
         android:name=".di.ECultureTool"
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/system_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/system_icon"
         android:supportsRtl="true"
         android:theme="@style/ECultureTool"
         android:usesCleartextTraffic="true">

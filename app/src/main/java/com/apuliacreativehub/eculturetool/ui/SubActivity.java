@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 import com.apuliacreativehub.eculturetool.ui.paths.fragment.EditPathFragment;
-import com.apuliacreativehub.eculturetool.ui.places.fragment.CreatePathFragment;
 import com.apuliacreativehub.eculturetool.ui.places.fragment.PlacePathsFragment;
 import com.apuliacreativehub.eculturetool.ui.places.fragment.ShowPlacesFragment;
 import com.apuliacreativehub.eculturetool.ui.user.fragment.EditProfileFragment;
@@ -46,13 +45,13 @@ public class SubActivity extends AppCompatActivity {
                     TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new ShowPlacesFragment());
                     break;
                 case PLACE_PATHS_FRAGMENT:
-                    TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new PlacePathsFragment());
+                    TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new PlacePathsFragment(extras.getParcelable("place")));
                     break;
                 case EDIT_PROFILE_FRAGMENT:
                     TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new EditProfileFragment());
                     break;
                 case EDIT_PATH_FRAGMENT:
-                    TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new EditPathFragment());
+                    TransactionHelper.transactionWithoutAddToBackStack(this, R.id.fragment_container_layout, new EditPathFragment(extras.getParcelable("place"), extras.getParcelable("path"), extras.getInt("fromScreen")));
                     break;
             }
         }

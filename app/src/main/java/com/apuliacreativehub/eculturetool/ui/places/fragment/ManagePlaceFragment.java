@@ -1,6 +1,8 @@
 package com.apuliacreativehub.eculturetool.ui.places.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,8 +35,10 @@ import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionEx
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.component.QRCodeHelper;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
+import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.apuliacreativehub.eculturetool.ui.places.adapter.ListObjectsManageAdapter;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.ManagePlaceViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -80,12 +84,12 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     arrayOptionsAdapter.notifyDataSetChanged();
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_ZONES_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_ZONES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_ZONES_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.GET_ZONES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
@@ -100,14 +104,17 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                 if (notification.getErrorMessage() == null) {
                     mDataset = notification.getData();
                     setDynamicRecycleView();
+                    view.findViewById(R.id.objectsProgressBar).setVisibility(View.GONE);
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_OBJECTS_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    view.findViewById(R.id.objectsProgressBar).setVisibility(View.GONE);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_OBJECTS_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_OBJECTS_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+                view.findViewById(R.id.objectsProgressBar).setVisibility(View.GONE);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.GET_OBJECTS_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
@@ -126,14 +133,17 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     arrayOptionsAdapter = new ArrayAdapter<>(requireContext(), R.layout.component_item_select_room, managePlaceViewModel.getZoneNames());
                     autoCompleteTextView.setAdapter(arrayOptionsAdapter);
                     arrayOptionsAdapter.notifyDataSetChanged();
+                    view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "ADD_ZONE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.ADD_ZONES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "ADD_ZONE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+                view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.ADD_ZONES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
@@ -155,15 +165,18 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                         arrayOptionsAdapter = new ArrayAdapter<>(requireContext(), R.layout.component_item_select_room, managePlaceViewModel.getZoneNames());
                         autoCompleteTextView.setAdapter(arrayOptionsAdapter);
                         arrayOptionsAdapter.notifyDataSetChanged();
+                        view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
                     }
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATE_ZONE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.UPDATE_ZONES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATE_ZONE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+                view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.UPDATE_ZONES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
@@ -182,14 +195,17 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     arrayOptionsAdapter = new ArrayAdapter<>(requireContext(), R.layout.component_item_select_room, managePlaceViewModel.getZoneNames());
                     autoCompleteTextView.setAdapter(arrayOptionsAdapter);
                     arrayOptionsAdapter.notifyDataSetChanged();
+                    view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETE_ZONE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.DELETE_ZONES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "DELETE_ZONE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+                view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.DELETE_ZONES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
@@ -198,6 +214,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         @Override
         public void onChanged(RepositoryNotification<Object> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            view.findViewById(R.id.objectsProgressBar).setVisibility(View.GONE);
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
@@ -205,12 +222,12 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new EditObjectFragment(notification.getData(), managePlaceViewModel.getZonesBundle(), arrayOptionsAdapter, managePlaceViewModel.getZoneById(notification.getData().getZoneId()).getName()));
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "GET_OBJECTS_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_OBJECTS_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "GET_OBJECTS_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.GET_OBJECTS_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     };
@@ -244,24 +261,28 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         toolbar.setTitle(R.string.manage_place_screen_title);
         toolbar.inflateMenu(R.menu.top_menu_manage_place);
         toolbar.setOnMenuItemClickListener(item -> {
-            switch(item.getItemId()) {
-                case R.id.editPlaceInformation:
-                    TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new EditPlaceFragment(place));
-                    break;
-                case R.id.editArtifactByQrCode:
-                    // Initialize intent integrator
-                    IntentIntegrator intentIntegrator = IntentIntegrator.forSupportFragment(ManagePlaceFragment.this);
-                    // Set prompt text
-                    intentIntegrator.setPrompt(getString(R.string.scan_qrcode_prompt));
-                    // Set beep
-                    intentIntegrator.setBeepEnabled(true);
-                    // Locked orientation
-                    intentIntegrator.setOrientationLocked(true);
-                    // Set capture activity
-                    intentIntegrator.setCaptureActivity(QRCodeHelper.class);
-                    // Initialize scan
-                    intentIntegrator.initiateScan();
-                    break;
+            if (Utils.checkConnection((ConnectivityManager) requireActivity().getApplication().getSystemService(Context.CONNECTIVITY_SERVICE))) {
+                switch(item.getItemId()) {
+                    case R.id.editPlaceInformation:
+                        TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new EditPlaceFragment(place));
+                        break;
+                    case R.id.editArtifactByQrCode:
+                        // Initialize intent integrator
+                        IntentIntegrator intentIntegrator = IntentIntegrator.forSupportFragment(ManagePlaceFragment.this);
+                        // Set prompt text
+                        intentIntegrator.setPrompt(getString(R.string.scan_qrcode_prompt));
+                        // Set beep
+                        intentIntegrator.setBeepEnabled(true);
+                        // Locked orientation
+                        intentIntegrator.setOrientationLocked(true);
+                        // Set capture activity
+                        intentIntegrator.setCaptureActivity(QRCodeHelper.class);
+                        // Initialize scan
+                        intentIntegrator.initiateScan();
+                        break;
+                }
+            }else{
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
             return true;
         });
@@ -283,9 +304,11 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
             // Initialize alert dialog
             Log.i("Object ID", intentResult.getContents());
             try {
+                view.findViewById(R.id.objectsProgressBar).setVisibility(View.VISIBLE);
                 managePlaceViewModel.getObjectById(Integer.parseInt(intentResult.getContents())).observe(this, getObjectFromQR);
             } catch (NoInternetConnectionException e) {
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                view.findViewById(R.id.objectsProgressBar).setVisibility(View.GONE);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
 
         } else {
@@ -297,7 +320,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
 
     private void setSelectElement() {
         managePlaceViewModel.getZonesFromDatabase().observe(getViewLifecycleOwner(), getZonesObserver);
-        autoCompleteTextView = view.findViewById(R.id.selectRoomAutoComplete);
+        autoCompleteTextView = view.findViewById(R.id.selectZonesAutoComplete);
         autoCompleteTextView.setAdapter(arrayOptionsAdapter);
     }
 
@@ -316,6 +339,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
         setSelectElement();
 
         if(!managePlaceViewModel.getCurrentlySelectedZoneName().equals("")){
+            view.findViewById(R.id.objectsProgressBar).setVisibility(View.VISIBLE);
             managePlaceViewModel.getObjectByZone().observe(getViewLifecycleOwner(), getObjectObserver);
         }
 
@@ -339,19 +363,23 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                 autoCompleteTextView.setError(null);
                 if(add) {
                     try {
+                        view.findViewById(R.id.zoneProgressBar).setVisibility(View.VISIBLE);
                         managePlaceViewModel.addZoneToDatabase(name).observe(this, addZoneObserver);
                     } catch (NoInternetConnectionException e) {
-                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                        view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
+                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                     }
                 } else {
                     try {
+                        view.findViewById(R.id.zoneProgressBar).setVisibility(View.VISIBLE);
                         managePlaceViewModel.editZoneOnDatabase(name).observe(this, updateZoneObserver);
                     } catch (NoInternetConnectionException e) {
-                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                        view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
+                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                     }
                 }
             } else {
-                autoCompleteTextView.setError(getString(R.string.invalid_room));
+                autoCompleteTextView.setError(getString(R.string.invalid_zone));
             }
 
             autoCompleteTextView.setInputType(EditorInfo.TYPE_NULL);
@@ -360,14 +388,19 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
             return true;
         });
 
-        Button btnRoomOptions = view.findViewById(R.id.btnRoomOptions);
+        Button btnRoomOptions = view.findViewById(R.id.btnZoneOptions);
         btnRoomOptions.setOnClickListener(view -> showMenu(view, R.menu.context_menu_room));
 
         FloatingActionButton btnCreateObject = view.findViewById(R.id.btnCreateObject);
-        btnCreateObject.setOnClickListener(view ->
-                TransactionHelper.transactionWithAddToBackStack(requireActivity(),
-                        R.id.fragment_container_layout,
-                        new CreateObjectFragment(managePlaceViewModel.getZonesBundle(), arrayOptionsAdapter))
+        btnCreateObject.setOnClickListener(view -> {
+                    if (Utils.checkConnection((ConnectivityManager) requireActivity().getApplication().getSystemService(Context.CONNECTIVITY_SERVICE))) {
+                        TransactionHelper.transactionWithAddToBackStack(requireActivity(),
+                                R.id.fragment_container_layout,
+                                new CreateObjectFragment(managePlaceViewModel.getZonesBundle(), arrayOptionsAdapter));
+                    } else {
+                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
+                    }
+                }
         );
     }
 
@@ -404,7 +437,7 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
     }
 
     public void showNoticeDialog() {
-        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_room), "DELETE_ROOM");
+        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_zone), DialogTags.DELETE_ZONES_WARNING);
         dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
     }
 
@@ -416,9 +449,11 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
             autoCompleteTextView.setText("");
             selected = false;
             try {
+                view.findViewById(R.id.zoneProgressBar).setVisibility(View.VISIBLE);
                 managePlaceViewModel.deleteZoneFromDatabase(managePlaceViewModel.getCurrentlySelectedZoneName()).observe(this, deleteZoneObserver);
             } catch (NoInternetConnectionException e) {
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), "NO_INTERNET_CONNECTION_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         }
     }

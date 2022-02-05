@@ -1,5 +1,6 @@
 package com.apuliacreativehub.eculturetool.ui.places.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,28 +8,61 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
+import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
+import com.apuliacreativehub.eculturetool.ui.paths.fragment.EditPathFragment;
+import com.google.android.material.card.MaterialCardView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.ViewHolder> {
 
-    private final ArrayList<Path> dataSet;
+    private final List<Path> dataSet;
+    private final Place place;
+    private final Context context;
+
+    public PlacePathsAdapter(Context context, List<Path> dataSet, Place place) {
+        this.context = context;
+        this.dataSet = dataSet;
+        this.place = place;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+        viewHolder.getTextPathName().setText(dataSet.get(position).getName());
+        viewHolder.getTextPlaceNameAndAddress().setText(place.getName() + " - " + place.getAddress());
+        viewHolder.getPathCard().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new EditPathFragment(place, dataSet.get(viewHolder.getBindingAdapterPosition()), EditPathFragment.FROM_PLACE_PATHS));
+            }
+        });
+    }
+
+    @Override
+    @NonNull
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.component_card_curator_path, viewGroup, false);
+        return new ViewHolder(view);
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textPathName;
         private final TextView textPlaceNameAndAddress;
         private final ImageView imagePath;
+        private final MaterialCardView pathCard;
 
         public ViewHolder(View view) {
             super(view);
-            //TODO: Define click listener for the ViewHolder's View
             textPathName = view.findViewById(R.id.listComponentPathName);
             textPlaceNameAndAddress = view.findViewById(R.id.listComponentPathPlace);
             imagePath = view.findViewById(R.id.listComponentPathImage);
+            pathCard = view.findViewById(R.id.cardCuratorPath);
         }
 
         public TextView getTextPathName() {
@@ -42,24 +76,10 @@ public class PlacePathsAdapter extends RecyclerView.Adapter<PlacePathsAdapter.Vi
         public ImageView getImagePath() {
             return imagePath;
         }
-    }
 
-    public PlacePathsAdapter(ArrayList<Path> dataSet) {
-        this.dataSet = dataSet;
-    }
-
-    @Override @NonNull
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.component_card_curator_path, viewGroup, false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        viewHolder.getTextPathName().setText(this.dataSet.get(position).getPathName());
-        String placeNameAndAddress = this.dataSet.get(position).getPlaceName() + " - " + this.dataSet.get(position).getPlaceAddress();
-        viewHolder.getTextPlaceNameAndAddress().setText(placeNameAndAddress);
-        //TODO: add all value to personalize single component
+        public MaterialCardView getPathCard() {
+            return pathCard;
+        }
     }
 
     @Override

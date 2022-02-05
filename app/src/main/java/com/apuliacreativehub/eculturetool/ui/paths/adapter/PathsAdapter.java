@@ -1,11 +1,8 @@
 package com.apuliacreativehub.eculturetool.ui.paths.adapter;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,30 +18,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
+import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.ui.LandscapeActivity;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
-import com.apuliacreativehub.eculturetool.ui.component.QRCodeHelper;
-import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
-import com.apuliacreativehub.eculturetool.ui.paths.fragment.ShowPathFragment;
-import com.apuliacreativehub.eculturetool.ui.places.fragment.CreatePathFragment;
-import com.apuliacreativehub.eculturetool.ui.places.fragment.ManagePlaceFragment;
+import com.apuliacreativehub.eculturetool.ui.paths.fragment.EditPathFragment;
 import com.google.android.material.card.MaterialCardView;
-import com.google.zxing.WriterException;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> {
     private final static int SHARE_PATH = R.id.sharePath;
@@ -53,7 +45,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
     private final static int DELETE_PATH = R.id.deletePath;
     private final Context context;
     private final FragmentManager fragmentManager;
-    private final ArrayList<Path> dataSet;
+    private final List<Path> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView cardPath;
@@ -92,7 +84,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         }
     }
 
-    public PathsAdapter(Context context, FragmentManager fragmentManager, ArrayList<Path> dataSet) {
+    public PathsAdapter(Context context, FragmentManager fragmentManager, List<Path> dataSet) {
         this.context = context;
         this.fragmentManager = fragmentManager;
         this.dataSet = dataSet;
@@ -106,13 +98,15 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        viewHolder.getTextPathName().setText(this.dataSet.get(position).getPathName());
-        String placeNameAndAddress = this.dataSet.get(position).getPlaceName() + " - " + this.dataSet.get(position).getPlaceAddress();
+        viewHolder.getTextPathName().setText(this.dataSet.get(position).getName());
+        String placeNameAndAddress = this.dataSet.get(position).getPlace().getName() + " - " + this.dataSet.get(position).getPlace().getAddress();
         viewHolder.getTextPlaceNameAndAddress().setText(placeNameAndAddress);
         viewHolder.getBtnOptions().setOnClickListener(view -> showMenu(view, R.menu.context_menu_path, position));
         viewHolder.getCardPath().setOnClickListener(
-                view -> context.startActivity(new Intent(((AppCompatActivity) context), LandscapeActivity.class).putExtra(LandscapeActivity.SHOW_FRAGMENT, LandscapeActivity.SHOW_PATH_FRAGMENT)
-        ));
+                view -> context.startActivity(new Intent(context, LandscapeActivity.class)
+                        .putExtra(LandscapeActivity.SHOW_FRAGMENT, LandscapeActivity.SHOW_PATH_FRAGMENT)
+                        .putExtra("path", dataSet.get(position))
+                ));
     }
 
     private void showMenu(View view, int menu, int position) {
@@ -122,20 +116,22 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             switch(menuItem.getItemId()) {
                 case SHARE_PATH:
-                    // TODO: Parse JSON Path Here
-                    sharePath("JSON Parse");
+                    sharePath(buildTextMessage(this.dataSet.get(position)));
                     break;
                 case DOWNLOAD_PATH:
-                    // TODO: Parse JSON Path Here
-                    downloadPath("JSON Parse");
+                    downloadPath(new Gson().toJson(this.dataSet.get(position)));
                     break;
                 case EDIT_PATH:
-                    // TODO: Read Path API
-                    context.startActivity(new Intent(((AppCompatActivity) context), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PATH_FRAGMENT));
+                    context.startActivity(
+                            new Intent(context, SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PATH_FRAGMENT)
+                                    .putExtra("place", dataSet.get(position).getPlace())
+                                    .putExtra("path", dataSet.get(position))
+                                    .putExtra("fromScreen", EditPathFragment.FROM_PATHS)
+                    );
                     break;
                 case DELETE_PATH:
                     Bundle result = new Bundle();
-                    result.putInt("pathId", this.dataSet.get(position).getPathId());
+                    result.putInt("pathId", this.dataSet.get(position).getId());
                     fragmentManager.setFragmentResult("pathKey", result);
                     break;
             }
@@ -143,6 +139,20 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         });
 
         popupMenu.show();
+    }
+
+    private String buildTextMessage(Path path) {
+        StringBuilder objectsList = new StringBuilder();
+        int i = 1;
+        for (Object object : path.getObjects()) {
+            objectsList.append(context.getString(R.string.objects_list_text_message, i, object.getName(), object.getDescription(), object.getZone().getName()));
+            i++;
+        }
+        return context.getString(R.string.path_text_message,
+                path.getPlace().getName(),
+                context.getString(R.string.maps_coordinates_link, path.getPlace().getLat(), path.getPlace().getLon()),
+                path.getName(),
+                objectsList);
     }
 
     private void sharePath(String text) {

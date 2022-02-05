@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.places.fragment.CreatePathFragment">
+
+    <ProgressBar
+        android:id="@+id/buildPathProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +26,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editPathToolbar"
+        app:layout_constraintTop_toBottomOf="@+id/buildPathToolbar"
         app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
@@ -46,6 +56,7 @@
                     android:id="@+id/recyclerCircleArtifact"
                     android:layout_width="match_parent"
                     android:layout_height="50dp" />
+
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -54,28 +65,30 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ellipsize="end"
-                android:hint="@string/rooms"
+                android:hint="@string/zones"
                 android:maxLines="1"
                 android:textAppearance="?attr/textAppearanceSubtitle1">
 
                 <AutoCompleteTextView
-                    android:id="@+id/selectRoomAutoComplete"
+                    android:id="@+id/selectZonesAutoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="none"
                     android:popupElevation="16dp" />
+
             </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerContainerCreateObject"
+            android:id="@+id/recyclerContainerBuildObject"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </LinearLayout>
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/editPathToolbar"
+        android:id="@+id/buildPathToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -86,12 +99,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnCreatePath"
+        android:id="@+id/btnSavePath"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="@string/create_path"
+        android:contentDescription="@string/save_path"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@mipmap/outline_check_black_48" />

@@ -27,7 +27,6 @@ import okio.ByteString;
 import retrofit2.Call;
 import retrofit2.Response;
 
-// TODO: Refactoring methods as the ZoneRepository ones
 public class PlaceRepository {
     private final RemotePlaceDAO remotePlaceDAO;
     private final LocalPlaceDAO localPlaceDAO;
@@ -41,7 +40,19 @@ public class PlaceRepository {
         this.executor = executor;
     }
 
-    public MutableLiveData<RepositoryNotification<Place>> addPlace(Context context, Place place) {
+    public MutableLiveData<RepositoryNotification<Place>> addPlace(Context context, Place place) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Place>> addResult;
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            addResult = addPlaceToRemoteDatabase(context, place);
+        } else {
+            throw new NoInternetConnectionException();
+        }
+
+        return addResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Place>> addPlaceToRemoteDatabase(Context context, Place place) {
         MutableLiveData<RepositoryNotification<Place>> addResult = new MutableLiveData<>();
         try {
             InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse(place.getUriImg()));
@@ -82,7 +93,19 @@ public class PlaceRepository {
         return addResult;
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> deletePlace(Place place) {
+    public MutableLiveData<RepositoryNotification<Void>> deletePlace(Place place) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Void>> deleteResult = new MutableLiveData<>();
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            deleteResult = deletePlaceFromRemoteDatabase(place);
+        } else {
+            throw new NoInternetConnectionException();
+        }
+
+        return deleteResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Void>> deletePlaceFromRemoteDatabase(Place place) {
         MutableLiveData<RepositoryNotification<Void>> deleteResult = new MutableLiveData<>();
         Call<Void> call = remotePlaceDAO.DeletePlace(place);
         executor.execute(new Runnable() {
@@ -110,15 +133,27 @@ public class PlaceRepository {
         return deleteResult;
     }
 
-    public MutableLiveData<RepositoryNotification<Void>> editPlace(Context context, Place place){
-        MutableLiveData<RepositoryNotification<Void>> editResult = new MutableLiveData<>();
+    public MutableLiveData<RepositoryNotification<Place>> editPlace(Context context, Place place) throws NoInternetConnectionException {
+        MutableLiveData<RepositoryNotification<Place>> editResult = new MutableLiveData<>();
+        if (RepositoryUtils.shouldFetch(connectivityManager) == RepositoryUtils.FROM_REMOTE_DATABASE) {
+            Log.d("SHOULDFETCH", "remote");
+            editResult = editPlaceOnRemoteDatabase(context, place);
+        } else {
+            throw new NoInternetConnectionException();
+        }
+
+        return editResult;
+    }
+
+    private MutableLiveData<RepositoryNotification<Place>> editPlaceOnRemoteDatabase(Context context, Place place) {
+        MutableLiveData<RepositoryNotification<Place>> editResult = new MutableLiveData<>();
         try {
-            Call<Void> call;
+            Call<Place> call;
             RequestBody id = RequestBody.create(String.valueOf(place.getId()), MediaType.parse("text/plain"));
             RequestBody name = RequestBody.create(place.getName(), MediaType.parse("text/plain"));
             RequestBody address = RequestBody.create(place.getAddress(), MediaType.parse("text/plain"));
             RequestBody description = RequestBody.create(place.getDescription(), MediaType.parse("text/plain"));
-            if(place.getUriImg() != null){
+            if (place.getUriImg() != null) {
                 InputStream imgStream = context.getContentResolver().openInputStream(Uri.parse(place.getUriImg()));
                 RequestBody imgBody = RequestBody.create(ByteString.read(imgStream, imgStream.available()), MediaType.parse("image/*"));
                 MultipartBody.Part imgPart = MultipartBody.Part.createFormData("img", "img.png", imgBody);
@@ -128,9 +163,9 @@ public class PlaceRepository {
             }
             executor.execute(() -> {
                 try {
-                    Response<Void> response = call.execute();
+                    Response<Place> response = call.execute();
                     Log.d("RETROFITRESPONSE", String.valueOf(response.code()));
-                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<Place> repositoryNotification = new RepositoryNotification<>();
                     if (response.isSuccessful()) {
                         repositoryNotification.setData(response.body());
                     } else {
@@ -140,14 +175,14 @@ public class PlaceRepository {
                     }
                     editResult.postValue(repositoryNotification);
                 } catch (IOException ioe) {
-                    RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+                    RepositoryNotification<Place> repositoryNotification = new RepositoryNotification<>();
                     repositoryNotification.setException(ioe);
                     editResult.postValue(repositoryNotification);
                     Log.e("RETROFITERROR", ioe.getMessage());
                 }
             });
         } catch (IOException ioe) {
-            RepositoryNotification<Void> repositoryNotification = new RepositoryNotification<>();
+            RepositoryNotification<Place> repositoryNotification = new RepositoryNotification<>();
             repositoryNotification.setException(ioe);
             editResult.postValue(repositoryNotification);
             Log.e("RETROFITERROR", ioe.getMessage());

@@ -32,8 +32,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.CreatePlaceViewModel;
 
@@ -55,6 +57,7 @@ public class CreatePlaceFragment extends Fragment {
 
     final Observer<RepositoryNotification<Place>> addPlaceObserver = notification -> {
         ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        view.findViewById(R.id.createPlaceProgressBar).setVisibility(View.GONE);
         if (notification.getException() == null) {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", String.valueOf(notification.getData()));
@@ -64,15 +67,50 @@ public class CreatePlaceFragment extends Fragment {
             } else {
                 Log.i("addPlace", "Not OK");
                 Log.d("Dialog", "show dialog here");
-                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.UPDATE_PROFILE_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
         } else {
             Log.i("addPlace", "Not OK exception");
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.UPDATE_PROFILE_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
         }
     };
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_create_place, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Toolbar toolbar = view.findViewById(R.id.createPlaceToolbar);
+        toolbar.setTitle(R.string.create_place_screen_title);
+
+        toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
+        toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+
+        createPlaceViewModel = new ViewModelProvider(this).get(CreatePlaceViewModel.class);
+
+        txtName = view.findViewById(R.id.txtName);
+        txtAddress = view.findViewById(R.id.txtAddress);
+        txtDescription = view.findViewById(R.id.txtDescription);
+
+        if (createPlaceViewModel.getImage() != null)
+            imgPlace.setImageURI(createPlaceViewModel.getImage());
+
+        if (!createPlaceViewModel.getName().equals(""))
+            txtName.setText(createPlaceViewModel.getName());
+
+        if (!createPlaceViewModel.getAddress().equals(""))
+            txtAddress.setText(createPlaceViewModel.getAddress());
+
+        if (!createPlaceViewModel.getDescription().equals(""))
+            txtDescription.setText(createPlaceViewModel.getDescription());
+    }
 
     @Override
     public void onStart() {
@@ -159,9 +197,15 @@ public class CreatePlaceFragment extends Fragment {
 
             if(!errors) {
                 if(createPlaceViewModel.isImageUploaded(createPlaceViewModel.getImage())) {
-                    createPlaceViewModel.addPlace().observe(this, addPlaceObserver);
+                    try {
+                        view.findViewById(R.id.createPlaceProgressBar).setVisibility(View.VISIBLE);
+                        createPlaceViewModel.addPlace().observe(this, addPlaceObserver);
+                    } catch (NoInternetConnectionException e) {
+                        view.findViewById(R.id.createPlaceProgressBar).setVisibility(View.GONE);
+                        new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
+                    }
                 } else {
-                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_place_image), "PLACE_IMAGE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.pick_place_image), DialogTags.PLACE_IMAGE_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             }
         });
@@ -216,40 +260,4 @@ public class CreatePlaceFragment extends Fragment {
             createPlaceViewModel.setImage(selectedImage);
         }
     }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_create_place, container, false);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        Toolbar toolbar = view.findViewById(R.id.createPlaceToolbar);
-        toolbar.setTitle(R.string.create_place_screen_title);
-
-        toolbar.setNavigationIcon(R.mipmap.outline_arrow_back_ios_black_24);
-        toolbar.setNavigationOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
-
-        createPlaceViewModel = new ViewModelProvider(this).get(CreatePlaceViewModel.class);
-
-        txtName = view.findViewById(R.id.txtName);
-        txtAddress = view.findViewById(R.id.txtAddress);
-        txtDescription = view.findViewById(R.id.txtDescription);
-
-        if(createPlaceViewModel.getImage() != null)
-            imgPlace.setImageURI(createPlaceViewModel.getImage());
-
-        if(!createPlaceViewModel.getName().equals(""))
-            txtName.setText(createPlaceViewModel.getName());
-
-        if(!createPlaceViewModel.getAddress().equals(""))
-            txtAddress.setText(createPlaceViewModel.getAddress());
-
-        if(!createPlaceViewModel.getDescription().equals(""))
-            txtDescription.setText(createPlaceViewModel.getDescription());
-    }
-
 }

@@ -16,14 +16,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.badge.BadgeUtils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     private final Context context;
-    private final ArrayList<Object> dataSet;
+    private final List<Object> dataSet;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imgObject;
@@ -62,7 +65,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
         }
     }
 
-    public PathAdapter(Context context, ArrayList<Object> dataSet) {
+    public PathAdapter(Context context, List<Object> dataSet) {
         this.context = context;
         this.dataSet = dataSet;
     }
@@ -76,8 +79,14 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.getTxtName().setText(this.dataSet.get(position).getName());
-        viewHolder.setBadgeCounter(position+1);
-        viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), this.dataSet.get(position).getDescription(), "OBJECT_DESCRIPTION").show(((AppCompatActivity)context).getSupportFragmentManager(), Dialog.TAG));
+        Glide.with(context)
+                .load("https://hiddenfile.ml/ecultureapi/" + this.dataSet.get(position)
+                        //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
+                        .getNormalSizeImg())
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .into(viewHolder.getImgObject());
+        viewHolder.setBadgeCounter(position + 1);
+        viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), this.dataSet.get(position).getDescription(), DialogTags.OBJECT_DESCRIPTION).show(((AppCompatActivity) context).getSupportFragmentManager(), Dialog.TAG));
     }
 
     @Override

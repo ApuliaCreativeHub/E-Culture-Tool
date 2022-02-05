@@ -1,5 +1,8 @@
 package com.apuliacreativehub.eculturetool.data.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -8,11 +11,11 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 
 @Entity
-public class Place {
+public class Place implements Parcelable {
     @PrimaryKey
     private int id;
 
-    @ColumnInfo(name="uriImg")
+    @ColumnInfo(name = "uri_img")
     private String uriImg;
 
     @ColumnInfo(name="name")
@@ -30,6 +33,10 @@ public class Place {
     @SerializedName("long")
     @ColumnInfo(name = "long")
     private String lon;
+
+    @SerializedName("userId")
+    @ColumnInfo(name = "user_id")
+    private int userId;
 
     private String normalSizeImg;
     private String thumbnail;
@@ -120,6 +127,14 @@ public class Place {
         this.uriImg = uriImg;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     public String getNormalSizeImg() {
         return normalSizeImg;
     }
@@ -135,4 +150,47 @@ public class Place {
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    protected Place(Parcel parcel){
+        id = parcel.readInt();
+        name = parcel.readString();
+        address = parcel.readString();
+        description = parcel.readString();
+        lat = parcel.readString();
+        lon = parcel.readString();
+        userId = parcel.readInt();
+        uriImg = parcel.readString();
+        normalSizeImg = parcel.readString();
+        thumbnail = parcel.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeString(address);
+        parcel.writeString(description);
+        parcel.writeString(lat);
+        parcel.writeString(lon);
+        parcel.writeInt(userId);
+        parcel.writeString(uriImg);
+        parcel.writeString(normalSizeImg);
+        parcel.writeString(thumbnail);
+    }
+
+    public static final Creator<Place> CREATOR = new Creator<Place>() {
+        @Override
+        public Place createFromParcel(Parcel in) {
+            return new Place(in);
+        }
+        @Override
+        public Place[] newArray(int size) {
+            return new Place[size];
+        }
+    };
 }

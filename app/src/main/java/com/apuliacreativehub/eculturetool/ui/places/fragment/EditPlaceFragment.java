@@ -33,9 +33,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
+import com.apuliacreativehub.eculturetool.data.repository.NoInternetConnectionException;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.apuliacreativehub.eculturetool.ui.places.viewmodel.EditPlaceViewModel;
 import com.bumptech.glide.Glide;
@@ -50,18 +52,39 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
     private EditText txtDescription;
     private EditPlaceViewModel editPlaceViewModel;
     private final Place place;
+    final Observer<RepositoryNotification<Place>> editPlaceObserver = notification -> {
+        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+        view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.GONE);
+        if (notification.getException() == null) {
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", String.valueOf(notification.getData()));
+            if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
+                Log.i("addPlace", "OK");
+                requireActivity().getSupportFragmentManager().popBackStackImmediate();
+            } else {
+                Log.i("addPlace", "Not OK");
+                Log.d("Dialog", "show dialog here");
+                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.UPDATE_PROFILE_ERROR).show(getChildFragmentManager(), Dialog.TAG);
+            }
+        } else {
+            Log.i("addPlace", "Not OK exception");
+            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
+            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.UPDATE_PROFILE_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
+        }
+    };
     private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
         if (isGranted) {
             takeImgFromGallery();
-        }else {
+        } else {
             takeStandardImg();
         }
     });
-
     private final Observer<RepositoryNotification<Void>> deletePlaceObserver = new Observer<RepositoryNotification<Void>>() {
         @Override
         public void onChanged(RepositoryNotification<Void> notification) {
             ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
+            view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.GONE);
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
@@ -69,34 +92,13 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
                     requireActivity().finish();
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "DELETE_PLACE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
+                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.DELETE_PLACES_ERROR).show(getChildFragmentManager(), Dialog.TAG);
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "DELETE_PLACE_EXCEPTION").show(getChildFragmentManager(), Dialog.TAG);
+                new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), DialogTags.DELETE_PLACES_EXCEPTION).show(getChildFragmentManager(), Dialog.TAG);
             }
-        }
-    };
-
-    final Observer<RepositoryNotification<Void>> editPlaceObserver = notification -> {
-        ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
-        if (notification.getException() == null) {
-            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
-            Log.d("CALLBACK", String.valueOf(notification.getData()));
-            if (notification.getErrorMessage()==null || notification.getErrorMessage().isEmpty()) {
-                Log.i("addPlace", "OK");
-                requireActivity().getSupportFragmentManager().popBackStackImmediate();
-            } else {
-                Log.i("addPlace", "Not OK");
-                Log.d("Dialog", "show dialog here");
-                new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
-            }
-        } else {
-            Log.i("addPlace", "Not OK exception");
-            Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
-            Log.d("CALLBACK", "An exception occurred: " + notification.getException().getMessage());
-            new Dialog(getString(R.string.error_dialog_title), getString(R.string.unexpected_exception_dialog), "UPDATING_PROFILE_ERROR").show(getChildFragmentManager(), Dialog.TAG);
         }
     };
 
@@ -242,7 +244,14 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
             }
 
             if(!errors) {
-                editPlaceViewModel.editPlace().observe(this, editPlaceObserver);
+                try {
+                    view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.VISIBLE);
+                    editPlaceViewModel.editPlace().observe(this, editPlaceObserver);
+                } catch (NoInternetConnectionException e) {
+                    view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.GONE);
+                    new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
+                }
+
             }
         });
 
@@ -253,14 +262,20 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
     }
 
     public void showNoticeDialog() {
-        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_place), "DELETE_PLACE");
+        DialogFragment dialog = new ConfirmationDialog(getString(R.string.warning_dialog_title), getString(R.string.warning_delete_place), DialogTags.DELETE_PLACES_WARNING);
         dialog.show(getChildFragmentManager(), "NoticeDialogFragment");
     }
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Log.i("Response", "AOPOSITIVE");
-        editPlaceViewModel.deletePlace().observe(this, deletePlaceObserver);
+        try {
+            view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.VISIBLE);
+            editPlaceViewModel.deletePlace().observe(this, deletePlaceObserver);
+        } catch (NoInternetConnectionException e) {
+            view.findViewById(R.id.editPlaceProgressBar).setVisibility(View.GONE);
+            new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
+        }
     }
 
     @Override

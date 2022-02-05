@@ -14,6 +14,7 @@ public class LogoutViewModel extends AndroidViewModel {
         super(application);
         ECultureTool app = getApplication();
         this.repository = new UserRepository(app.executorService);
+        repository.setLocalDatabase(app.localDatabase);
     }
 
     public void logoutUser() {

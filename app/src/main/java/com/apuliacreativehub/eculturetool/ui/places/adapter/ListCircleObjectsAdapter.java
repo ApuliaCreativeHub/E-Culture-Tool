@@ -2,6 +2,7 @@ package com.apuliacreativehub.eculturetool.ui.places.adapter;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.content.Context;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.GuavaHelper;
-import com.apuliacreativehub.eculturetool.ui.places.NodeArtifact;
+import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.common.graph.MutableGraph;
 
 public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObjectsAdapter.ViewHolder> {
 
-    private final MutableGraph<NodeArtifact> dataSet;
+    private final MutableGraph<NodeObject> dataSet;
+    private final Context context;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final View view;
@@ -59,8 +63,9 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
         }
     }
 
-    public ListCircleObjectsAdapter(MutableGraph<NodeArtifact> dataSet) {
+    public ListCircleObjectsAdapter(MutableGraph<NodeObject> dataSet, Context context) {
         this.dataSet = dataSet;
+        this.context = context;
     }
 
     @NonNull
@@ -75,8 +80,8 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
         view.setOnLongClickListener(v ->  {
             View parent = (View) v.getParent();
 
-            ClipData.Item itemId = new ClipData.Item(parent.getTag(R.id.artifact_tag_id).toString());
-            ClipData dragData = new ClipData("node_artifact", new String[] { ClipDescription.MIMETYPE_TEXT_PLAIN }, itemId);
+            ClipData.Item itemId = new ClipData.Item(parent.getTag(R.id.object_tag_id).toString());
+            ClipData dragData = new ClipData("node_artifact", new String[]{ClipDescription.MIMETYPE_TEXT_PLAIN}, itemId);
 
             View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);
             v.startDragAndDrop(dragData, myShadow, null,0);
@@ -92,8 +97,8 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
             if(e.getAction() == DragEvent.ACTION_DROP) {
                 String moveOrientationAction = V.getTag().toString();
                 View parent = (View) V.getParent();
-                NodeArtifact rebornDragArtifact = GuavaHelper.getNodeById(dataSet, Integer.valueOf(e.getClipData().getItemAt(0).getText().toString()));
-                NodeArtifact rebornDropArtifact = GuavaHelper.getNodeById(dataSet, (Integer) parent.getTag(R.id.artifact_tag_id));
+                NodeObject rebornDragArtifact = GuavaHelper.getNodeById(dataSet, Integer.valueOf(e.getClipData().getItemAt(0).getText().toString()));
+                NodeObject rebornDropArtifact = GuavaHelper.getNodeById(dataSet, (Integer) parent.getTag(R.id.object_tag_id));
                 if(rebornDragArtifact.equals(rebornDropArtifact)) return  true;
                 setupGraphAfterInteraction(rebornDragArtifact, rebornDropArtifact, moveOrientationAction);
                 notifyDataSetChanged();
@@ -110,15 +115,16 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        NodeArtifact[] node = dataSet.nodes().toArray(new NodeArtifact[0]);
+        NodeObject[] node = dataSet.nodes().toArray(new NodeObject[0]);
 
         View view = holder.getView();
-        view.setTag(R.id.artifact_tag_id, node[position].getId());
-        //ONLY FOR SEE THE CIRCLE DIFFERENCE
-        if(node[position].getId() == 100)  holder.getCircle().setImageResource(R.mipmap.outline_qr_code_scanner_black_18);
-        if(node[position].getId() == 101)  holder.getCircle().setImageResource(R.mipmap.outline_add_photo_alternate_black_20);
-        if(node[position].getId() == 102)  holder.getCircle().setImageResource(R.mipmap.outline_search_black_18);
-        if(node[position].getId() == 103)  holder.getCircle().setImageResource(R.mipmap.outline_travel_explore_black_18);
+        view.setTag(R.id.object_tag_id, node[position].getId());
+        Glide.with(context)
+                .load("https://hiddenfile.ml/ecultureapi/" + node[position]
+                        //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
+                        .getNormalSizeImg())
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .into(holder.getCircle());
         setOnDragListener(holder.getCircle());
         setOnDropListener(holder.getRightDropContainer());
         setOnDropListener(holder.getLeftDropContainer());
@@ -129,33 +135,33 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
     /**
      * DON'T TOUCH THIS FUNCTION (IS IMPORTANT TO PERSIST THE ORDER TOO)
      */
-    private void setupGraphAfterInteraction(NodeArtifact drag, NodeArtifact drop, String moveOrientation) {
-        NodeArtifact nodeArtifactDraggedLeft = GuavaHelper.getLeftNode(dataSet, drag);
-        NodeArtifact nodeArtifactDraggedRight = GuavaHelper.getRightNode(dataSet, drag);
+    private void setupGraphAfterInteraction(NodeObject drag, NodeObject drop, String moveOrientation) {
+        NodeObject nodeObjectDraggedLeft = GuavaHelper.getLeftNode(dataSet, drag);
+        NodeObject nodeObjectDraggedRight = GuavaHelper.getRightNode(dataSet, drag);
 
-        if(nodeArtifactDraggedLeft == null && nodeArtifactDraggedRight == null) return;
+        if(nodeObjectDraggedLeft == null && nodeObjectDraggedRight == null) return;
         dataSet.removeNode(drag);
-        if(nodeArtifactDraggedLeft != null && nodeArtifactDraggedRight != null) dataSet.putEdge(nodeArtifactDraggedLeft, nodeArtifactDraggedRight);
+        if(nodeObjectDraggedLeft != null && nodeObjectDraggedRight != null) dataSet.putEdge(nodeObjectDraggedLeft, nodeObjectDraggedRight);
 
-        NodeArtifact nodeArtifactDroppedLeft = GuavaHelper.getLeftNode(dataSet, drop);
-        NodeArtifact nodeArtifactDroppedRight = GuavaHelper.getRightNode(dataSet, drop);
+        NodeObject nodeObjectDroppedLeft = GuavaHelper.getLeftNode(dataSet, drop);
+        NodeObject nodeObjectDroppedRight = GuavaHelper.getRightNode(dataSet, drop);
 
         if(moveOrientation.equals("LEFT")) {
-            if(nodeArtifactDroppedLeft != null) {
-                drag.setWeight((nodeArtifactDroppedLeft.getWeight() + drop.getWeight())/2);
-                dataSet.removeEdge(nodeArtifactDroppedLeft, drop);
-                dataSet.putEdge(nodeArtifactDroppedLeft, drag);
+            if(nodeObjectDroppedLeft != null) {
+                drag.setWeight((nodeObjectDroppedLeft.getWeight() + drop.getWeight())/2);
+                dataSet.removeEdge(nodeObjectDroppedLeft, drop);
+                dataSet.putEdge(nodeObjectDroppedLeft, drag);
                 dataSet.putEdge(drag, drop);
             } else {
                 drag.setWeight(drop.getWeight()/2);
                 dataSet.putEdge(drag, drop);
             }
         } else {
-            if(nodeArtifactDroppedRight != null) {
-                drag.setWeight((drop.getWeight()+nodeArtifactDroppedRight.getWeight())/2);
-                dataSet.removeEdge(drop, nodeArtifactDroppedRight);
+            if(nodeObjectDroppedRight != null) {
+                drag.setWeight((drop.getWeight()+ nodeObjectDroppedRight.getWeight())/2);
+                dataSet.removeEdge(drop, nodeObjectDroppedRight);
                 dataSet.putEdge(drop, drag);
-                dataSet.putEdge(drag, nodeArtifactDroppedRight);
+                dataSet.putEdge(drag, nodeObjectDroppedRight);
             } else {
                 drag.setWeight(drop.getWeight()*2);
                 dataSet.putEdge(drop, drag);
@@ -165,7 +171,10 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
 
     @Override
     public int getItemCount() {
-        return this.dataSet.nodes().size();
+        if(dataSet != null)
+            return this.dataSet.nodes().size();
+        else
+            return 0;
     }
 
 }

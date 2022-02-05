@@ -11,9 +11,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 public class ConfirmationDialog extends DialogFragment {
     private final String title;
     private final String message;
+    private int positiveButtonLabel = R.string.confirm;
+    private int negativeButtonLabel = R.string.cancel;
 
     public interface ConfirmationDialogListener {
         void onDialogPositiveClick(DialogFragment dialog);
+
         void onDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -25,6 +28,14 @@ public class ConfirmationDialog extends DialogFragment {
         Dialog.TAG = tag;
     }
 
+    public void setCustomPositiveButtonLabel(int resourceId) {
+        positiveButtonLabel = resourceId;
+    }
+
+    public void setCustomNegativeButtonLabel(int resourceId) {
+        negativeButtonLabel = resourceId;
+    }
+
     @NonNull
     @Override
     public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -34,8 +45,8 @@ public class ConfirmationDialog extends DialogFragment {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         builder.setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(R.string.confirm, (dialog, id) -> listener.onDialogPositiveClick(ConfirmationDialog.this))
-                .setNegativeButton(R.string.cancel, (dialog, id) -> listener.onDialogNegativeClick(ConfirmationDialog.this));
+                .setPositiveButton(positiveButtonLabel, (dialog, id) -> listener.onDialogPositiveClick(ConfirmationDialog.this))
+                .setNegativeButton(negativeButtonLabel, (dialog, id) -> listener.onDialogNegativeClick(ConfirmationDialog.this));
         // Create the AlertDialog object and return it
         return builder.create();
     }

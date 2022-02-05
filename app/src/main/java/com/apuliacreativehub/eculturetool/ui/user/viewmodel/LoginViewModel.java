@@ -1,6 +1,8 @@
 package com.apuliacreativehub.eculturetool.ui.user.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
@@ -8,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.apuliacreativehub.eculturetool.data.entity.user.Token;
 import com.apuliacreativehub.eculturetool.data.entity.user.User;
 import com.apuliacreativehub.eculturetool.data.entity.user.UserWithToken;
+import com.apuliacreativehub.eculturetool.data.repository.PathRepository;
 import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification;
 import com.apuliacreativehub.eculturetool.data.repository.UserRepository;
 import com.apuliacreativehub.eculturetool.di.ECultureTool;
@@ -15,13 +18,15 @@ import com.apuliacreativehub.eculturetool.di.ECultureTool;
 public class LoginViewModel extends AndroidViewModel {
     private String email = "";
     private String password = "";
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final PathRepository pathRepository;
     private String uuid;
 
     public LoginViewModel(Application application) {
         super(application);
         ECultureTool app = getApplication();
-        this.repository = new UserRepository(app.executorService);
+        this.userRepository = new UserRepository(app.executorService);
+        this.pathRepository = new PathRepository(app.executorService, app.localDatabase, (ConnectivityManager) app.getSystemService(Context.CONNECTIVITY_SERVICE));
     }
 
     public String getEmail() {
@@ -52,7 +57,14 @@ public class LoginViewModel extends AndroidViewModel {
         User user = new User(email, password);
         Token token = new Token("", null, uuid);
         UserWithToken uwt = new UserWithToken(user, token);   // contains user with his UUID
-        return repository.loginUser(uwt);
+        return userRepository.loginUser(uwt);
     }
 
+    public MutableLiveData<Integer> checkForVisitorPaths() {
+        return pathRepository.countVisitorPaths();
+    }
+
+    public void importVisitorPathsToAccount() {
+        pathRepository.saveVisitorPathsToRemoteDatabase();
+    }
 }

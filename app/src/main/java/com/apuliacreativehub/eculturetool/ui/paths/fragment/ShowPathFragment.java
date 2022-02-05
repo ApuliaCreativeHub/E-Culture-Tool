@@ -2,62 +2,52 @@ package com.apuliacreativehub.eculturetool.ui.paths.fragment;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.apuliacreativehub.eculturetool.R;
-import com.apuliacreativehub.eculturetool.data.entity.Object;
+import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.ui.paths.adapter.PathAdapter;
-import com.apuliacreativehub.eculturetool.ui.places.NodeArtifact;
-
-import java.util.ArrayList;
+import com.apuliacreativehub.eculturetool.ui.paths.viewmodel.ShowPathViewModel;
 
 public class ShowPathFragment extends Fragment {
+    private final int NUMBER_COLUMNS = 2;
+
     private View view;
     private RecyclerView recyclerArtifactsGridView;
-    private GridLayoutManager gridLayoutManager;
     private PathAdapter pathAdapter;
-    private ArrayList<Object> mDataset;
-    private int numberColumn;
-    private int orientation;
+    private ShowPathViewModel showPathViewModel;
+    private Path path;
+
+    public ShowPathFragment(Path path) {
+        this.path = path;
+    }
+
+    public ShowPathFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //TODO: FETCH ARTIFACT OF PLACE
-        Object testArtifact = new Object(100, "AAA", "Opera d'arte antica",  "img1", 1);
-        Object testArtifact2 = new Object(101, "BBB", "Opera d'arte antica 2", "img1",2);
-        Object testArtifact3 = new Object(102, "CCC", "Opera d'arte antica 3", "img1",3);
-        Object testArtifact4 = new Object(103, "DDD", "Opera d'arte antica 4", "img1",3);
-        mDataset = new ArrayList<>();
-        mDataset.add(testArtifact);
-        mDataset.add(testArtifact2);
-        mDataset.add(testArtifact3);
-        mDataset.add(testArtifact4);
-        mDataset.add(testArtifact);
-        mDataset.add(testArtifact2);
-        mDataset.add(testArtifact3);
-        mDataset.add(testArtifact4);
+        showPathViewModel = new ViewModelProvider(this).get(ShowPathViewModel.class);
+        showPathViewModel.setPath(path);
+        showPathViewModel.fillDatasetFromPath();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        orientation = this.getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            numberColumn = 2;
-        } else {
-            numberColumn = 1;
-        }
+        showPathViewModel.setOrientation(this.getResources().getConfiguration().orientation);
 
         return inflater.inflate(R.layout.fragment_show_path, container, false);
     }
@@ -77,14 +67,16 @@ public class ShowPathFragment extends Fragment {
 
     private void setDynamicArtifactRecycleView() {
         recyclerArtifactsGridView = view.findViewById(R.id.recyclerViewPath);
-        gridLayoutManager = new GridLayoutManager(getContext(), numberColumn);
-        if(orientation == Configuration.ORIENTATION_PORTRAIT) {
-            gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        LinearLayoutManager layoutManager;
+        if (showPathViewModel.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+            layoutManager = new GridLayoutManager(requireContext(), NUMBER_COLUMNS);
+            layoutManager.setOrientation(RecyclerView.VERTICAL);
         } else {
-            gridLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+            layoutManager = new LinearLayoutManager(requireContext());
+            layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         }
-        recyclerArtifactsGridView.setLayoutManager(gridLayoutManager);
-        pathAdapter = new PathAdapter(getContext(), mDataset);
+        recyclerArtifactsGridView.setLayoutManager(layoutManager);
+        pathAdapter = new PathAdapter(requireContext(), showPathViewModel.getmDataset());
         recyclerArtifactsGridView.setAdapter(pathAdapter);
     }
 
