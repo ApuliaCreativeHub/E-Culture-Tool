@@ -91,7 +91,7 @@
     <string name="pick_place_image">Per favore, scegli un\'immagine del tuo luogo dalla galleria</string>
     <string name="pick_object_image">Per favore, scegli un\'immagine del tuo oggetto dalla galleria</string>
     <string name="show_place_default_paths">Percorsi del Luogo</string>
-    <string name="create_path_screen_title">Crea percorso</string>
+    <string name="create_path_screen_title">Crea Percorso</string>
     <string name="btn_add_path">Crea un nuovo percorso</string>
     <string name="show_my_paths">Percorsi</string>
     <string name="manage_place_screen_title">Gestisci Luogo</string>
@@ -109,7 +109,7 @@
     <string name="paths_section">Vai alla sezione dei percorsi</string>
     <string name="not_found_text">Spiacenti, non trovato</string>
     <string name="not_found_text_explanation">I risultati richiesti non sono stati trovati. Potrebbero essere stati eliminati o mai esistiti</string>
-    <string name="edit_place_screen_title">Modifica luogo</string>
+    <string name="edit_place_screen_title">Modifica Luogo</string>
     <string name="place_details">Dettagli Luogo</string>
     <string name="change_place_information">Modifica le informazioni del luogo</string>
     <string name="delete_your_place">Elimina il luogo</string>
@@ -139,7 +139,7 @@
     <string name="object_details">Dettagli oggetti</string>
     <string name="change_object_information">Modifica le informazioni dell\'oggetto</string>
     <string name="delete_your_object">Elimina l\'oggetto</string>
-    <string name="edit_object_screen_title">Modifica l\'oggetto</string>
+    <string name="edit_object_screen_title">Modifica Oggetto</string>
     <string name="scan_qrcode_prompt">Per attivare il flash, premi il tasto volume SU</string>
     <string name="scan_qrcode_error">Non hai scansionato niente</string>
     <string name="qrcode_download_success">QR Code scaricato</string>
