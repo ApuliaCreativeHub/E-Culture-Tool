@@ -42,10 +42,6 @@ public class EditPathViewModel extends CEPathViewModel {
         }
     }
 
-    public NodeObject getNodeObjectFromObjectsDatasetById(int objectId) {
-        return findObjectByIdInObjectsDataset(objectId);
-    }
-
     public MutableLiveData<RepositoryNotification<Path>> editPath() throws NoInternetConnectionException {
         path.setName(getPathName());
         List<Object> objects = new ArrayList<>();
