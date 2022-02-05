@@ -17,6 +17,8 @@ import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.badge.BadgeUtils;
 
@@ -77,6 +79,12 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.getTxtName().setText(this.dataSet.get(position).getName());
+        Glide.with(context)
+                .load("https://hiddenfile.ml/ecultureapi/" + this.dataSet.get(position)
+                        //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
+                        .getNormalSizeImg())
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .into(viewHolder.getImgObject());
         viewHolder.setBadgeCounter(position + 1);
         viewHolder.getBtnDescription().setOnClickListener(v -> new Dialog(context.getString(R.string.description), this.dataSet.get(position).getDescription(), DialogTags.OBJECT_DESCRIPTION).show(((AppCompatActivity) context).getSupportFragmentManager(), Dialog.TAG));
     }
