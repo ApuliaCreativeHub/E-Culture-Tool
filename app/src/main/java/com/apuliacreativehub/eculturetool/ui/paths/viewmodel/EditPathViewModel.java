@@ -47,8 +47,9 @@ public class EditPathViewModel extends CEPathViewModel {
         List<Object> objects = new ArrayList<>();
         for (int i = 0; i < super.getOrderedObjects().size(); i++) {
             int objectId = super.getOrderedObjects().get(i);
-            objects.add(new Object(objectId));
+            objects.add(getNodeObjectFromObjectsDatasetById(objectId));
         }
+        path.setPlace(getPlace());
         path.setObjects(objects);
         return super.pathRepository.editPath(path);
     }
