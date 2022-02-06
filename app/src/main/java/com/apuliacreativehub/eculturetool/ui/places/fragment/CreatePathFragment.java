@@ -60,7 +60,7 @@ public class CreatePathFragment extends CEPathFragment {
             Log.d("CALLBACK", String.valueOf(notification.getData()));
             if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
                 Log.i("addPlace", "OK");
-                requireActivity().finish();
+                requireActivity().getSupportFragmentManager().popBackStackImmediate();
             } else {
                 Log.i("addPlace", "Not OK");
                 Log.d("Dialog", "show dialog here");
