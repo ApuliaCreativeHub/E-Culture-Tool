@@ -127,6 +127,8 @@ public class EditPathFragment extends CEPathFragment {
 
     @Override
     protected void onSaveSuccessful() {
-        requireActivity().finish();
+        if (fromScreen == FROM_PLACE_PATHS)
+            requireActivity().getSupportFragmentManager().popBackStack();
+        else requireActivity().finish();
     }
 }
