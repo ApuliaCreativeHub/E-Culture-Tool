@@ -17,6 +17,7 @@ public class NodeObject extends Object {
     public NodeObject(Object object) {
         super(object.getId(), object.getName(), object.getDescription(), object.getUriImg(), object.getZoneId());
         this.setNormalSizeImg(object.getNormalSizeImg());
+        this.setZone(object.getZone());
         this.weight = null;
     }
 

@@ -253,7 +253,6 @@ public class PathRepository {
                 for (Path path : paths) {
                     VisitorPath visitorPath = new VisitorPath(path);
                     long id;
-                    VisitorPath vp = visitorPathDAO.getPathById(visitorPath.getVisitorPathId());
                     if (visitorPathDAO.getPathById(visitorPath.getVisitorPathId()) == null)
                         id = visitorPathDAO.insertPath(visitorPath);
                     else {

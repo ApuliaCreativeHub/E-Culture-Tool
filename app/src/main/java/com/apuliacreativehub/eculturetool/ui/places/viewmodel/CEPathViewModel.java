@@ -63,7 +63,11 @@ public class CEPathViewModel extends ZoneObjectViewModel {
                 if (notification.getErrorMessage() == null) {
                     if (notification.getData().size() != 0) {
                         Zone zone = getZoneById(notification.getData().get(0).getZoneId());
-                        tempObjectsDataset.put(zone.getName(), NodeObject.getNodeObjectAll(notification.getData()));
+                        List<Object> objects = notification.getData();
+                        for (int i = 0; i < objects.size(); i++) {
+                            objects.get(i).setZone(zone);
+                        }
+                        tempObjectsDataset.put(zone.getName(), NodeObject.getNodeObjectAll(objects));
                     }
                     i++;
                     if (i == getZones().size()) {
