@@ -130,7 +130,12 @@ public class PathRepository {
         List<Path> convertedPaths = new ArrayList<>();
         for (int i = 0; i < paths.size(); i++) {
             paths.get(i).setPlace(localPlaceDAO.getPlaceByVisitorPathId(paths.get(i).getVisitorPathId()));
-            paths.get(i).setObjects(localObjectDAO.getObjectsByVisitorPathId(paths.get(i).getVisitorPathId()));
+            List<Object> objects = localObjectDAO.getObjectsByVisitorPathId(paths.get(i).getVisitorPathId());
+            for (int j = 0; j < objects.size(); j++) {
+                Zone zone = localZoneDAO.getZoneById(objects.get(j).getZoneId());
+                objects.get(j).setZone(zone);
+            }
+            paths.get(i).setObjects(objects);
             convertedPaths.add(new Path(paths.get(i)));
         }
 
