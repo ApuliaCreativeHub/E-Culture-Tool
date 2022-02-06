@@ -195,6 +195,8 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
                     arrayOptionsAdapter = new ArrayAdapter<>(requireContext(), R.layout.component_item_select_room, managePlaceViewModel.getZoneNames());
                     autoCompleteTextView.setAdapter(arrayOptionsAdapter);
                     arrayOptionsAdapter.notifyDataSetChanged();
+                    mDataset.clear();
+                    listObjectsManageAdapter.notifyDataSetChanged();
                     view.findViewById(R.id.zoneProgressBar).setVisibility(View.GONE);
                 } else {
                     Log.d("Dialog", "show dialog here");
