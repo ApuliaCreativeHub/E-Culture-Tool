@@ -137,7 +137,7 @@
     <string name="object_information">Informazioni Oggetto</string>
     <string name="zone_not_selected">Seleziona una zona</string>
     <string name="object_details">Dettagli oggetti</string>
-    <string name="change_object_information">Modifica le informazioni dell\'oggetto</string>
+    <string name="change_object_information">Modifica informazioni oggetto</string>
     <string name="delete_your_object">Elimina l\'oggetto</string>
     <string name="edit_object_screen_title">Modifica Oggetto</string>
     <string name="scan_qrcode_prompt">Per attivare il flash, premi il tasto volume SU</string>

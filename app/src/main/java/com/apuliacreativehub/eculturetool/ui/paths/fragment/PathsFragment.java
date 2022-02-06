@@ -120,10 +120,7 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         pathsViewModel = new ViewModelProvider(this).get(PathsViewModel.class);
-        if (pathsViewModel.getPaths() == null) {
-            view.findViewById(R.id.pathsProgressBar).setVisibility(View.VISIBLE);
-            pathsViewModel.getYourPaths().observe(getViewLifecycleOwner(), getYourPlacesObserver);
-        }
+
 
         return view;
     }
@@ -131,6 +128,9 @@ public class PathsFragment extends Fragment implements ConfirmationDialog.Confir
     @Override
     public void onStart() {
         super.onStart();
+
+        view.findViewById(R.id.pathsProgressBar).setVisibility(View.VISIBLE);
+        pathsViewModel.getYourPaths().observe(getViewLifecycleOwner(), getYourPlacesObserver);
 
         MenuItem searchPaths = toolbar.getMenu().findItem(R.id.searchPaths);
         SearchView searchView = (SearchView) searchPaths.getActionView();
