@@ -26,7 +26,7 @@ public interface RemoteObjectDAO {
     Call<ArrayList<Object>> GetObjectByZoneAndPlace(@Query("zoneId") int zoneId);
 
     @GET("object/getById")
-    Call<Object> getObjectById(@Query("id") int id);
+    Call<Object> getObjectById(@Query("objectId") int id);
 
     @Multipart
     @POST("object/update")
