@@ -1,6 +1,7 @@
 package com.apuliacreativehub.eculturetool.ui.user.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,7 +30,9 @@ import com.apuliacreativehub.eculturetool.data.repository.RepositoryNotification
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
+import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 import com.apuliacreativehub.eculturetool.ui.user.viewmodel.EditProfileViewModel;
+import com.google.android.gms.common.api.internal.IStatusCallback;
 
 import java.util.Objects;
 
@@ -85,7 +88,8 @@ public class EditProfileFragment extends Fragment implements ConfirmationDialog.
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.clear();
                     editor.apply();
-                    Navigation.findNavController(requireActivity(), R.id.navHostContainer).popBackStack(R.id.placesFragment, false);
+                    requireActivity().setResult(1);
+                    requireActivity().finish();
                 } else {
                     Log.d("Dialog", "show dialog here");
                     new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.DELETE_PROFILE_ERROR).show(getChildFragmentManager(), Dialog.TAG);

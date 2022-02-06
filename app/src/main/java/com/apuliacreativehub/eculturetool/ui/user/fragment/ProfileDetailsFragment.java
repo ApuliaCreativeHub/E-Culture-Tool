@@ -29,6 +29,7 @@ import com.apuliacreativehub.eculturetool.ui.SubActivity;
 import com.apuliacreativehub.eculturetool.ui.component.ConfirmationDialog;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
+import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
 import com.apuliacreativehub.eculturetool.ui.component.Utils;
 import com.apuliacreativehub.eculturetool.ui.user.viewmodel.LogoutViewModel;
 
@@ -84,7 +85,7 @@ public class ProfileDetailsFragment extends Fragment implements ConfirmationDial
 
         btnEdit.setOnClickListener(view -> {
             if (Utils.checkConnection((ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE))) {
-                startActivity(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PROFILE_FRAGMENT));
+                startActivityForResult(new Intent(this.getActivity(), SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PROFILE_FRAGMENT), 0);
             } else {
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);
             }
@@ -117,4 +118,13 @@ public class ProfileDetailsFragment extends Fragment implements ConfirmationDial
         Log.i("Response", "NEGATIVE");
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == 1){
+            Log.i("NavigateUp", "ok");
+            Navigation.findNavController(requireActivity(), R.id.navHostContainer).navigateUp();
+        }
+    }
 }
