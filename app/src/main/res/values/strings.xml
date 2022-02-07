@@ -172,4 +172,5 @@
     <string name="exported_paths_folder" translatable="false">ECultureTool Paths</string>
     <string name="path_place_deleted">This place was deleted</string>
     <string name="warning_path_place_deleted">Path place was deleted.\nDelete this path</string>
+    <string name="object_does_not_exist">The object you are trying to edit does not exist</string>
 </resources>
