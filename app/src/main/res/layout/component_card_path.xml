@@ -33,7 +33,7 @@
                 android:contentDescription="@string/object_image" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
