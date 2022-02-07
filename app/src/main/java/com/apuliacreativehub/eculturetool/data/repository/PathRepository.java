@@ -247,42 +247,37 @@ public class PathRepository {
     }
 
     private void saveVisitorPath(List<Path> paths) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (Path path : paths) {
-                    VisitorPath visitorPath = new VisitorPath(path);
-                    long id;
-                    if (visitorPathDAO.getPathById(visitorPath.getVisitorPathId()) == null)
-                        id = visitorPathDAO.insertPath(visitorPath);
-                    else {
-                        visitorPathDAO.updatePath(visitorPath);
-                        visitorIsPresentInDAO.deleteRelationsByPathId(visitorPath.getVisitorPathId());
-                        id = visitorPath.getVisitorPathId();
-                    }
-                    int i = 1;
-                    for (Object object : visitorPath.getObjects()) {
-                        Zone zone;
-                        if (object.getZone() == null) zone = new Zone(object.getZoneId());
-                        else zone = object.getZone();
-                        if (path.getPlace() != null)
-                            zone.setPlaceId(path.getPlace().getId());
-                        if (localZoneDAO.getZoneById(object.getZoneId()) == null) {
-                            localZoneDAO.insertZone(zone);
-                        } else {
-                            localZoneDAO.updateZone(zone);
-                        }
-                        if (localObjectDAO.getObjectById(object.getId()) == null) {
-                            localObjectDAO.insertObject(object);
-                        } else {
-                            localObjectDAO.updateObject(object);
-                        }
-                        visitorIsPresentInDAO.insertRelation(new VisitorIsPresentIn(object.getId(), (int) id, i));
-                        i++;
-                    }
-                }
+        for (Path path : paths) {
+            VisitorPath visitorPath = new VisitorPath(path);
+            long id;
+            if (visitorPathDAO.getPathById(visitorPath.getVisitorPathId()) == null)
+                id = visitorPathDAO.insertPath(visitorPath);
+            else {
+                visitorPathDAO.updatePath(visitorPath);
+                visitorIsPresentInDAO.deleteRelationsByPathId(visitorPath.getVisitorPathId());
+                id = visitorPath.getVisitorPathId();
             }
-        });
+            int i = 1;
+            for (Object object : visitorPath.getObjects()) {
+                Zone zone;
+                if (object.getZone() == null) zone = new Zone(object.getZoneId());
+                else zone = object.getZone();
+                if (path.getPlace() != null)
+                    zone.setPlaceId(path.getPlace().getId());
+                if (localZoneDAO.getZoneById(object.getZoneId()) == null) {
+                    localZoneDAO.insertZone(zone);
+                } else {
+                    localZoneDAO.updateZone(zone);
+                }
+                if (localObjectDAO.getObjectById(object.getId()) == null) {
+                    localObjectDAO.insertObject(object);
+                } else {
+                    localObjectDAO.updateObject(object);
+                }
+                visitorIsPresentInDAO.insertRelation(new VisitorIsPresentIn(object.getId(), (int) id, i));
+                i++;
+            }
+        }
     }
 
     public MutableLiveData<RepositoryNotification<Path>> editPath(Path path) throws NoInternetConnectionException {
