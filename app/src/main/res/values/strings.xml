@@ -169,4 +169,7 @@
     <string name="maps_coordinates_link" translatable="false">https://www.google.com/maps/place/%1$s,%2$s</string>
     <string name="objects_list_text_message">%1$d. %2$s, %3$s, located in %4$s\n</string>
     <string name="object_qr_code_download">Download the QR Code of this object</string>
+    <string name="exported_paths_folder" translatable="false">ECultureTool Paths</string>
+    <string name="path_place_deleted">This place was deleted</string>
+    <string name="warning_path_place_deleted">Path place was deleted.\nDelete this path</string>
 </resources>

@@ -176,4 +176,6 @@
     <string name="e54">Elaborazione dell\'immagine fallita. Prova con un\'immagine differente</string>
     <string name="e55">Non è stato trovato alcun luogo per questo utente</string>
     <string name="object_qr_code_download">Scarica il QR Code di questo oggetto</string>
+    <string name="path_place_deleted">Questo luogo è stato eliminato</string>
+    <string name="warning_path_place_deleted">Il luogo del percorso è stato eliminato.\\nElimina questo percorso</string>
 </resources>

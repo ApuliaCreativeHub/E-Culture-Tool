@@ -41,4 +41,5 @@ public class DialogTags {
     public static final String DELETE_PROFILE_WARNING = "DELETE_PROFILE_WARNING";
     public static final String LOGOUT_PROFILE_WARNING = "LOGOUT_PROFILE_WARNING";
     public static final String SAVE_VISITOR_PATHS_WARNING = "SAVE_VISITOR_PATHS_WARNING";
+    public static final String PATH_PLACE_DELETED_WARNING = "PATH_PLACE_DELETED_WARNING";
 }

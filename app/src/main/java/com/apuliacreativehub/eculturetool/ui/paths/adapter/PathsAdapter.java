@@ -26,6 +26,8 @@ import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Path;
 import com.apuliacreativehub.eculturetool.ui.LandscapeActivity;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
+import com.apuliacreativehub.eculturetool.ui.component.Dialog;
+import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
 import com.apuliacreativehub.eculturetool.ui.paths.fragment.EditPathFragment;
 import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
@@ -99,14 +101,22 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.getTextPathName().setText(this.dataSet.get(position).getName());
-        String placeNameAndAddress = this.dataSet.get(position).getPlace().getName() + " - " + this.dataSet.get(position).getPlace().getAddress();
+        String placeNameAndAddress;
+        if (this.dataSet.get(position).getPlace().getName().equals("")) {
+            placeNameAndAddress = context.getString(R.string.path_place_deleted);
+            viewHolder.getCardPath().setOnClickListener(
+                    view -> new Dialog(context.getString(R.string.warning_dialog_title), context.getString(R.string.warning_path_place_deleted), DialogTags.PATH_PLACE_DELETED_WARNING).show(fragmentManager, Dialog.TAG));
+        } else {
+            placeNameAndAddress = this.dataSet.get(position).getPlace().getName() + " - " + this.dataSet.get(position).getPlace().getAddress();
+            viewHolder.getCardPath().setOnClickListener(
+                    view -> context.startActivity(new Intent(context, LandscapeActivity.class)
+                            .putExtra(LandscapeActivity.SHOW_FRAGMENT, LandscapeActivity.SHOW_PATH_FRAGMENT)
+                            .putExtra("path", dataSet.get(position))
+                    ));
+        }
+
         viewHolder.getTextPlaceNameAndAddress().setText(placeNameAndAddress);
         viewHolder.getBtnOptions().setOnClickListener(view -> showMenu(view, R.menu.context_menu_path, position));
-        viewHolder.getCardPath().setOnClickListener(
-                view -> context.startActivity(new Intent(context, LandscapeActivity.class)
-                        .putExtra(LandscapeActivity.SHOW_FRAGMENT, LandscapeActivity.SHOW_PATH_FRAGMENT)
-                        .putExtra("path", dataSet.get(position))
-                ));
     }
 
     private void showMenu(View view, int menu, int position) {
@@ -116,18 +126,30 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             switch(menuItem.getItemId()) {
                 case SHARE_PATH:
-                    sharePath(buildTextMessage(this.dataSet.get(position)));
+                    if (this.dataSet.get(position).getPlace().getName().equals("")) {
+                        new Dialog(context.getString(R.string.warning_dialog_title), context.getString(R.string.warning_path_place_deleted), DialogTags.PATH_PLACE_DELETED_WARNING).show(fragmentManager, Dialog.TAG);
+                    } else {
+                        sharePath(buildTextMessage(this.dataSet.get(position)));
+                    }
                     break;
                 case DOWNLOAD_PATH:
-                    downloadPath(new Gson().toJson(this.dataSet.get(position)));
+                    if (this.dataSet.get(position).getPlace().getName().equals("")) {
+                        new Dialog(context.getString(R.string.warning_dialog_title), context.getString(R.string.warning_path_place_deleted), DialogTags.PATH_PLACE_DELETED_WARNING).show(fragmentManager, Dialog.TAG);
+                    } else {
+                        downloadPath(new Gson().toJson(this.dataSet.get(position)));
+                    }
                     break;
                 case EDIT_PATH:
-                    context.startActivity(
-                            new Intent(context, SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PATH_FRAGMENT)
-                                    .putExtra("place", dataSet.get(position).getPlace())
-                                    .putExtra("path", dataSet.get(position))
-                                    .putExtra("fromScreen", EditPathFragment.FROM_PATHS)
-                    );
+                    if (this.dataSet.get(position).getPlace().getName().equals("")) {
+                        new Dialog(context.getString(R.string.warning_dialog_title), context.getString(R.string.warning_path_place_deleted), DialogTags.PATH_PLACE_DELETED_WARNING).show(fragmentManager, Dialog.TAG);
+                    } else {
+                        context.startActivity(
+                                new Intent(context, SubActivity.class).putExtra(SubActivity.SHOW_FRAGMENT, SubActivity.EDIT_PATH_FRAGMENT)
+                                        .putExtra("place", dataSet.get(position).getPlace())
+                                        .putExtra("path", dataSet.get(position))
+                                        .putExtra("fromScreen", EditPathFragment.FROM_PATHS)
+                        );
+                    }
                     break;
                 case DELETE_PATH:
                     Bundle result = new Bundle();
@@ -201,7 +223,7 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
 
     private File getDisc() {
         File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        return new File(file, "Download");
+        return new File(file, context.getString(R.string.exported_paths_folder));
     }
 
     @Override
