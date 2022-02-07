@@ -16,7 +16,6 @@ import com.apuliacreativehub.eculturetool.R;
 
 public class RegisterInformationFragment extends Fragment {
     private View view;
-    private AppCompatActivity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +44,7 @@ public class RegisterInformationFragment extends Fragment {
         super.onStart();
 
         TextView btnSignUp = view.findViewById(R.id.btnSignUp);
-        btnSignUp.setOnClickListener(view -> activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new RegisterFragment()).commit());
+        btnSignUp.setOnClickListener(view -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new RegisterFragment()).commit());
     }
 
 }

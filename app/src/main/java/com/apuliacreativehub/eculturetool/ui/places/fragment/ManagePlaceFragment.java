@@ -220,11 +220,15 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
             if (notification.getException() == null) {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
                 Log.d("CALLBACK", String.valueOf(notification.getData()));
-                if (notification.getErrorMessage() == null) {
+                if (notification.getErrorMessage() == null && !notification.getData().getName().equals("") && managePlaceViewModel.getZoneById(notification.getData().getZoneId()) != null) {
                     TransactionHelper.transactionWithAddToBackStack(requireActivity(), R.id.fragment_container_layout, new EditObjectFragment(notification.getData(), managePlaceViewModel.getZonesBundle(), arrayOptionsAdapter, managePlaceViewModel.getZoneById(notification.getData().getZoneId()).getName()));
                 } else {
                     Log.d("Dialog", "show dialog here");
-                    new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_OBJECTS_ERROR).show(getChildFragmentManager(), Dialog.TAG);
+                    if (notification.getData().getName().equals("") || managePlaceViewModel.getZoneById(notification.getData().getZoneId()) == null){
+                        new Dialog(getString(R.string.warning_dialog_title), getString(R.string.object_does_not_exist), DialogTags.EDIT_OBJECT_ERROR).show(getChildFragmentManager(), Dialog.TAG);
+                    }else{
+                        new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.GET_OBJECTS_ERROR).show(getChildFragmentManager(), Dialog.TAG);
+                    }
                 }
             } else {
                 Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
@@ -307,7 +311,13 @@ public class ManagePlaceFragment extends Fragment implements ConfirmationDialog.
             Log.i("Object ID", intentResult.getContents());
             try {
                 view.findViewById(R.id.objectsProgressBar).setVisibility(View.VISIBLE);
-                managePlaceViewModel.getObjectById(Integer.parseInt(intentResult.getContents())).observe(this, getObjectFromQR);
+                try {
+                    managePlaceViewModel.getObjectById(Integer.parseInt(intentResult.getContents())).observe(this, getObjectFromQR);
+                }catch (NumberFormatException ne){
+                    view.findViewById(R.id.objectsProgressBar).setVisibility(View.GONE);
+                    new Dialog(getString(R.string.warning_dialog_title), getString(R.string.object_does_not_exist), DialogTags.EDIT_OBJECT_ERROR).show(getChildFragmentManager(), Dialog.TAG);
+                }
+
             } catch (NoInternetConnectionException e) {
                 view.findViewById(R.id.objectsProgressBar).setVisibility(View.GONE);
                 new Dialog(getString(R.string.error_dialog_title), getString(R.string.err_no_internet_connection), DialogTags.NO_INTERNET_CONNECTION_ERROR).show(getChildFragmentManager(), Dialog.TAG);

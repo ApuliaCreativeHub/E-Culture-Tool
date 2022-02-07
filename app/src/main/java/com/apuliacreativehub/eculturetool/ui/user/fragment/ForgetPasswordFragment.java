@@ -31,14 +31,13 @@ public class ForgetPasswordFragment extends Fragment {
     private View view;
     private ForgetPasswordViewModel forgetPasswordViewModel;
     private EditText txtEmail;
-    private AppCompatActivity activity;
     final Observer<RepositoryNotification<Void>> changePasswordObserver = notification -> {
         ErrorStrings errorStrings = ErrorStrings.getInstance(getResources());
         if (notification.getException() == null) {
             Log.d("CALLBACK", "I am in thread " + Thread.currentThread().getName());
             Log.d("CALLBACK", String.valueOf(notification.getData()));
             if (notification.getErrorMessage() == null || notification.getErrorMessage().isEmpty()) {
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new LoginFragment()).commit();
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new LoginFragment()).commit();
             } else {
                 Log.d("Dialog", "show dialog here");
                 new Dialog(getString(R.string.error_dialog_title), errorStrings.errors.get(notification.getErrorMessage()), DialogTags.CHANGE_PASSWORD_ERROR).show(getChildFragmentManager(), Dialog.TAG);
@@ -96,10 +95,10 @@ public class ForgetPasswordFragment extends Fragment {
         });
 
         TextView btnSignUp = view.findViewById(R.id.btnSignUp);
-        btnSignUp.setOnClickListener(view -> activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new RegisterFragment()).commit());
+        btnSignUp.setOnClickListener(view -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new RegisterFragment()).commit());
 
         TextView btnSignIn = view.findViewById(R.id.btnSignIn);
-        btnSignIn.setOnClickListener(view -> activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new LoginFragment()).commit());
+        btnSignIn.setOnClickListener(view -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_layout, new LoginFragment()).commit());
 
         Button btnSend = view.findViewById(R.id.btnSend);
         btnSend.setOnClickListener(view -> forgetPasswordViewModel.changePassword().observe(this, changePasswordObserver));
