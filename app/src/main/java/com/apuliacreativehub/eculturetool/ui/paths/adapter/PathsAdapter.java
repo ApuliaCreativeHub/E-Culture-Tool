@@ -183,6 +183,9 @@ public class PathsAdapter extends RecyclerView.Adapter<PathsAdapter.ViewHolder> 
         sendIntent.putExtra(Intent.EXTRA_TEXT, text);
         sendIntent.setType("text/plain");
         Intent shareIntent = Intent.createChooser(sendIntent, null);
+        // Android will always know how to handle this Intent with this MIME type,
+        // because the "Copy to clipboard" will always be available, so no check on handle capability
+        // is necessary
         context.startActivity(shareIntent);
     }
 
