@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_shared_preferences" translatable="false">com.apuliacreativehub.eculturetool.user_shared_preferences</string>
+</resources>

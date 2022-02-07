@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.places.fragment.CreateObjectFragment">
+
+    <ProgressBar
+        android:id="@+id/editObjectProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|top"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtEditObject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:letterSpacing="0.03"
+                android:text="@string/object_details"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:layout_marginTop="72dp" />
+
+            <ImageView
+                android:id="@+id/imgObject"
+                android:layout_width="144dp"
+                android:layout_height="144dp"
+                android:layout_marginTop="32dp"
+                android:layout_weight="1"
+                android:src="@mipmap/outline_add_photo_alternate_black_36"
+                android:contentDescription="@string/place_image"
+                android:scaleType="centerCrop"
+                tools:ignore="ImageContrastCheck" />
+
+            <EditText
+                android:id="@+id/txtName"
+                android:layout_width="320dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:autofillHints="@string/name"
+                android:hint="@string/name"
+                android:inputType="textPersonName" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:hint="@string/zones"
+                android:maxLines="1"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:layout_marginTop="16dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/txtRoom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:labelFor="@id/selectZonesAutoComplete"
+                    android:popupElevation="16dp"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <EditText
+                android:id="@+id/txtDescription"
+                android:layout_width="320dp"
+                android:layout_height="144dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:autofillHints="@string/description"
+                android:gravity="top"
+                android:hint="@string/description"
+                android:inputType="textLongMessage|textMultiLine"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/btnDownloadQRCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="40dp"
+                android:layout_weight="1"
+                android:text="@string/object_qr_code_download"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnChangeObjectInformation"
+                android:layout_width="320dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:text="@string/change_object_information"
+                android:textAllCaps="true" />
+
+            <Button
+                android:id="@+id/btnDeleteObject"
+                android:layout_width="320dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:text="@string/delete_your_object"
+                android:textAllCaps="true"
+                android:layout_marginBottom="8dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/editObjectToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
