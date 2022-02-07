@@ -42,11 +42,8 @@ public class PlacesFragment extends Fragment {
         super.onStart();
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        MapFragment mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.mapContainer);
-        if (mapFragment == null) {
-            fragmentTransaction.add(R.id.mapContainer, MapFragment.class, null);
-            fragmentTransaction.commit();
-        }
+        fragmentTransaction.replace(R.id.mapContainer, MapFragment.class, null);
+        fragmentTransaction.commit();
 
         boolean isACurator = false;
         Context context = getActivity();
