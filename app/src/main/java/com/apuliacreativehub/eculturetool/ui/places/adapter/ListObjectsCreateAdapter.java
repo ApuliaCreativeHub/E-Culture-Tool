@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.apuliacreativehub.eculturetool.BuildConfig;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
 import com.apuliacreativehub.eculturetool.ui.component.DialogTags;
@@ -127,8 +128,7 @@ public class ListObjectsCreateAdapter extends RecyclerView.Adapter<ListObjectsCr
         });
         viewHolder.getTitle().setText(dataSet.get(position).getName());
         Glide.with(context)
-                .load("https://hiddenfile.ml/ecultureapi/" + this.dataSet.get(position)
-                        //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
+                .load(BuildConfig.API_URL + this.dataSet.get(position)
                         .getNormalSizeImg())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(viewHolder.getImgObject());

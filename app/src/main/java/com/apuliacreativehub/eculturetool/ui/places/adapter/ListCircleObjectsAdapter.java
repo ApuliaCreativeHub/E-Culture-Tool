@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.apuliacreativehub.eculturetool.BuildConfig;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.ui.component.GuavaHelper;
 import com.apuliacreativehub.eculturetool.ui.places.NodeObject;
@@ -120,8 +121,7 @@ public class ListCircleObjectsAdapter extends RecyclerView.Adapter<ListCircleObj
         View view = holder.getView();
         view.setTag(R.id.object_tag_id, node[position].getId());
         Glide.with(context)
-                .load("https://hiddenfile.ml/ecultureapi/" + node[position]
-                        //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
+                .load(BuildConfig.API_URL + node[position]
                         .getNormalSizeImg())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(holder.getCircle());

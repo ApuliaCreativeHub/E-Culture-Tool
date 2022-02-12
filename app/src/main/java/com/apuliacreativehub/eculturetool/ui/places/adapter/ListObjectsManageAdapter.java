@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.apuliacreativehub.eculturetool.BuildConfig;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
@@ -102,10 +103,9 @@ public class ListObjectsManageAdapter extends RecyclerView.Adapter<ListObjectsMa
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.getTxtName().setText(this.dataSet.get(position).getName());
-        Log.i("ObjectCardPosizion", "https://hiddenfile.ml/ecultureapi/" + this.dataSet.get(position).getNormalSizeImg());
+        Log.i("ObjectCardPosizion", BuildConfig.API_URL + this.dataSet.get(position).getNormalSizeImg());
         Glide.with(context)
-                .load("https://hiddenfile.ml/ecultureapi/" + this.dataSet.get(position)
-                        //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
+                .load(BuildConfig.API_URL + this.dataSet.get(position)
                         .getNormalSizeImg())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(viewHolder.getImgObject());

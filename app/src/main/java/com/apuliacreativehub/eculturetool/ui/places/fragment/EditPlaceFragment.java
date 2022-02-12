@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.apuliacreativehub.eculturetool.BuildConfig;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
@@ -133,8 +134,7 @@ public class EditPlaceFragment extends Fragment implements ConfirmationDialog.Co
         txtAddress.setText(place.getAddress());
         txtDescription.setText(place.getDescription());
         Glide.with(requireContext()).asBitmap()
-                .load("https://hiddenfile.ml/ecultureapi/" + place.getNormalSizeImg())
-                //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
+                .load(BuildConfig.API_URL + place.getNormalSizeImg())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(imgPlace);
 
