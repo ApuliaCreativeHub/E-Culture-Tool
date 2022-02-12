@@ -30,6 +30,16 @@ android {
         viewBinding true
     }
 
+    flavorDimensions "default"
+    productFlavors{
+        stable{
+            buildConfigField("String", "API_URL", "\"https://hiddenfile.ml/ecultureapi/\"")
+        }
+        demo{
+            buildConfigField("String", "API_URL", "\"https://hiddenfile.ml/ecultureapibeta/\"")
+        }
+    }
+
 }
 
 dependencies {
