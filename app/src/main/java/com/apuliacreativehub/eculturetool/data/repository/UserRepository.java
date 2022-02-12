@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.apuliacreativehub.eculturetool.data.entity.user.User;
 import com.apuliacreativehub.eculturetool.data.entity.user.UserWithToken;
 import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
-import com.apuliacreativehub.eculturetool.data.network.user.RemoteUserDAO;
-import com.apuliacreativehub.eculturetool.data.network.user.UserRemoteDatabase;
+import com.apuliacreativehub.eculturetool.data.network.RemoteDatabase;
+import com.apuliacreativehub.eculturetool.data.network.RemoteUserDAO;
 
 import java.io.IOException;
 import java.util.concurrent.Executor;
@@ -22,7 +22,7 @@ public class UserRepository{
     private LocalDatabase localDatabase;
 
     public UserRepository(Executor executor) {
-        remoteUserDAO = UserRemoteDatabase.provideRemoteUserDAO();
+        remoteUserDAO = RemoteDatabase.provideRemoteUserDAO();
         this.executor = executor;
     }
 

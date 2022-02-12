@@ -10,8 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
 import com.apuliacreativehub.eculturetool.data.local.LocalPlaceDAO;
-import com.apuliacreativehub.eculturetool.data.network.place.PlaceRemoteDatabase;
-import com.apuliacreativehub.eculturetool.data.network.place.RemotePlaceDAO;
+import com.apuliacreativehub.eculturetool.data.network.RemoteDatabase;
+import com.apuliacreativehub.eculturetool.data.network.RemotePlaceDAO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +34,7 @@ public class PlaceRepository {
     private final ConnectivityManager connectivityManager;
 
     public PlaceRepository(Executor executor, LocalDatabase localDatabase, ConnectivityManager connectivityManager) {
-        remotePlaceDAO = PlaceRemoteDatabase.provideRemotePlaceDAO();
+        remotePlaceDAO = RemoteDatabase.provideRemotePlaceDAO();
         localPlaceDAO = localDatabase.placeDAO();
         this.connectivityManager = connectivityManager;
         this.executor = executor;
