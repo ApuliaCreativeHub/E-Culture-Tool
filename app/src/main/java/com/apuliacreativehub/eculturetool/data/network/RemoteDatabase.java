@@ -14,7 +14,7 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public abstract class RemoteDatabase {
+public class RemoteDatabase {
     private static final String baseUrl = BuildConfig.API_URL;
 
     protected static OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
