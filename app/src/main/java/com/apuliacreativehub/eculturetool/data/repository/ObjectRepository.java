@@ -11,8 +11,8 @@ import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
 import com.apuliacreativehub.eculturetool.data.local.LocalObjectDAO;
-import com.apuliacreativehub.eculturetool.data.network.object.ObjectRemoteDatabase;
-import com.apuliacreativehub.eculturetool.data.network.object.RemoteObjectDAO;
+import com.apuliacreativehub.eculturetool.data.network.RemoteDatabase;
+import com.apuliacreativehub.eculturetool.data.network.RemoteObjectDAO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +35,7 @@ public class ObjectRepository {
     private final ConnectivityManager connectivityManager;
 
     public ObjectRepository(Executor executor, LocalDatabase localDatabase, ConnectivityManager connectivityManager) {
-        remoteObjectDAO = ObjectRemoteDatabase.provideRemoteObjectDAO();
+        remoteObjectDAO = RemoteDatabase.provideRemoteObjectDAO();
         localObjectDAO = localDatabase.objectDAO();
         this.connectivityManager = connectivityManager;
         this.executor = executor;

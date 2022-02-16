@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.data.network.user;
+package com.apuliacreativehub.eculturetool.data.network;
 
 import com.apuliacreativehub.eculturetool.data.entity.user.User;
 import com.apuliacreativehub.eculturetool.data.entity.user.UserWithToken;

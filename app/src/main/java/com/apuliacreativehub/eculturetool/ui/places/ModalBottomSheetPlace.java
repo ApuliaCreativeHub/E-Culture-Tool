@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.apuliacreativehub.eculturetool.BuildConfig;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.ui.SubActivity;
@@ -69,8 +70,7 @@ public class ModalBottomSheetPlace extends BottomSheetDialogFragment {
         txtAddress.setText(place.getAddress());
         txtDescription.setText(place.getDescription());
         Glide.with(context)
-                .load("https://hiddenfile.ml/ecultureapi/" + place.getNormalSizeImg()
-                        //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
+                .load(BuildConfig.API_URL + place.getNormalSizeImg()
                 )
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(imgPlace);

@@ -37,6 +37,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.apuliacreativehub.eculturetool.BuildConfig;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.ErrorStrings;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
@@ -161,8 +162,7 @@ public class EditObjectFragment extends Fragment implements ConfirmationDialog.C
         txtName.setText(object.getName());
         txtDescription.setText(object.getDescription());
         Glide.with(requireContext()).asBitmap()
-                .load("https://hiddenfile.ml/ecultureapi/" + object.getNormalSizeImg())
-                //.load("http://10.0.2.2:8080/" + object.getNormalSizeImg())
+                .load(BuildConfig.API_URL + object.getNormalSizeImg())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(imgObject);
 

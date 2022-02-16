@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.apuliacreativehub.eculturetool.BuildConfig;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.ui.component.TransactionHelper;
@@ -80,12 +81,11 @@ public class CardPlaceAdapter extends RecyclerView.Adapter<CardPlaceAdapter.View
         viewHolder.getTxtAddress().setText(this.dataSet.get(position).getAddress());
         viewHolder.getTxtDescription().setText(this.dataSet.get(position).getDescription());
         viewHolder.getCardPlace().setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new ManagePlaceFragment(this.dataSet.get(position))));
-        
-        Log.i("CardPosizion", "https://hiddenfile.ml/ecultureapi/" + this.dataSet.get(position).getNormalSizeImg());
+
+        Log.i("CardPosizion", BuildConfig.API_URL + this.dataSet.get(position).getNormalSizeImg());
         Glide.with(context)
-                .load("https://hiddenfile.ml/ecultureapi/" + this.dataSet.get(position)
-                //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
-                .getNormalSizeImg())
+                .load(BuildConfig.API_URL + this.dataSet.get(position)
+                        .getNormalSizeImg())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(viewHolder.getImgPlace());
         viewHolder.getCardPlace().setOnClickListener(view -> TransactionHelper.transactionWithAddToBackStack((FragmentActivity) context, R.id.fragment_container_layout, new ManagePlaceFragment(this.dataSet.get(position))));

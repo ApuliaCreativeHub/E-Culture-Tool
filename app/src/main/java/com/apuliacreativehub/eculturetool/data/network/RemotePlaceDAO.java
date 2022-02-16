@@ -1,4 +1,4 @@
-package com.apuliacreativehub.eculturetool.data.network.place;
+package com.apuliacreativehub.eculturetool.data.network;
 
 import com.apuliacreativehub.eculturetool.data.entity.Place;
 

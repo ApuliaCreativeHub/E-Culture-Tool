@@ -21,8 +21,8 @@ import com.apuliacreativehub.eculturetool.data.local.LocalPlaceDAO;
 import com.apuliacreativehub.eculturetool.data.local.LocalZoneDAO;
 import com.apuliacreativehub.eculturetool.data.local.VisitorIsPresentInDAO;
 import com.apuliacreativehub.eculturetool.data.local.VisitorPathDAO;
-import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDAO;
-import com.apuliacreativehub.eculturetool.data.network.path.RemotePathDatabase;
+import com.apuliacreativehub.eculturetool.data.network.RemoteDatabase;
+import com.apuliacreativehub.eculturetool.data.network.RemotePathDAO;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class PathRepository {
     private final Executor executor;
 
     public PathRepository(Executor executor, LocalDatabase localDatabase, ConnectivityManager connectivityManager) {
-        remotePathDAO = RemotePathDatabase.provideRemotePathDAO();
+        remotePathDAO = RemoteDatabase.provideRemotePathDAO();
         localPathDAO = localDatabase.pathDAO();
         localIsPresentInDAO = localDatabase.isPresentInDAO();
         localObjectDAO = localDatabase.objectDAO();

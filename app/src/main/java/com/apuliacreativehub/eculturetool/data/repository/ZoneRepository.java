@@ -9,8 +9,8 @@ import com.apuliacreativehub.eculturetool.data.entity.Place;
 import com.apuliacreativehub.eculturetool.data.entity.Zone;
 import com.apuliacreativehub.eculturetool.data.local.LocalDatabase;
 import com.apuliacreativehub.eculturetool.data.local.LocalZoneDAO;
-import com.apuliacreativehub.eculturetool.data.network.zone.RemoteZoneDAO;
-import com.apuliacreativehub.eculturetool.data.network.zone.ZoneRemoteDatabase;
+import com.apuliacreativehub.eculturetool.data.network.RemoteDatabase;
+import com.apuliacreativehub.eculturetool.data.network.RemoteZoneDAO;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class ZoneRepository {
     private final Executor executor;
 
     public ZoneRepository(Executor executor, LocalDatabase localDatabase, ConnectivityManager connectivityManager) {
-        remoteZoneDAO = ZoneRemoteDatabase.provideRemoteZoneDAO();
+        remoteZoneDAO = RemoteDatabase.provideRemoteZoneDAO();
         localZoneDAO = localDatabase.zoneDAO();
         this.connectivityManager = connectivityManager;
         this.executor = executor;

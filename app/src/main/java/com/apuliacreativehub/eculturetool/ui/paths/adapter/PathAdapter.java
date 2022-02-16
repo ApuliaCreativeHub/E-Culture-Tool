@@ -13,6 +13,7 @@ import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.apuliacreativehub.eculturetool.BuildConfig;
 import com.apuliacreativehub.eculturetool.R;
 import com.apuliacreativehub.eculturetool.data.entity.Object;
 import com.apuliacreativehub.eculturetool.ui.component.Dialog;
@@ -80,8 +81,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.getTxtName().setText(this.dataSet.get(position).getName());
         Glide.with(context)
-                .load("https://hiddenfile.ml/ecultureapi/" + this.dataSet.get(position)
-                        //.load("http://10.0.2.2:8080/" + this.dataSet.get(position)
+                .load(BuildConfig.API_URL + this.dataSet.get(position)
                         .getNormalSizeImg())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(viewHolder.getImgObject());
